@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Energy and Enzymes Lab</title>
+<meta name="description" content="Energy and enzymes lab for majors biology: an enzyme rate bench where substrate, enzyme amount, temperature, pH and competitive and noncompetitive inhibitor sliders drive animated binding and a live Michaelis-Menten rate curve with Vmax and Km markers; a randomized trainer on delta G and spontaneity, energy diagrams, coupling, rate curves, inhibitor type, Q10 and turnover with animated worked solutions; a sorting game for terms and inhibitor effects; and real-world scenarios with experimental data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0F5759;--accent-wash:#DCEFEE;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#B8561A;--act2:#2F7FC1;--act3:#B07A10;--act4:#2E8A7A;--act5:#7B5CC9;--act6:#3E9B4F;--act7:#A04E8C;--act8:#5E7183;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF1F6;--grid:#D5DAE6;--paper:#FFFDF7;
+  --dna:#2F6FC1;--rna:#E07A1F;--prot:#C0455A;--lipid:#D9A520;--carb:#E08A1E;--atp:#E3B505;--elec:#1FA7C4;--water:#5FA8DC;--plant:#3E9B4F;
+  --dna-ink:#1D4F92;--rna-ink:#9A4A00;--prot-ink:#9B2C40;--lipid-ink:#6E5800;--carb-ink:#8A4F00;--atp-ink:#6E5800;--elec-ink:#0E6377;--water-ink:#1D5C93;--plant-ink:#2A6B37;
+  --enz:#C0455A;--enz-2:#E48A9A;--sub:#E08A1E;--prod:#7B5CC9;--prod-ink:#5B3FA8;--compi:#A04E8C;--compi-ink:#7E3A6E;--nci:#4F6273;--nci-ink:#3A4B5A;--actv:#2E8A7A;--cof:#2F8F86;
+  --phos:#E07B00;--phos-ink:#8A4A00;--adenine:#2F6FC1;--ribose:#D9A520;
+  --cC:#4A4F55;--cO:#D33A2C;--cN:#2F5FD0;--cH:#F2F4F5;--cP:#E07B00;--cS:#D9C21E;
+  --heat:#C8452B;--cold:#2F7FC1;--high:#C8452B;--low:#2F7FC1;--ea:#A9372F;--eacat:#2F6F4F;
+  --cell:#F3E3D3;--cell-edge:#B98A6A;--mito:#E7A55A;--mem:#D9A520;--cyto:#F6EEE4;
+  --skin1:#E8C2A0;--skin2:#B98462;--skin3:#7A5038;--hair:#3D3029;--pants:#2E3A46;--shirt1:#4F7FA8;--shirt2:#A0577A;--leaf:#4E9A3A;--soil:#8A6A4A;--sky:#D7E8F3;
+  --mus:#C76A6A;--blood:#C8453F;--milk:#F2F5F7;--glass:#E3EDF2;--glass-edge:#7F99A6;--liquid:#CFE5F1;--foam:#FFFFFF;--h2o2:#BFE0EE;--metal:#9AA6AF;--flame:#E8862A;--flame-in:#F6D04D;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#11302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#5E9BEB;--rna:#F2A25A;--prot:#EE7A8C;--lipid:#EBC452;--carb:#F2A24A;--atp:#F2D44A;--elec:#4FD0EA;--water:#7FC0EE;--plant:#6CCB7C;
+  --dna-ink:#8DB8F2;--rna-ink:#F5B97E;--prot-ink:#F49AA8;--lipid-ink:#F0D27A;--carb-ink:#F5B66A;--atp-ink:#F5DE72;--elec-ink:#7FDDEF;--water-ink:#9ACFF2;--plant-ink:#8AD898;
+  --enz:#EE7A8C;--enz-2:#9A4A58;--sub:#F2A24A;--prod:#A98BEF;--prod-ink:#BFA6F4;--compi:#D186C0;--compi-ink:#E0A6D4;--nci:#9AAEC0;--nci-ink:#B5C5D3;--actv:#5CC4B0;--cof:#5CC4B0;
+  --phos:#F59A3A;--phos-ink:#F5B46A;--adenine:#5E9BEB;--ribose:#EBC452;
+  --cC:#8A9096;--cO:#F0675A;--cN:#6F95F0;--cH:#E8EEF1;--cP:#F59A3A;--cS:#E8D44A;
+  --heat:#F07A5E;--cold:#5AA9E6;--high:#F07A5E;--low:#5AA9E6;--ea:#E07067;--eacat:#6BC293;
+  --cell:#3A2E26;--cell-edge:#C9A07E;--mito:#B87A3A;--mem:#B8962E;--cyto:#2A241F;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--hair:#1E1814;--pants:#4A5B6A;--shirt1:#5A8FBF;--shirt2:#B9698F;--leaf:#6EB85A;--soil:#6A5240;--sky:#1A2A36;
+  --mus:#B05A5A;--blood:#E0605A;--milk:#D8DEE2;--glass:#1E2C34;--glass-edge:#7F99A6;--liquid:#1F3A4A;--foam:#E8EEF1;--h2o2:#25404E;--metal:#5E6B75;--flame:#F2A93B;--flame-in:#F8DA6A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#11302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#5E9BEB;--rna:#F2A25A;--prot:#EE7A8C;--lipid:#EBC452;--carb:#F2A24A;--atp:#F2D44A;--elec:#4FD0EA;--water:#7FC0EE;--plant:#6CCB7C;
+  --dna-ink:#8DB8F2;--rna-ink:#F5B97E;--prot-ink:#F49AA8;--lipid-ink:#F0D27A;--carb-ink:#F5B66A;--atp-ink:#F5DE72;--elec-ink:#7FDDEF;--water-ink:#9ACFF2;--plant-ink:#8AD898;
+  --enz:#EE7A8C;--enz-2:#9A4A58;--sub:#F2A24A;--prod:#A98BEF;--prod-ink:#BFA6F4;--compi:#D186C0;--compi-ink:#E0A6D4;--nci:#9AAEC0;--nci-ink:#B5C5D3;--actv:#5CC4B0;--cof:#5CC4B0;
+  --phos:#F59A3A;--phos-ink:#F5B46A;--adenine:#5E9BEB;--ribose:#EBC452;
+  --cC:#8A9096;--cO:#F0675A;--cN:#6F95F0;--cH:#E8EEF1;--cP:#F59A3A;--cS:#E8D44A;
+  --heat:#F07A5E;--cold:#5AA9E6;--high:#F07A5E;--low:#5AA9E6;--ea:#E07067;--eacat:#6BC293;
+  --cell:#3A2E26;--cell-edge:#C9A07E;--mito:#B87A3A;--mem:#B8962E;--cyto:#2A241F;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--hair:#1E1814;--pants:#4A5B6A;--shirt1:#5A8FBF;--shirt2:#B9698F;--leaf:#6EB85A;--soil:#6A5240;--sky:#1A2A36;
+  --mus:#B05A5A;--blood:#E0605A;--milk:#D8DEE2;--glass:#1E2C34;--glass-edge:#7F99A6;--liquid:#1F3A4A;--foam:#E8EEF1;--h2o2:#25404E;--metal:#5E6B75;--flame:#F2A93B;--flame-in:#F8DA6A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ctl input[type=range]:disabled{opacity:.45}
+.modes3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes3 .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.modes3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.modes3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.gsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gsel .tbtn{font-size:13.5px;padding:7px 4px;line-height:1.25}
+.gsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.gsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.lifeq .opts{margin-top:6px}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.hgrid{grid-template-columns:1fr}}
+.target{border:2px solid var(--act6);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-bottom:10px}
+.target .k{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block}
+.eqn{font-family:var(--mono);font-size:15.5px;font-weight:600;overflow-wrap:anywhere}
+.hzone{border:2px dashed var(--rule);border-radius:var(--r);padding:8px;min-height:90px;display:flex;flex-direction:column;gap:8px}
+.hzone.over{border-color:var(--accent);background:var(--accent-wash)}
+.hzone h3{margin:0;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.hzone .empty{font-size:13.5px;color:var(--ink-soft);margin:0}
+.hcard{background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--exo);border-radius:var(--r);padding:8px 10px;touch-action:none}
+.hcard.pos{border-left-color:var(--endo)}
+.hcard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.hcard.drag{opacity:.9;box-shadow:var(--shadow);position:relative;z-index:20}
+.hcard .top{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.hcard .grip{cursor:grab;font-family:var(--mono);font-size:13px;color:var(--ink-soft);border:1px dashed var(--rule);border-radius:4px;padding:2px 6px;background:var(--panel-2)}
+.hcard .dh{font-family:var(--mono);font-weight:700;font-size:14.5px}
+.hcard .dh.neg{color:var(--bad)}.hcard .dh.posv{color:var(--endo-ink)}
+.hcard .ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.hcard .ctrls .tbtn{padding:5px 9px;font-size:13.5px}
+.hcard .mult{font-family:var(--mono);font-weight:700;min-width:44px;text-align:center}
+.sumbox{border:1.5px solid var(--rule);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-top:10px}
+.sumbox .eqn s{color:var(--bad)}
+.sumbox .tot{font-family:var(--mono);font-weight:700;font-size:16px;margin-top:4px}
+.dhpos{color:var(--endo-ink)}.dhneg{color:var(--bad)}
+.hintline{font-size:14.5px;margin:4px 0}
+.enzsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.enzsel .tbtn{font-size:13px;line-height:1.25;padding:7px 6px;text-align:left}
+.enzsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);font-weight:500}
+.enzsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.ctl .tk{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-faint);font-family:var(--mono)}
+.datat{border-collapse:collapse;margin:8px 0;font-size:14px;width:100%}
+.datat th,.datat td{border:1px solid var(--rule);padding:4px 8px;text-align:center}
+.datat th{background:var(--panel-2);font-weight:600;font-size:13px}
+.datat td{font-family:var(--mono)}
+.scard svg{display:none}
+.binhead span{font-size:14px}
+@media (max-width:420px){.enzsel{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 5 &middot; Energy, enzymes and metabolism</div>
+    <h1>Energy and Enzymes Lab</h1>
+    <p class="sub">Run an enzyme rate bench and watch the curve respond; train on free energy, energy diagrams, rate curves and inhibitors with animated worked solutions; sort the key terms; and read real experiments. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-sim" data-tab="sim" id="tabbtn-sim" type="button">Part 1 &middot; Enzyme Rate Bench</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 2 &middot; Energy and Rate Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sort" data-tab="sort" id="tabbtn-sort" type="button" tabindex="-1">Part 3 &middot; Match It Up</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 4 &middot; Enzymes in the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-sim" role="tabpanel" aria-labelledby="tabbtn-sim">
+    <h2 class="gk-sr">Part 1: Enzyme Rate Bench</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvSim" role="img" aria-label="Enzyme rate bench."></canvas></div>
+        <div class="stagebar"><span class="caption" id="simCap">Enzymes bind substrate, make product and let go. The graph shows rate against substrate for the settings you choose.</span></div>
+        <div class="legend">
+          <span><i style="background:var(--enz)"></i>Enzyme</span>
+          <span><i style="background:var(--sub)"></i>Substrate</span>
+          <span><i style="background:var(--prod)"></i>Product</span>
+          <span><i style="background:var(--compi)"></i>Competitive inhibitor (I)</span>
+          <span><i class="s" style="background:var(--nci)"></i>Noncompetitive inhibitor (N)</span>
+          <span><i class="ln" style="border-top-color:var(--accent)"></i>Your curve</span>
+          <span><i class="ln" style="border-top-color:var(--ink-faint)"></i>Reference: no inhibitors, best conditions</span>
+        </div>
+        <table class="readouts" id="simRead"><caption class="gk-sr">Live readouts</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">The rate follows the Michaelis-Menten equation, v = V<sub>max</sub>[S] ÷ (K<sub>m</sub> + [S]), with K<sub>m</sub> = 2 mM and V<sub>max</sub> = 10 µmol/min for 1 unit of enzyme at its best temperature and pH. A competitive inhibitor multiplies K<sub>m</sub> by (1 + [I]/K<sub>i</sub>); a pure noncompetitive inhibitor divides V<sub>max</sub> by (1 + [N]/K<sub>i</sub>). Temperature uses Q<sub>10</sub> = 2 below the optimum and denaturation above it; pH uses a bell curve around the optimum. Denaturation here is shown as instant and reversible so you can explore; real heat denaturation is often permanent. Animation speed is exaggerated.</p>
+      </div>
+      <aside class="card side" aria-label="Rate bench controls">
+        <h3 id="enz-h">Enzyme</h3>
+        <div class="enzsel" id="simEnz" role="group" aria-labelledby="enz-h"></div>
+        <div class="ctl"><label for="slS">Substrate [S] <output id="oS" for="slS"></output></label><input type="range" id="slS" min="0" max="20" step="0.5" value="4"></div>
+        <div class="ctl"><label for="slE">Enzyme amount <output id="oE" for="slE"></output></label><input type="range" id="slE" min="0.5" max="2" step="0.25" value="1"></div>
+        <div class="ctl"><label for="slT">Temperature <output id="oT" for="slT"></output></label><input type="range" id="slT" min="0" max="95" step="1" value="37"></div>
+        <div class="ctl"><label for="slP">pH <output id="oP" for="slP"></output></label><input type="range" id="slP" min="1" max="13" step="0.5" value="7"></div>
+        <div class="ctl"><label for="slI"><span>Competitive inhibitor [I]/K<sub>i</sub></span> <output id="oI" for="slI"></output></label><input type="range" id="slI" min="0" max="5" step="0.5" value="0"></div>
+        <div class="ctl"><label for="slN"><span>Noncompetitive inhibitor [N]/K<sub>i</sub></span> <output id="oN" for="slN"></output></label><input type="range" id="slN" min="0" max="5" step="0.5" value="0"></div>
+        <div class="bar"><button class="tbtn" type="button" id="simReset">Reset to defaults</button><button class="tbtn" type="button" id="simSweep">Sweep [S] from 0 to 20</button></div>
+        <div class="status" id="simStatus" role="status"></div>
+        <h3>Challenges</h3>
+        <ul class="chal" id="simChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 2: Energy and Rate Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Problems are randomly generated. Values are realistic teaching values. The worked solution builds step by step; units that cancel are struck through in red.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcNumWrap" class="ansrow">
+          <label for="calcAns" class="ans-l">Your answer</label>
+          <div class="ansbox"><input type="text" id="calcAns" inputmode="decimal" autocomplete="off" spellcheck="false"><span id="calcUnit" class="unit"></span></div>
+        </div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices" hidden></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">Type a number (a minus sign where needed; no units needed) or pick a choice. The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-sort" role="tabpanel" aria-labelledby="tabbtn-sort" hidden>
+    <h2 class="gk-sr">Part 3: Match It Up</h2>
+    <div class="rounds" id="sRounds" role="group" aria-label="Rounds"></div>
+    <div class="card">
+      <div class="sorthead">
+        <div><div class="lvl-n" id="sN"></div><h2 class="sec" id="sTitle"></h2></div>
+        <div class="sortbar">
+          <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+          <span class="timer" id="sTimer" hidden>0:00</span>
+          <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+        </div>
+      </div>
+      <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+      <p class="small">Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.</p>
+      <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+      <div class="bins" id="sBins"></div>
+      <div class="bar">
+        <button class="tbtn" id="sHint" type="button">Hint</button>
+        <button class="tbtn" id="sShow" type="button">Show answer</button>
+        <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+        <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <p class="small" id="sBest"></p>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 4: Enzymes in the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note" id="lifeNote">Fictional people and teaching data with rounded values. Not medical advice.</p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h2 class="sc-title" id="lifeTitle"></h2>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeData"></div>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Enzymes-Walkthrough.html">Energy and Enzymes Walkthrough</a>. Rate values and data are rounded teaching values.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "dna", "rna", "prot", "lipid", "carb", "atp", "elec", "water", "plant", "dna-ink", "rna-ink", "prot-ink", "lipid-ink", "carb-ink", "atp-ink", "elec-ink", "water-ink", "plant-ink", "enz", "enz-2", "sub", "prod", "prod-ink", "compi", "compi-ink", "nci", "nci-ink", "actv", "cof", "phos", "phos-ink", "adenine", "ribose", "cC", "cO", "cN", "cH", "cP", "cS", "heat", "cold", "high", "low", "ea", "eacat", "cell", "cell-edge", "mito", "mem", "cyto", "skin1", "skin2", "skin3", "hair", "pants", "shirt1", "shirt2", "leaf", "soil", "sky", "mus", "blood", "milk", "glass", "glass-edge", "liquid", "foam", "h2o2", "metal", "flame", "flame-in"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=fg||onFill();ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= utility drawing (shared) ================= */
+function wrapCount(t,w,size,weight){ctx.font=`${weight||500} ${size}px ${FONT}`;let n=1,ln="";t.split(" ").forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){n++;ln=wd}else ln=test});return n}
+/* fit one line of text into a width (shrinks font) */
+function fitTxt(x,y,t,maxW,o){o=o||{};let sz=o.size||13;ctx.font=`${o.weight||600} ${sz}px ${o.mono?MONO:FONT}`;const w=ctx.measureText(t).width;if(w>maxW)sz=Math.max(9.5,sz*maxW/w);txt(x,y,t,Object.assign({},o,{size:sz}))}
+/* worked example panel: rows = [{c:[items,res]} | {l:"text"} | {ans:"text"}], animates over `per` seconds */
+function wk(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);
+  const sw=o.split||0;const sz=o.size||12.5;
+  if(sw){let ly=wrapText(W_.q,x+12,y+38,sw-22,sz+4,{size:sz,weight:600})+sz+8;(W_.given||[]).forEach((g,i)=>{const a=seg(t,.6+i*.4,1+i*.4);if(a>0)withA(a,()=>wrapText(g,x+14,ly,sw-26,sz+3,{size:sz-.5,mono:true,weight:500}));ly+=wrapCount(g,sw-26,sz-.5)*(sz+3)+6});line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2)}
+  const rx=x+sw+14,rw=w-sw-28;let cy=y+(o.cy||30);const fs=o.cfs||14;const t0=o.t0||1.2;const dt=o.dt||1.8;
+  W_.rows.forEach((r,i)=>{const p_=clamp((t-t0-i*dt)/(dt*.85),0,1);
+    if(r.c){cy+=fs+6;if(p_>0){const cw=chainWidth(r.c[0],r.c[1],{size:fs});const sc=Math.min(1,rw/cw);ctx.save();ctx.translate(rx,cy);ctx.scale(sc,sc);chain(0,0,r.c[0],r.c[1],p_,{size:fs});ctx.restore()}cy+=fs+(o.rowGap||16)}
+    else if(r.l){cy+=12;if(p_>0)withA(p_,()=>fitTxt(rx,cy,r.l,rw,{size:o.lfs||13.5,weight:600,mono:true}));cy+=(o.lh||16)}
+    else if(r.ans){cy+=16;if(p_>0)withA(p_,()=>{ctx.font=`700 15px ${MONO}`;const tw=Math.min(rw,ctx.measureText(r.ans).width);rr(rx-4,cy-14,tw+14,28,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(rx+3,cy,r.ans,rw-6,{size:15,weight:700,mono:true})});cy+=18}});
+  if(W_.miss){const tm=t0+W_.rows.length*dt+.4;const a=seg(t,tm,tm+.6);if(a>0){const mw=o.missFull?w-24:rw+8;const mx=o.missFull?x+12:rx-4;const n=wrapCount("Common mistake: "+W_.miss,mw-16,sz-1);const mh=n*(sz+2)+10;
+    withA(a,()=>{rr(mx,y+h-mh-8,mw,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,mx+8,y+h-mh-8+5+(sz)/2+1,mw-16,sz+2,{size:sz-1})})}}
+  return t}
+function cardBox(x,y,w,h,col,on){rr(x,y,w,h,8);ctx.fillStyle=on?hexA(col,.16):hexA(C.panel,.88);ctx.fill();ctx.strokeStyle=on?col:C.rule;ctx.lineWidth=on?2.4:1.2;ctx.stroke()}
+function bar(x,y,w,h,f,col,o){o=o||{};rr(x,y,w,h,Math.min(4,h/2));ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){rr(x,y,w*clamp(f,0,1),h,Math.min(4,h/2));ctx.fillStyle=col;ctx.fill()}if(o.over&&f>1){txt(x+w+4,y+h/2,"+",{size:12,weight:700,color:C.bad})}}
+function vbar(x,y,w,h,f,col){rr(x,y,w,h,3);ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){const hh=h*clamp(f,0,1);rr(x,y+h-hh,w,hh,3);ctx.fillStyle=col;ctx.fill()}}
+function tick(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function fmtK(v){return Math.round(v).toLocaleString("en-US")}
+function gear(x,y,r,n,rot,col){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();for(let i=0;i<n*2;i++){const a=i*Math.PI/n;const rr_=i%2?r*.78:r;ctx.lineTo(Math.cos(a-.12)*rr_,Math.sin(a-.12)*rr_);ctx.lineTo(Math.cos(a+.12)*rr_,Math.sin(a+.12)*rr_)}ctx.closePath();ctx.fillStyle=hexA(col,.5);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=1.6;ctx.stroke();circ(0,0,r*.28,C.panel,col,1.6);ctx.restore()}
+/* count wrapped lines */
+function spark(x,y,s,col,p){if(p<=0||p>=1)return;ctx.save();ctx.globalAlpha*=Math.sin(p*Math.PI);ctx.translate(x,y-p*20);ctx.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8;const r=i%2?s*.4:s;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fillStyle=col||C.flame;ctx.fill();ctx.restore()}
+function flame(x,y,s,T,a){if(a!=null&&a<=0)return;ctx.save();if(a!=null)ctx.globalAlpha*=clamp(a,0,1);const w=Math.sin(T*13)*.08+Math.sin(T*7.3)*.06;
+  ctx.beginPath();ctx.moveTo(x-s*.5,y);ctx.quadraticCurveTo(x-s*.6,y-s*.8,x+s*w,y-s*1.6);ctx.quadraticCurveTo(x+s*.6,y-s*.8,x+s*.5,y);ctx.closePath();ctx.fillStyle=C.flame;ctx.fill();
+  ctx.beginPath();ctx.moveTo(x-s*.25,y);ctx.quadraticCurveTo(x-s*.3,y-s*.5,x+s*w*.6,y-s*.95);ctx.quadraticCurveTo(x+s*.3,y-s*.5,x+s*.25,y);ctx.closePath();ctx.fillStyle=C["flame-in"];ctx.fill();ctx.restore()}
+function thermo(x,y,h,f,o){o=o||{};const col=o.col||C.heat;rr(x-7,y-h,14,h,7);fillStroke(C.paper,C["ink-soft"],1.6);circ(x,y+6,12,col,C["ink-soft"],1.6);rr(x-3.5,y-h*clamp(f,0,1)+4,7,h*clamp(f,0,1),3.5);ctx.fillStyle=col;ctx.fill()}
+/* a speech bubble */
+function bubble(x,y,w,h,t,o){o=o||{};rr(x,y,w,h,10);fillStroke(o.fill||C.panel,o.stroke||C.rule,1.6);ctx.beginPath();const tx=o.tx==null?x+24:o.tx;ctx.moveTo(tx,y+h);ctx.lineTo(tx+10,y+h);ctx.lineTo(tx-4,y+h+14);ctx.closePath();ctx.fillStyle=o.fill||C.panel;ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.stroke();
+  rr(tx-1,y+h-3,13,5,0);ctx.fillStyle=o.fill||C.panel;ctx.fill();wrapText(t,x+10,y+16,w-20,o.lh||16,{size:o.size||12.5,weight:o.weight||500})}
+/* headline card */
+function heatWave(x1,y1,x2,y2,col,T,lw,a){if(a!=null&&a<=0)return;ctx.save();if(a!=null)ctx.globalAlpha*=clamp(a,0,1);const L=Math.hypot(x2-x1,y2-y1),ang=Math.atan2(y2-y1,x2-x1);ctx.translate(x1,y1);ctx.rotate(ang);
+  ctx.beginPath();for(let i=0;i<=40;i++){const t=i/40;const X=t*L,Y=Math.sin(t*TAU*2.5-T*6)*5;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(L,0);ctx.lineTo(L-8,-5);ctx.lineTo(L-8,5);ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.restore()}
+function pie(x,y,r,parts,o){o=o||{};const tot=parts.reduce((a,p)=>a+Math.max(0,p[0]),0)||1;let a0=-Math.PI/2;const out=[];
+  if(tot<=0||!parts.some(p=>p[0]>0)){circ(x,y,r,hexA(C.sunk,.8),C.rule,1.2);return out}
+  parts.forEach(p=>{const f=Math.max(0,p[0])/tot;const a1=a0+f*TAU*(o.p==null?1:o.p);if(f>0){ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,r,a0,a1);ctx.closePath();ctx.fillStyle=p[1];ctx.fill();ctx.strokeStyle=C.panel;ctx.lineWidth=2;ctx.stroke()}
+    out.push({f,mid:(a0+a1)/2,lab:p[2]});a0=a1});
+  if(o.hole){circ(x,y,r*o.hole,C.panel)}
+  if(o.labels!==false)out.forEach(q=>{if(q.f<.04||!q.lab)return;const rx=x+Math.cos(q.mid)*r*(o.lr||.66),ry=y+Math.sin(q.mid)*r*(o.lr||.66);label(rx,ry,q.lab,{size:o.fs||12,weight:700,mono:true,bga:.85})});return out}
+/* AMDR bars: pc = {carb,fat,prot} percent of kcal */
+const AMDR={carb:[45,65],fat:[20,35],prot:[10,35]};
+/* ================= biology drawing library (shared by both pages) ================= */
+function levelTag(x,y,k){const m={org:["ORGANISM",C.act1],cell:["CELL",C.act2],mol:["MOLECULE",C.act5],math:["THE MATH",C.accent],graph:["THE GRAPH",C.act4],data:["THE DATA",C.act4],eco:["THE WORLD",C.act6],lab:["THE BENCH",C.act8]}[k];
+  ctx.save();ctx.font=`700 10.5px ${MONO}`;const w=ctx.measureText(m[0]).width+12;rr(x,y-8,w,16,8);ctx.fillStyle=hexA(m[1],.16);ctx.fill();ctx.strokeStyle=m[1];ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle=C.ink;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(m[0],x+6,y+.5);ctx.restore();return w}
+/* link line between two levels (dashed zoom cone) */
+function zoomLink(x1,y1,r1,x2,y2,w2,h2,col){ctx.save();ctx.strokeStyle=hexA(col||C["ink-soft"],.55);ctx.lineWidth=1.2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x1,y1-r1);ctx.lineTo(x2,y2);ctx.moveTo(x1,y1+r1);ctx.lineTo(x2,y2+h2);ctx.stroke();ctx.restore()}
+function lens(x,y,r,col){circ(x,y,r,null,col||C["ink-soft"],2.2)}
+/* ---------- atoms (CPK colours) ---------- */
+const EL={C:"cC",O:"cO",N:"cN",H:"cH",P:"cP",S:"cS"};
+function atom(x,y,r,el,o){o=o||{};const col=C[EL[el]]||C["ink-soft"];circ(x,y,r,col,hexA(C.ink,.45),1);if(r>=7&&o.lab!==false){txt(x,y+.5,el,{size:Math.max(9,r*.95),weight:700,align:"center",color:inkOn(col)})}}
+/* ---------- simple organic molecule icons ---------- */
+function hexRing(x,y,s,col,rot,o){o=o||{};ctx.beginPath();for(let i=0;i<6;i++){const a=(rot||0)+i*TAU/6+Math.PI/6;const X=x+Math.cos(a)*s,Y=y+Math.sin(a)*s;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.fillStyle=hexA(col,o.fa==null?.35:o.fa);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=o.lw||2;ctx.stroke()}
+function pentRing(x,y,s,col,rot,o){o=o||{};ctx.beginPath();for(let i=0;i<5;i++){const a=(rot||0)-Math.PI/2+i*TAU/5;const X=x+Math.cos(a)*s,Y=y+Math.sin(a)*s;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.fillStyle=hexA(col,o.fa==null?.35:o.fa);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=o.lw||2;ctx.stroke()}
+function glucose(x,y,s,o){o=o||{};hexRing(x,y,s,o.col||C.carb,o.rot);if(o.lab)txt(x,y+.5,o.lab,{size:Math.max(9,s*.7),weight:700,align:"center"})}
+function aminoBead(x,y,r,col,lab){circ(x,y,r,col||C.prot,hexA(C.ink,.4),1.1);if(lab)txt(x,y+.5,lab,{size:Math.max(8.5,r*.9),weight:700,align:"center",color:inkOn(col||C.prot)})}
+function beadChain(pts,r,col,o){o=o||{};for(let i=1;i<pts.length;i++)line(pts[i-1][0],pts[i-1][1],pts[i][0],pts[i][1],hexA(col,.8),2);pts.forEach((p,i)=>aminoBead(p[0],p[1],r,i%2?col:mix(col,C.ink,.15)))}
+function water(x,y,s,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);circ(-s*.75,s*.55,s*.5,C.cH,hexA(C.ink,.35),1);circ(s*.75,s*.55,s*.5,C.cH,hexA(C.ink,.35),1);circ(0,0,s*.8,C.cO,hexA(C.ink,.35),1);ctx.restore()}
+function co2(x,y,s,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);circ(-s*1.25,0,s*.65,C.cO,hexA(C.ink,.35),1);circ(s*1.25,0,s*.65,C.cO,hexA(C.ink,.35),1);circ(0,0,s*.75,C.cC,hexA(C.ink,.35),1);ctx.restore()}
+function o2(x,y,s,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);circ(-s*.6,0,s*.7,C.cO,hexA(C.ink,.35),1);circ(s*.6,0,s*.7,C.cO,hexA(C.ink,.35),1);ctx.restore()}
+/* phosphate group: orange circle with P and a minus sign */
+function phos(x,y,r,o){o=o||{};circ(x,y,r,o.col||C.phos,hexA(C.ink,.5),1.2);txt(x,y+.5,"P",{size:Math.max(9,r*1.05),weight:800,align:"center",color:inkOn(o.col||C.phos)});if(o.neg!==false){txt(x+r*.85,y-r*.9,"−",{size:Math.max(10,r*.95),weight:800,align:"center",color:C.ink})}}
+/* ATP / ADP: adenine (blue double ring) + ribose (gold pentagon) + 2 or 3 phosphates.
+   o.n phosphates, o.split 0..1 = last phosphate leaving, o.jig = repulsion jiggle, o.lab labels */
+function atpMol(x,y,s,o){o=o||{};const n=o.n||3;const T_=o.T||0;
+  const ax=x,ay=y;hexRing(ax,ay,s*.62,C.adenine,0,{lw:1.8});pentRing(ax-s*1.02,ay,s*.5,C.adenine,Math.PI/2,{lw:1.8});
+  const rx=ax+s*1.25,ry=ay+s*.35;pentRing(rx,ry,s*.58,C.ribose,0,{lw:1.8});line(ax+s*.55,ay+s*.2,rx-s*.5,ry-s*.1,C["ink-soft"],1.6);
+  let px=rx+s*.9,py=ry-s*.15;const pr=s*.42;
+  for(let i=0;i<n;i++){let X=px+i*s*.98,Y=py;const j=o.jig?Math.sin(T_*28+i*2.1)*s*.05*o.jig:0;
+    if(i===n-1&&o.split){X+=o.split*s*2.2;Y-=o.split*s*1.4}
+    if(i>0&&!(i===n-1&&o.split>.15))line(px+(i-1)*s*.98+pr,py,X-pr,Y,C["ink-soft"],1.8);else if(i===0)line(rx+s*.5,ry,X-pr,Y,C["ink-soft"],1.8);
+    phos(X+j,Y-j,pr,{neg:true});}
+  if(o.lab){txt(ax-s*.4,ay+s*1.2,"adenine",{size:11,weight:600,align:"center",color:C["dna-ink"]});txt(rx,ry+s*1.0,"ribose",{size:11,weight:600,align:"center",color:C["lipid-ink"]});txt(px+s*.98,py+s*.95,"phosphates",{size:11,weight:600,align:"center",color:C["phos-ink"]})}}
+/* compact ATP token: yellow rounded tag with P chain, for flows */
+function atpTok(x,y,s,o){o=o||{};const n=o.n||3;const w=s*(1.2+n*.75);rr(x-w/2,y-s*.55,w,s*1.1,s*.55);fillStroke(hexA(C.atp,o.adp?.35:.85),C["atp-ink"],1.3);
+  txt(x-w/2+s*.62,y+.5,"A",{size:Math.max(9,s*.75),weight:800,align:"center",color:o.adp?C.ink:"#10161A"});for(let i=0;i<n;i++)circ(x-w/2+s*1.3+i*s*.75,y,s*.28,C.phos,hexA(C.ink,.5),1);
+  if(o.lab)txt(x,y+s*1.1,o.lab,{size:10.5,weight:700,align:"center",mono:true,color:C.ink})}
+function piTok(x,y,s){circ(x,y,s,C.phos,hexA(C.ink,.5),1.2);txt(x,y+.5,"Pi",{size:Math.max(8.5,s*.8),weight:800,align:"center",color:"#10161A"})}
+/* ---------- cell-level drawings ---------- */
+function cellOutline(x,y,r,T,o){o=o||{};blobPath(x,y,r,o.seed||1,(T||0)*.4,o.amp==null?.04:o.amp);fillStroke(o.fill||hexA(C.cell,.9),C["cell-edge"],2.2);
+  if(o.nucleus!==false){circ(x-r*.28,y-r*.12,r*.25,hexA(C.dna,.18),C.dna,1.6);circ(x-r*.25,y-r*.12,r*.08,hexA(C.dna,.45))}
+  (o.mito||[[.32,.22,.4],[-.1,.48,-.3],[.4,-.32,1]]).forEach(m=>mito(x+m[0]*r,y+m[1]*r,r*.22,r*.11,m[2]))}
+function mito(x,y,w,h,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ell(0,0,w,h,0,C.mito,mix(C.mito,C.ink,.4),1.3);ctx.beginPath();for(let i=0;i<=6;i++){const X=-w*.8+i*w*1.6/6,Y=(i%2?-1:1)*h*.55;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=mix(C.mito,C.ink,.45);ctx.lineWidth=1.2;ctx.stroke();ctx.restore()}
+/* membrane bilayer: horizontal strip at y, from x to x+w */
+function membrane(x,y,w,T,o){o=o||{};const n=Math.floor(w/11);const hr=4.2;const gap=o.gap||0;
+  for(let i=0;i<n;i++){const X=x+5+i*11;const wob=Math.sin((T||0)*2+i*.7)*1.1;if(gap&&Math.abs(X-gap[0])<gap[1])continue;
+    line(X-1.5,y-14+wob,X-1.5,y-2,hexA(C["lipid-ink"],.7),1.3);line(X+1.5,y-14+wob,X+1.5,y-2,hexA(C["lipid-ink"],.7),1.3);
+    line(X-1.5,y+2,X-1.5,y+14-wob,hexA(C["lipid-ink"],.7),1.3);line(X+1.5,y+2,X+1.5,y+14-wob,hexA(C["lipid-ink"],.7),1.3);
+    circ(X,y-17+wob,hr,C.lipid,hexA(C.ink,.3),.8);circ(X,y+17-wob,hr,C.lipid,hexA(C.ink,.3),.8)}}
+/* ---------- enzyme shape with a notched active site ----------
+   o.close 0..1 induced fit, o.distort 0..1 (allosteric / noncompetitive change), o.allo true = show allosteric notch underneath,
+   o.col, o.rot, o.T, o.alpha. Pocket opens upward (before rotation). Returns pocket centre in world coords. */
+function enzPocket(s,o){const cl=o.close||0,ds=o.distort||0;const top=-s*.78;const d=s*.46;
+  const w1=s*.36*(1-.22*cl),w2=s*.2;return {top,d,w1,w2,ds,pts:[[-w1-s*.06,-s*1.6],[-w1+ds*s*.2,top],[-w2+ds*s*.16,top+d-ds*s*.1],[w2-ds*s*.02,top+d+ds*s*.06],[w1-ds*s*.08,top],[w1+s*.06,-s*1.6]]}}
+function enzBodyPath(s,o){const T_=o.T||0;const cl=o.close||0;ctx.beginPath();const N=60;for(let i=0;i<=N;i++){const a=i/N*TAU;let rad=s*(1+.05*Math.sin(a*3+T_*1.5+(o.seed||0))+.04*Math.sin(a*5-T_));
+    const up=Math.max(0,-Math.sin(a));rad*=1+cl*.06*up;const X=Math.cos(a)*rad*1.08,Y=Math.sin(a)*rad*.92;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function enzyme(x,y,s,o){o=o||{};const col=o.col||C.enz;ctx.save();ctx.translate(x,y);if(o.rot)ctx.rotate(o.rot);if(o.alpha!=null)ctx.globalAlpha*=clamp(o.alpha,0,1);
+  const pk=enzPocket(s,o);const al={w:s*.2,h:s*.2,y:s*.92*.92};
+  /* clip away the pocket (and allosteric notch) */
+  ctx.save();ctx.beginPath();ctx.rect(-s*3,-s*3,s*6,s*6);pk.pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();
+  if(o.allo){ctx.moveTo(-al.w,s*1.6);ctx.lineTo(-al.w,al.y-al.h);ctx.lineTo(al.w,al.y-al.h);ctx.lineTo(al.w,s*1.6);ctx.closePath()}
+  ctx.clip("evenodd");enzBodyPath(s,o);const g=ctx.createRadialGradient(-s*.3,-s*.3,s*.1,0,0,s*1.15);g.addColorStop(0,mix(col,"#ffffff",.25));g.addColorStop(1,col);ctx.fillStyle=g;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=2;ctx.stroke();
+  /* secondary-structure hints */
+  ctx.strokeStyle=hexA(mix(col,C.ink,.5),.45);ctx.lineWidth=1.6;ctx.beginPath();for(let i=0;i<5;i++){const X=-s*.7+i*s*.12;ctx.moveTo(X,s*.15);ctx.quadraticCurveTo(X+s*.06,s*.05,X+s*.12,s*.15)}ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*.35,s*.05);ctx.lineTo(s*.75,s*.05);ctx.lineTo(s*.68,s*.0);ctx.moveTo(s*.35,s*.22);ctx.lineTo(s*.72,s*.22);ctx.stroke();
+  ctx.restore();
+  /* stroke pocket walls inside body */
+  ctx.save();enzBodyPath(s,o);ctx.clip();ctx.beginPath();pk.pts.slice(1,5).forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=mix(col,C.ink,.5);ctx.lineWidth=2.2;ctx.stroke();
+  if(o.allo){ctx.beginPath();ctx.moveTo(-al.w,s*1.3);ctx.lineTo(-al.w,al.y-al.h);ctx.lineTo(al.w,al.y-al.h);ctx.lineTo(al.w,s*1.3);ctx.stroke()}ctx.restore();
+  if(o.glow){ctx.save();ctx.globalAlpha*=o.glow;ctx.beginPath();pk.pts.slice(1,5).forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=C.gold;ctx.lineWidth=4;ctx.stroke();ctx.restore()}
+  ctx.restore();return {x:x,y:y+(pk.top+pk.d*.5)}}
+/* the substrate that fits the pocket: a trapezoid (wide top), optional split into two products */
+function substrate(x,y,s,o){o=o||{};const sp=o.split||0;const col=o.col||C.sub;const w1=s*.33,w2=s*.18,h=s*.44;ctx.save();ctx.translate(x,y);if(o.rot)ctx.rotate(o.rot);if(o.alpha!=null)ctx.globalAlpha*=clamp(o.alpha,0,1);
+  const halves=sp>0?[[-1,sp],[1,sp]]:[[0,0]];
+  halves.forEach(hv=>{const side=hv[0],f=hv[1];ctx.save();if(side)ctx.translate(side*f*s*.9,-f*s*.5);ctx.rotate(side*f*.6);const c2=sp>.05?mix(col,C.prod,clamp(sp*3,0,1)):col;
+    ctx.beginPath();if(side<=0){ctx.moveTo(-w1,-h/2);ctx.lineTo(side?0:w1,-h/2);ctx.lineTo(side?0:w2,h/2);ctx.lineTo(-w2,h/2)}else{ctx.moveTo(0,-h/2);ctx.lineTo(w1,-h/2);ctx.lineTo(w2,h/2);ctx.lineTo(0,h/2)}ctx.closePath();
+    ctx.fillStyle=c2;ctx.fill();ctx.strokeStyle=mix(c2,C.ink,.45);ctx.lineWidth=1.6;ctx.stroke();ctx.restore()});
+  if(!sp){line(0,-h/2+2,0,h/2-2,hexA(C.ink,.55),1.4,[2,2])}
+  if(o.lab&&!sp)txt(0,-h/2-9,o.lab,{size:10.5,weight:700,align:"center",mono:true});ctx.restore()}
+/* product piece (half substrate) drawn alone */
+function product(x,y,s,o){o=o||{};const col=o.col||C.prod;const w1=s*.33,w2=s*.18,h=s*.44;ctx.save();ctx.translate(x,y);ctx.rotate(o.rot||0);ctx.beginPath();ctx.moveTo(-w1/2,-h/2);ctx.lineTo(w1/2,-h/2);ctx.lineTo(w2/2,h/2);ctx.lineTo(-w2/2,h/2);ctx.closePath();
+  ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.4;ctx.stroke();ctx.restore()}
+/* competitive inhibitor: same outline as substrate, different colour and a bar mark (no cut line) */
+function compInhib(x,y,s,o){o=o||{};const w1=s*.33,w2=s*.18,h=s*.44;const col=C.compi;ctx.save();ctx.translate(x,y);if(o.rot)ctx.rotate(o.rot);if(o.alpha!=null)ctx.globalAlpha*=clamp(o.alpha,0,1);
+  ctx.beginPath();ctx.moveTo(-w1,-h/2);ctx.lineTo(w1,-h/2);ctx.lineTo(w2,h/2);ctx.lineTo(-w2,h/2);ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.6;ctx.stroke();
+  ctx.font=`800 ${Math.max(9,s*.2)}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle="#fff";ctx.fillText("I",0,1);ctx.restore()}
+/* allosteric / noncompetitive inhibitor: small square that fits the allosteric notch */
+function ncInhib(x,y,s,o){o=o||{};const w=s*.38,h=s*.2;ctx.save();ctx.translate(x,y);if(o.rot)ctx.rotate(o.rot);if(o.alpha!=null)ctx.globalAlpha*=clamp(o.alpha,0,1);const col=o.col||C.nci;
+  rr(-w/2,-h/2,w,h,2);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.5;ctx.stroke();ctx.font=`800 ${Math.max(8.5,s*.15)}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle="#fff";ctx.fillText(o.t||"N",0,1);ctx.restore()}
+/* where the substrate sits when bound (enzyme at x,y size s, no rotation) */
+function boundPos(x,y,s){return [x,y-s*.78+s*.22]}
+function alloPos(x,y,s){return [x,y+s*.92*.92-s*.1]}
+/* denatured chain: wavy unfolded strand */
+function unfolded(x,y,s,T,o){o=o||{};const col=o.col||C.enz;const pts=[];for(let i=0;i<16;i++){const X=x-s*1.4+i*s*.19,Y=y+Math.sin(i*1.3+(T||0)*3)*s*.22+Math.sin(i*.5)*s*.15;pts.push([X,Y])}poly(pts,col,3.5);pts.forEach((p,i)=>{if(i%3===0)circ(p[0],p[1],3,col)})}
+/* ---------- energy diagram ----------
+   x,y,w,h box; o.r reactant level (0..1 from bottom), o.p product level, o.ea hump top (0..1), o.cat (catalysed hump top or null), o.ball 0..1, o.labels */
+function ePath(x,y,w,h,r,p,top){const Y=v=>y+h-v*h;const x0=x,x1=x+w*.22,xm=x+w*.5,x2=x+w*.78,x3=x+w;return t=>{/* t 0..1 */if(t<=.22)return [lerp(x0,x1,t/.22),Y(r)];if(t>=.78)return [lerp(x2,x3,(t-.78)/.22),Y(p)];
+  const u=(t-.22)/.56;const base=lerp(r,p,smooth(u));const bump=Math.sin(u*Math.PI);const peak=top-Math.max(r,p);const v=base+(top-lerp(r,p,.5))*Math.pow(bump,1.6);return [lerp(x1,x2,u),Y(v)]}}
+function eDiagram(x,y,w,h,o){o=o||{};const r=o.r,p=o.p,top=o.ea;const Y=v=>y+h-v*h;
+  line(x,y-6,x,y+h,C["ink-soft"],1.6);line(x,y+h,x+w,y+h,C["ink-soft"],1.6);arrow(x,y+h,x,y-10,C["ink-soft"],1.6);
+  if(o.yl!==false){ctx.save();ctx.translate(x-12,y+h/2);ctx.rotate(-Math.PI/2);txt(0,0,o.yl||"free energy (G)",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});ctx.restore()}
+  txt(x+w,y+h+13,o.xl||"progress of the reaction",{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  const f=ePath(x,y,w,h,r,p,top);const pts=[];for(let i=0;i<=80;i++)pts.push(f(i/80));poly(pts,o.col||C.ink,2.6);
+  if(o.cat!=null){const fc=ePath(x,y,w,h,r,p,o.cat);const pc=[];for(let i=0;i<=80;i++)pc.push(fc(i/80));poly(pc,C.eacat,2.6,[7,5])}
+  if(o.ball!=null){const q=(o.cat!=null&&o.useCat?ePath(x,y,w,h,r,p,o.cat):f)(clamp(o.ball,0,1));circ(q[0],q[1]-7,7,o.ballCol||C.sub,hexA(C.ink,.5),1.2)}
+  return {Y,f,xm:x+w*.5,x1:x+w*.22,x2:x+w*.78}}
+/* bracket arrow (vertical) with label */
+function vBracket(x,y1,y2,col,t,o){o=o||{};arrow(x,y1,x,y2,col,2);if(o.both)arrow(x,y2,x,y1,col,2);if(t)label(x+(o.dx||8),(y1+y2)/2,t,{size:o.size||12,weight:700,align:o.align||"left",border:col,mono:o.mono})}
+/* Michaelis-Menten rate */
+function mmRate(S,Vmax,Km){return Vmax*S/(Km+S)}
+function hillRate(S,Vmax,K,n){const a=Math.pow(S,n);return Vmax*a/(Math.pow(K,n)+a)}
+/* ---------- organism silhouettes ---------- */
+function personFig(x,y,s,o){o=o||{};const sk=C[o.skin||"skin1"],sh=o.col||C.shirt1;const ph=o.run!=null?o.run:null;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  const hip=[x,y-s*.95],sho=[x+(ph!=null?s*.08:0),y-s*1.55];const leg=(a,c)=>{const k=[hip[0]+Math.sin(a)*s*.32,hip[1]+s*.45];const f=[k[0]+Math.sin(a-.6)*s*.3-(ph!=null?0:0),y];poly([hip,k,f],c,s*.13)};
+  const arm=(a,c)=>{const e=[sho[0]+Math.sin(a)*s*.25,sho[1]+s*.3];const h_=[e[0]+Math.sin(a+.9)*s*.22,e[1]+s*.2];poly([sho,e,h_],c,s*.1)};
+  if(ph!=null){leg(Math.sin(ph)*.9,mix(C.pants,sh,.2));arm(-Math.sin(ph)*1,sk)}else{poly([hip,[x-s*.12,y-s*.48],[x-s*.14,y]],mix(C.pants,sh,.2),s*.13)}
+  poly([hip,sho],sh,s*.3);circ(sho[0]+s*.03,sho[1]-s*.24,s*.16,sk,hexA(C.ink,.35),1);ctx.beginPath();ctx.arc(sho[0]+s*.03,sho[1]-s*.28,s*.165,Math.PI*1.05,Math.PI*2.05);ctx.fillStyle=C.hair;ctx.fill();
+  if(ph!=null){leg(-Math.sin(ph)*.9,C.pants);arm(Math.sin(ph)*1,sk)}else{poly([hip,[x+s*.12,y-s*.48],[x+s*.14,y]],C.pants,s*.13);poly([sho,[sho[0]+s*.18,sho[1]+s*.3],[sho[0]+s*.2,sho[1]+s*.6]],sk,s*.1);poly([sho,[sho[0]-s*.18,sho[1]+s*.3],[sho[0]-s*.2,sho[1]+s*.6]],sk,s*.1)}
+  ctx.restore();return {chest:[x,y-s*1.3],head:[sho[0],sho[1]-s*.24]}}
+function plantFig(x,y,s,T,o){o=o||{};ctx.save();rr(x-s*.32,y-s*.05,s*.64,s*.38,3);fillStroke(C.soil,mix(C.soil,C.ink,.3),1.2);
+  const sw=Math.sin((T||0)*1.3)*.04;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+s*sw*4,y-s*.6,x+s*sw*6,y-s*1.2);ctx.strokeStyle=C.plant;ctx.lineWidth=s*.06;ctx.stroke();
+  [[.35,-1,.8],[.6,1,.7],[.85,-1,.6],[1.05,1,.5]].forEach(l=>{const yy=y-s*l[0],xx=x+s*sw*6*l[0];ctx.save();ctx.translate(xx,yy);ctx.rotate(l[1]*(.7+sw*3));ell(l[1]*s*.2*l[2],0,s*.24*l[2],s*.09*l[2],0,C.leaf,mix(C.leaf,C.ink,.35),1);ctx.restore()});ctx.restore()}
+function bacterium(x,y,s,T,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(o.rot||0);rr(-s,-s*.42,s*2,s*.84,s*.42);fillStroke(o.col||hexA(C.plant,.35),o.edge||C.plant,1.6);
+  ctx.beginPath();for(let i=0;i<=12;i++){const X=s+i*s*.12,Y=Math.sin(i*.9+(T||0)*8)*s*.12;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=o.edge||C.plant;ctx.lineWidth=1.3;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(-s*.2,0,s*.4,s*.16,0,0,TAU);ctx.strokeStyle=hexA(C.dna,.6);ctx.lineWidth=1;ctx.stroke();ctx.restore()}
+function lizard(x,y,s,T){ctx.save();ctx.translate(x,y);const w=Math.sin((T||0)*3)*.15;ell(0,0,s*.55,s*.16,0,C.plant,mix(C.plant,C.ink,.35),1.2);circ(s*.6,-s*.04,s*.14,C.plant,mix(C.plant,C.ink,.35),1.2);circ(s*.66,-s*.08,s*.03,C.ink);
+  ctx.beginPath();ctx.moveTo(-s*.5,0);ctx.quadraticCurveTo(-s*.9,s*.2*w*5,-s*1.25,-s*.05);ctx.strokeStyle=C.plant;ctx.lineWidth=s*.08;ctx.stroke();
+  [[-.25,1],[.25,1],[-.25,-1],[.25,-1]].forEach(l=>line(s*l[0],0,s*l[0]+s*.12,s*l[1]*.28,C.plant,s*.06));ctx.restore()}
+/* ---------- lab glassware ---------- */
+function beaker(x,y,w,h,f,col,o){o=o||{};ctx.save();rr(x,y,w,h,6);ctx.fillStyle=hexA(C.glass,.6);ctx.fill();const fh=h*clamp(f,0,1);rr(x+2,y+h-fh,w-4,fh-2,5);ctx.fillStyle=col||C.liquid;ctx.fill();
+  ctx.strokeStyle=C["glass-edge"];ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-4,y);ctx.lineTo(x,y+4);ctx.lineTo(x,y+h-6);ctx.quadraticCurveTo(x,y+h,x+6,y+h);ctx.lineTo(x+w-6,y+h);ctx.quadraticCurveTo(x+w,y+h,x+w,y+h-6);ctx.lineTo(x+w,y+4);ctx.lineTo(x+w+4,y);ctx.stroke();
+  for(let i=1;i<4;i++)line(x+w-12,y+h*i/4,x+w-2,y+h*i/4,hexA(C["glass-edge"],.8),1.2);ctx.restore()}
+function testTube(x,y,w,h,f,col){ctx.save();ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+h-w/2);ctx.arc(x+w/2,y+h-w/2,w/2,Math.PI,0,true);ctx.lineTo(x+w,y);ctx.fillStyle=hexA(C.glass,.6);ctx.fill();
+  ctx.save();ctx.clip();const fh=h*clamp(f,0,1);ctx.fillStyle=col||C.liquid;ctx.fillRect(x,y+h-fh,w,fh);ctx.restore();ctx.strokeStyle=C["glass-edge"];ctx.lineWidth=2;ctx.stroke();ctx.restore()}
+function bubbleRise(x,y,w,h,n,T,rate,col){for(let i=0;i<n;i++){const ph=P(T*rate*(.7+rnd(i)*.6)+rnd(i+9),1);const bx=x+w*rnd(i*3+1)+Math.sin(T*3+i)*3,by=y+h-ph*h;circ(bx,by,2+rnd(i+5)*3,null,col||C["glass-edge"],1.3)}}
+/* small arrow "reaction" between labels */
+function rxArrow(x1,y,x2,col,t){arrow(x1,y,x2,y,col||C["ink-soft"],2);if(t)txt((x1+x2)/2,y-11,t,{size:11,weight:700,align:"center",mono:true,color:col||C["ink-soft"]})}
+/* numbered pathway node */
+function node(x,y,t,col,o){o=o||{};const r=o.r||16;circ(x,y,r,o.fill||hexA(col,.25),col,2);txt(x,y+.5,t,{size:o.size||13,weight:700,align:"center",mono:true})}
+
+/* ---------- panels and graph guides ---------- */
+function pnl(x,y,w,h,tag,o){panelBox(x,y,w,h,o);if(tag)levelTag(x+12,y+16,tag)}
+function rateAxes(g){return graph(Object.assign({xl:"[substrate] (mM)",yl:"rate",grid:true},g))}
+function hLine(g,v,col,t,o){o=o||{};line(g.x,g.Y(v),g.x+g.w,g.Y(v),col,1.6,[6,4]);if(t)txt(g.x+g.w-4,g.Y(v)-9,t,{size:11.5,weight:700,align:"right",mono:true,color:o.tc||col})}
+function vLine(g,v,col,t,o){o=o||{};line(g.X(v),g.y,g.X(v),g.y+g.h,col,1.6,[4,4]);if(t)label(g.X(v),g.y+g.h-12-(o.dy||0),t,{size:11,weight:700,mono:true,border:col})}
+
+function enzLoop(x,y,s,T,o){o=o||{};const per=o.per||6;const p=P(T+(o.off||0),per);const bp=boundPos(x,y,s);
+  const close=seg(p,.32,.45)*(1-seg(p,.72,.82));enzyme(x,y,s,{T,close,glow:o.glow?gauss(p,.5,.06):0,col:o.col});
+  const sx=o.from?o.from[0]:x-s*1.6,sy=o.from?o.from[1]:y-s*2.1;
+  if(p<.32){const e=ease(seg(p,0,.32));substrate(lerp(sx,bp[0],e),lerp(sy,bp[1],e),s,{rot:(1-e)*1.2})}
+  else if(p<.6){substrate(bp[0],bp[1],s,{split:0})}
+  else{const f=ease(seg(p,.6,.95));substrate(bp[0],bp[1]-f*s*.5,s,{split:.15+f*1.1,alpha:1-seg(p,.9,1)})}
+  return p}
+function steam(x,y,T,n){for(let i=0;i<(n||3);i++){const p=P(T*.5+i/3,1);ctx.save();ctx.globalAlpha*=1-p;ctx.beginPath();for(let k=0;k<=8;k++){const yy=y-k*5-p*20;const xx=x+i*14+Math.sin(k*.9+T*2)*4;k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.strokeStyle=C["ink-soft"];ctx.lineWidth=1.6;ctx.stroke();ctx.restore()}}
+function bodyOutline(x,y,s){circ(x,y-s*.82,s*.14,hexA(C.skin1,.6),hexA(C.ink,.4),1.2);rr(x-s*.26,y-s*.66,s*.52,s*.85,s*.16);fillStroke(hexA(C.skin1,.35),hexA(C.ink,.4),1.2)}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("b1-enz-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("b1-enz-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+let DT=0;
+/* ================= PART 1: enzyme rate bench ================= */
+const ENZ={amyl:{name:"Amylase-like",Tref:37,Tm:42,pH:7},pep:{name:"Pepsin-like",Tref:37,Tm:42,pH:2},thermo:{name:"Thermophile",Tref:75,Tm:80,pH:7}};
+const KM0=2,VM0=10;
+function rawT(e,t){return Math.pow(2,(t-e.Tref)/10)/(1+Math.exp((t-e.Tm)/2.2))}
+Object.keys(ENZ).forEach(k=>{const e=ENZ[k];let m=0,at=0;for(let t=0;t<=100;t+=.25){const v=rawT(e,t);if(v>m){m=v;at=t}}e.max=m;e.Topt=at;e.sub="best "+Math.round(at)+" °C, pH "+e.pH});
+function fTemp(e,t){return rawT(e,t)/e.max}
+function fPH(e,p){return Math.exp(-Math.pow(p-e.pH,2)/(2*1.5*1.5))}
+function denFrac(e,t){return 1/(1+Math.exp(-(t-e.Tm)/2.2))}
+const SIM={enz:"amyl",S:4,E:1,T:37,pH:7,I:0,N:0,prod:0,en:[],sweep:null,done:new Set(),last:-1};
+function simCalc(){const e=ENZ[SIM.enz];const fT=fTemp(e,SIM.T),fP=fPH(e,SIM.pH);const act=fT*fP;const Vref=VM0*SIM.E;const Vmax=Vref*act/(1+SIM.N);const Km=KM0*(1+SIM.I);const v=Vmax*SIM.S/(Km+SIM.S);
+  const D=Km+SIM.S;return {e,fT,fP,act,Vref,Vmax,Km,v,fS:SIM.S/D,fI:KM0*SIM.I/D,fN:SIM.N/(1+SIM.N),den:denFrac(e,SIM.T)}}
+const SCHAL=["Nearly saturate the enzyme: push the rate to at least 90% of V<sub>max</sub>.","Find K<sub>m</sub>: with no inhibitors, set [S] so the rate is half of V<sub>max</sub>.","Add a competitive inhibitor ([I]/K<sub>i</sub> of 2 or more), then win back at least 75% of V<sub>max</sub> by raising [S].","Show that a noncompetitive inhibitor cannot be outrun: [N]/K<sub>i</sub> of 2 or more with [S] = 20 mM keeps the rate below half of the reference V<sub>max</sub>.","Denature the enzyme: set the temperature at least 10 °C above its optimum.","Pick the pepsin-like enzyme and find its pH optimum (within 0.5).","Use 2 units of enzyme at its best temperature and pH and check that V<sub>max</sub> doubles to 20 µmol/min."];
+function simChecks(r){const d=SIM.done;const n0=d.size;
+  if(r.Vmax>.5&&r.v>=.9*r.Vmax)d.add(0);if(SIM.I===0&&SIM.N===0&&r.Vmax>.5&&Math.abs(r.v/r.Vmax-.5)<.03)d.add(1);if(SIM.I>=2&&r.Vmax>.5&&r.v>=.75*r.Vmax)d.add(2);
+  if(SIM.N>=2&&SIM.S>=20&&r.v<.5*r.Vref)d.add(3);if(SIM.T>=r.e.Topt+10)d.add(4);if(SIM.enz==="pep"&&Math.abs(SIM.pH-2)<=.5)d.add(5);if(SIM.E>=2&&r.act>=.95&&SIM.N===0)d.add(6);
+  if(d.size!==n0)chalUI($("#simChal"),SCHAL,d)}
+function simStatus(r){let t=`Rate ${r.v.toFixed(1)} µmol/min, ${r.Vmax>0.05?Math.round(r.v/r.Vmax*100):0}% of this V<sub>max</sub> (${r.Vmax.toFixed(1)}). `;let cls="";
+  if(r.den>.5){t+="The enzyme is denatured: the heat has unfolded it, so most active sites are gone.";cls="bad"}
+  else if(r.fP<.5){t+="This pH is far from the optimum: changed side-chain charges have warped the active site.";cls="warn"}
+  else if(SIM.N>0&&SIM.I>0)t+="Both inhibitors: V<sub>max</sub> is lowered by N and K<sub>m</sub> is raised by I.";
+  else if(SIM.N>0){t+=`Noncompetitive inhibitor: V<sub>max</sub> is divided by ${(1+SIM.N).toFixed(1)}. K<sub>m</sub> is unchanged, and more substrate cannot fix it.`;cls="warn"}
+  else if(SIM.I>0){t+=`Competitive inhibitor: K<sub>m</sub> rose to ${r.Km.toFixed(1)} mM. V<sub>max</sub> is unchanged, so enough substrate wins the active sites back.`;cls="warn"}
+  else if(r.fS>.9){t+="Nearly saturated: almost every active site is busy, so extra substrate barely helps.";cls="good"}
+  else if(r.fS<.3)t+="Low [S]: most active sites are empty, so the rate rises steeply as you add substrate.";
+  else t+="Between: the rate still climbs with [S], but more slowly as sites fill.";
+  const st=$("#simStatus");st.className="status "+cls;st.innerHTML=t}
+function simRead(r){const rows=[["Rate v",r.v.toFixed(2)+" µmol/min"],["V<sub>max</sub> (these conditions)",r.Vmax.toFixed(2)+" µmol/min"],["K<sub>m</sub> (apparent)",r.Km.toFixed(1)+" mM"],["Active sites busy with substrate",Math.round(r.fS*(1-r.fN)*(1-r.den)*100)+"%"],["Activity from temperature",Math.round(r.fT*100)+"%"],["Activity from pH",Math.round(r.fP*100)+"%"],["Product made so far",SIM.prod.toFixed(1)+" µmol"]];
+  $("#simRead tbody").innerHTML=rows.map(x=>`<tr><th scope="row">${x[0]}</th><td>${x[1]}</td></tr>`).join("")}
+let simReadT=0;
+function simSync(){$("#oS").textContent=SIM.S.toFixed(1)+" mM";$("#oE").textContent=SIM.E.toFixed(2)+" units";$("#oT").textContent=SIM.T+" °C";$("#oP").textContent=SIM.pH.toFixed(1);$("#oI").textContent=SIM.I.toFixed(1);$("#oN").textContent=SIM.N.toFixed(1);
+  const r=simCalc();simStatus(r);simRead(r);simChecks(r);a11yKey=""}
+function simEnzUI(){segBtns($("#simEnz"),Object.keys(ENZ).map(k=>[k,ENZ[k].name+"<small>"+ENZ[k].sub+"</small>"]),()=>SIM.enz,k=>{SIM.enz=k;simSync()})}
+function simInit(){const map={slS:"S",slE:"E",slT:"T",slP:"pH",slI:"I",slN:"N"};Object.keys(map).forEach(id=>{const el=$("#"+id);el.addEventListener("input",()=>{SIM[map[id]]=+el.value;SIM.sweep=null;simSync()})});
+  $("#simReset").onclick=()=>{Object.assign(SIM,{enz:"amyl",S:4,E:1,T:37,pH:7,I:0,N:0,prod:0,sweep:null});simPush();simEnzUI();simSync()};
+  $("#simSweep").onclick=()=>{SIM.sweep=performance.now();SIM.S=0;simPush()};
+  simEnzUI();chalUI($("#simChal"),SCHAL,SIM.done);simPush();simSync()}
+function simPush(){$("#slS").value=SIM.S;$("#slE").value=SIM.E;$("#slT").value=SIM.T;$("#slP").value=SIM.pH;$("#slI").value=SIM.I;$("#slN").value=SIM.N}
+/* per-enzyme state machine */
+function simEnzymes(r,now){const n=Math.round(SIM.E*4);while(SIM.en.length<n)SIM.en.push({st:"E",t0:now,dur:.4,seed:SIM.en.length});SIM.en.length=n;
+  const speed=Math.max(.25,r.fT*r.fP);
+  SIM.en.forEach((e,i)=>{if((now-e.t0)/1000>=e.dur){const x=Math.random();let st;
+      if(Math.random()<Math.max(0,(r.den-.12)/.88))st="D";else if(Math.random()<r.fN)st=Math.random()<r.fS?"NS":"N";else st=x<r.fS?"S":x<r.fS+r.fI?"I":"E";
+      e.st=st;e.t0=now;e.dur=st==="S"?1.4/speed:st==="E"?.5:st==="I"?1.6:st==="D"?2:1.8}})}
+function drawSim(now){use(S1);const T=now/1000;const r=simCalc();
+  if(SIM.sweep!=null){const f=(now-SIM.sweep)/6000;SIM.S=Math.min(20,Math.round(f*20*2)/2);simPush();simSync();if(f>=1)SIM.sweep=null}
+  SIM.prod+=r.v*DT/60;if((++simReadT)%15===0)simRead(r);
+  simEnzymes(r,now);
+  panelBox(10,10,780,300);levelTag(22,26,"mol");
+  /* thermometer and pH strip */
+  thermo(40,250,170,clamp(SIM.T/95,0,1),{col:C.heat});txt(40,276,SIM.T+" °C",{size:12,weight:700,align:"center",mono:true});
+  const pc=["#C8452B","#E07A1F","#E3B505","#3E9B4F","#1FA7C4","#2F6FC1","#7B5CC9"];for(let i=0;i<7;i++){rr(740,60+i*28,26,26,3);ctx.fillStyle=pc[i];ctx.fill()}const py=60+(SIM.pH-1)/12*(7*28-4);arrow(724,py,738,py,C.ink,2);txt(753,262,"pH "+SIM.pH.toFixed(1),{size:12,weight:700,align:"center",mono:true});
+  /* particles */
+  const nS=Math.min(32,Math.round(SIM.S*1.6));for(let i=0;i<nS;i++){const x=80+rnd(i)*630+Math.sin(T*1.1+i*1.7)*12,y=40+rnd(i+40)*250+Math.cos(T*1.3+i)*10;substrate(x,y,18,{rot:T*.8+i})}
+  const nI=Math.round(SIM.I*3);for(let i=0;i<nI;i++){const x=80+rnd(i+90)*630+Math.sin(T*.9+i*2)*12,y=40+rnd(i+130)*250+Math.cos(T*1.2+i)*10;compInhib(x,y,18,{rot:-T*.7+i})}
+  const nN=Math.round(SIM.N*3);for(let i=0;i<nN;i++){const x=80+rnd(i+190)*630+Math.sin(T*.8+i*2)*12,y=40+rnd(i+230)*250+Math.cos(T+i)*10;ncInhib(x,y,26,{rot:T*.6+i})}
+  const nH=Math.round(clamp((13-SIM.pH)*1.3,0,16));for(let i=0;i<nH;i++){txt(90+rnd(i+300)*600+Math.sin(T+i)*8,30+rnd(i+330)*270,"H⁺",{size:11,weight:700,align:"center",color:C["elec-ink"]})}
+  /* enzymes */
+  const n=SIM.en.length;const cols=Math.min(4,n),rows=Math.ceil(n/4);const s=34;const jig=SIM.T/95*2.5;
+  SIM.en.forEach((e,i)=>{const row=Math.floor(i/4),col=i%4;const cnt=row===rows-1?n-row*4:4;const x=400+(col-(cnt-1)/2)*150+Math.sin(T*5+i)*jig,y=(rows===1?160:105+row*115)+Math.cos(T*4.3+i)*jig;
+    const ph=(now-e.t0)/1000/e.dur;const warp=(1-r.fP)*.85;
+    if(e.st==="D"){unfolded(x,y,s,T+i);return}
+    const nc=e.st==="N"||e.st==="NS";enzyme(x,y,s,{T:T+i,allo:true,distort:Math.min(1,warp+(nc?1:0)),close:e.st==="S"&&ph>.2&&ph<.75?.7:0});const bp=boundPos(x,y,s),ap=alloPos(x,y,s);
+    if(nc)ncInhib(ap[0],ap[1]+4,s,{});
+    if(e.st==="S"){if(ph<.2){const f=ease(ph/.2);substrate(lerp(x-60,bp[0],f),lerp(y-70,bp[1],f),s,{rot:1-f})}else if(ph<.75)substrate(bp[0],bp[1],s,{});else{const f=(ph-.75)/.25;substrate(bp[0],bp[1]-f*30,s,{split:.2+f*1.1,alpha:1-f*.7})}}
+    if(e.st==="I")compInhib(bp[0],bp[1],s,{});
+    if(e.st==="NS"){const f=Math.sin(clamp(ph,0,1)*Math.PI);substrate(bp[0]+10,bp[1]-12-f*16,s,{rot:.5})}});
+  label(400,26,"Active sites busy: "+Math.round(r.fS*(1-r.fN)*(1-r.den)*100)+"%   ·   product made: "+SIM.prod.toFixed(1)+" µmol",{size:12,weight:700,mono:true,border:C.accent});
+  /* graph */
+  panelBox(10,320,780,270);levelTag(22,336,"graph");const g=graph({x:80,y:372,w:470,h:174,x0:0,x1:20,y0:0,y1:22,xt:[0,2,4,6,8,10,12,14,16,18,20],yt:[0,5,10,15,20],xl:"[substrate] (mM)",yl:"rate (µmol/min)"});
+  curve(g,s=>mmRate(s,r.Vref,KM0),0,20,C["ink-faint"],2,[6,4]);
+  if(r.Vmax>.05){hLine(g,r.Vmax,C.accent,"Vmax "+r.Vmax.toFixed(1),{tc:C["accent-ink"]});line(g.x,g.Y(r.Vmax/2),g.X(Math.min(20,r.Km)),g.Y(r.Vmax/2),hexA(C.accent,.8),1.4,[3,3]);txt(Math.min(g.X(Math.min(20,r.Km))+6,g.x+g.w-50),g.Y(r.Vmax/2)-9,"Vmax/2",{size:11,weight:700,mono:true,color:C["accent-ink"]});
+    if(r.Km<=20){line(g.X(r.Km),g.Y(r.Vmax/2),g.X(r.Km),g.y+g.h,C.accent,1.6,[3,3]);label(g.X(r.Km),g.y+g.h-12,"Km "+r.Km.toFixed(1),{size:11,weight:700,mono:true,border:C.accent})}}
+  curve(g,s=>mmRate(s,r.Vmax,r.Km),0,20,C.accent,3);gdot(g,SIM.S,r.v,C.sub,null,{guides:true,r:7});
+  /* side gauges */
+  const bx=590;title(bx,352,"This moment",C["ink-soft"]);txt(bx,378,"rate",{size:12,weight:700});bar(bx+50,370,130,14,r.v/22,C.sub);txt(bx+184,378,r.v.toFixed(1),{size:11.5,mono:true,weight:700});
+  txt(bx,404,"Vmax",{size:12,weight:700});bar(bx+50,396,130,14,r.Vmax/22,C.accent);txt(bx+184,404,r.Vmax.toFixed(1),{size:11.5,mono:true,weight:700});
+  txt(bx,438,"temp",{size:12,weight:700});bar(bx+50,430,130,14,r.fT,C.heat);txt(bx+184,438,Math.round(r.fT*100)+"%",{size:11.5,mono:true,weight:700});
+  txt(bx,464,"pH",{size:12,weight:700});bar(bx+50,456,130,14,r.fP,C.elec);txt(bx+184,464,Math.round(r.fP*100)+"%",{size:11.5,mono:true,weight:700});
+  wrapText(r.e.name+" enzyme. Best near "+Math.round(r.e.Topt)+" °C and pH "+r.e.pH+".",bx,500,190,15,{size:11.5,weight:600,color:C["ink-soft"]});
+}
+function simA11y(){const r=simCalc();const lab=`Enzyme rate bench: ${r.e.name}, substrate ${SIM.S} mM, rate ${r.v.toFixed(1)} of Vmax ${r.Vmax.toFixed(1)} micromoles per minute, Km ${r.Km.toFixed(1)} mM.`;
+  const d=`Top: ${SIM.en.length} rose enzymes float among ${Math.min(32,Math.round(SIM.S*1.6))} amber substrate wedges${SIM.I?", magenta competitive inhibitors marked I that sit in active sites":""}${SIM.N?", and grey-blue noncompetitive inhibitors marked N that click into a notch under the enzyme and warp the active site":""}. About ${Math.round(r.fS*(1-r.fN)*(1-r.den)*100)}% of active sites hold substrate and release violet products.${r.den>.5?" Most enzymes are drawn as unfolded strands because they are denatured.":""} Bottom: a graph of rate against substrate concentration. Your teal curve rises and levels off at a dashed Vmax line of ${r.Vmax.toFixed(1)}; a dashed half-Vmax guide drops to Km at ${r.Km.toFixed(1)} mM; a grey dashed reference curve shows the uninhibited enzyme at its best conditions. An amber dot marks your current substrate setting.`;
+  return [lab,d]}
+/* ================= PART 2: energy and rate trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const r1=v=>Math.round(v*10)/10;
+const MN=v=>(v<0?"−":"")+String(Math.abs(v));
+const SG_=(v,dp)=>{const s=dp!=null?Math.abs(v).toFixed(dp):String(Math.abs(v));return (v<0?"−":"+")+s};
+const fx=(v,dp)=>(v<0?"−":"")+Math.abs(v).toFixed(dp);
+const CTYPES=[["mix","All types, mixed"],["dg","ΔG = ΔH − TΔS"],["spont","Spontaneous or not?"],["couple","Energy coupling with ATP"],["ediag","Reading energy diagrams"],["mm","Rate curves: Vmax, Km and v"],["inhib","Inhibitor type from graphs"],["q10","Temperature and Q10"],["turn","Turnover number"]];
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:0,count:0,solT:0,pick:null};
+const GEN={
+ dg(){let dH,dSJ,TC,TK,dSk,TS,ans,k=0;do{dH=ri(-60,60);dSJ=ri(-40,40)*5;TC=pick([0,25,37,37,50,80]);TK=TC+273;dSk=dSJ/1000;TS=TK*dSk;ans=dH-TS;k++}while((Math.abs(dH)<3||Math.abs(dSJ)<20||Math.abs(ans)<.4)&&k<200);
+  const useJ=Math.random()<.35;const dSs=useJ?SG_(dSJ)+" J/(mol·K)":SG_(dSk,3)+" kJ/(mol·K)";const ansR=r1(ans);
+  const rows=[{l:`T = ${TC} + 273 = ${TK} K`}];if(useJ)rows.push({l:`ΔS = ${MN(dSJ)} J/(mol·K) ÷ 1,000 = ${fx(dSk,3)} kJ/(mol·K)`});
+  rows.push({c:[[F(TK,["K"]),F(fx(dSk,3),["kJ"],"1",["mol","K"])],[fx(TS,1),["kJ/mol"]]]});rows.push({l:`ΔG = ΔH − TΔS = ${MN(dH)} − (${fx(TS,1)})`});rows.push({ans:`ΔG = ${fx(ans,1)} kJ/mol: ${ans<0?"spontaneous (exergonic)":"not spontaneous (endergonic)"}`});
+  return {title:"ΔG = ΔH − TΔS",html:`A reaction has <b>ΔH = ${SG_(dH)} kJ/mol</b> and <b>ΔS = ${dSs}</b> at <b>${TC} °C</b>. Find <b>ΔG</b> in kJ/mol. Is it spontaneous?`,ans,unit:"kJ/mol",dp:1,tol:.16,
+   hints:["Use ΔG = ΔH − TΔS, with T in kelvin (K = °C + 273)."+(useJ?" ΔS is in joules: divide by 1,000 to get kJ.":""),`T = ${TK} K, so TΔS = ${TK} × ${fx(dSk,3)} = ${fx(TS,1)} kJ/mol.`,`ΔG = ${MN(dH)} − (${fx(TS,1)}). Watch the double negative.`],
+   rows,miss:"using °C for T, or adding TΔS instead of subtracting it.",
+   slips:[[dH-TC*dSk,"That used °C. Convert to kelvin first: K = °C + 273."],[dH+TS,"That added TΔS. The formula subtracts it: ΔG = ΔH − TΔS."],useJ?[dH-TK*dSJ,"ΔS was given in J/(mol·K). Divide by 1,000 to get kJ before combining with ΔH."]:[NaN,""],[-ans,"Right size, wrong sign. Recheck ΔH − TΔS term by term."]],
+   vis:{k:"dg",dH,TS,TK,TC,ans}}},
+ spont(){if(Math.random()<.55){const h=pick(["−","+"]),s=pick(["+","−"]);const ans=h==="−"&&s==="+"?0:h==="+"&&s==="−"?1:h==="−"?2:3;
+   const why=["Both terms help: ΔH is negative and −TΔS is negative, so ΔG < 0 at every temperature.","Both terms hurt: ΔH is positive and −TΔS is positive, so ΔG > 0 at every temperature.","ΔH helps but −TΔS hurts, and the hurt grows with T. At low T, ΔH wins: spontaneous only at low temperature.","ΔH hurts but −TΔS helps, and the help grows with T. At high T, −TΔS wins: spontaneous only at high temperature."][ans];
+   return {title:"Spontaneous or not?",html:`A process has <b>ΔH ${h==="−"?"&lt; 0 (releases heat)":"&gt; 0 (absorbs heat)"}</b> and <b>ΔS ${s==="+"?"&gt; 0 (more disorder)":"&lt; 0 (more order)"}</b>. Using ΔG = ΔH − TΔS, when is it spontaneous?`,
+    choices:["Spontaneous at every temperature","Never spontaneous","Spontaneous only at low temperature","Spontaneous only at high temperature"],ans,unit:"",
+    hints:["Spontaneous means ΔG < 0.",`ΔS ${s==="+"?"> 0":"< 0"} makes the −TΔS term ${s==="+"?"negative (helps)":"positive (hurts)"}, and it grows as T rises.`,`ΔH ${h==="−"?"< 0 helps":"> 0 hurts"}. Combine the two.`],
+    rows:[{l:`ΔH ${h==="−"?"< 0: helps ΔG go negative":"> 0: pushes ΔG positive"}`},{l:`−TΔS ${s==="+"?"< 0: helps, more at high T":"> 0: hurts, more at high T"}`},{ans:["Always spontaneous","Never spontaneous","Spontaneous at low T only","Spontaneous at high T only"][ans]}],miss:why,vis:{k:"spont",mode:"sign",h,s,ans}}}
+  const dG=pick([-1,1,1,-1,0])*(pick([0,1])?ri(3,40):r1(ri(10,90)/10));const ans=dG<0?0:dG>0?1:2;
+  return {title:"Spontaneous or not?",html:`At cell conditions a reaction has <b>ΔG = ${dG===0?"0":SG_(dG)} kJ/mol</b>. Which description fits?`,choices:["Exergonic: it can proceed on its own (not necessarily fast)","Endergonic: it needs an energy input, such as coupling to ATP","At equilibrium: no net change and no work can be done"],ans,unit:"",
+   hints:["Look only at the sign of ΔG.","Negative ΔG = energy released = exergonic. Positive ΔG = energy absorbed = endergonic.",dG===0?"ΔG = 0 is the special case: equilibrium.":`Here ΔG is ${dG<0?"negative":"positive"}.`],
+   rows:[{l:`ΔG = ${dG===0?"0":SG_(dG)} kJ/mol`},{l:dG<0?"products lower than reactants":dG>0?"products higher than reactants":"no free energy difference left"},{ans:["Exergonic, spontaneous","Endergonic, needs energy","At equilibrium"][ans]}],miss:"spontaneous does not mean fast; speed depends on activation energy.",vis:{k:"spont",mode:"dg",dG,ans}}},
+ couple(){if(Math.random()<.5){let dGr,n,ans,k=0;do{dGr=r1(ri(10,130)/10);n=pick([1,1,2,2,3]);ans=r1(dGr-7.3*n);k++}while((Math.abs(ans)<.3||n*7.3>dGr+16)&&k<200);
+   return {title:"Energy coupling: total ΔG",html:`A reaction has <b>ΔG = +${dGr.toFixed(1)} kcal/mol</b>. It is coupled to the hydrolysis of <b>${n} ATP</b> (ΔG = −7.3 kcal/mol each). What is ΔG for the coupled process?`,ans,unit:"kcal/mol",dp:1,tol:.06,
+    hints:["ΔG values of coupled steps add.",`The ATP part is ${n} × (−7.3) = ${fx(-7.3*n,1)} kcal/mol.`,`Total = +${dGr.toFixed(1)} + (${fx(-7.3*n,1)}).`],
+    rows:[{l:"ΔG(total) = ΔG(reaction) + n × ΔG(ATP)"},{l:`= +${dGr.toFixed(1)} + ${n} × (−7.3) kcal/mol`},{ans:`ΔG = ${fx(ans,1)} kcal/mol: ${ans<0?"the coupled process runs":"still uphill: needs more ATP"}`}],miss:"ignoring the minus sign on ATP hydrolysis and adding 7.3.",
+    slips:[[dGr+7.3*n,"ATP hydrolysis has a NEGATIVE ΔG. Add −7.3 for each ATP."],n>1?[dGr-7.3,"That used only one ATP. Multiply −7.3 by "+n+"."]:[NaN,""],[-(dGr+7.3*n),"Check the sign of the reaction's ΔG: it is positive."]],vis:{k:"couple",dGr,n,ans}}}
+  let dGr,ans,k=0;do{dGr=r1(ri(15,300)/10);ans=Math.ceil(dGr/7.3);k++}while((Math.abs(dGr/7.3-Math.round(dGr/7.3))<.06)&&k<200);
+  return {title:"Energy coupling: how many ATP?",html:`A reaction has <b>ΔG = +${dGr.toFixed(1)} kcal/mol</b>. What is the <b>fewest ATP</b> (−7.3 kcal/mol each) that must be coupled to make the total ΔG negative?`,ans,unit:"ATP",dp:0,tol:.01,
+   hints:["Each ATP adds −7.3 kcal/mol.",`${dGr.toFixed(1)} ÷ 7.3 = ${(dGr/7.3).toFixed(2)}.`,"You cannot use part of an ATP, so round UP to the next whole number."],
+   rows:[{l:`${dGr.toFixed(1)} ÷ 7.3 = ${(dGr/7.3).toFixed(2)} → round up`},{l:`check: +${dGr.toFixed(1)} + ${ans} × (−7.3) = ${fx(dGr-7.3*ans,1)} kcal/mol`},{ans:`${ans} ATP`}],miss:"rounding down leaves the total still positive.",
+   slips:[[Math.floor(dGr/7.3),"That rounds down, which leaves the total ΔG positive. Round up."],[Math.round(dGr),"Each ATP gives 7.3 kcal/mol, not 1. Divide by 7.3."]],vis:{k:"couple",dGr,n:ans,ans:r1(dGr-7.3*ans),howMany:true}}},
+ ediag(){let R,Pp,Top,Cat,k=0;do{R=ri(2,8)*10;Pp=R+pick([-1,1])*ri(1,5)*10;Top=Math.max(R,Pp)+ri(3,6)*10;Cat=Math.max(R,Pp)+ri(1,2)*10;k++}while((Pp<10||Pp>110||Top>150)&&k<200);
+  const ask=pick(["dG","dG","eaU","eaC","kind"]);const base={title:"Reading an energy diagram",unit:"kJ/mol",dp:0,tol:.5,vis:{k:"ediag",R,Pp,Top,Cat,ask}};
+  if(ask==="dG")return Object.assign(base,{html:"Read the energy diagram. What is <b>ΔG</b> for the reaction (products minus reactants), in kJ/mol?",ans:Pp-R,hints:["ΔG = G(products) − G(reactants). Ignore the hump.",`Reactants sit at ${R} kJ/mol.`,`Products sit at ${Pp} kJ/mol.`],
+    rows:[{l:`reactants ${R}, products ${Pp} kJ/mol`},{l:`ΔG = ${Pp} − ${R}`},{ans:`ΔG = ${MN(Pp-R)} kJ/mol (${Pp<R?"exergonic":"endergonic"})`}],miss:"subtracting the wrong way round (reactants minus products) flips the sign.",slips:[[R-Pp,"That is reactants minus products. ΔG = products − reactants."],[Pp,"That is the product level, not the change. Subtract the reactant level."],[Top-R,"That is the activation energy (the hump), not ΔG."]]});
+  if(ask==="eaU")return Object.assign(base,{html:"Read the energy diagram. What is the <b>activation energy without the enzyme</b> (solid curve), in kJ/mol?",ans:Top-R,hints:["Activation energy = top of the hump − reactant level.",`The solid hump peaks at ${Top} kJ/mol.`,`Reactants sit at ${R} kJ/mol.`],
+    rows:[{l:`peak ${Top}, reactants ${R} kJ/mol`},{l:`EA = ${Top} − ${R}`},{ans:`EA = ${Top-R} kJ/mol`}],miss:"reading the peak height from zero instead of from the reactants.",slips:[[Top,"That is the peak height from zero. Measure from the reactant level."],[Top-Pp,"That measured from the products, which is the reverse reaction's barrier."],[Cat-R,"That is the dashed (enzyme) hump. The question asks for the solid curve."]]});
+  if(ask==="eaC")return Object.assign(base,{html:"Read the energy diagram. What is the <b>activation energy with the enzyme</b> (dashed curve), in kJ/mol?",ans:Cat-R,hints:["Use the dashed curve's peak.",`The dashed hump peaks at ${Cat} kJ/mol.`,`Subtract the reactant level, ${R} kJ/mol.`],
+    rows:[{l:`dashed peak ${Cat}, reactants ${R} kJ/mol`},{l:`EA(enzyme) = ${Cat} − ${R}`},{ans:`EA = ${Cat-R} kJ/mol (lower than ${Top-R} without enzyme)`}],miss:"enzymes lower EA but leave ΔG unchanged.",slips:[[Top-R,"That is the solid curve, without the enzyme."],[Cat,"Measure from the reactant level, not from zero."]]});
+  return Object.assign(base,{html:"Read the energy diagram. Is this reaction exergonic or endergonic?",choices:["Exergonic: products are lower, ΔG negative","Endergonic: products are higher, ΔG positive"],ans:Pp<R?0:1,unit:"",dp:null,
+    hints:["Compare the product level with the reactant level.",`Reactants ${R}, products ${Pp} kJ/mol.`,"Lower products = energy released."],rows:[{l:`ΔG = ${Pp} − ${R} = ${MN(Pp-R)} kJ/mol`},{ans:Pp<R?"Exergonic":"Endergonic"}],miss:"the hump height says nothing about exergonic or endergonic."})},
+ mm(){const sub=pick(["calc","calc","km","vmax"]);const Vmax=pick([20,40,50,60,80,100,120]);
+  if(sub==="calc"){let Km,S,k=0;do{Km=pick([1,2,4,5,8,10]);S=pick([.5,1,2,3,4,5,6,8,10,12,15,20]);k++}while(S===Km&&Math.random()<.6&&k<20);const ans=Vmax*S/(Km+S);
+   return {title:"Michaelis-Menten rate",html:`An enzyme has <b>V<sub>max</sub> = ${Vmax} µmol/min</b> and <b>K<sub>m</sub> = ${Km} mM</b>. What is the rate <b>v</b> when <b>[S] = ${S} mM</b>?`,ans,unit:"µmol/min",dp:1,tol:.06,
+    hints:["v = Vmax[S] ÷ (Km + [S]).",`Km + [S] = ${Km} + ${S} = ${Km+S} mM.`,`v = ${Vmax} × ${S} ÷ ${Km+S}.`],
+    rows:[{l:`Km + [S] = ${Km} + ${S} = ${Km+S} mM`},{c:[[F(Vmax,["µmol/min"]),F(S,["mM"],Km+S,["mM"])],[ans.toFixed(1),["µmol/min"]]]},{ans:`v = ${ans.toFixed(1)} µmol/min (${Math.round(ans/Vmax*100)}% of Vmax)`}],miss:"leaving [S] out of the denominator, or treating Km as a rate.",
+    slips:[[Vmax*S/Km,"The denominator is Km + [S], not Km alone."],S!==Km?[Vmax/2,"Half of Vmax only happens when [S] = Km."]:[NaN,""],[Vmax*Km/(Km+S),"[S] goes on top: v = Vmax[S] ÷ (Km + [S])."]],vis:{k:"mm",sub,Vmax,Km,S}}}
+  if(sub==="km"){const Km=pick([1,2,3,4,5,6,8]);return {title:"Read Km from a graph",html:`The graph shows the rate of an enzyme against [S]. V<sub>max</sub> is <b>${Vmax} µmol/min</b>. Read <b>K<sub>m</sub></b> from the graph, in mM.`,ans:Km,unit:"mM",dp:null,tol:.5,
+    hints:["Km is the substrate concentration at which v = Vmax/2.",`Vmax/2 = ${Vmax/2} µmol/min. Find that height on the y-axis.`,"Go across to the curve, then straight down to the x-axis."],
+    rows:[{l:`Vmax/2 = ${Vmax} ÷ 2 = ${Vmax/2} µmol/min`},{l:"across to the curve, down to [S]"},{ans:`Km = ${Km} mM`}],miss:"Km is a concentration on the x-axis, not half of Vmax on the y-axis.",slips:[[Vmax/2,"That is half of Vmax, a rate. Km is the [S] where the rate reaches that value."],[Vmax,"That is Vmax, a rate. Km is a concentration."]],vis:{k:"mm",sub,Vmax,Km}}}
+  const Km=pick([1,2,4]);return {title:"Read Vmax from a graph",html:"The graph shows an enzyme's rate against [S] up to high substrate. Estimate <b>V<sub>max</sub></b>, the rate the curve levels off toward, in µmol/min.",ans:Vmax,unit:"µmol/min",dp:null,tol:Vmax*.07,
+   hints:["Vmax is the plateau: the rate when every active site is busy.","Look at the right side of the graph where the curve flattens.","Read the y-value the curve approaches (slightly above the last point)."],
+   rows:[{l:"curve levels off at high [S]"},{l:"rate approaches the plateau on the y-axis"},{ans:`Vmax ≈ ${Vmax} µmol/min`}],miss:"reading the rate at a middle [S] gives a value below Vmax.",slips:[[Vmax/2,"That is half of Vmax. Vmax is where the curve levels off."]],vis:{k:"mm",sub,Vmax,Km}}},
+ inhib(){if(Math.random()<.55){const kind=pick(["comp","comp","nc","nc","act"]);const kf=pick([2,3,4]);const Vmax=pick([40,60,80,100]);const ans=kind==="comp"?0:kind==="nc"?1:2;
+   return {title:"Inhibitor type from a graph",html:"The graph shows an enzyme's rate against [S] without (solid) and with (dashed) an added molecule. What is the added molecule?",choices:["A competitive inhibitor","A noncompetitive inhibitor","An activator, not an inhibitor"],ans,unit:"",
+    hints:["Compare the plateaus (Vmax) first, then the [S] at half of each plateau (Km).","Same Vmax but Km shifted right = competitive. Lower Vmax, same Km = noncompetitive.",kind==="act"?"Here the dashed curve rises ABOVE the solid one.":kind==="comp"?"Here the dashed curve reaches the same plateau, just later.":"Here the dashed curve levels off lower."],
+    rows:[{l:kind==="comp"?"Vmax: same · Km: larger ("+2*kf+" vs 2 mM)":kind==="nc"?"Vmax: lower (÷"+kf+") · Km: same (2 mM)":"Vmax: higher · Km: same"},{l:kind==="comp"?"more substrate wins back the active sites":kind==="nc"?"extra substrate cannot fix a warped enzyme":"the molecule boosts activity"},{ans:["Competitive inhibitor","Noncompetitive inhibitor","Activator"][ans]}],miss:"judging by the low-[S] part only: both inhibitors lower the rate there.",vis:{k:"inhib",mode:"graph",kind,kf,Vmax}}}
+  const kind=pick(["comp","nc"]);const desc=kind==="comp"?pick(["looks like the substrate and binds the active site","is blocked from acting when a lot of substrate is added (it is outcompeted)","fits the active site but cannot be converted to product"]):pick(["binds a site away from the active site and changes the enzyme's shape","clicks into a regulatory pocket and twists the active site out of shape","binds the enzyme whether or not substrate is already bound, at a separate site"]);
+  const ans=kind==="comp"?0:1;
+  return {title:"Predict, then watch the curve",html:`An inhibitor <b>${desc}</b>. Predict how it changes the rate curve, then watch the dashed curve draw.`,choices:["Vmax unchanged, Km increases","Vmax decreases, Km unchanged","Vmax increases, Km unchanged","Both Vmax and Km unchanged"],ans,unit:"",
+   hints:["First decide: does it compete for the active site or bind elsewhere?",kind==="comp"?"It competes for the active site, so enough substrate can win.":"It binds elsewhere and warps the enzyme, so extra substrate cannot fix it.","Competitive: Km up, Vmax same. Noncompetitive: Vmax down, Km same."],
+   rows:[{l:kind==="comp"?"competes for the active site → competitive":"binds another site → noncompetitive"},{l:kind==="comp"?"high [S] outcompetes it: same Vmax":"some enzymes switched off: lower Vmax"},{ans:["Vmax same, Km up","Vmax down, Km same"][ans]}],miss:"mixing the two up: competitive inhibitors change Km, noncompetitive ones change Vmax.",vis:{k:"inhib",mode:"predict",kind,kf:3,Vmax:80}}},
+ q10(){let T1,dT,Q,ra,k=0;do{T1=pick([10,12,15,17,20,22,25,27]);dT=pick([5,10,10,15,20]);Q=pick([2,2,2.5,3]);ra=ri(5,60);k++}while(T1+dT>40&&k<200);
+  const fac=Math.pow(Q,dT/10);const ans=ra*fac;const T2=T1+dT;
+  return {title:"Temperature and Q10",html:`An enzyme reaction runs at <b>${ra} µmol/min at ${T1} °C</b>. Its <b>Q<sub>10</sub> = ${Q}</b>. Estimate the rate at <b>${T2} °C</b> (still below the optimum).`,ans,unit:"µmol/min",dp:1,tol:Math.max(.06,ans*.006),
+   hints:["rate₂ = rate₁ × Q10^(ΔT ÷ 10).",`ΔT = ${T2} − ${T1} = ${dT} °C, so the exponent is ${dT/10}.`,`Factor = ${Q}^${dT/10} = ${fac.toFixed(3)}. Multiply ${ra} by it.`],
+   rows:[{l:`ΔT ÷ 10 = ${dT} ÷ 10 = ${dT/10}`},{l:`factor = ${Q}^${dT/10} = ${+fac.toFixed(3)}`},{c:[[F(ra,["µmol/min"]),F(+fac.toFixed(3),[])],[ans.toFixed(1),["µmol/min"]]]},{ans:`rate at ${T2} °C ≈ ${ans.toFixed(1)} µmol/min`}],miss:"multiplying by Q10 × (ΔT ÷ 10) instead of raising Q10 to that power.",
+   slips:[dT!==10?[ra*Q,"That multiplied by Q10 once. The exponent is ΔT ÷ 10 = "+dT/10+"."]:[NaN,""],dT!==10?[ra*Q*dT/10,"Q10 is applied as a power: Q10^(ΔT ÷ 10), not Q10 × (ΔT ÷ 10)."]:[NaN,""],[ra*Math.pow(Q,dT),"The exponent is ΔT ÷ 10, not ΔT."],[ra+Q*dT/10,"Q10 multiplies the rate; it is not added."]],vis:{k:"q10",T1,T2,ra,ans,Q}}},
+ turn(){const kc=pick([200,500,600,1000,2500,5000,40000]);if(Math.random()<.6){const unit=pick(["s","min"]);const tv=unit==="min"?pick([1,2,5,10]):pick([10,30,45,60,90]);const sec=unit==="min"?tv*60:tv;const ans=kc*sec;
+   const items=unit==="min"?[F(tv,["min"]),F("60",["s"],"1",["min"]),F(fmtK(kc),["substrates"],"1",["s"])]:[F(tv,["s"]),F(fmtK(kc),["substrates"],"1",["s"])];
+   return {title:"Turnover number",html:`One enzyme molecule has a turnover number of <b>${fmtK(kc)} substrate molecules per second</b>. How many substrate molecules does it convert in <b>${tv} ${unit==="min"?(tv===1?"minute":"minutes"):"seconds"}</b>?`,ans,unit:"molecules",dp:0,tol:Math.max(.5,ans*.001),
+    hints:["molecules = turnover number × time in seconds.",unit==="min"?`${tv} min × 60 s/min = ${sec} s.`:`The time is already in seconds: ${sec} s.`,`${fmtK(kc)} × ${sec}.`],
+    rows:[{c:[items,[fmtK(ans),["substrates"]]]},{ans:`${fmtK(ans)} substrate molecules`}],miss:"forgetting to change minutes into seconds.",
+    slips:[unit==="min"?[kc*tv,"Turnover is per SECOND. Change minutes to seconds first (× 60)."]:[NaN,""],[kc/sec,"Multiply turnover by time; do not divide."]],vis:{k:"turn",kc,ans}}}
+  const sec=pick([3,4,12,20,30,90,240]);const N=kc*sec;
+  return {title:"Turnover number: how long?",html:`An enzyme with a turnover number of <b>${fmtK(kc)} per second</b> must convert <b>${fmtK(N)} substrate molecules</b>. How many <b>seconds</b> will that take one enzyme molecule?`,ans:sec,unit:"s",dp:0,tol:.01,
+   hints:["time = molecules ÷ turnover number.",`${fmtK(N)} ÷ ${fmtK(kc)}.`,"The answer is in seconds because turnover is per second."],
+   rows:[{c:[[F(fmtK(N),["substrates"]),F("1",["s"],fmtK(kc),["substrates"])],[String(sec),["s"]]]},{ans:`${sec} s`}],miss:"multiplying instead of dividing.",slips:[[N*kc,"Divide the molecules by the turnover number."],[sec/60,"That is in minutes. The question asks for seconds."]],vis:{k:"turn",kc,ans:N}}}
+};
+const GKEYS=Object.keys(GEN);
+function genOne(k){let q=null;for(let i=0;i<40&&!q;i++){try{q=GEN[k]()}catch(e){console.error(e);q=null}if(q&&!q.choices&&!isFinite(q.ans))q=null}q.kind=k;if(!q.choices)q.slips=(q.slips||[]).filter(s=>!(isFinite(s[0])&&Math.abs(s[0]-q.ans)<=q.tol));return q}
+function fmtAns(p,v){if(p.choices)return p.choices[v];if(p.dp!=null)return v.toFixed(p.dp);return String(+v.toPrecision(4))}
+function normAns(s){return String(s).trim().replace(/,/g,"").replace(/[−–—]/g,"-").replace(/\s*(kj\/mol|kcal\/mol|µmol\/min|umol\/min|mm|°c|substrates?|molecules?|atp|s|sec|seconds)\s*$/i,"").replace(/^\+/,"").replace(/\s+/g,"")}
+function parseAns(s){s=normAns(s);if(!/^-?(\d+\.?\d*|\.\d+)$/.test(s))return null;return parseFloat(s)}
+function judge(p,str){if(p.choices){const v=+str;if(str===""||!(v>=0))return {ok:false,kind:"empty"};return v===p.ans?{ok:true}:{ok:false,kind:"choice"}}
+  const v=parseAns(str);if(v==null)return {ok:false,kind:"empty"};if(Math.abs(v-p.ans)<=p.tol)return {ok:true};
+  const sl=(p.slips||[]).find(s=>isFinite(s[0])&&s[1]&&Math.abs(v-s[0])<=Math.max(Math.abs(s[0])*.012,p.dp!=null?Math.pow(10,-p.dp)*.6:0));if(sl&&Math.abs(sl[0]-p.ans)>p.tol)return {ok:false,kind:"slip",msg:sl[1]};
+  if(Math.sign(v)===Math.sign(p.ans)&&Math.abs(v-p.ans)<=Math.abs(p.ans)*.06)return {ok:false,kind:"close"};if(p.ans!==0&&Math.abs(v+p.ans)<=p.tol)return {ok:false,kind:"sign"};return {ok:false,kind:"wrong"}}
+function calcMsg(cls,t){const m=$("#calcMsg");m.className="msg show "+cls;m.textContent=t}
+function ansTxt(p){return p.choices?p.choices[p.ans]:fmtAns(p,p.ans).replace("-","−")+" "+p.unit}
+function calcNew(){const k=TR.type==="mix"?pick(GKEYS):TR.type;const q=genOne(k);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;
+  const rd=q.choices?"Pick one answer.":q.dp===0?"Give a whole number.":q.dp?"Give "+q.dp+" decimal place (use a minus sign if negative).":"Read the value from the graph.";
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}<span class="rd">${rd}</span>`;$("#calcUnit").textContent=q.unit;$("#calcAns").value="";
+  $("#calcNumWrap").hidden=!!q.choices;const cb=$("#calcChoices");cb.hidden=!q.choices;cb.innerHTML="";
+  if(q.choices)q.choices.forEach((c,i)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=c;b.setAttribute("aria-pressed","false");b.onclick=()=>{TR.pick=i;cb.querySelectorAll(".opt").forEach((x,j)=>{x.setAttribute("aria-pressed",String(j===i));x.classList.remove("wrong","right")});calcCheck()};cb.appendChild(b)});
+  $("#calcMsg").className="msg";$("#calcHintBox").hidden=true;$("#calcCap").textContent=q.title+": the picture shows the problem; the worked solution builds below it.";a11yKey=""}
+function calcCheck(){const p=TR.p;const str=p.choices?(TR.pick==null?"":String(TR.pick)):$("#calcAns").value;const j=judge(p,str);
+  if(j.kind==="empty"){calcMsg("info",p.choices?"Pick one of the answers first.":"Type a number in the answer box first.");return}
+  if(p.choices){$("#calcChoices").querySelectorAll(".opt").forEach((x,i)=>{x.classList.toggle("right",j.ok&&i===TR.pick);x.classList.toggle("wrong",!j.ok&&i===TR.pick)})}
+  if(j.ok){const wasFirst=TR.first&&!TR.sol;if(!TR.solved){TR.count++;if(wasFirst){TR.streak++;if(TR.streak>TR.best){TR.best=TR.streak;store.set("best",TR.best)}}}TR.solved=true;calcMsg("good",`✓ Correct: ${ansTxt(p)}. Watch the worked solution build.`);showSol(false)}
+  else{TR.first=false;TR.streak=0;let msg="Not quite. ";if(j.kind==="slip")msg+=j.msg;else if(j.kind==="close")msg+="Very close. Check your rounding.";else if(j.kind==="sign")msg+="Right size, wrong sign. Check each minus sign.";else if(j.kind==="choice")msg+=p.hints[1];else msg+="Check the setup. "+p.hints[0];calcMsg("warn",msg)}
+  updCalcMeter();a11yKey=""}
+function showSol(byBtn){if(byBtn&&!TR.solved){TR.streak=0;TR.first=false}TR.sol=true;TR.solT=performance.now();updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function calcInit(){const sel=$("#calcType");sel.innerHTML=CTYPES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");sel.onchange=()=>{TR.type=sel.value;calcNew()};
+  $("#calcCheck").onclick=calcCheck;$("#calcAns").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();calcCheck()}});
+  $("#calcHint").onclick=()=>{const p=TR.p;const b=$("#calcHintBox");if(TR.hint<p.hints.length)TR.hint++;b.hidden=false;b.innerHTML=p.hints.slice(0,TR.hint).map((h,i)=>`<div><b>Hint ${i+1}:</b> ${h}</div>`).join("")+(TR.hint>=p.hints.length?`<div class="small">That is the whole ladder. Try it, or press Show worked solution.</div>`:"")};
+  $("#calcSol").onclick=()=>{showSol(true);calcMsg("info",`Worked solution: ${ansTxt(TR.p)}. Watch each step, then try a new problem.`)};$("#calcNew").onclick=calcNew;
+  TR.best=+(store.get("best")||0)}
+/* ---------- trainer drawing ---------- */
+function tvTyped(){const v=parseAns($("#calcAns").value);return v==null||!isFinite(v)?null:v}
+function numLine(x,y,w,lo,hi,marks,o){o=o||{};const X=v=>x+(clamp(v,lo,hi)-lo)/(hi-lo)*w;rr(x,y,w,12,4);ctx.fillStyle=hexA(C.sunk,.9);ctx.fill();if(o.neg){rr(x,y,X(0)-x,12,4);ctx.fillStyle=hexA(C.good,.35);ctx.fill()}
+  for(let v=lo;v<=hi;v+=o.step||20)txt(X(v),y+26,MN(v),{size:10.5,mono:true,align:"center",color:C["ink-soft"]});line(X(0),y-6,X(0),y+18,C.ink,1.5);
+  marks.forEach(m=>{if(m[0]==null)return;circ(X(m[0]),y+6,8,m[1],C.ink,1.5);label(X(m[0]),y-18-(m[3]||0),m[2],{size:11.5,weight:700,mono:true,border:m[1]})});return X}
+function drawCalc(now){use(S2);const T=now/1000;const p=TR.p;const vs=p.vis;const tv=p.choices?null:tvTyped();const ok=TR.solved;const show=TR.sol||TR.solved;const el=(now-TR.solT)/1000;
+  panelBox(10,10,780,262);if(ok){circ(762,32,13,C.good);tick(762,32,7,"#ffffff")}
+  const tvs=v=>v==null?"?":String(+(+v).toPrecision(5)).replace("-","−");
+  if(vs.k==="dg"){levelTag(22,26,"math");thermo(60,220,150,clamp((vs.TC+10)/100,0,1),{col:C.heat});txt(60,246,vs.TC+" °C = "+vs.TK+" K",{size:12,weight:700,align:"center",mono:true});
+    const cx=330,cy=150;const ang=show?clamp((vs.TS-vs.dH)/90,-.3,.3)*smooth(Math.min(1,el/1.5)):Math.sin(T*1.5)*.03;
+    ctx.beginPath();ctx.moveTo(cx-16,cy+40);ctx.lineTo(cx,cy);ctx.lineTo(cx+16,cy+40);ctx.closePath();fillStroke(C.metal,C["ink-soft"],1.4);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(ang);rr(-170,-6,340,8,3);ctx.fillStyle=C["ink-soft"];ctx.fill();rr(-165,-46,130,40,6);fillStroke(hexA(C.act3,.25),C.act3,2);txt(-100,-26,"ΔH = "+MN(vs.dH),{size:13.5,weight:700,align:"center",mono:true});
+    rr(35,-46,130,40,6);fillStroke(hexA(C.elec,.25),C.elec,2);txt(100,-26,"TΔS = "+(show?fx(vs.TS,1):"?"),{size:13.5,weight:700,align:"center",mono:true});ctx.restore();
+    txt(330,40,"ΔG = ΔH − TΔS (kJ/mol)",{size:14,weight:700,align:"center",mono:true});
+    title(540,60,"ΔG on a number line",C["ink-soft"]);numLine(540,140,220,-80,80,[[tv,C.accent,"you "+tvs(tv),0],[show?vs.ans:null,C.good,"answer "+fx(vs.ans,1),30]],{neg:true,step:40});txt(560,200,"green zone: ΔG < 0, spontaneous",{size:11.5,weight:600,color:C.good})}
+  else if(vs.k==="spont"&&vs.mode==="sign"){levelTag(22,26,"math");const gx=230,gy=60,cw=200,ch=90;txt(gx+cw,46,"ΔS > 0",{size:13,weight:700,align:"center",mono:true});txt(gx+cw*2,46,"ΔS < 0",{size:13,weight:700,align:"center",mono:true});
+    const out=[["always","low T only"],["high T only","never"]];[["ΔH < 0","−"],["ΔH > 0","+"]].forEach((r,ri_)=>{txt(gx+40,gy+ch*ri_+ch/2,r[0],{size:13,weight:700,align:"center",mono:true});[["+",0],["−",1]].forEach((c,ci)=>{const x=gx+cw*ci+cw/2+50,y=gy+ch*ri_;const cur=r[1]===vs.h&&c[0]===vs.s;rr(x,y,cw-10,ch-10,8);fillStroke(cur?hexA(C.accent,.18+.1*Math.sin(T*4)):hexA(C.panel,.9),cur?C.accent:C.rule,cur?2.4:1.2);
+      txt(x+(cw-10)/2,y+(ch-10)/2,show||!cur?(show?out[ri_][ci]:""):"?",{size:14,weight:700,align:"center",color:cur?C["accent-ink"]:C["ink-soft"]})})});
+    if(!show)txt(gx+cw+50,gy+2*ch+20,"The highlighted box is your process. The answers fill in with the worked solution.",{size:11.5,weight:600,align:"center",color:C["ink-soft"]})}
+  else if(vs.k==="spont"){levelTag(22,26,"graph");const r=.5,pp=clamp(.5+vs.dG/90,.1,.9);eDiagram(120,50,360,190,{r,p:vs.dG===0?.5:pp,ea:.95,ball:show?smooth(Math.min(1,el/2)):null,yl:"free energy",xl:"progress"});
+    label(620,90,"ΔG = "+(vs.dG===0?"0":SG_(vs.dG))+" kJ/mol",{size:14,weight:700,mono:true,border:vs.dG<0?C.bad:vs.dG>0?C.good:C.accent});if(show)label(620,140,["exergonic","endergonic","equilibrium"][vs.ans],{size:13,weight:700,border:C.good});wrapText("Spontaneous tells you direction, not speed.",530,200,240,16,{size:12,weight:600,color:C["ink-soft"]})}
+  else if(vs.k==="couple"){levelTag(22,26,"math");const z=140,k=6.5;line(60,z,740,z,C["ink-soft"],1.4);txt(56,z,"0",{size:11,mono:true,align:"right"});
+    const up=vs.dGr*k;arrow(110,z,110,z-up,C.good,7);txt(110,z-up-14,"+"+vs.dGr.toFixed(1),{size:12.5,weight:700,mono:true,align:"center",color:C.good});txt(110,z+18,"reaction",{size:11,weight:600,align:"center",color:C["ink-soft"]});
+    const n=vs.n;for(let i=0;i<n;i++){const x=200+i*70;arrow(x,z,x,z+7.3*k,C.bad,7);txt(x,z+7.3*k+14,"−7.3",{size:12,weight:700,mono:true,align:"center",color:C.bad});atpTok(x,z-20,8)}
+    const nx=200+n*70+60;if(show){const h=vs.ans*k*smooth(Math.min(1,el/1.5));if(Math.abs(h)>2)arrow(nx,z,nx,z-h,vs.ans<0?C.bad:C.good,7);txt(nx+40,z-vs.ans*k,"net "+fx(vs.ans,1),{size:12.5,weight:700,mono:true,color:vs.ans<0?C.bad:C.good})}
+    else txt(nx,z-30,"net ?",{size:13,weight:700,mono:true,align:"center"});txt(740,30,"ΔG in kcal/mol",{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+    label(600,240,vs.howMany?"your answer: "+tvs(tv)+" ATP":"your answer: "+tvs(tv)+" kcal/mol",{size:13,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="ediag"){levelTag(22,26,"graph");const x=120,y=36,w=420,h=210;const Y=v=>y+h-v/150*h;
+    for(let v=0;v<=150;v+=10){line(x,Y(v),x+w,Y(v),v%50?hexA(C.grid,.6):C.grid,1);if(v%20===0)txt(x-6,Y(v),String(v),{size:10.5,mono:true,align:"right",color:C["ink-soft"]})}
+    ctx.save();ctx.translate(x-40,y+h/2);ctx.rotate(-Math.PI/2);txt(0,0,"G (kJ/mol)",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});ctx.restore();
+    const f=ePath(x,y,w,h,vs.R/150,vs.Pp/150,vs.Top/150),fc=ePath(x,y,w,h,vs.R/150,vs.Pp/150,vs.Cat/150);const A=[],B=[];for(let i=0;i<=80;i++){A.push(f(i/80));B.push(fc(i/80))}poly(A,C.ink,2.6);poly(B,C.eacat,2.6,[7,5]);
+    line(x,y+h,x+w,y+h,C["ink-soft"],1.6);line(x,y,x,y+h,C["ink-soft"],1.6);txt(x+w*.11,Y(vs.R)-12,"reactants",{size:11.5,weight:700,align:"center"});txt(x+w*.89,Y(vs.Pp)-12,"products",{size:11.5,weight:700,align:"center"});
+    if(show){const a=smooth(Math.min(1,el/1.2));withA(a,()=>{if(vs.ask==="dG"||vs.ask==="kind")vBracket(x+w+20,Y(vs.R),Y(vs.Pp),C.bad,"ΔG");if(vs.ask==="eaU")vBracket(x+w*.5,Y(vs.R),Y(vs.Top),C.ea,"EA");if(vs.ask==="eaC")vBracket(x+w*.5,Y(vs.R),Y(vs.Cat),C.eacat,"EA (enzyme)");
+      line(x,Y(vs.R),x+w,Y(vs.R),hexA(C.ink,.5),1.2,[3,3])})}
+    txt(600,60,"solid: no enzyme",{size:12,weight:700});txt(600,82,"dashed: with enzyme",{size:12,weight:700,color:C.eacat});if(!p.choices)label(660,200,"your answer: "+tvs(tv),{size:13,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="mm"){levelTag(22,26,"graph");let g;
+    if(vs.sub==="calc"){g=graph({x:90,y:58,w:440,h:172,x0:0,x1:20,y0:0,y1:vs.Vmax*1.15,xt:[0,2,4,6,8,10,12,14,16,18,20],yt:[0,vs.Vmax/2,vs.Vmax].map(v=>Math.round(v)),xl:"[S] (mM)",yl:"v (µmol/min)"});hLine(g,vs.Vmax,C["ink-soft"],"Vmax "+vs.Vmax);curve(g,s=>mmRate(s,vs.Vmax,vs.Km),0,20,C.accent,2.8);vLine(g,vs.S,C.sub,"[S] = "+vs.S);
+      if(tv!=null)gdot(g,vs.S,tv,C.accent,"you",{});if(show)gdot(g,vs.S,mmRate(vs.S,vs.Vmax,vs.Km),C.good,(mmRate(vs.S,vs.Vmax,vs.Km)).toFixed(1),{guides:true,dx:40})}
+    else if(vs.sub==="km"){const xm=vs.Km*5;const xt=[];for(let v=0;v<=xm;v+=vs.Km>=4?2:1)xt.push(v);g=graph({x:90,y:58,w:440,h:172,x0:0,x1:xm,y0:0,y1:vs.Vmax*1.15,xt,yt:[0,vs.Vmax/4,vs.Vmax/2,vs.Vmax*.75,vs.Vmax],xl:"[S] (mM)",yl:"v (µmol/min)"});
+      hLine(g,vs.Vmax,C["ink-soft"],"Vmax "+vs.Vmax);curve(g,s=>mmRate(s,vs.Vmax,vs.Km),0,xm,C.accent,2.8);if(show){const a=smooth(Math.min(1,el/1.5));withA(a,()=>{hLine(g,vs.Vmax/2,C.good,"Vmax/2");vLine(g,vs.Km,C.good,"Km = "+vs.Km)})}else if(tv!=null&&tv<=xm)vLine(g,tv,C.accent,"you: "+tvs(tv))}
+    else{const xm=vs.Km*20;g=graph({x:90,y:58,w:440,h:172,x0:0,x1:xm,y0:0,y1:vs.Vmax*1.25,xt:[0,xm/4,xm/2,xm*.75,xm],yt:[0,vs.Vmax/4,vs.Vmax/2,vs.Vmax*.75,vs.Vmax,vs.Vmax*1.25].map(v=>Math.round(v)),xl:"[S] (mM)",yl:"v (µmol/min)"});curve(g,s=>mmRate(s,vs.Vmax,vs.Km),0,xm,C.accent,2.8);
+      if(show)withA(smooth(Math.min(1,el/1.5)),()=>hLine(g,vs.Vmax,C.good,"Vmax = "+vs.Vmax));else if(tv!=null)hLine(g,tv,C.accent,"you: "+tvs(tv))}
+    if(!p.choices)label(660,200,"your answer: "+tvs(tv)+" "+p.unit,{size:12.5,weight:700,mono:true,border:ok?C.good:C.accent});wrapText("v = Vmax[S] ÷ (Km + [S])",570,80,200,16,{size:12.5,weight:700,mono:true})}
+  else if(vs.k==="inhib"){levelTag(22,26,"graph");const V=vs.Vmax;const g=graph({x:90,y:58,w:440,h:172,x0:0,x1:20,y0:0,y1:V*1.6,xt:[0,5,10,15,20],yt:[0,Math.round(V/2),V],xl:"[S] (mM)",yl:"rate"});
+    curve(g,s=>mmRate(s,V,2),0,20,C.accent,2.8);hLine(g,V,C.accent);const f2=vs.kind==="comp"?s=>mmRate(s,V,2*vs.kf):vs.kind==="nc"?s=>mmRate(s,V/vs.kf,2):s=>mmRate(s,V*1.5,2);const col=vs.kind==="comp"?C.compi:vs.kind==="nc"?C.nci:C.actv;
+    if(vs.mode==="graph"||show){const prog=vs.mode==="graph"?20:20*smooth(Math.min(1,el/2.5));curve(g,f2,0,prog,vs.mode==="graph"?C["ink-soft"]:col,2.8,[7,5]);if(show){withA(smooth(Math.min(1,el/2)),()=>{vLine(g,2,C.accent,"Km",{dy:22});const k2=vs.kind==="comp"?2*vs.kf:2;if(k2!==2)vLine(g,k2,col,"Km'",{dy:0});const v2=vs.kind==="nc"?V/vs.kf:vs.kind==="act"?V*1.5:V;if(v2!==V)hLine(g,v2,col)})}}
+    else txt(g.x+g.w/2,g.y+g.h/2,"dashed curve appears after you answer",{size:12.5,weight:700,align:"center",color:C["ink-soft"]});
+    txt(560,60,"solid: no inhibitor",{size:12,weight:700,color:C["accent-ink"]});txt(560,82,"dashed: with the added molecule",{size:12,weight:700,color:C["ink-soft"]});
+    if(TR.pick!=null)wrapText("you picked: "+p.choices[TR.pick],560,130,210,16,{size:12,weight:700,color:ok?C.good:C["warn-ink"]})}
+  else if(vs.k==="q10"){levelTag(22,26,"math");thermo(80,220,150,clamp(vs.T1/50,0,1),{col:C.cold});txt(80,246,vs.T1+" °C",{size:12,weight:700,align:"center",mono:true});thermo(190,220,150,clamp(vs.T2/50,0,1),{col:C.heat});txt(190,246,vs.T2+" °C",{size:12,weight:700,align:"center",mono:true});
+    const mx=Math.max(vs.ans,tv||0,vs.ra)*1.2;const bx=320,bw=80,bh=180,by=230;[[vs.ra,C.cold,vs.ra+""],[tv,C.accent,"you "+tvs(tv)],[show?vs.ans:null,C.good,show?vs.ans.toFixed(1):"?"]].forEach((b,i)=>{const x=bx+i*120;const hh=b[0]==null?0:bh*clamp(b[0]/mx,0,1);rr(x,by-hh,bw,hh,4);ctx.fillStyle=hexA(b[1],.8);ctx.fill();txt(x+bw/2,by+14,["at "+vs.T1+" °C","your answer","at "+vs.T2+" °C"][i],{size:11.5,weight:600,align:"center"});txt(x+bw/2,by-hh-12,b[0]==null?"?":b[2],{size:12,weight:700,align:"center",mono:true})});
+    txt(700,60,"Q10 = "+vs.Q,{size:14,weight:700,align:"center",mono:true})}
+  else if(vs.k==="turn"){levelTag(22,26,"mol");enzLoop(180,170,62,T*Math.min(6,1+Math.log10(vs.kc)),{per:3,glow:true});label(180,50,fmtK(vs.kc)+" per second",{size:13,weight:700,mono:true,border:C.enz});
+    const cnt=show?Math.min(vs.ans,Math.floor(vs.ans*smooth(Math.min(1,el/2.5)))):0;label(520,110,"substrates converted: "+fmtK(cnt),{size:14,weight:700,mono:true,border:C.prod});txt(520,150,"Enzymes are not used up: the same molecule repeats the cycle.",{size:12,weight:600,align:"center",color:C["ink-soft"]});
+    if(!p.choices)label(520,210,"your answer: "+tvs(tv)+" "+p.unit,{size:13,weight:700,mono:true,border:ok?C.good:C.accent})}
+  const WY=282;if(TR.sol){const per=Math.max(8,1.2+p.rows.length*1.8+3);wk(10,WY,780,308,{q:"",rows:p.rows,miss:p.miss},Math.min(el,per-.01),{per,cfs:14,dt:1.8,t0:.6,rowGap:16,cy:30,title:"Worked solution"})}
+  else{panelBox(10,WY,780,308,{fill:hexA(C.paper,.96)});title(22,WY+18,"Worked solution",C["accent-ink"]);wrapText("The worked solution builds here after a correct answer, or when you press Show worked solution. Units cancel with a red strike-through; a common mistake is flagged at the end.",24,WY+50,750,18,{size:13,color:C["ink-soft"]})}}
+function calcA11y(){const p=TR.p;const vs=p.vis;const v=p.choices?(TR.pick==null?"not chosen":p.choices[TR.pick]):($("#calcAns").value.trim()||"not entered");const lab=`Practice problem, ${p.title}. Your answer ${v}.${TR.solved?" Correct.":""}`;
+  const vk={dg:`a thermometer at ${vs.TC} °C (${vs.TK} K), a seesaw with ΔH = ${vs.dH} kJ/mol on the left and TΔS on the right, and a ΔG number line from −80 to 80 with a green zone for negative values`,
+    spont:vs.mode==="sign"?"a two-by-two table of ΔH sign (rows) against ΔS sign (columns), with your process's box highlighted":`an energy diagram with products ${vs.dG<0?"below":vs.dG>0?"above":"level with"} the reactants`,
+    couple:`a bar chart with a green upward arrow of +${vs.dGr} kcal/mol for the reaction and ${vs.n} red downward arrows of −7.3 for each ATP${TR.sol?", then a net arrow of "+vs.ans:""}`,
+    ediag:`an energy diagram on a 0 to 150 kJ/mol scale with gridlines every 10: reactants at ${vs.R}, products at ${vs.Pp}, a solid hump peaking at ${vs.Top} without enzyme and a dashed hump peaking at ${vs.Cat} with enzyme`,
+    mm:vs.sub==="calc"?`a rate curve with Vmax ${vs.Vmax} and a marker at [S] = ${vs.S} mM`:vs.sub==="km"?`a rate curve levelling off at Vmax ${vs.Vmax} µmol/min, with gridlines to read the [S] where the rate is half of Vmax`:`a rate curve up to high [S] that levels off near its plateau, with gridlines on the rate axis`,
+    inhib:vs.mode==="graph"?`two rate curves: a solid one without the molecule and a dashed one with it. The dashed curve ${vs.kind==="comp"?"rises more slowly but reaches the same plateau":vs.kind==="nc"?"levels off at a lower plateau, with the same half-way [S]":"rises above the solid curve to a higher plateau"}`:"a solid rate curve; a dashed curve for the inhibitor draws after you answer",
+    q10:`two thermometers at ${vs.T1} and ${vs.T2} °C and bars for the rate at each temperature and your answer`,
+    turn:`one enzyme cycling quickly, labelled ${vs.kc} per second, and a counter of substrates converted`}[vs.k];
+  return [lab,`The picture shows ${vk}. ${TR.sol?"Below it, the worked solution builds step by step, ending with "+ansTxt(p)+" in a green box.":"The worked solution is hidden until you check a correct answer or ask for it."}`]}
+/* ================= PART 3: matching game ================= */
+function binSVG(k){const sv=s=>`<svg viewBox="0 0 56 46" aria-hidden="true">${s}</svg>`;const T_=(x,y,t,sz,c)=>`<text x="${x}" y="${y}" font-size="${sz||11}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="${c||"var(--ink)"}">${t}</text>`;
+  const ed=(r,p,col)=>`<path d="M4 ${r} L16 ${r} C24 ${r} 24 6 30 6 C36 6 36 ${p} 42 ${p} L52 ${p}" fill="none" stroke="${col||"var(--ink)"}" stroke-width="2.2"/>`;
+  const enz=(x,y,c)=>`<path d="M${x-14} ${y-8} L${x-5} ${y-8} L${x-3} ${y} L${x+3} ${y} L${x+5} ${y-8} L${x+14} ${y-8} Q${x+18} ${y+10} ${x} ${y+14} Q${x-18} ${y+10} ${x-14} ${y-8} Z" fill="${c||"var(--enz)"}" stroke="var(--ink)" stroke-width="1"/>`;
+  switch(k){
+  case "exer":return sv(ed(12,38,"var(--bad)")+'<path d="M50 14 L50 34" stroke="var(--bad)" stroke-width="2"/>');
+  case "ender":return sv(ed(38,14,"var(--good)")+'<path d="M50 34 L50 16" stroke="var(--good)" stroke-width="2"/>');
+  case "cata":return sv('<polygon points="16,8 26,14 26,26 16,32 6,26 6,14" fill="var(--carb)" fill-opacity=".4" stroke="var(--carb)" stroke-width="2"/><circle cx="38" cy="14" r="4" fill="var(--cO)"/><circle cx="46" cy="24" r="4" fill="var(--cC)"/><circle cx="38" cy="34" r="4" fill="var(--cO)"/>');
+  case "ana":return sv([8,18,28,38,48].map((x,i)=>`<circle cx="${x}" cy="${23+(i%2?6:-6)}" r="5" fill="var(--prot)" stroke="var(--ink)" stroke-width=".8"/>`).join(""));
+  case "first":return sv('<circle cx="12" cy="14" r="8" fill="var(--atp)"/><path d="M22 20 L34 20" stroke="var(--ink)" stroke-width="2"/><polygon points="34,16 40,20 34,24" fill="var(--ink)"/><polygon points="46,10 54,24 46,38 38,24" fill="var(--carb)" fill-opacity=".5" stroke="var(--carb)" stroke-width="2"/>');
+  case "second":return sv('<path d="M10 40 C14 30 6 24 12 14 M22 40 C26 30 18 24 24 14 M34 40 C38 30 30 24 36 14" stroke="var(--heat)" stroke-width="2.2" fill="none"/>');
+  case "entropy":return sv([[8,8],[30,12],[46,6],[16,30],[40,34],[24,22],[50,26],[8,40]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--elec)"/>`).join(""));
+  case "free":return sv(T_(28,28,"ΔG",15));
+  case "ea":return sv(ed(30,40,"var(--ink)")+'<path d="M12 30 L12 8" stroke="var(--ea)" stroke-width="2"/>');
+  case "site":return sv(enz(28,26)+'<path d="M24 14 L32 14 L30 22 L26 22 Z" fill="var(--sub)"/>');
+  case "fit":return sv(enz(28,26)+'<path d="M10 10 L16 16 M46 10 L40 16" stroke="var(--gold)" stroke-width="2.4"/>');
+  case "cof":return sv(enz(28,26)+'<circle cx="28" cy="25" r="4.5" fill="var(--metal)" stroke="var(--ink)" stroke-width=".8"/>');
+  case "allo":return sv(enz(28,22)+'<rect x="23" y="36" width="10" height="7" fill="var(--actv)" stroke="var(--ink)" stroke-width=".8"/>');
+  case "coop":return sv('<path d="M4 42 C18 42 22 6 52 6" fill="none" stroke="var(--accent)" stroke-width="2.4"/>');
+  case "feed":return sv('<circle cx="8" cy="30" r="5" fill="var(--sub)"/><path d="M14 30 L42 30" stroke="var(--ink-soft)" stroke-width="2"/><circle cx="48" cy="30" r="5" fill="var(--prod)"/><path d="M48 24 C44 4 14 4 10 22" fill="none" stroke="var(--bad)" stroke-width="2" stroke-dasharray="3 2"/>');
+  case "local":return sv('<ellipse cx="28" cy="23" rx="24" ry="14" fill="var(--mito)" stroke="var(--ink)" stroke-width="1"/><path d="M10 23 L16 16 L22 30 L28 16 L34 30 L40 16 L46 23" fill="none" stroke="var(--ink)" stroke-width="1.4"/>');
+  case "comp":return sv(enz(28,26)+'<path d="M24 14 L32 14 L30 22 L26 22 Z" fill="var(--compi)"/>'+T_(28,21,"I",8,"#fff"));
+  case "nc":return sv(enz(28,22)+'<rect x="22" y="36" width="12" height="7" fill="var(--nci)" stroke="var(--ink)" stroke-width=".8"/>');
+  case "irr":return sv(enz(28,26)+'<path d="M22 12 L34 24 M34 12 L22 24" stroke="var(--bad)" stroke-width="3"/>');
+  case "act":return sv(enz(28,22)+'<circle cx="28" cy="40" r="5" fill="var(--actv)" stroke="var(--ink)" stroke-width=".8"/>');
+  }return sv("")}
+const SROUNDS=[
+{name:"Energy words",goal:"Match each description to the right term. Some descriptions fit two boxes; either is accepted.",bins:[["exer","Exergonic"],["ender","Endergonic"],["cata","Catabolic pathway"],["ana","Anabolic pathway"]],cards:[
+ ["ΔG is negative; free energy is released","exer","Negative ΔG means energy is released: exergonic."],
+ ["Products end up with more free energy than reactants","ender","Products higher than reactants means energy was absorbed: endergonic."],
+ ["ATP + H₂O → ADP + Pi","exer","ATP hydrolysis releases about 7.3 kcal/mol: exergonic."],
+ ["ADP + Pi → ATP","ender","Rebuilding ATP needs about +7.3 kcal/mol: endergonic."],
+ ["Cellular respiration breaks glucose down to CO₂ and H₂O",["cata","exer"],"Breaking a big molecule down and releasing energy: catabolic (and exergonic)."],
+ ["Digesting starch into glucose","cata","Breakdown of a polymer into monomers: catabolic."],
+ ["Linking amino acids into a protein",["ana","ender"],"Building a large molecule uses energy: anabolic (and endergonic)."],
+ ["The liver building glycogen from glucose","ana","Building a polymer from monomers: anabolic."]]},
+{name:"Laws of thermodynamics",goal:"Match each statement or example to the idea it shows.",bins:[["first","First law"],["second","Second law"],["entropy","Entropy (S)"],["free","Free energy (G)"]],cards:[
+ ["Energy cannot be created or destroyed","first","Conservation of energy is the first law."],
+ ["A plant turns light energy into chemical energy in sugar","first","Energy is transformed, not created: first law."],
+ ["Every energy transfer increases the entropy of the universe","second","That is the second law."],
+ ["Your body gives off heat as it uses food","second","Some energy is lost as heat in every transformation: second law."],
+ ["A measure of disorder, or how spread out energy is","entropy","That is the definition of entropy."],
+ ["Perfume molecules spreading through a room","entropy","Spreading out raises entropy."],
+ ["Energy that can do work at constant temperature and pressure","free","That is Gibbs free energy."],
+ ["Calculated as ΔH − TΔS","free","ΔG = ΔH − TΔS is the free energy change."]]},
+{name:"How enzymes work",goal:"Match each description to the enzyme term.",bins:[["ea","Activation energy"],["site","Active site"],["fit","Induced fit"],["cof","Cofactor or coenzyme"]],cards:[
+ ["Energy needed to reach the transition state","ea","That is the definition of activation energy."],
+ ["The hill that enzymes make smaller","ea","Enzymes lower activation energy, not ΔG."],
+ ["The pocket where the substrate binds","site","That is the active site."],
+ ["Gives an enzyme its specificity for one substrate","site","The shape and chemistry of the active site set specificity."],
+ ["The enzyme changes shape to grip the substrate more tightly","fit","That is induced fit."],
+ ["Hexokinase clamping shut around glucose","fit","A shape change on binding: induced fit."],
+ ["Zn²⁺ held in the active site of carbonic anhydrase","cof","A metal ion helper is an inorganic cofactor."],
+ ["NAD⁺, made from the vitamin niacin","cof","An organic helper made from a vitamin is a coenzyme."]]},
+{name:"Regulation",goal:"Match each example to the kind of regulation.",bins:[["allo","Allosteric regulation"],["coop","Cooperativity"],["feed","Feedback inhibition"],["local","Enzyme localization"]],cards:[
+ ["AMP binds a regulatory site and switches an enzyme on","allo","A regulator at a separate site changing activity: allosteric regulation."],
+ ["A molecule binding at one site changes the active site somewhere else","allo","That is the definition of allosteric regulation."],
+ ["One substrate binding makes the other subunits bind substrate more easily","coop","That is cooperativity."],
+ ["An S-shaped rate curve","coop","A sigmoid curve is the signature of cooperativity."],
+ ["Isoleucine shuts off threonine deaminase","feed","The end product shuts off the first enzyme: feedback inhibition."],
+ ["The end product of a pathway inhibits the pathway's first enzyme","feed","That is the definition of feedback inhibition."],
+ ["Respiration enzymes built into the mitochondrial inner membrane","local","Enzymes placed in a membrane in pathway order: localization."],
+ ["Lysosome enzymes that only work near pH 5","local","Enzymes kept in an acidic compartment: localization."]]},
+{name:"Inhibitor type and effect",goal:"Match each effect or example to the kind of regulator. Effects on Vmax and Km are the key.",bins:[["comp","Competitive inhibitor"],["nc","Noncompetitive inhibitor"],["irr","Irreversible inhibitor"],["act","Allosteric activator"]],cards:[
+ ["Vmax unchanged, Km increases","comp","Competitive: substrate can still win at high [S], so Vmax stays; Km rises."],
+ ["Overcome by adding more substrate","comp","Only a competitive inhibitor can be outcompeted by substrate."],
+ ["Ethanol slowing methanol breakdown by alcohol dehydrogenase","comp","Ethanol competes for the same active site: competitive."],
+ ["Vmax decreases, Km unchanged",["nc","irr"],"Fewer working enzymes means a lower Vmax with the same Km: noncompetitive (an irreversible inhibitor does this too)."],
+ ["Binds a separate site, warps the active site, then comes off again","nc","Reversible binding away from the active site: noncompetitive."],
+ ["Bonds covalently, so that enzyme molecule is lost for good","irr","Covalent, permanent binding: irreversible."],
+ ["Sarin blocking acetylcholinesterase","irr","Sarin bonds covalently to the enzyme: irreversible."],
+ ["Stabilises the active shape and raises activity","act","That describes an allosteric activator."]]}];
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{}};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();const R=SROUNDS[i];SG.order=shuffle(R.cards.map((c,k)=>k));
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${binSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sRender();sTimerUI();a11yKey=""}
+function sRender(){const R=SROUNDS[SG.r];const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";items.appendChild(s)}})});
+  const n=Object.keys(SG.placed).length,tot=R.cards.length;$("#sStars").textContent=n===tot?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",n===tot?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";sMsg("good",`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();sRender()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(Object.keys(SG.placed).length<SROUNDS[SG.r].cards.length)$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= PART 4: enzymes in the real world ================= */
+const FEVA=(()=>{const a=t=>Math.pow(2,(t-37)/10)/(1+Math.exp((t-42.3)/1));const a37=a(37);return t=>a(t)/a37*100})();
+const LAC=[["A","milk + water","37 °C",0],["B","milk + lactase pill","37 °C",180],["C","milk + lactase pill","4 °C",40],["D","milk + boiled lactase pill","37 °C",0]];
+const CAT=[[3,4],[5,16],[7,34],[9,22],[11,6]];
+function bedPerson(x,y,s,T){rr(x-s,y,s*2,s*.18,4);ctx.fillStyle=C.metal;ctx.fill();rr(x-s*.85,y-s*.22,s*1.6,s*.24,s*.1);fillStroke(hexA(C.shirt1,.5),C.shirt1,1.4);circ(x-s*.82,y-s*.28,s*.16,C.skin1,hexA(C.ink,.35),1);rr(x+s*.6,y-s*.3,s*.28,s*.12,4);ctx.fillStyle=C.paper;ctx.fill()}
+function bars(x,y,w,h,data,o){o=o||{};const mx=o.max||Math.max(...data.map(d=>d[1]))*1.15;const bw=w/data.length*.6;line(x,y+h,x+w,y+h,C["ink-soft"],1.5);line(x,y,x,y+h,C["ink-soft"],1.5);
+  data.forEach((d,i)=>{const bx=x+(i+.5)*w/data.length-bw/2;const f=o.grow==null?1:o.grow;const hh=h*d[1]/mx*f;rr(bx,y+h-hh,bw,hh,3);ctx.fillStyle=d[2]||C.accent;ctx.fill();txt(bx+bw/2,y+h+13,d[0],{size:11.5,weight:600,align:"center"});txt(bx+bw/2,y+h-hh-10,String(d[1]),{size:11.5,weight:700,align:"center",mono:true})});
+  if(o.yl)txt(x,y-12,o.yl,{size:11.5,weight:600,color:C["ink-soft"]});if(o.xl)txt(x+w,y+h+30,o.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]})}
+function potato(x,y,s){ell(x,y,s,s*.7,.2,mix(C.soil,"#E8C88A",.5),mix(C.soil,C.ink,.3),1.6);[[-.4,-.2],[.3,.25],[.5,-.3]].forEach(e=>circ(x+e[0]*s,y+e[1]*s,s*.06,mix(C.soil,C.ink,.3)))}
+const LIFE=[
+{name:"Fever and enzyme activity",who:"Scenario 1 · medicine",
+ story:"Jordan has the flu and a temperature of 39.5 °C. A classmate worries that the fever is \"cooking\" Jordan's enzymes. The graph shows the relative activity of a typical human enzyme measured at different temperatures (100% = activity at 37 °C).",
+ cap:"A patient with a fever, a jiggling enzyme and a graph of enzyme activity from 30 to 46 °C.",
+ desc:"On the left, a person lies in bed with a thermometer reading 39.5 °C. Below, a rose enzyme jiggles. On the right, a graph shows relative activity from 30 to 46 °C. The curve rises gently from about 60% at 30 °C to 100% at 37 °C, peaks a little above that near 40 °C, then plunges toward zero by about 45 °C. Dashed markers sit at 37, 39.5 and 42 °C, with their activity values labelled. The region above 42 °C is shaded red and labelled denaturation zone.",
+ draw(T){pnl(10,10,250,480,"org");bedPerson(135,200,90,T);thermo(220,180,90,.7,{col:C.heat});label(150,90,"39.5 °C",{size:13,weight:700,mono:true,border:C.heat});
+   levelTag(22,280,"mol");enzyme(135,380,50,{T:T*2.2});for(let i=0;i<8;i++)circ(135+Math.cos(i+T*3)*80,380+Math.sin(i*1.7+T*2.5)*60,3,hexA(C.heat,.6));
+   pnl(270,10,520,480,"graph");const g=graph({x:330,y:60,w:430,h:330,x0:30,x1:46,y0:0,y1:140,xt:[30,32,34,36,38,40,42,44,46],yt:[0,20,40,60,80,100,120,140],xl:"body temperature (°C)",yl:"relative activity (%)"});
+   ctx.save();ctx.beginPath();ctx.rect(g.X(42),g.y,g.X(46)-g.X(42),g.h);ctx.fillStyle=hexA(C.bad,.12);ctx.fill();ctx.restore();txt(g.X(44),g.y+16,"denaturation zone",{size:11.5,weight:700,align:"center",color:C.bad});
+   curve(g,FEVA,30,46,C.enz,3);[[37,C.good],[39.5,C.heat],[42,C.bad]].forEach((m,i)=>{line(g.X(m[0]),g.y+g.h,g.X(m[0]),g.Y(FEVA(m[0])),m[1],1.6,[4,3]);gdot(g,m[0],FEVA(m[0]),m[1],m[0]+" °C: "+Math.round(FEVA(m[0]))+"%",{dy:-18-i*4,dx:i===2?50:i===1?-10:-40})})},
+ qs:[{q:"According to the graph, how does the enzyme's activity at 39.5 °C compare with 37 °C?",opts:[["A little higher (about "+Math.round(FEVA(39.5))+"%)",1,"Right. A moderate fever is still below this enzyme's denaturation zone, and a bit of warming speeds it up."],["Much lower, because the enzyme is denatured",0,"Read the curve at 39.5 °C: it is still above 100%. Denaturation sets in only past about 42 °C."],["Exactly the same",0,"The curve is not flat between 37 and 39.5 °C."],["Zero",0,"The graph shows activity near its peak at 39.5 °C, not zero."]]},
+  {q:"Why is a body temperature above about 42 °C dangerous?",opts:[["Many proteins, including enzymes, start to lose their shape (denature)",1,"Right. The weak bonds holding the 3-D shape break, active sites are lost and activity falls sharply."],["Enzymes are used up faster at high temperature",0,"Enzymes are not consumed by reactions. The problem is loss of shape."],["High temperature changes ΔG of every reaction to positive",0,"Temperature affects rate and shape; it does not make every reaction endergonic."],["Peptide bonds in every protein break",0,"Denaturation breaks weak bonds that hold the shape, not the peptide backbone."]]},
+  {q:"A fever-lowering drug brings Jordan from 40 °C back to 38 °C. A student says this will 'kill the enzymes'. Best reply?",opts:[["No: cooling slightly slows enzymes but does not denature them",1,"Right. Moving below the optimum only lowers the rate a little; the enzymes keep their shape."],["Yes: any change in temperature destroys enzymes",0,"Enzymes tolerate a range of temperatures; denaturation comes from too much heat."],["Yes: enzymes only work at exactly 40 °C",0,"Human enzymes work across a range, best near 37 to 40 °C."],["No: enzymes do not depend on temperature at all",0,"Temperature does affect rate; it just does not destroy enzymes in this range."]]}]},
+{name:"Methanol poisoning and a competitive inhibitor",who:"Scenario 2 · medicine",
+ story:"A worker accidentally drinks windshield-washer fluid that contains methanol. In the liver, the enzyme alcohol dehydrogenase (ADH) converts methanol into formaldehyde, which becomes formic acid that can damage the eyes and cause dangerous acidosis. Doctors give fomepizole (or, where it is unavailable, ethanol). The graph shows ADH's rate on methanol with and without the drug.",
+ cap:"Liver cell, ADH binding methanol or the drug, and a rate graph with and without fomepizole.",
+ desc:"On the left, a liver sits in a body outline and an IV drip runs into the arm. In the middle, a rose ADH enzyme is shown twice: once with an amber methanol wedge in its active site turning into a red formaldehyde product, and once with a magenta drug molecule marked I blocking the active site. On the right, a graph plots ADH rate against methanol concentration. The solid curve without drug rises quickly and levels off. The dashed curve with fomepizole rises more slowly but approaches the same plateau at very high methanol. Km markers show Km moving from 2 to 10 mM.",
+ draw(T){pnl(10,10,200,480,"org");bodyOutline(110,360,300);ell(122,250,32,16,-.2,hexA(C.soil,.85),mix(C.soil,C.ink,.3),1.4);txt(122,290,"liver",{size:12,weight:700,align:"center"});line(180,60,180,180,C.metal,3);rr(168,50,26,40,6);fillStroke(hexA(C.water,.5),C["water-ink"],1.4);poly([[181,90],[181,120],[150,160]],C["water-ink"],1.2);txt(110,440,"fomepizole by IV",{size:11.5,weight:700,align:"center"});
+   pnl(220,10,220,480,"mol");const p=P(T,6);enzyme(330,150,48,{T});const bp=boundPos(330,150,48);if(p<.6)substrate(bp[0],bp[1],48,{lab:"methanol"});else substrate(bp[0],bp[1]-(p-.6)*60,48,{split:(p-.6)*3,col:C.bad});txt(330,215,"ADH + methanol → toxic products",{size:11.5,weight:700,align:"center"});
+   enzyme(330,350,48,{T:T+1});const bq=boundPos(330,350,48);compInhib(bq[0],bq[1],48,{});txt(330,415,"ADH blocked by the drug",{size:11.5,weight:700,align:"center",color:C["compi-ink"]});
+   pnl(450,10,340,480,"graph");const g=graph({x:500,y:60,w:270,h:330,x0:0,x1:40,y0:0,y1:1.15,xt:[0,10,20,30,40],yt:[0,.5,1],yf:v=>v===1?"Vmax":v===.5?"½":"0",xl:"[methanol] (mM)",yl:"ADH rate"});
+   hLine(g,1,C["ink-soft"]);hLine(g,.5,C["ink-soft"]);curve(g,s=>mmRate(s,1,2),0,40,C.accent,3);curve(g,s=>mmRate(s,1,10),0,40*smooth(Math.min(1,P(T,8)*2)),C.compi,3,[7,5]);vLine(g,2,C.accent,"Km 2",{dy:24});vLine(g,10,C.compi,"Km 10");
+   txt(520,440,"solid: no drug · dashed: with fomepizole",{size:11.5,weight:700})},
+ qs:[{q:"Read the graph. What kind of inhibitor is fomepizole?",opts:[["Competitive: same Vmax, higher Km",1,"Right. The dashed curve reaches the same plateau but needs more methanol to get to half speed."],["Noncompetitive: lower Vmax, same Km",0,"The dashed curve still heads to the same Vmax, so it is not noncompetitive."],["An activator",0,"The dashed curve is lower at every [S] shown, so the drug slows ADH."],["It has no effect",0,"The curves clearly differ; the drug raises Km from 2 to 10 mM."]]},
+  {q:"Why does slowing ADH help the patient?",opts:[["Less methanol is turned into toxic products while the body clears methanol unchanged",1,"Right. Methanol itself is much less harmful than its products; the kidneys (or dialysis) remove it."],["The drug destroys methanol directly",0,"The drug blocks the enzyme; it does not react with methanol."],["Slowing ADH makes the reaction endergonic",0,"An inhibitor changes rate, not ΔG."],["The drug turns formic acid back into methanol",0,"The drug acts on ADH's first step; it does not reverse the products."]]},
+  {q:"If methanol levels were extremely high, how well would the same drug dose work?",opts:[["Less well, because high substrate can outcompete a competitive inhibitor",1,"Right. That is why doses are adjusted and dialysis may also be used."],["Better, because more substrate activates the drug",0,"Substrate competes with the drug; it does not activate it."],["Exactly the same at any methanol level",0,"Competitive inhibition depends on the ratio of inhibitor to substrate."],["It would stop working because Vmax drops",0,"Competitive inhibitors do not lower Vmax."]]}]},
+{name:"Lactase supplement experiment",who:"Scenario 3 · read the experiment",
+ story:"A student tests whether a lactase pill breaks down lactose in milk. Lactase splits lactose into glucose and galactose. She sets up four tubes, waits 20 minutes and measures glucose with test strips.",
+ cap:"Four test tubes with glucose test strips and a bar chart of glucose made in each tube.",
+ desc:"On the left, a person holds a glass of milk; a dashed zoom shows lactase splitting a two-ring lactose into glucose and galactose. In the middle, four labelled test tubes A to D hold milk; glucose strips beside them change colour from pale (none) to dark (lots). On the right, a bar chart shows glucose after 20 minutes: A, milk plus water at 37 °C, 0 mg/dL; B, milk plus lactase at 37 °C, 180; C, milk plus lactase at 4 °C, 40; D, milk plus boiled lactase at 37 °C, 0.",
+ data:`<table class="datat"><caption class="gk-sr">Glucose after 20 minutes</caption><thead><tr><th scope="col">Tube</th><th scope="col">Contents</th><th scope="col">Temperature</th><th scope="col">Glucose (mg/dL)</th></tr></thead><tbody>${LAC.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table>`,
+ draw(T){pnl(10,10,200,480,"org");personFig(80,300,110,{col:C.shirt2});beaker(130,150,34,50,.8,mix(C.milk,C.lipid,.25));levelTag(22,330,"mol");const q=P(T,4);const sp=seg(q,.3,.7);hexRing(80-sp*20,410,14,C.carb);hexRing(108+sp*20,410,14,C.carb);if(sp<.5)atom(94,410,5,"O",{lab:false});enzyme(94,450,22,{T});txt(105,380,sp>.5?"glucose + galactose":"lactose",{size:11.5,weight:700,align:"center"});
+   pnl(220,10,250,480,"lab");LAC.forEach((r,i)=>{const x=250+i*55;testTube(x,80,30,170,.7,mix(C.milk,C.lipid,.25));txt(x+15,270,r[0],{size:14,weight:700,align:"center",mono:true});const c=mix("#F3EDB0","#2F6F4F",r[3]/180);rr(x+5,300,20,46,3);ctx.fillStyle=c;ctx.fill();ctx.strokeStyle=C.rule;ctx.lineWidth=1;ctx.stroke();txt(x+15,362,r[2],{size:10.5,weight:600,align:"center"});if(i===3)steam(x+4,74,T,2)});
+   txt(345,400,"strip: pale = none, dark = lots",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});
+   pnl(480,10,310,480,"data");bars(520,70,250,320,LAC.map(r=>[r[0],r[3],r[3]?C.plant:C["ink-faint"]]),{max:200,yl:"glucose (mg/dL)",xl:"tube",grow:smooth(Math.min(1,P(T,10)*3))})},
+ qs:[{q:"Which tube is the negative control?",opts:[["Tube A: milk and water, no lactase",1,"Right. It shows what happens with no enzyme at all, so any glucose elsewhere comes from lactase."],["Tube B: milk and lactase at 37 °C",0,"Tube B is the main test, not the control."],["Tube C: lactase at 4 °C",0,"Tube C tests the effect of temperature."],["Tube D: boiled lactase",0,"Tube D is also a control of a kind (it tests whether active enzyme is needed), but the plain no-enzyme control is A."]]},
+  {q:"Why did tube D (boiled lactase) make no glucose?",opts:[["Boiling denatured lactase, so its active site no longer fits lactose",1,"Right. Heat destroyed the enzyme's 3-D shape, so it could not catalyse the reaction."],["Boiling used up all the lactose",0,"The lactose is in the milk, which was not boiled. The enzyme was."],["Boiled lactase works only at 4 °C",0,"Boiling permanently unfolds most enzymes, whatever the later temperature."],["The pill contained no lactase",0,"Tube B, with the same kind of pill unboiled, made plenty of glucose."]]},
+  {q:"What is the best conclusion from tube C compared with tube B?",opts:[["Lactase still works at 4 °C, but more slowly, because molecules collide less often",1,"Right. Cold slows the enzyme without denaturing it: 40 versus 180 mg/dL in the same time."],["4 °C denatures lactase",0,"Tube C still made glucose, so the enzyme was active, just slower."],["Cold speeds lactase up",0,"Tube C made less glucose than tube B."],["Temperature has no effect on lactase",0,"The two tubes differ only in temperature and give very different results."]]}]},
+{name:"Catalase and pH: a potato lab",who:"Scenario 4 · read the graph",
+ story:"Students blend potato, which is rich in the enzyme catalase, and buffer the extract at different pH values. They add hydrogen peroxide (2 H₂O₂ → 2 H₂O + O₂) and measure the height of the oxygen foam after 30 seconds.",
+ cap:"Potato cells, catalase releasing oxygen bubbles, foam columns and a bar chart of foam height at five pH values.",
+ desc:"On the left, a potato with a dashed zoom to a plant cell, then to a rose catalase enzyme turning two light-blue hydrogen peroxide molecules into water and red oxygen pairs that rise as bubbles. In the middle, five tubes at pH 3, 5, 7, 9 and 11 fill with white foam to different heights. On the right, a bar chart of foam height: pH 3, 4 mm; pH 5, 16 mm; pH 7, 34 mm; pH 9, 22 mm; pH 11, 6 mm. The tallest bar is at pH 7.",
+ data:`<table class="datat"><caption class="gk-sr">Foam height after 30 seconds</caption><thead><tr><th scope="col">pH</th>${CAT.map(c=>`<th scope="col">${c[0]}</th>`).join("")}</tr></thead><tbody><tr><th scope="row">Foam (mm)</th>${CAT.map(c=>`<td>${c[1]}</td>`).join("")}</tr></tbody></table>`,
+ draw(T){pnl(10,10,200,480,"org");potato(100,90,56);levelTag(22,170,"cell");rr(50,190,110,90,6);fillStroke(hexA(C.plant,.15),C.plant,2);circ(80,225,14,hexA(C.dna,.2),C.dna,1.2);for(let i=0;i<5;i++)ell(110+(i%3)*14,215+Math.floor(i/3)*24,8,5,0,hexA(C.milk,.9),C.rule,1);
+   levelTag(22,310,"mol");enzyme(100,400,34,{T});const q=P(T,3);for(let i=0;i<2;i++)withA(1-seg(q,.3,.5),()=>{circ(70+i*60,350,6,C.h2o2,C["water-ink"],1.2);circ(78+i*60,350,6,C.h2o2,C["water-ink"],1.2)});for(let i=0;i<4;i++){const f=P(T*.7+i/4,1);o2(100+Math.sin(i*2)*30,440-f*100,5,0)}
+   pnl(220,10,280,480,"lab");CAT.forEach((c,i)=>{const x=240+i*52;testTube(x,140,34,220,.3,C.h2o2);const fh=c[1]/34*150*smooth(Math.min(1,P(T,8)*2));rr(x+3,360-66-fh,28,fh,8);ctx.fillStyle=hexA(C.foam,.95);ctx.fill();ctx.strokeStyle=C.rule;ctx.stroke();bubbleRise(x+4,300-fh,26,fh,4,T,.6,C["ink-faint"]);txt(x+17,392,"pH "+c[0],{size:11.5,weight:700,align:"center"})});
+   pnl(510,10,280,480,"data");bars(550,70,220,320,CAT.map(c=>["pH "+c[0],c[1],C.accent]),{max:40,yl:"foam height (mm)",xl:"pH",grow:smooth(Math.min(1,P(T,10)*3))})},
+ qs:[{q:"From the graph, what is catalase's optimum pH in this experiment?",opts:[["About pH 7",1,"Right. The tallest foam (34 mm) is at pH 7."],["pH 3",0,"pH 3 gave the least foam (4 mm)."],["pH 11",0,"pH 11 gave only 6 mm of foam."],["There is no optimum; foam is the same at every pH",0,"Foam height changes a lot with pH, peaking at 7."]]},
+  {q:"In this experiment, which is the dependent variable?",opts:[["Height of oxygen foam",1,"Right. Foam height is what was measured; it depends on how fast catalase works."],["pH",0,"pH was set by the students, so it is the independent variable."],["The amount of potato",0,"That should be held constant: a controlled variable."],["Hydrogen peroxide concentration",0,"That should also be kept the same in every tube."]]},
+  {q:"One group got 0 mm of foam at every pH. What is the most likely explanation?",opts:[["Their potato extract had been heated, denaturing the catalase",1,"Right. With no working enzyme, H₂O₂ breaks down far too slowly to foam in 30 seconds."],["Catalase was used up after the first tube",0,"Enzymes are not used up; each tube had fresh extract anyway."],["Potatoes do not contain enzymes",0,"Other groups got foam, so the potato extract can contain active catalase."],["pH 7 always stops catalase",0,"Other groups found pH 7 was the best."]]}]},
+{name:"Hot spring enzymes and PCR",who:"Scenario 5 · research lab",
+ story:"PCR copies DNA in cycles that heat the sample to about 95 °C to separate the strands, then cool to about 72 °C for DNA polymerase to build new strands. Labs use Taq polymerase, an enzyme from Thermus aquaticus, a bacterium found in hot springs.",
+ cap:"A hot spring with thermophilic bacteria, a PCR cycle and activity graphs for a human and a Taq DNA polymerase.",
+ desc:"On the left, a steaming hot spring with rod-shaped bacteria labelled Thermus aquaticus. In the middle, a thermocycler display steps between 95, 55 and 72 °C while a blue DNA ladder separates into two strands and a rose polymerase builds new strands. On the right, a graph shows relative activity against temperature: a rose curve for a human DNA polymerase peaking near 37 °C and dropping to zero by about 45 °C, and a green curve for Taq peaking near 72 to 75 °C. A shaded band at 95 °C is labelled strand separation step.",
+ draw(T){pnl(10,10,200,480,"org");ell(110,300,80,26,0,hexA(C.water,.7),C["water-ink"],1.6);steam(80,270,T,4);for(let i=0;i<5;i++)bacterium(70+i*20,300+(i%2)*6,8,T,{rot:i*.6});label(110,350,"Thermus aquaticus",{size:11.5,weight:700,border:C.plant});txt(110,380,"hot spring ~70 °C",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});
+   pnl(220,10,240,480,"mol");const st=Math.floor(P(T,9)*3);const tc=[95,55,72][st];label(340,46,"thermocycler: "+tc+" °C",{size:13,weight:700,mono:true,border:C.heat});
+   const sep=st===0?seg(P(T,3),0,.6):st===1?1:1;for(let i=0;i<10;i++){const y=100+i*26;const dx=12+sep*28;circ(340-dx,y,6,C.dna);circ(340+dx,y,6,C.dna);if(sep<.3)line(340-dx+6,y,340+dx-6,y,hexA(C.dna,.6),2)}
+   if(st===2){const f=P(T,3);const n=Math.floor(f*10);for(let i=0;i<n;i++){circ(340-40+16,100+i*26,5,C.rna);}enzyme(340-24,100+n*26,18,{T,rot:Math.PI/2})}txt(340,390,["95 °C: strands separate","55 °C: primers attach","72 °C: Taq builds new strands"][st],{size:12,weight:700,align:"center"});
+   pnl(470,10,320,480,"graph");const g=graph({x:520,y:60,w:250,h:330,x0:20,x1:100,y0:0,y1:1.15,xt:[20,40,60,80,100],yt:[0,.5,1],xl:"temperature (°C)",yl:"relative activity"});
+   ctx.save();ctx.beginPath();ctx.rect(g.X(93),g.y,g.X(97)-g.X(93),g.h);ctx.fillStyle=hexA(C.heat,.2);ctx.fill();ctx.restore();txt(g.X(95),g.y+g.h+28,"95 °C step",{size:11,weight:700,align:"center",color:C.heat});
+   const hum=t=>{const a=x=>Math.pow(2,(x-37)/10)/(1+Math.exp((x-42)/2));return a(t)/a(39)*.97},taq=t=>{const a=x=>Math.pow(2,(x-72)/10)/(1+Math.exp((x-78)/2.5));return a(t)/a(74)*.98};
+   curve(g,hum,20,100,C.enz,3);curve(g,taq,20,100,C.plant,3);txt(g.X(37),g.Y(1.08),"human",{size:11.5,weight:700,align:"center",color:C["prot-ink"]});txt(g.X(74),g.Y(1.08),"Taq",{size:11.5,weight:700,align:"center",color:C["plant-ink"]});
+   line(g.X(tc),g.y,g.X(tc),g.y+g.h,C.heat,2,[4,3])},
+ qs:[{q:"Why do PCR labs use Taq polymerase instead of a human DNA polymerase?",opts:[["Taq keeps its shape after the 95 °C steps and works well at 72 °C",1,"Right. Taq comes from a thermophile, so its structure resists heat that would denature a human enzyme."],["Taq lowers the ΔG of DNA synthesis",0,"Enzymes do not change ΔG; Taq is chosen for heat stability."],["Human polymerase works only at 95 °C",0,"Human enzymes work best near 37 °C and denature at high temperatures."],["Taq is not a protein, so heat cannot affect it",0,"Taq is a protein; its folded structure is simply very heat-stable."]]},
+  {q:"Read the graph. About where is Taq's optimum temperature?",opts:[["About 72 to 75 °C",1,"Right. The green curve peaks there, matching PCR's extension step."],["About 37 °C",0,"That is the human enzyme's peak (rose curve)."],["About 95 °C",0,"Taq survives 95 °C steps but is not most active there."],["About 20 °C",0,"Taq activity is very low at 20 °C."]]},
+  {q:"What would happen to a human DNA polymerase during the first 95 °C step?",opts:[["It would denature and stop working for the rest of the run",1,"Right. Its activity curve is already near zero by about 45 °C."],["It would work faster than ever",0,"Past its optimum, the enzyme unfolds and activity crashes."],["It would be unaffected",0,"Human proteins are not built for 95 °C."],["It would turn into Taq",0,"Each enzyme's structure is set by its own gene."]]}]}];
+const LS={i:0,ans:{}};
+function lifeUI(){const S=LIFE[LS.i];$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;$("#lifeData").innerHTML=S.data||"";
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]?'<span class="ok" aria-label="all answered">✓</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-label="all answered">✓</span>')}
+function drawLife(now){use(S4);LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvSim",800,600),S2=makeStage("cvCalc",800,600),S4=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+const A11Y={sim:{cv:"#cvSim",f:simA11y},calc:{cv:"#cvCalc",f:calcA11y},sort:{cv:null,f:sortA11y},life:{cv:"#cvLife",f:lifeA11y}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(a.cv&&lab)$(a.cv).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=a.cv?$(a.cv).closest(".canvas-holder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(a.cv)$(a.cv).setAttribute("aria-describedby","gk-desc")}}
+/* ---------------- tabs / theme / loop ---------------- */
+let curTab="sim";
+const TABS=["sim","calc","sort","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S4].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;DT=dt;
+  try{if(curTab==="sim")drawSim(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__nb={tab:k=>showTab(k),sim:o=>{Object.assign(SIM,o);simPush();simSync();return simCalc()},simDone:()=>[...SIM.done],
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,choices:TR.p.choices?TR.p.choices.length:0,fmt:TR.p.choices?String(TR.p.ans):fmtAns(TR.p,TR.p.ans),unit:TR.p.unit,kind:TR.p.kind}),
+  gen:t=>{const q=genOne(t);if(q.choices){return {choice:true,ans:q.ans,j1:judge(q,String(q.ans)),j2:judge(q,String((q.ans+1)%q.choices.length)),hints:q.hints.length,rows:q.rows.length}}
+    const good=fmtAns(q,q.ans);const off=Math.max(Math.abs(q.ans)*.5,q.tol*3,1);const bad=fmtAns(q,q.ans+off);return {ans:q.ans,good,j1:judge(q,good),j1u:judge(q,good+" "+q.unit),j1m:judge(q,good.replace("-","−")),j2:judge(q,bad),j3:judge(q,"abc"),hints:q.hints.length,rows:q.rows.length,html:q.html,slips:(q.slips||[]).filter(s=>isFinite(s[0])&&s[1]).map(s=>judge(q,String(s[0])).ok)}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards.length}),lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();simInit();calcInit();calcNew();updCalcMeter();sLoad(0);lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chromosomes and Inheritance Lab</title>
+<meta name="description" content="Chromosomes and inheritance lab: a fruit fly cross bench for X linked, autosomal and linked genes with a chosen map distance, animated offspring, phenotype counts and a live recombination frequency readout; a trainer for X linked cross probabilities, recombination frequency, expected recombinants, three point map distances and gene order; a matching game for chromosome alterations and pedigree clues; and real world cases on hemophilia, calico cats, CML and mitochondrial disease.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0F5A5C;--accent-wash:#DCEFEF;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#B8561A;--act2:#2F7FC1;--act3:#B07A10;--act4:#2E8A7A;--act5:#7B5CC9;--act6:#3E9B4F;--act7:#A04E8C;--act8:#5E7183;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF2F3;--grid:#D5DDE0;--paper:#FFFDF7;
+  --skin1:#E8C2A0;--skin2:#B98462;--skin3:#7A5038;--skin4:#F0D2B8;--hair:#3D3029;--shirt1:#4F7FA8;--shirt2:#A0577A;--shirt3:#5E8A4A;--shirt4:#8C6BB0;
+  --dna:#2F6FC4;--rna:#E07A1F;--protein:#C8577A;--lipid:#C9A227;--carb:#D08A1A;--atp:#E3C019;--elec:#1FA7C7;--water:#7FB8E6;--plant:#3E9B4F;
+  --nuc:#E6EEF6;--cyto:#F4F1E8;--memb:#C9A227;
+  --xchr:#8A4FC0;--ychr:#B5651D;--auto:#6B7C88;--mat:#C2367E;--pat:#2F6FC4;
+  --eyered:#C8302A;--eyewhite:#FFFFFF;--flybody:#B39A72;--flyblack:#2B2622;--wing:#BFD4E2;--flystripe:#6E5A3E;
+  --catorange:#D9822B;--catblack:#2A2522;--catwhite:#FBF8F2;
+  --mito:#D2642A;--chl:#3E9B4F;
+  --aff:#3A4752;--carrier:#3A4752;
+  --par:#2F6FC4;--rec:#D08A1A;--fus:#C8302A;--meth:#7B5CC9;--wbc:#8E7CC3;--rbc:#C8453F;--xist:#E07A1F;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123536;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#121B20;--grid:#26323A;--paper:#1A2328;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--skin4:#D8B596;--hair:#1E1814;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --dna:#6FA8EE;--rna:#F2A15A;--protein:#E88AA6;--lipid:#E0BE48;--carb:#F0B050;--atp:#F2D84A;--elec:#5FD3EC;--water:#9CCBF0;--plant:#6CCB7C;
+  --nuc:#1B2A36;--cyto:#1F2620;--memb:#E0BE48;
+  --xchr:#B78BE8;--ychr:#E8A060;--auto:#9AAAB5;--mat:#EE82B8;--pat:#6FA8EE;
+  --eyered:#F0605A;--eyewhite:#F4F6F8;--flybody:#C9B08A;--flyblack:#4A423C;--wing:#7E97A8;--flystripe:#8A7350;
+  --catorange:#E8954A;--catblack:#3A332F;--catwhite:#E9E4DA;
+  --mito:#F08A50;--chl:#6CCB7C;
+  --aff:#C9D4DA;--carrier:#C9D4DA;
+  --par:#6FA8EE;--rec:#F0B050;--fus:#F0605A;--meth:#A98BEF;--wbc:#A898DA;--rbc:#E0605A;--xist:#F2A15A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123536;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#121B20;--grid:#26323A;--paper:#1A2328;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--skin4:#D8B596;--hair:#1E1814;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --dna:#6FA8EE;--rna:#F2A15A;--protein:#E88AA6;--lipid:#E0BE48;--carb:#F0B050;--atp:#F2D84A;--elec:#5FD3EC;--water:#9CCBF0;--plant:#6CCB7C;
+  --nuc:#1B2A36;--cyto:#1F2620;--memb:#E0BE48;
+  --xchr:#B78BE8;--ychr:#E8A060;--auto:#9AAAB5;--mat:#EE82B8;--pat:#6FA8EE;
+  --eyered:#F0605A;--eyewhite:#F4F6F8;--flybody:#C9B08A;--flyblack:#4A423C;--wing:#7E97A8;--flystripe:#8A7350;
+  --catorange:#E8954A;--catblack:#3A332F;--catwhite:#E9E4DA;
+  --mito:#F08A50;--chl:#6CCB7C;
+  --aff:#C9D4DA;--carrier:#C9D4DA;
+  --par:#6FA8EE;--rec:#F0B050;--fus:#F0605A;--meth:#A98BEF;--wbc:#A898DA;--rbc:#E0605A;--xist:#F2A15A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ctl input[type=range]:disabled{opacity:.45}
+.modes3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes3 .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.modes3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.modes3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.gsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gsel .tbtn{font-size:13.5px;padding:7px 4px;line-height:1.25}
+.gsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.gsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.lifeq .opts{margin-top:6px}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.hgrid{grid-template-columns:1fr}}
+.target{border:2px solid var(--act6);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-bottom:10px}
+.target .k{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block}
+.eqn{font-family:var(--mono);font-size:15.5px;font-weight:600;overflow-wrap:anywhere}
+.hzone{border:2px dashed var(--rule);border-radius:var(--r);padding:8px;min-height:90px;display:flex;flex-direction:column;gap:8px}
+.hzone.over{border-color:var(--accent);background:var(--accent-wash)}
+.hzone h3{margin:0;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.hzone .empty{font-size:13.5px;color:var(--ink-soft);margin:0}
+.hcard{background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--exo);border-radius:var(--r);padding:8px 10px;touch-action:none}
+.hcard.pos{border-left-color:var(--endo)}
+.hcard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.hcard.drag{opacity:.9;box-shadow:var(--shadow);position:relative;z-index:20}
+.hcard .top{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.hcard .grip{cursor:grab;font-family:var(--mono);font-size:13px;color:var(--ink-soft);border:1px dashed var(--rule);border-radius:4px;padding:2px 6px;background:var(--panel-2)}
+.hcard .dh{font-family:var(--mono);font-weight:700;font-size:14.5px}
+.hcard .dh.neg{color:var(--bad)}.hcard .dh.posv{color:var(--endo-ink)}
+.hcard .ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.hcard .ctrls .tbtn{padding:5px 9px;font-size:13.5px}
+.hcard .mult{font-family:var(--mono);font-weight:700;min-width:44px;text-align:center}
+.sumbox{border:1.5px solid var(--rule);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-top:10px}
+.sumbox .eqn s{color:var(--bad)}
+.sumbox .tot{font-family:var(--mono);font-weight:700;font-size:16px;margin-top:4px}
+.dhpos{color:var(--endo-ink)}.dhneg{color:var(--bad)}
+.hintline{font-size:14.5px;margin:4px 0}
+.seg3 .tbtn sup,.seg2 .tbtn sup,.modes .tbtn sup{font-size:10.5px}
+.tptable{border-collapse:collapse;font-family:var(--mono);font-size:14px;margin:8px 0 2px}
+.tptable th,.tptable td{padding:3px 10px 3px 0;text-align:left;border-bottom:1px solid var(--rule-soft)}
+.tptable th{font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);font-weight:600}
+.tptable td.n{text-align:right}
+.scard svg{display:block;width:120px;height:62px;margin:0 0 4px}
+.scard.placed svg{width:84px;height:44px}
+.ctl select{width:100%}
+.seg2 .tbtn small,.seg3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.seg2 .tbtn[aria-pressed="true"] small,.seg3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 12 &middot; Chromosomes and inheritance patterns</div>
+    <h1>Chromosomes and Inheritance Lab</h1>
+    <p class="sub">Cross fruit flies and watch offspring sort into classes while a live recombination readout settles; practise X linked probabilities and gene mapping with animated worked solutions; match chromosome changes and pedigree clues; and work through real cases. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-sim" data-tab="sim" id="tabbtn-sim" type="button">Part 1 &middot; Fly Cross Bench</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 2 &middot; Cross and Map Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sort" data-tab="sort" id="tabbtn-sort" type="button" tabindex="-1">Part 3 &middot; Alteration and Pedigree Match</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 4 &middot; Chromosomes in the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-sim" role="tabpanel" aria-labelledby="tabbtn-sim">
+    <h2 class="gk-sr">Part 1: Fly Cross Bench</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvSim" role="img" aria-label="Fly cross bench."></canvas></div>
+        <div class="stagebar"><span class="caption" id="simCap"></span></div>
+        <div class="legend" id="simLegend"></div>
+        <table class="readouts" id="simRead"><caption class="gk-sr">Cross results</caption><thead class="srhead"><tr><th scope="col">Class</th><th scope="col">Observed (expected)</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">Simplified model for learning. Each offspring is drawn at random using Mendel's rules and the chosen map distance. Without double crossovers, recombination frequency equals map distance divided by 100 (at most 50 percent). With double crossovers on, the bench uses the Haldane mapping function, recombination = ½(1 − e<sup>−2d/100</sup>), so far apart genes show less than their map distance. The linked cross is a testcross with a b vg / b vg male (male fruit flies do not cross over). Flies are drawn larger than life and the timing is sped up.</p>
+      </div>
+      <aside class="card side" aria-label="Fly cross bench controls">
+        <h3 id="mode-h">Trait</h3>
+        <div class="modes" id="simMode" role="group" aria-labelledby="mode-h"></div>
+        <h3 id="fem-h">Mother</h3>
+        <div class="seg3" id="simFem" role="group" aria-labelledby="fem-h"></div>
+        <h3 id="mal-h">Father</h3>
+        <div class="seg3" id="simMal" role="group" aria-labelledby="mal-h"></div>
+        <div id="linkCtl">
+          <div class="ctl"><label for="slD">Map distance between b and vg <output id="oD" for="slD"></output></label><input type="range" id="slD" min="1" max="50" step="1" value="17"></div>
+          <label class="chk"><input type="checkbox" id="simDco"> <span>Include double crossovers (realistic for genes far apart)</span></label>
+        </div>
+        <h3 id="n-h">Offspring to count</h3>
+        <div class="seg3" id="simN" role="group" aria-labelledby="n-h"></div>
+        <div class="runbar">
+          <button class="btn" id="simRun" type="button">Run cross</button>
+          <button class="tbtn" id="simReset" type="button">Reset</button>
+        </div>
+        <div class="status" id="simStatus" role="status"></div>
+        <h3>Try these</h3>
+        <ul class="chal" id="simChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 2: Cross and Map Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Problems are randomly generated for practice. Probabilities can be typed as a fraction (1/4), a decimal (0.25) or a percent (25%). Recombination frequencies and map distances are typed as a percent or in cM, to one decimal place.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcNumWrap" class="ansrow">
+          <label for="calcAns" class="ans-l">Your answer</label>
+          <div class="ansbox"><input type="text" id="calcAns" inputmode="decimal" autocomplete="off" spellcheck="false"><span id="calcUnit" class="unit"></span></div>
+        </div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices" hidden></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-sort" role="tabpanel" aria-labelledby="tabbtn-sort" hidden>
+    <h2 class="gk-sr">Part 3: Alteration and Pedigree Match</h2>
+    <div class="rounds" id="sRounds" role="group" aria-label="Rounds"></div>
+    <div class="card">
+      <div class="sorthead">
+        <div><div class="lvl-n" id="sN"></div><h2 class="sec" id="sTitle"></h2></div>
+        <div class="sortbar">
+          <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+          <span class="timer" id="sTimer" hidden>0:00</span>
+          <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+        </div>
+      </div>
+      <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+      <p class="small">Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.</p>
+      <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+      <div class="bins" id="sBins"></div>
+      <div class="bar">
+        <button class="tbtn" id="sHint" type="button">Hint</button>
+        <button class="tbtn" id="sShow" type="button">Show answer</button>
+        <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+        <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <p class="small" id="sBest"></p>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 4: Chromosomes in the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note">Families and patients are made up for teaching, and data are simplified. Not medical advice.</p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h2 class="sc-title" id="lifeTitle"></h2>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Chromosomes-Walkthrough.html">Chromosomes and Inheritance Walkthrough</a>. Families, patients and some data are made up for teaching.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "skin1", "skin2", "skin3", "skin4", "hair", "shirt1", "shirt2", "shirt3", "shirt4", "dna", "rna", "protein", "lipid", "carb", "atp", "elec", "water", "plant", "nuc", "cyto", "memb", "xchr", "ychr", "auto", "mat", "pat", "eyered", "eyewhite", "flybody", "flyblack", "wing", "flystripe", "catorange", "catblack", "catwhite", "mito", "chl", "aff", "carrier", "par", "rec", "fus", "meth", "wbc", "rbc", "xist"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=fg||onFill();ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= base pieces (shared kit) ================= */
+let SC={};let SYS={};
+const SKINS=["skin1","skin2","skin3","skin4"],SHIRTS=["shirt1","shirt2","shirt3","shirt4"];
+function person(x,y,s,o){o=o||{};const sk=C[SKINS[(o.skin||0)%4]],sh=o.col||C[SHIRTS[(o.shirt||0)%4]];const bw=(o.w||1);ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  rr(x-s*.42*bw,y-s*1.2,s*.84*bw,s*1.25,s*.32);fillStroke(sh,hexA(C.ink,.4),1.2);
+  rr(x-s*.3*bw,y-s*.02,s*.24*bw,s*.9,s*.1);fillStroke(mix(sh,C.ink,.35),null);rr(x+s*.06*bw,y-s*.02,s*.24*bw,s*.9,s*.1);fillStroke(mix(sh,C.ink,.35),null);
+  circ(x,y-s*1.55,s*.36,sk,hexA(C.ink,.4),1.2);
+  if(o.hair!==false){ctx.beginPath();ctx.arc(x,y-s*1.6,s*.37,Math.PI*1.05,Math.PI*1.95);ctx.fillStyle=C.hair;ctx.fill()}
+  if(o.mood){circ(x-s*.12,y-s*1.56,1.6,C.ink);circ(x+s*.12,y-s*1.56,1.6,C.ink);ctx.beginPath();ctx.arc(x,y-s*1.48,s*.12,.2,Math.PI-.2);ctx.strokeStyle=C.ink;ctx.lineWidth=1.3;ctx.stroke()}
+  ctx.restore()}
+function bar(x,y,w,h,f,col,o){o=o||{};rr(x,y,w,h,Math.min(4,h/2));ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){rr(x,y,w*clamp(f,0,1),h,Math.min(4,h/2));ctx.fillStyle=col;ctx.fill()}if(o.over&&f>1){txt(x+w+4,y+h/2,"+",{size:12,weight:700,color:C.bad})}}
+function vbar(x,y,w,h,f,col){rr(x,y,w,h,3);ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){const hh=h*clamp(f,0,1);rr(x,y+h-hh,w,hh,3);ctx.fillStyle=col;ctx.fill()}}
+function cardBox(x,y,w,h,col,on){rr(x,y,w,h,8);ctx.fillStyle=on?hexA(col,.16):hexA(C.panel,.88);ctx.fill();ctx.strokeStyle=on?col:C.rule;ctx.lineWidth=on?2.4:1.2;ctx.stroke()}
+function tick(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+/* a speech bubble */
+function bubble(x,y,w,h,t,o){o=o||{};rr(x,y,w,h,10);fillStroke(o.fill||C.panel,o.stroke||C.rule,1.6);ctx.beginPath();const tx=o.tx==null?x+24:o.tx;ctx.moveTo(tx,y+h);ctx.lineTo(tx+10,y+h);ctx.lineTo(tx-4,y+h+14);ctx.closePath();ctx.fillStyle=o.fill||C.panel;ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.stroke();
+  rr(tx-1,y+h-3,13,5,0);ctx.fillStyle=o.fill||C.panel;ctx.fill();wrapText(t,x+10,y+16,w-20,o.lh||16,{size:o.size||12.5,weight:o.weight||500})}
+/* headline card */
+function headline(x,y,w,h,t,o){o=o||{};rr(x,y,w,h,6);fillStroke(C.paper,o.border||C.rule,1.6);rr(x,y,w,20,6);ctx.fillStyle=hexA(C.ink,.08);ctx.fill();txt(x+10,y+10,o.src||"NEWS FEED",{size:10.5,weight:700,mono:true,color:C["ink-soft"]});wrapText(t,x+10,y+36,w-20,o.lh||18,{size:o.size||14,weight:700})}
+/* count wrapped lines */
+function wrapCount(t,w,size,weight){ctx.font=`${weight||500} ${size}px ${FONT}`;let n=1,ln="";t.split(" ").forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){n++;ln=wd}else ln=test});return n}
+/* fit one line of text into a width (shrinks font) */
+function fitTxt(x,y,t,maxW,o){o=o||{};let sz=o.size||13;ctx.font=`${o.weight||600} ${sz}px ${o.mono?MONO:FONT}`;const w=ctx.measureText(t).width;if(w>maxW)sz=Math.max(9.5,sz*maxW/w);txt(x,y,t,Object.assign({},o,{size:sz}))}
+/* worked example panel: rows = [{c:[items,res]} | {l:"text"} | {ans:"text"}], animates over `per` seconds */
+function wk(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);
+  const sw=o.split||0;const sz=o.size||12.5;
+  if(sw){let ly=wrapText(W_.q,x+12,y+38,sw-22,sz+4,{size:sz,weight:600})+sz+8;(W_.given||[]).forEach((g,i)=>{const a=seg(t,.6+i*.4,1+i*.4);if(a>0)withA(a,()=>wrapText(g,x+14,ly,sw-26,sz+3,{size:sz-.5,mono:true,weight:500}));ly+=wrapCount(g,sw-26,sz-.5)*(sz+3)+6});line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2)}
+  const rx=x+sw+14,rw=w-sw-28;let cy=y+(o.cy||30);const fs=o.cfs||14;const t0=o.t0||1.2;const dt=o.dt||1.8;
+  W_.rows.forEach((r,i)=>{const p_=clamp((t-t0-i*dt)/(dt*.85),0,1);
+    if(r.c){cy+=fs+6;if(p_>0){const cw=chainWidth(r.c[0],r.c[1],{size:fs});const sc=Math.min(1,rw/cw);ctx.save();ctx.translate(rx,cy);ctx.scale(sc,sc);chain(0,0,r.c[0],r.c[1],p_,{size:fs});ctx.restore()}cy+=fs+(o.rowGap||16)}
+    else if(r.l){cy+=12;if(p_>0)withA(p_,()=>fitTxt(rx,cy,r.l,rw,{size:o.lfs||13.5,weight:600,mono:true}));cy+=(o.lh||16)}
+    else if(r.ans){cy+=16;if(p_>0)withA(p_,()=>{ctx.font=`700 15px ${MONO}`;const tw=Math.min(rw,ctx.measureText(r.ans).width);rr(rx-4,cy-14,tw+14,28,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(rx+3,cy,r.ans,rw-6,{size:15,weight:700,mono:true})});cy+=18}});
+  if(W_.miss){const tm=t0+W_.rows.length*dt+.4;const a=seg(t,tm,tm+.6);if(a>0){const mw=o.missFull?w-24:rw+8;const mx=o.missFull?x+12:rx-4;const n=wrapCount("Common mistake: "+W_.miss,mw-16,sz-1);const mh=n*(sz+2)+10;
+    withA(a,()=>{rr(mx,y+h-mh-8,mw,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,mx+8,y+h-mh-8+5+(sz)/2+1,mw-16,sz+2,{size:sz-1})})}}
+  return t}
+/* ================= biology drawing kit (shared by both pages) ================= */
+/* level tag chip */
+function levelTag(x,y,k){const m={org:["ORGANISM",C.act1],cell:["CELL",C.act2],chrom:["CHROMOSOMES",C.xchr],mol:["MOLECULES",C.protein],data:["DATA",C.accent],math:["THE MATH",C.act5],cross:["THE CROSS",C.act3],fam:["THE FAMILY",C.act7],pop:["POPULATION",C.act4]}[k]||[String(k).toUpperCase(),C.accent];
+  ctx.save();ctx.font=`700 10.5px ${MONO}`;const w=ctx.measureText(m[0]).width+12;rr(x,y-8,w,16,8);ctx.fillStyle=hexA(m[1],.16);ctx.fill();ctx.strokeStyle=m[1];ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle=C.ink;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(m[0],x+6,y+.5);ctx.restore();return w}
+/* rich text with ^sup and _sub: "X^w", "b^+", "X^{H}" */
+function richParts(s){const out=[];const re=/\^\{([^}]*)\}|\^(.)|_\{([^}]*)\}|_(.)/g;let last=0,m;s=String(s);
+  while((m=re.exec(s))){if(m.index>last)out.push([s.slice(last,m.index),0]);if(m[1]!=null||m[2]!=null)out.push([m[1]!=null?m[1]:m[2],1]);else out.push([m[3]!=null?m[3]:m[4],-1]);last=re.lastIndex}
+  if(last<s.length)out.push([s.slice(last),0]);return out}
+function richW(s,o){o=o||{};const size=o.size||13,fam=o.mono?MONO:FONT,wt=o.weight||600;let w=0;richParts(s).forEach(p=>{ctx.font=`${wt} ${p[1]?size*.7:size}px ${fam}`;w+=ctx.measureText(p[0]).width+(p[1]?1:0)});return w}
+function rich(x,y,s,o){o=o||{};const size=o.size||13,fam=o.mono?MONO:FONT,wt=o.weight||600;const w=richW(s,o);let x0=x;const al=o.align||"center";if(al==="center")x0=x-w/2;else if(al==="right")x0=x-w;
+  ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  if(o.pill){ctx.save();ctx.globalAlpha*=(o.bga==null?.92:o.bga);rr(x0-5,y-size*.78,w+10,size*1.56,4);ctx.fillStyle=o.bg||C.panel;ctx.fill();ctx.restore();if(o.border){rr(x0-5,y-size*.78,w+10,size*1.56,4);ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;let X=x0;
+  richParts(s).forEach(p=>{const sz=p[1]?size*.7:size;ctx.font=`${wt} ${sz}px ${fam}`;const dy=p[1]===1?-size*.38:p[1]===-1?size*.28:0;ctx.fillText(p[0],X,y+dy+.5);X+=ctx.measureText(p[0]).width+(p[1]?1:0)});
+  ctx.restore();return w}
+/* capsule */
+function capsule(x1,y1,x2,y2,w){const a=Math.atan2(y2-y1,x2-x1),r=w/2;ctx.beginPath();ctx.arc(x1,y1,r,a+Math.PI/2,a+Math.PI*1.5);ctx.arc(x2,y2,r,a-Math.PI/2,a+Math.PI/2);ctx.closePath()}
+/* chromosome: x,y = centromere position; L = length; cen = fraction of length above centromere
+   o: {rot, sis (two sister chromatids), spr (arm spread angle), bands:[{p,col,lab,side}], edge, a, w2 (second colour for crossover segment from p0..p1 on sister k)} */
+function chromo(x,y,L,w,col,o){o=o||{};const cen=o.cen==null?.4:o.cen;const top=-L*cen,bot=L*(1-cen);ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);ctx.translate(x,y);ctx.rotate(o.rot||0);
+  const edge=o.edge||mix(col,C.ink,.45);const sis=o.sis?[-1,1]:[0];const spr=o.spr==null?.08:o.spr;const off=o.sis?(o.gap==null?w*.52:o.gap):0;
+  sis.forEach((s,k)=>{ctx.save();ctx.translate(s*off,0);
+    const segs=(o.segs&&o.segs[k])||null;/* segs: [[p0,p1,col]] colour overrides along length */
+    const armP=(a_,b_)=>{const r=w/2;if(b_-a_<=w){ctx.beginPath();ctx.ellipse(0,(a_+b_)/2,r,Math.max(1,(b_-a_)/2),0,0,TAU)}else capsule(0,a_+r,0,b_-r,w)};
+    [[top,-w*.16,-s*spr],[w*.16,bot,s*spr]].forEach(arm=>{ctx.save();ctx.rotate(arm[2]);armP(arm[0],arm[1]);ctx.fillStyle=col;ctx.fill();
+      ctx.save();armP(arm[0],arm[1]);ctx.clip();
+      if(segs)segs.forEach(sg=>{const ya=lerp(top,bot,sg[0]),yb=lerp(top,bot,sg[1]);ctx.fillStyle=sg[2];ctx.fillRect(-w,ya,w*2,yb-ya)});
+      ctx.globalAlpha*=.16;for(let b=arm[0]+6;b<arm[1]-3;b+=9){ctx.fillStyle=C.ink;ctx.fillRect(-w,b,w*2,2.2)}ctx.globalAlpha/=.16;
+      (o.bands||[]).forEach(bd=>{const by=lerp(top,bot,bd.p);ctx.fillStyle=bd.col||C.ink;ctx.fillRect(-w,by-3,w*2,6)});
+      ctx.restore();armP(arm[0],arm[1]);ctx.strokeStyle=edge;ctx.lineWidth=1.3;ctx.stroke();ctx.restore()});
+    ctx.restore()});
+  /* centromere */
+  ell(0,0,off+w*.36,w*.26,0,mix(col,C.ink,.5),null);
+  /* band labels (not rotated with arms) */
+  (o.bands||[]).forEach(bd=>{if(!bd.lab)return;const by=lerp(top,bot,bd.p);const side=bd.side==="l"?-1:1;const lx=side*(off+w/2+6);ctx.save();ctx.rotate(-(o.rot||0));const px=lx*Math.cos(o.rot||0)-by*Math.sin(o.rot||0),py=lx*Math.sin(o.rot||0)+by*Math.cos(o.rot||0);
+    rich(px+(side>0?2:-2),py,bd.lab,{size:bd.size||12.5,weight:700,mono:true,align:side>0?"left":"right",pill:true,border:bd.col&&bd.col!==C.ink?bd.col:null});ctx.restore()});
+  ctx.restore()}
+/* simple straight chromosome drawn horizontally from x1 to x2 (for maps and structural changes); segs: [[p0,p1,col,label]] */
+function chromoH(x1,x2,y,w,col,o){o=o||{};const L=x2-x1;capsule(x1+w/2,y,x2-w/2,y,w);ctx.fillStyle=col;ctx.fill();
+  if(o.segs){ctx.save();capsule(x1+w/2,y,x2-w/2,y,w);ctx.clip();o.segs.forEach(s=>{const a=x1+L*s[0],b=x1+L*s[1];ctx.fillStyle=s[2];ctx.fillRect(a,y-w,b-a,w*2);ctx.strokeStyle=hexA(C.ink,.35);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(b,y-w);ctx.lineTo(b,y+w);ctx.stroke()});ctx.restore();
+    o.segs.forEach(s=>{if(s[3]){const a=x1+L*s[0],b=x1+L*s[1];txt((a+b)/2,y+.5,s[3],{size:o.fs||12,weight:700,mono:true,align:"center",color:inkOn(s[2])})}})}
+  capsule(x1+w/2,y,x2-w/2,y,w);ctx.strokeStyle=o.edge||mix(col,C.ink,.45);ctx.lineWidth=1.4;ctx.stroke();
+  if(o.cen!=null){const cx=x1+L*o.cen;ell(cx,y,w*.28,w*.62,0,mix(col,C.ink,.5),null)}}
+/* cell with membrane, optional nucleus */
+function cellO(x,y,rx,ry,o){o=o||{};ell(x,y,rx,ry,o.rot||0,o.fill||C.cyto,null);ctx.save();ctx.setLineDash([]);ell(x,y,rx,ry,o.rot||0,null,C.memb,3);ell(x,y,rx-3.5,ry-3.5,o.rot||0,null,hexA(C.memb,.55),1.4);ctx.restore();
+  if(o.nuc){ell(x+(o.nx||0),y+(o.ny||0),o.nuc,o.nuc*(o.nr||1),0,C.nuc,mix(C.dna,C.ink,.2),1.6)}}
+/* fruit fly, top view. o: {eye:"red"|"white", body:"gray"|"black", wing:"normal"|"vestigial", sex:"f"|"m", rot, flap, a, legs} */
+function fly(x,y,s,o){o=o||{};const u=s/10;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);ctx.translate(x,y);ctx.rotate(o.rot||0);
+  const bc=o.body==="black"?C.flyblack:C.flybody;const edge=mix(bc,C.ink,.5);const fem=o.sex!=="m";
+  /* legs */
+  ctx.strokeStyle=hexA(C.ink,.7);ctx.lineWidth=Math.max(1,u*.35);const lp=o.walk||0;
+  [-1,1].forEach(sd=>{[[-1.4,-1],[0,0],[1.2,1]].forEach((l,i)=>{const sw=Math.sin(lp+i*2.1+(sd>0?Math.PI:0))*.35;ctx.beginPath();ctx.moveTo(sd*u*1.4,l[0]*u-u*.6);const kx=sd*u*(3.4),ky=l[0]*u-u*.6+l[1]*u*1.6+sw*u*2;ctx.lineTo(kx,ky);ctx.lineTo(kx+sd*u*1.2,ky+l[1]*u*1.8+u*.6);ctx.stroke()})});
+  /* abdomen */
+  const arx=fem?u*2.5:u*2.05,ary=fem?u*3.9:u*3.0,ay=fem?u*3.5:u*2.9;
+  ell(0,ay,arx,ary,0,bc,edge,1.2);
+  ctx.save();ell(0,ay,arx,ary,0,null,null);ctx.clip();ctx.strokeStyle=o.body==="black"?hexA("#000",.55):C.flystripe;ctx.lineWidth=u*.75;
+  for(let k=0;k<(fem?5:3);k++){const yy=ay-ary*.35+k*u*1.25;ctx.beginPath();ctx.ellipse(0,yy,arx*1.1,u*.9,0,0,Math.PI);ctx.stroke()}
+  if(!fem){ctx.fillStyle=o.body==="black"?"#000":C.flyblack;ctx.fillRect(-arx,ay+ary*.25,arx*2,ary)}ctx.restore();
+  /* thorax and head */
+  ell(0,-u*.5,u*2.25,u*2.35,0,bc,edge,1.2);ell(0,-u*3.5,u*1.9,u*1.35,0,mix(bc,C.ink,.15),edge,1.2);
+  const ec=o.eye==="white"?C.eyewhite:C.eyered;[-1,1].forEach(sd=>ell(sd*u*1.45,-u*3.55,u*.95,u*1.25,sd*.25,ec,o.eye==="white"?C.ink:mix(ec,"#000",.35),o.eye==="white"?1.6:1));
+  /* wings */
+  const fl=o.flap||0;ctx.fillStyle=hexA(C.wing,.62);ctx.strokeStyle=hexA(C.ink,.45);ctx.lineWidth=1;
+  [-1,1].forEach(sd=>{ctx.save();ctx.translate(sd*u*.8,-u*1.2);ctx.rotate(sd*(.32+fl));
+    if(o.wing==="vestigial"){ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(sd*u*1.6,u*.8,sd*u*.9,u*2.2);ctx.quadraticCurveTo(sd*u*.2,u*1.6,0,0);ctx.fill();ctx.stroke()}
+    else{ctx.beginPath();ctx.ellipse(sd*u*.6,u*4.2,u*1.55,u*4.5,0,0,TAU);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(sd*u*.9,u*7.5);ctx.moveTo(sd*u*.2,u*1);ctx.lineTo(sd*u*1.7,u*6.6);ctx.strokeStyle=hexA(C.ink,.25);ctx.stroke()}
+    ctx.restore()});
+  ctx.restore()}
+/* glass vial with fly food and a foam plug */
+function vial(x,y,w,h,o){o=o||{};rr(x,y,w,h,w*.3);ctx.fillStyle=hexA(C.water,.12);ctx.fill();ctx.save();rr(x,y,w,h,w*.3);ctx.clip();ctx.fillStyle=hexA(C.carb,.7);ctx.fillRect(x,y+h*.72,w,h);ctx.fillStyle=hexA(C.carb,.35);ctx.fillRect(x,y+h*.7,w,4);ctx.restore();
+  rr(x,y,w,h,w*.3);ctx.strokeStyle=hexA(C["ink-soft"],.8);ctx.lineWidth=1.8;ctx.stroke();rr(x-3,y-14,w+6,22,6);fillStroke(o.plug||mix(C.paper,C.gold,.25),C["ink-soft"],1.2);
+  if(o.lab)txt(x+w/2,y+h+14,o.lab,{size:12,weight:700,align:"center"})}
+/* cat sitting, facing right. o: {patches:[[x,y,r,col]], base, a} coordinates in units of s */
+function catPath(s){ctx.beginPath();ctx.ellipse(0,s*.35,s*.62,s*.72,0,0,TAU);ctx.moveTo(s*.62,-s*.42);ctx.arc(s*.38,-s*.42,s*.36,0,TAU);
+  ctx.moveTo(s*.12,-s*.62);ctx.lineTo(s*.16,-s*1.02);ctx.lineTo(s*.38,-s*.74);ctx.closePath();ctx.moveTo(s*.42,-s*.76);ctx.lineTo(s*.66,-s*1.0);ctx.lineTo(s*.72,-s*.56);ctx.closePath()}
+function cat(x,y,s,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);ctx.translate(x,y);
+  /* tail */
+  const tw=Math.sin(o.t||0)*.25;ctx.beginPath();ctx.moveTo(-s*.45,s*.9);ctx.quadraticCurveTo(-s*1.25,s*.8+tw*s,-s*1.05,s*.05-tw*s*.5);ctx.strokeStyle=o.tail||o.base||C.catwhite;ctx.lineWidth=s*.16;ctx.lineCap="round";ctx.stroke();ctx.strokeStyle=hexA(C.ink,.5);ctx.lineWidth=1.2;ctx.lineCap="butt";
+  catPath(s);ctx.fillStyle=o.base||C.catwhite;ctx.fill();
+  ctx.save();catPath(s);ctx.clip();(o.patches||[]).forEach((p,i)=>{blobPath(p[0]*s,p[1]*s,p[2]*s,i*1.7+.3,0,.18);ctx.fillStyle=p[3];ctx.fill()});ctx.restore();
+  catPath(s);ctx.strokeStyle=hexA(C.ink,.55);ctx.lineWidth=1.4;ctx.stroke();
+  /* face */
+  ell(s*.5,-s*.48,s*.05,s*.07,0,C.good,C.ink,1);ell(s*.26,-s*.48,s*.05,s*.07,0,C.good,C.ink,1);circ(s*.52,-s*.36,s*.035,C.protein);
+  ctx.strokeStyle=hexA(C.ink,.5);ctx.lineWidth=1;[[-.04,0],[.02,.04]].forEach(d=>{line(s*.6,-s*.34+d[0]*s,s*.86,-s*.38+d[1]*s*2,hexA(C.ink,.45),1)});
+  ctx.restore()}
+const CALICO=[[-.3,.1,.34,"catorange"],[.25,.5,.3,"catblack"],[.42,-.55,.2,"catorange"],[.2,-.38,.14,"catblack"],[-.25,.7,.25,"catblack"],[.05,.05,.18,"catorange"],[-.55,.45,.2,"catorange"]];
+function calicoPatches(sc){return CALICO.map(p=>[p[0],p[1],p[2]*(sc||1),C[p[3]]])}
+/* pedigree symbol. sex "m" square, "f" circle. st 0 unaffected, 1 affected, 2 carrier (dot) */
+function pedSym(x,y,r,sex,st,o){o=o||{};const fill=st===1?(o.col||C.aff):C.panel;if(o.hl){ctx.save();ctx.globalAlpha*=o.hl;glow(x,y,r*2.2,C.gold,.7);ctx.restore()}
+  if(sex==="m"){ctx.beginPath();ctx.rect(x-r,y-r,r*2,r*2)}else ctx.beginPath(),ctx.arc(x,y,r,0,TAU);ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=1.8;ctx.stroke();
+  if(st===2)circ(x,y,r*.32,o.col||C.carrier);if(st===3){ctx.save();if(sex==="m"){ctx.beginPath();ctx.rect(x-r,y-r,r,r*2)}else{ctx.beginPath();ctx.moveTo(x,y-r);ctx.arc(x,y,r,-Math.PI/2,Math.PI/2,true);ctx.closePath()}ctx.fillStyle=o.col||C.aff;ctx.fill();ctx.restore()}
+  if(o.lab)txt(x,y+r+12,o.lab,{size:11.5,weight:600,align:"center",color:C["ink-soft"],mono:true})}
+/* pedigree: nodes {id:[x,y,sex,st,label]}, mates [[a,b]], kids [[a,b,[ids]]] ; p reveal 0..1 (per generation order given by y) */
+function pedigree(nodes,mates,kids,r,o){o=o||{};const lc=C.ink;ctx.lineWidth=1.8;const vis=id=>o.vis?o.vis(id):1;
+  mates.forEach(m=>{const A=nodes[m[0]],B=nodes[m[1]];const a=Math.min(vis(m[0]),vis(m[1]));if(a<=0)return;withA(a,()=>line(A[0]+(A[0]<B[0]?r:-r),A[1],B[0]+(A[0]<B[0]?-r:r),B[1],lc,1.8))});
+  kids.forEach(k=>{const A=nodes[k[0]],B=nodes[k[1]];const ids=k[2];const a=Math.min(...ids.map(vis));if(a<=0)return;const mx=(A[0]+B[0])/2,my=A[1];const ky=nodes[ids[0]][1];const sy=ky-r-14;
+    withA(a,()=>{line(mx,my,mx,sy,lc,1.8);const xs=ids.map(i=>nodes[i][0]);line(Math.min(mx,...xs),sy,Math.max(mx,...xs),sy,lc,1.8);ids.forEach(i=>line(nodes[i][0],sy,nodes[i][0],nodes[i][1]-r,lc,1.8))})});
+  Object.keys(nodes).forEach(id=>{const n=nodes[id];const a=vis(id);if(a<=0)return;withA(a,()=>pedSym(n[0],n[1],r,n[2],n[3],{lab:n[4],hl:o.hl?o.hl(id):0,col:o.col}))})}
+/* Punnett square. top/left: arrays of rich text gametes; cell(i,j,cx,cy,cs) draws cell content; p 0..1 reveal */
+function punnett(x,y,cs,top,left,cell,p,o){o=o||{};const n=top.length,m=left.length;const hc=o.hc||C.panel;
+  top.forEach((g,i)=>{rr(x+cs*(i+1)+3,y+3,cs-6,cs*.55-6,6);fillStroke(hexA(o.topCol||C.pat,.14),o.topCol||C.pat,1.4);rich(x+cs*(i+1.5),y+cs*.275,g,{size:o.gs||14,weight:700,mono:true})});
+  left.forEach((g,j)=>{rr(x+3,y+cs*.55+cs*j+3,cs-6,cs-6,6);fillStroke(hexA(o.leftCol||C.mat,.14),o.leftCol||C.mat,1.4);rich(x+cs*.5,y+cs*.55+cs*(j+.5),g,{size:o.gs||14,weight:700,mono:true})});
+  for(let j=0;j<m;j++)for(let i=0;i<n;i++){const k=j*n+i;const a=clamp(p*(n*m)-k,0,1);const cx=x+cs*(i+1),cy=y+cs*.55+cs*j;rr(cx+2,cy+2,cs-4,cs-4,5);fillStroke(hexA(hc,.9),C.rule,1.2);if(a>0)withA(a,()=>cell(i,j,cx+cs/2,cy+cs/2,cs))}
+  if(o.lt)rich(x+cs*.5,y+cs*.275,o.lt,{size:11,weight:600,color:C["ink-soft"]})}
+/* double helix, horizontal. o:{amp,ph,col,col2,marks:[fractions],markCol,rungs} */
+function helix(x,y,len,o){o=o||{};const amp=o.amp||9,ph=o.ph||0,wl=o.wl||34;const c1=o.col||C.dna,c2=o.col2||mix(o.col||C.dna,C.ink,.25);
+  for(let X=0;X<=len;X+=wl/6){const a=X/wl*TAU+ph;const y1=y+Math.sin(a)*amp,y2=y-Math.sin(a)*amp;line(x+X,y1,x+X,y2,hexA(o.rung||C["ink-soft"],.5),1.6)}
+  [[1,c1],[-1,c2]].forEach(s=>{ctx.beginPath();for(let X=0;X<=len;X+=2){const Y=y+s[0]*Math.sin(X/wl*TAU+ph)*amp;X?ctx.lineTo(x+X,Y):ctx.moveTo(x+X,Y)}ctx.strokeStyle=s[1];ctx.lineWidth=3.2;ctx.stroke()});
+  (o.marks||[]).forEach(f=>{const X=x+f*len;const Y=y+Math.sin(f*len/wl*TAU+ph)*amp;line(X,Y,X,Y-12,o.markCol||C.meth,2);circ(X,Y-15,4.5,o.markCol||C.meth,C.ink,1)})}
+/* protein blob */
+function prot(x,y,r,col,seed,t,o){o=o||{};blobPath(x,y,r,seed||1,t||0,o.amp==null?.08:o.amp);fillStroke(col,mix(col,C.ink,.45),1.4);if(o.lab)txt(x,y,o.lab,{size:o.fs||11.5,weight:700,align:"center",color:inkOn(col)})}
+/* membrane bilayer strip */
+function bilayer(x,y,w,o){o=o||{};const sp=9;for(let X=x+4;X<x+w;X+=sp){[[-1],[1]].forEach(s=>{const hy=y+s[0]*11;line(X-1.5,hy-s[0]*-4,X-1.5,y+s[0]*2,hexA(C.memb,.8),1.2);line(X+1.5,hy-s[0]*-4,X+1.5,y+s[0]*2,hexA(C.memb,.8),1.2);circ(X,hy,4,C.memb,mix(C.memb,C.ink,.35),1)})}}
+/* mitochondrion */
+function mitoD(x,y,w,h,rot,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ell(0,0,w/2,h/2,0,o.col||C.mito,mix(o.col||C.mito,C.ink,.4),1.5);ell(0,0,w/2-3,h/2-3,0,mix(o.col||C.mito,C.paper,.35),null);
+  ctx.beginPath();const n=6;for(let i=0;i<=n*4;i++){const X=-w/2+6+(w-12)*i/(n*4);const Y=(i%4<2?-1:1)*(h/2-6)*(i%2?1:.2);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=mix(o.col||C.mito,C.ink,.3);ctx.lineWidth=1.6;ctx.stroke();
+  (o.dna||[]).forEach((d,i)=>{const X=-w/2+10+(w-20)*(i+.5)/o.dna.length;circ(X,(i%2?1:-1)*h*.12,Math.min(4,h*.12),null,d,2)});ctx.restore()}
+/* chloroplast */
+function chloroD(x,y,w,h,rot,o){o=o||{};const col=o.white?mix(C.catwhite,C.plant,.12):C.chl;ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ell(0,0,w/2,h/2,0,col,mix(col,C.ink,.4),1.4);
+  if(!o.white){for(let i=0;i<4;i++){const X=-w/2+w*(i+.7)/4.6;for(let k=0;k<3;k++){rr(X-4,-5+k*3.4-2,8,3,1.5);ctx.fillStyle=mix(C.chl,C.ink,.35);ctx.fill()}}}else{ctx.setLineDash([3,3]);ell(0,0,w/2-3,h/2-3,0,null,hexA(C.ink,.35),1);ctx.setLineDash([])}ctx.restore()}
+/* leaf */
+function leaf(x,y,s,rot,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(s*.45,-s*.35,s,0);ctx.quadraticCurveTo(s*.45,s*.35,0,0);
+  ctx.fillStyle=o.col||C.plant;ctx.fill();if(o.vari){ctx.save();ctx.clip();[[.3,.1,.16],[.62,-.08,.14],[.78,.1,.1]].forEach((p,i)=>{blobPath(p[0]*s,p[1]*s,p[2]*s,i+2,0,.2);ctx.fillStyle=mix(C.catwhite,C.plant,.1);ctx.fill()});ctx.restore()}
+  ctx.strokeStyle=mix(o.col||C.plant,C.ink,.4);ctx.lineWidth=1.3;ctx.stroke();line(0,0,s*.9,0,mix(o.col||C.plant,C.ink,.3),1);ctx.restore()}
+/* gametes */
+function egg(x,y,r,o){o=o||{};circ(x,y,r,o.fill||mix(C.cyto,C.protein,.12),C.memb,2.4);if(o.nuc!==false)circ(x+(o.nx||0),y+(o.ny||0),r*.32,C.nuc,mix(C.dna,C.ink,.2),1.4)}
+function sperm(x,y,s,rot,t,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ctx.beginPath();for(let i=0;i<=20;i++){const X=-s*.4-i*s*.12;const Y=Math.sin(i*.6-t*14)*s*.12*(i/20);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=hexA(C.ink,.6);ctx.lineWidth=1.4;ctx.stroke();
+  ell(0,0,s*.42,s*.26,0,o.fill||C.nuc,mix(C.dna,C.ink,.3),1.4);rr(-s*.62,-s*.12,s*.24,s*.24,2);ctx.fillStyle=C.mito;ctx.fill();ctx.restore()}
+/* sex symbols drawn with lines */
+function sexSym(x,y,r,k,col){col=col||C.ink;circ(x,y,r,null,col,2);if(k==="f"){line(x,y+r,x,y+r*2.2,col,2);line(x-r*.6,y+r*1.6,x+r*.6,y+r*1.6,col,2)}else{const a=-Math.PI/4;const x1=x+Math.cos(a)*r,y1=y+Math.sin(a)*r,x2=x+Math.cos(a)*r*2.2,y2=y+Math.sin(a)*r*2.2;line(x1,y1,x2,y2,col,2);line(x2,y2,x2-r*.75,y2,col,2);line(x2,y2,x2,y2+r*.75,col,2)}}
+/* blood cells */
+function rbc(x,y,r,col){ell(x,y,r,r*.8,0,col||C.rbc,mix(col||C.rbc,C.ink,.35),1);ell(x,y,r*.45,r*.32,0,mix(col||C.rbc,C.ink,.18),null)}
+function wbcD(x,y,r,o){o=o||{};circ(x,y,r,mix(C.wbc,C.paper,.55),mix(C.wbc,C.ink,.35),1.3);blobPath(x,y,r*.55,o.seed||1,0,.22);ctx.fillStyle=mix(C.wbc,C.ink,.15);ctx.fill()}
+/* small karyotype: pairs of chromosomes in rows. counts {n:copies} */
+const KLEN=[52,50,42,40,38,36,34,31,30,30,30,29,24,23,22,20,19,18,15,15,11,12];
+function karyo(x,y,sc,o){o=o||{};const cnt=o.cnt||{};const hl=o.hl;let k=0;const cols=o.cols||12;const cw=o.cw||30;
+  for(let n=1;n<=24;n++){const isX=n===23,isY=n===24;if(isY&&!o.sex)continue;const c=k%cols,rw=Math.floor(k/cols);const cx=x+c*cw,cy=y+rw*(o.rh||64)*sc;
+    let copies=cnt[n]!=null?cnt[n]:(n<=22?2:0);let cols2=[];if(n<=22)for(let i=0;i<copies;i++)cols2.push(i%2?C.pat:C.mat);
+    if(n===23){const s=o.sex||"XX";cols2=s.split("").map(ch=>ch==="X"?C.xchr:C.ychr)}
+    const L=(n<=22?KLEN[n-1]:(n===23?(o.sex||"XX").length?36:0:0))*sc;
+    cols2.forEach((col,i)=>{const isY2=n===23&&(o.sex||"XX")[i]==="Y";const LL=isY2?14*sc:L;const off=(i-(cols2.length-1)/2)*7*sc;chromo(cx+off,cy+LL*.0,LL,5.2*sc,col,{cen:.38})});
+    const lab=n<=22?String(n):(o.sex||"XX");txt(cx,cy+30*sc+8,lab,{size:11,weight:hl===n?700:500,align:"center",mono:true,color:hl===n?C.bad:C["ink-soft"]});
+    if(hl===n){rr(cx-cw/2+1,cy-26*sc,cw-2,58*sc+14,5);ctx.strokeStyle=C.bad;ctx.lineWidth=2;ctx.stroke()}
+    k++;if(n===23)break}}
+/* little pea seed for Mendel references */
+function pea(x,y,r,col,wrinkled){if(wrinkled){blobPath(x,y,r,3,0,.16);fillStroke(col,mix(col,C.ink,.4),1.2)}else circ(x,y,r,col,mix(col,C.ink,.4),1.2);circ(x-r*.3,y-r*.3,r*.22,hexA("#fff",.5))}
+/* worked panel with rich text rows: rows [{l}|{ans}|{h (heading)}], miss. Animates over per seconds */
+function wkR(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+18,o.title||"Worked example",C["accent-ink"]);
+  let cy=y+(o.cy||44);const t0=o.t0||.8,dt=o.dt||1.5;const fs=o.fs||14;const rw=w-28;
+  W_.rows.forEach((r,i)=>{const p_=clamp((t-t0-i*dt)/(dt*.7),0,1);const s=r.ans||r.l||r.h;let sz=r.ans?fs+1:(r.h?fs-1:fs);const wt=r.ans?700:600;const mono=!r.h;
+    const ww=richW(s,{size:sz,weight:wt,mono});if(ww>rw-(r.ans?14:0))sz=Math.max(10.5,sz*(rw-(r.ans?14:0))/ww);const hh=r.ans?34:(r.gap||sz+12);
+    if(p_>0)withA(p_,()=>{if(r.ans){const w2=richW(s,{size:sz,weight:wt,mono});rr(x+10,cy-14,w2+16,28,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();rich(x+18,cy,s,{size:sz,weight:wt,mono,align:"left"})}
+      else rich(x+14,cy,s,{size:sz,weight:r.h?700:wt,mono,align:"left",color:r.h?C["accent-ink"]:(r.col||C.ink)})});
+    cy+=hh+(r.ans?6:0)});
+  if(W_.miss){const tm=t0+W_.rows.length*dt+.4;const a=seg(t,tm,tm+.6);if(a>0){const sz=o.msz||12.5;const n=wrapCount("Common mistake: "+W_.miss,w-40,sz);const mh=n*(sz+4)+12;
+    withA(a,()=>{rr(x+10,y+h-mh-10,w-20,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+20,y+h-mh-10+6+sz/2+2,w-40,sz+4,{size:sz})})}}
+  return t}
+/* homolog helper: replicated chromosome with allele bands */
+function homo(x,y,L,col,bands,o){o=o||{};chromo(x,y,L,o.w||14,col,Object.assign({sis:true,spr:.06,cen:o.cen==null?.45:o.cen,bands:bands},o))}
+function band(p,col,lab,side){return {p,col,lab,side:side||"r"}}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("b1-chromo-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("b1-chromo-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+function supH(s){return String(s).replace(/\^\{([^}]*)\}/g,"<sup>$1</sup>").replace(/\^(.)/g,"<sup>$1</sup>")}
+function plainA(s){return String(s).replace(/\^\{([^}]*)\}/g," $1").replace(/\^(.)/g," $1")}
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvSim",800,640),S2=makeStage("cvCalc",800,600),S4=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+const A11Y={sim:{cv:"#cvSim",f:()=>simA11y()},calc:{cv:"#cvCalc",f:()=>calcA11y()},sort:{cv:null,f:()=>sortA11y()},life:{cv:"#cvLife",f:()=>lifeA11y()}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(a.cv&&lab)$(a.cv).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=a.cv?$(a.cv).closest(".canvas-holder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(a.cv)$(a.cv).setAttribute("aria-describedby","gk-desc")}}
+let curTab="sim";
+/* ================= PART 1: fly cross bench ================= */
+const MODES={
+ x:{name:"X linked: eye colour",short:"X linked white eye",fem:[["AA","X^{w+}X^{w+}","red"],["Aa","X^{w+}X^w","red, carrier"],["aa","X^wX^w","white"]],mal:[["A","X^{w+}Y","red"],["a","X^wY","white"]],
+    bins:[["red eyed daughters","f",{eye:"red"}],["white eyed daughters","f",{eye:"white"}],["red eyed sons","m",{eye:"red"}],["white eyed sons","m",{eye:"white"}]]},
+ auto:{name:"Autosomal: body colour",short:"autosomal black body",fem:[["AA","b^+b^+","gray"],["Aa","b^+b","gray, carrier"],["aa","bb","black"]],mal:[["AA","b^+b^+","gray"],["Aa","b^+b","gray, carrier"],["aa","bb","black"]],
+    bins:[["gray daughters","f",{body:"gray"}],["black daughters","f",{body:"black"}],["gray sons","m",{body:"gray"}],["black sons","m",{body:"black"}]]},
+ link:{name:"Linked genes: body and wings",short:"linked b and vg",fem:[["cis","b^+vg^+ / b vg","coupling"],["trans","b^+vg / b vg^+","repulsion"]],mal:[["t","b vg / b vg","tester"]],
+    bins:[["gray, normal wings","f",{body:"gray",wing:"normal"}],["black, vestigial","f",{body:"black",wing:"vestigial"}],["gray, vestigial","f",{body:"gray",wing:"vestigial"}],["black, normal wings","f",{body:"black",wing:"normal"}]]}};
+const SIMDEF={mode:"link",fem:"cis",mal:"t",d:17,dco:false,n:500};
+const SM={set:Object.assign({},SIMDEF),run:null,chal:new Set(),demo:null,demoT:-9,showIdx:-1,showT:-9,msg:"",seen:{}};
+function rfOf(s){const d=s.d;return s.dco?.5*(1-Math.exp(-2*d/100)):Math.min(.5,d/100)}
+function alleles(mode,key,isM){if(mode==="x"){if(isM)return [key==="A"?"+":"w"];return key==="AA"?["+","+"]:key==="Aa"?["+","w"]:["w","w"]}
+  if(mode==="auto")return key==="AA"?["+","+"]:key==="Aa"?["+","b"]:["b","b"];return null}
+function oneOff(s){const sex=Math.random()<.5?"f":"m";const h=Math.random()<.5?0:1;
+  if(s.mode==="x"){const m=alleles("x",s.fem)[h],fa=alleles("x",s.mal,true)[0];let cls;if(sex==="f")cls=(m==="w"&&fa==="w")?1:0;else cls=m==="w"?3:2;return {sex,cls,h,mat:m,pat:sex==="f"?fa:"Y"}}
+  if(s.mode==="auto"){const m=alleles("auto",s.fem)[h],ph=Math.random()<.5?0:1,p=alleles("auto",s.mal)[ph];const black=m==="b"&&p==="b";return {sex,cls:(black?1:0)+(sex==="m"?2:0),h,mat:m,pat:p}}
+  const H=s.fem==="cis"?[["+","+"],["b","vg"]]:[["+","vg"],["b","+"]];const rec=Math.random()<rfOf(s);const g=rec?[H[h][0],H[1-h][1]]:H[h].slice();
+  const gray=g[0]==="+",norm=g[1]==="+";const cls=gray&&norm?0:!gray&&!norm?1:gray?2:3;return {sex,cls,h,rec,g}}
+function expP(s){if(s.mode==="x"){const m=alleles("x",s.fem),fa=alleles("x",s.mal,true)[0];const pw=m.filter(a=>a==="w").length/2;const dw=fa==="w"?pw:0;return [.5*(1-dw),.5*dw,.5*(1-pw),.5*pw]}
+  if(s.mode==="auto"){const m=alleles("auto",s.fem),p=alleles("auto",s.mal);const pb=(m.filter(a=>a==="b").length/2)*(p.filter(a=>a==="b").length/2);return [.5*(1-pb),.5*pb,.5*(1-pb),.5*pb]}
+  const r=rfOf(s);return s.fem==="cis"?[(1-r)/2,(1-r)/2,r/2,r/2]:[r/2,r/2,(1-r)/2,(1-r)/2]}
+function parentalIdx(s){return s.mode!=="link"?[]:s.fem==="cis"?[0,1]:[2,3]}
+function simRun(){const s=SM.set;const off=[];for(let i=0;i<s.n;i++)off.push(oneOff(s));const dur=s.n<=100?4500:s.n<=500?6500:8500;
+  SM.run={off,t0:performance.now(),dur,set:Object.assign({},s),hist:[],counts:[0,0,0,0],shown:0,rec:0,done:false};SM.showIdx=-1;SM.demo=null;SM.demoT=-1e9;SM.showT=-1e9;SM.msg="";simUI();a11yKey=""}
+function simStep(now){const R=SM.run;if(!R)return;const target=Math.min(R.off.length,Math.floor((now-R.t0)/R.dur*R.off.length));
+  while(R.shown<target){const o=R.off[R.shown];R.counts[o.cls]++;if(o.rec)R.rec++;R.shown++;if(R.shown%Math.max(1,Math.round(R.off.length/120))===0||R.shown===R.off.length)R.hist.push([R.shown,simMetric(R)])}
+  if(!R.done&&R.shown>=R.off.length){R.done=true;simChalCheck();simUI();a11yKey=""}
+  else if(R.shown&&R.shown%Math.max(1,Math.round(R.off.length/10))===0&&!R.done)simUI()}
+function simMetric(R){const c=R.counts,n=R.shown||1,s=R.set;if(s.mode==="link"){const pi=parentalIdx(s);const rec=n-c[pi[0]]-c[pi[1]];return rec/n*100}
+  if(s.mode==="x"){const sons=c[2]+c[3],dau=c[0]+c[1];return [sons?c[3]/sons*100:0,dau?c[1]/dau*100:0]}return (c[1]+c[3])/n*100}
+function chi2(R){const e=expP(R.set);let x=0,df=0;e.forEach((p,i)=>{const E=p*R.shown;if(E>0){x+=(R.counts[i]-E)*(R.counts[i]-E)/E;df++}});return {x,df:Math.max(1,df-1)}}
+const CRIT={1:3.84,2:5.99,3:7.81};
+function simUI(){const s=SM.set,M=MODES[s.mode];$("#oD").textContent=s.d+" cM";$("#linkCtl").hidden=s.mode!=="link";
+  const R=SM.run;const rows=[];const e=expP(R?R.set:s);const MR=MODES[(R?R.set:s).mode];
+  MR.bins.forEach((b,i)=>{if(e[i]===0&&(!R||R.counts[i]===0)&&s.mode!=="x")return;rows.push([b[0],R?`${R.counts[i]} (${(e[i]*(R.shown||0)).toFixed(0)})`:"-"])});
+  if(R){const rs=R.set;if(rs.mode==="link"){const pi=parentalIdx(rs);const rec=R.shown-R.counts[pi[0]]-R.counts[pi[1]];rows.push(["Recombinants",`${rec} of ${R.shown}`]);rows.push(["Recombination frequency",R.shown?(rec/R.shown*100).toFixed(1)+"% (expected "+(rfOf(rs)*100).toFixed(1)+"%)":"-"]);rows.push(["Map distance set",rs.d+" cM"])}
+    if(R.shown>=20){const c=chi2(R);rows.push(["Chi square vs expected",`${c.x.toFixed(2)} (critical ${CRIT[c.df]||"?"} at ${c.df} df)`])}}
+  $("#simRead tbody").innerHTML=rows.map(x=>`<tr><th scope="row">${x[0]}</th><td>${x[1]}</td></tr>`).join("");
+  const st=$("#simStatus");let t=SM.msg,cls="";if(!t&&R){const rs=R.set;
+    if(rs.mode==="x"){const c=R.counts;if(c[1]===0&&c[3]>0)t="White eyes appear only in sons: the gene is on the X, and every daughter got her father's X.";else if(c[1]>0)t="White eyed daughters appear because both parents gave an X carrying w.";else if(c[3]===0&&c[1]===0)t="No white eyed flies: no parent passed on two w alleles to a daughter or one to a son.";if(rs.fem==="aa"&&rs.mal==="A")t="Criss cross: every son is white eyed like his mother, every daughter red eyed like her father.";}
+    else if(rs.mode==="auto")t="Autosomal: daughters and sons show the same ratio, because both sexes carry two copies of chromosome 2.";
+    else{const rf=R.shown?((R.shown-R.counts[parentalIdx(rs)[0]]-R.counts[parentalIdx(rs)[1]])/R.shown*100):0;t=rs.fem==="trans"?"Repulsion phase: now gray vestigial and black normal are the parental classes, and the other two are recombinant.":"Coupling phase: gray normal and black vestigial are parental.";t+=` Observed recombination ${rf.toFixed(1)}%.`;if(rs.dco&&rs.d>=25)t+=" With double crossovers, the observed value is below the map distance.";}
+    cls=""}
+  st.className="status"+(cls?" "+cls:"");st.textContent=t||"Choose the parents and press Run cross.";
+  chalUI($("#simChal"),SIMCHAL.map(c=>c[0]),SM.chal);
+  const L=[];const rs=R?R.set:s;if(rs.mode==="link")L.push('<span><i class="s" style="background:var(--par)"></i>Parental class</span><span><i class="s" style="background:var(--rec)"></i>Recombinant class</span><span><i class="ln" style="border-top-color:var(--rec)"></i>Running recombination %</span><span><i style="background:var(--gold)"></i>Crossover</span>');
+  else L.push('<span><i style="background:var(--eyered)"></i>Red eye</span><span><i style="background:var(--flyblack)"></i>Black body</span><span><i class="s" style="background:var(--xchr)"></i>X chromosome</span><span><i class="ln" style="border-top-color:var(--act2)"></i>Sons line</span><span><i class="ln" style="border-top-color:var(--act1)"></i>Daughters line</span>');
+  $("#simLegend").innerHTML=L.join("");
+  $("#simCap").textContent=R?`${MR.short}: ${R.shown} of ${R.off.length} offspring counted${R.done?".":", sorting now."}`:"Press Run cross."}
+const SIMCHAL=[["X linked: cross a carrier mother with a red eyed father. Are any daughters white eyed?",()=>SM.seen.xcar],
+  ["X linked: cross a white eyed mother with a red eyed father (the reciprocal cross)",()=>SM.seen.xrec],
+  ["Autosomal: cross two carriers and compare daughters with sons",()=>SM.seen.auto],
+  ["Linked: set 10 cM, count 2,000 offspring, and get within 1 point of 10%",()=>SM.seen.l10],
+  ["Linked: turn on double crossovers at 40 cM or more. Is the observed value below the map distance?",()=>SM.seen.ldco],
+  ["Linked: switch the mother to repulsion. Which classes are parental now?",()=>SM.seen.trans]];
+function simChalCheck(){const R=SM.run;if(!R||!R.done)return;const s=R.set;
+  if(s.mode==="x"&&s.fem==="Aa"&&s.mal==="A")SM.seen.xcar=1;if(s.mode==="x"&&s.fem==="aa"&&s.mal==="A")SM.seen.xrec=1;if(s.mode==="auto"&&s.fem==="Aa"&&s.mal==="Aa")SM.seen.auto=1;
+  if(s.mode==="link"){const rf=simMetric(R);if(s.d===10&&s.n>=2000&&Math.abs(rf-10)<=1)SM.seen.l10=1;if(s.dco&&s.d>=40)SM.seen.ldco=1;if(s.fem==="trans")SM.seen.trans=1}
+  SIMCHAL.forEach((c,i)=>{if(c[1]())SM.chal.add(i)})}
+function simButtons(){const s=SM.set,M=MODES[s.mode];
+  segBtns($("#simMode"),Object.keys(MODES).map(k=>[k,MODES[k].name]),()=>SM.set.mode,v=>{if(v===SM.set.mode)return;SM.set.mode=v;const MM=MODES[v];SM.set.fem=MM.fem[v==="link"?0:1][0];SM.set.mal=MM.mal[0][0];simButtons();simRun()});
+  segBtns($("#simFem"),M.fem.map(f=>[f[0],supH(f[1])+"<small>"+f[2]+"</small>"]),()=>SM.set.fem,v=>{SM.set.fem=v;simRun()});
+  segBtns($("#simMal"),M.mal.map(f=>[f[0],supH(f[1])+"<small>"+f[2]+"</small>"]),()=>SM.set.mal,v=>{SM.set.mal=v;simRun()});
+  $("#simFem").className=M.fem.length===3?"seg3":"seg2";$("#simMal").className=M.mal.length===3?"seg3":M.mal.length===2?"seg2":"seg2";
+  segBtns($("#simN"),[[100,"100"],[500,"500"],[2000,"2,000"]],()=>SM.set.n,v=>{SM.set.n=v;simRun()});simUI()}
+function simInit(){const sl=$("#slD");sl.value=SM.set.d;let deb=null;sl.oninput=()=>{SM.set.d=+sl.value;simUI();clearTimeout(deb);deb=setTimeout(simRun,350)};
+  $("#simDco").checked=SM.set.dco;$("#simDco").onchange=e=>{SM.set.dco=e.target.checked;simRun()};
+  $("#simRun").onclick=simRun;$("#simReset").onclick=()=>{SM.set=Object.assign({},SIMDEF);sl.value=SM.set.d;$("#simDco").checked=false;simButtons();simRun()};
+  simButtons();simRun()}
+/* ---------- drawing ---------- */
+function flyLook(s,o){/* o offspring */if(s.mode==="x")return {eye:MODES.x.bins[o.cls][2].eye,sex:o.sex,body:"gray",wing:"normal"};if(s.mode==="auto")return {eye:"red",sex:o.sex,body:o.cls%2?"black":"gray",wing:"normal"};const b=MODES.link.bins[o.cls][2];return {eye:"red",sex:o.sex,body:b.body,wing:b.wing}}
+function parentLook(s,who){if(s.mode==="x"){if(who==="f")return {eye:s.fem==="aa"?"white":"red",sex:"f"};return {eye:s.mal==="a"?"white":"red",sex:"m"}}
+  if(s.mode==="auto"){const k=who==="f"?s.fem:s.mal;return {body:k==="aa"?"black":"gray",eye:"red",sex:who}}
+  if(who==="f")return {body:"gray",wing:"normal",eye:"red",sex:"f"};return {body:"black",wing:"vestigial",eye:"red",sex:"m"}}
+function gtOf(s,who){const M=MODES[s.mode];const L=who==="f"?M.fem:M.mal;const k=who==="f"?s.fem:s.mal;return (L.find(x=>x[0]===k)||L[0])[1]}
+function drawSim(now){use(S1);const T=now/1000;simStep(now);const R=SM.run;const s=R?R.set:SM.set;const M=MODES[s.mode];
+  /* parents */
+  panelBox(10,10,384,196);levelTag(22,28,"cross");title(108,28,"Parents in a culture vial",C.ink);
+  vial(170,62,56,120,{});fly(92,96,46,Object.assign(parentLook(s,"f"),{walk:T*4,rot:Math.sin(T*.6)*.15}));fly(304,96,46,Object.assign(parentLook(s,"m"),{walk:T*4+1,rot:Math.sin(T*.5+1)*.15}));
+  for(let i=0;i<5;i++){const fx=180+((i*37)%36)+6*Math.sin(T*.8+i),fy=150+((i*29)%24)+4*Math.cos(T*.7+i);circ(fx,fy,2.4,mix(C.paper,C.carb,.3),C["ink-soft"],.8)}
+  txt(198,200,"eggs and larvae",{size:11,weight:600,align:"center",color:C["ink-soft"]});
+  rich(92,150,gtOf(s,"f"),{size:12.5,weight:700,mono:true});txt(92,170,"mother",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});
+  rich(304,150,gtOf(s,"m"),{size:12.5,weight:700,mono:true});txt(304,170,"father",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});
+  /* meiosis panel */
+  panelBox(404,10,386,196);levelTag(416,28,"chrom");title(530,28,"Mother's meiosis, latest egg",C.ink);
+  let o=null,q=0;if(R&&!R.done&&R.shown>0){if(now-SM.showT>700){SM.showIdx=R.shown-1;SM.showT=now}o=R.off[Math.max(0,SM.showIdx)];q=clamp((now-SM.showT)/700,0,1)}
+  else{if(now-SM.demoT>1600){SM.demo=oneOff(s);SM.demoT=now}o=SM.demo;q=clamp((now-SM.demoT)/1100,0,1)}
+  if(o)drawMeiosis(s,o,q,T);
+  /* sorting tray */
+  panelBox(10,214,780,226);levelTag(22,232,"org");title(108,232,R?`Offspring sorted: ${R.shown} of ${R.off.length}`:"Offspring",C.ink);
+  const e=expP(s);const pi=parentalIdx(s);const bw=184;
+  M.bins.forEach((b,i)=>{const x=22+i*192,y=250;const isP=pi.indexOf(i)>=0,isR=s.mode==="link"&&!isP;const col=isP?C.par:isR?C.rec:C.rule;
+    rr(x,y,bw,180,8);ctx.fillStyle=isP?hexA(C.par,.08):isR?hexA(C.rec,.1):hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=s.mode==="link"?2:1.2;ctx.stroke();
+    const look=Object.assign({eye:"red",body:"gray",wing:"normal"},b[2],{sex:s.mode==="link"?"f":b[1]});fly(x+34,y+40,34,look);
+    wrapText(b[0],x+66,y+30,bw-72,15,{size:12,weight:700});if(s.mode==="link")txt(x+66,y+64,isP?"parental":"recombinant",{size:11.5,weight:700,color:isP?C.par:mix(C.rec,C.ink,.4)});
+    const n=R?R.counts[i]:0,tot=R?Math.max(1,R.shown):1;const fr=R?n/tot:0;
+    vbar(x+14,y+84,bw-28,62,1,hexA(C.sunk,.6));const h=62*clamp(fr/.6,0,1);rr(x+14,y+146-h,bw-28,h,3);ctx.fillStyle=hexA(isR?C.rec:isP?C.par:(look.eye==="white"?C["ink-soft"]:look.body==="black"?C.flyblack:C.eyered),.7);ctx.fill();
+    const eh=146-62*clamp(e[i]/.6,0,1);ctx.setLineDash([4,3]);line(x+10,y+eh,x+bw-10,y+eh,C.ink,1.4);ctx.setLineDash([]);
+    txt(x+14,y+164,`${n}`,{size:15,weight:700,mono:true});txt(x+bw-14,y+164,R?`${(fr*100).toFixed(1)}%  exp ${(e[i]*100).toFixed(1)}%`:`exp ${(e[i]*100).toFixed(1)}%`,{size:11.5,weight:600,mono:true,align:"right",color:C["ink-soft"]})});
+  /* flying offspring */
+  if(R&&!R.done){const step=Math.max(1,Math.ceil(R.off.length/90));const per=R.dur/R.off.length;for(let i=Math.max(0,R.shown-40);i<R.shown;i++){if(i%step)continue;const qq=(now-(R.t0+i*per))/650;if(qq<0||qq>1)continue;const oo=R.off[i];
+      const tx=22+oo.cls*192+bw/2,ty=330;fly(lerp(198,tx,ease(qq)),lerp(150,ty,ease(qq))-Math.sin(qq*Math.PI)*40,20,Object.assign(flyLook(s,oo),{flap:.3*Math.sin(T*40+i),rot:Math.atan2(ty-150,tx-198)+Math.PI/2,a:1-qq*.4}))}}
+  /* graph */
+  panelBox(10,448,780,182);levelTag(712,466,"data");
+  const N=R?R.off.length:s.n;const isL=s.mode==="link";const ymax=isL?60:100;
+  const g=graph({x:80,y:486,w:560,h:110,x0:0,x1:N,y0:0,y1:ymax,xt:[0,N/2,N],yt:isL?[0,25,50]:[0,50,100],xl:"offspring counted",yl:isL?"recombination %":s.mode==="x"?"% white eyed":"% black bodied",ylx:56,xf:v=>String(Math.round(v))});
+  if(isL){ctx.setLineDash([6,4]);line(g.x,g.Y(rfOf(s)*100),g.x+g.w,g.Y(rfOf(s)*100),C.rec,1.6);line(g.x,g.Y(s.d),g.x+g.w,g.Y(s.d),hexA(C.ink,.5),1.2);ctx.setLineDash([]);
+    txt(g.x+g.w+8,g.Y(rfOf(s)*100),"expected "+(rfOf(s)*100).toFixed(1)+"%",{size:11.5,weight:700,color:mix(C.rec,C.ink,.35)});if(s.dco&&Math.abs(s.d-rfOf(s)*100)>2)txt(g.x+g.w+8,g.Y(s.d),"map "+s.d+" cM",{size:11.5,weight:600,color:C["ink-soft"]})}
+  else{const ex=e;const lines=s.mode==="x"?[[ex[3]/.5*100,C.act2,"sons"],[ex[1]/.5*100,C.act1,"daughters"]]:[[(ex[1]+ex[3])*100,C.act2,"all"]];
+    lines.forEach((l,k)=>{ctx.setLineDash([6,4]);line(g.x,g.Y(l[0]),g.x+g.w,g.Y(l[0]),l[1],1.4);ctx.setLineDash([]);txt(g.x+g.w+8,g.Y(l[0])+(k?12:-4),"exp "+l[2]+" "+l[0].toFixed(0)+"%",{size:11.5,weight:700,color:l[1]})})}
+  if(R&&R.hist.length>1){const H=R.hist;const sets=isL||s.mode==="auto"?[[0,isL?C.rec:C.act2]]:[[0,C.act2],[1,C.act1]];
+    sets.forEach(st=>{ctx.beginPath();H.forEach((h,i)=>{const v=Array.isArray(h[1])?h[1][st[0]]:h[1];const X=g.X(h[0]),Y=g.Y(clamp(v,0,ymax));i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.strokeStyle=st[1];ctx.lineWidth=2.6;ctx.stroke()})}
+  if(R&&R.shown){const v=simMetric(R);const vv=Array.isArray(v)?v:[v];label(712,610,isL?`RF now ${vv[0].toFixed(1)}%`:s.mode==="x"?`sons ${vv[0].toFixed(0)}%, daughters ${vv[1].toFixed(0)}%`:`black ${vv[0].toFixed(0)}%`,{size:12,weight:700,mono:true,border:isL?C.rec:C.act2})}
+}
+function drawMeiosis(s,o,q,T){const cx=520,cy=118;if(s.mode==='link'?!o.g:o.g)return;
+  if(s.mode==="x"||s.mode==="auto"){const isX=s.mode==="x";const m=alleles(s.mode,s.fem);const col=isX?C.xchr:C.auto;
+    egg(700,cy,52,{nuc:false});
+    [0,1].forEach(h=>{const chosen=h===o.h;const pull=chosen?smooth(seg(q,.35,.9)):0;const x=lerp(cx-36+h*48,700,pull),y=lerp(cy,cy-10,pull);const a=chosen?1:1-.6*seg(q,.35,.9);
+      chromo(x,y,isX?84:70,12,col,{cen:isX?.08:.45,a,bands:[band(.6,m[h]==="+"?(isX?C.eyered:C["ink-soft"]):(isX?C.eyewhite:C.flyblack),(isX?(m[h]==="+"?"w^+":"w"):(m[h]==="+"?"b^+":"b")),h?"r":"l")]})});
+    
+    if(isX){const pp=smooth(seg(q,.5,1));const sx=lerp(790,756,pp);sperm(sx,160,22,Math.PI,T,{});chipText(700,190,o.pat==="Y"?"Y sperm: a son":"X sperm: a daughter",o.pat==="Y"?C.ychr:C.xchr)}else txt(700,190,"egg",{size:11.5,weight:700,align:"center"});
+    if(!isX)txt(560,190,"one homolog goes to the egg",{size:11.5,weight:600,align:"center",color:C["ink-soft"]});return}
+  const H=s.fem==="cis"?[["+","+"],["b","vg"]]:[["+","vg"],["b","+"]];const cols=[C.mat,C.pat];const syn=smooth(seg(q,0,.3));
+  const lab=(g,k)=>g==="+"?(k?"vg^+":"b^+"):(k?"vg":"b");
+  [0,1].forEach(h=>{const y=cy-22+h*44-syn*(h?14:-14)*.6;chromoH(426,610,y,16,cols[h],{});[[460,0],[580,1]].forEach(gp=>{line(gp[0],y-8,gp[0],y+8,C.paper,3.4);rich(gp[0],y+(h?20:-20),lab(H[h][gp[1]],gp[1]),{size:12,weight:700,mono:true,pill:true})})});
+  if(o.rec){const a=seg(q,.3,.45)*(1-seg(q,.75,.9));if(a>0)withA(a,()=>{glow(520,cy,26,C.gold,.9);line(508,cy-12,532,cy+12,C.gold,3);line(532,cy-12,508,cy+12,C.gold,3)})}
+  const pull=smooth(seg(q,.5,.95));const gx=lerp(518,706,pull),gy=lerp(cy,cy,pull);egg(706,cy,50,{nuc:false});
+  const left=cols[o.h],right=o.rec?cols[1-o.h]:cols[o.h];if(q>.45){const w=lerp(184,84,pull);chromoH(gx-w/2,gx+w/2,gy,14,left,{segs:[[.5,1,right]]})}
+  txt(706,186,o.rec?"recombinant egg":"parental egg",{size:11.5,weight:700,align:"center",color:o.rec?mix(C.rec,C.ink,.4):C.par});
+  if(q>.6)rich(706,cy+30,(o.g[0]==="+"?"b^+":"b")+" "+(o.g[1]==="+"?"vg^+":"vg"),{size:12,weight:700,mono:true})}
+function simA11y(){const R=SM.run;const s=R?R.set:SM.set;const M=MODES[s.mode];const e=expP(s);
+  const lab=R?`${M.short} cross, ${R.shown} of ${R.off.length} offspring counted`+(s.mode==="link"?`, recombination ${simMetric(R).toFixed?simMetric(R).toFixed(1):""} percent`:""):"Fly cross bench.";
+  const cnt=R?M.bins.map((b,i)=>`${b[0]} ${R.counts[i]}`).join(", "):"";
+  const d=`Top left: the mother, ${plainA(gtOf(s,"f"))}, and the father, ${plainA(gtOf(s,"m"))}, beside a culture vial. Top right: the mother's chromosomes go through meiosis and one ends up in the egg`+(s.mode==="link"?`; when a crossover happens a gold X flashes between b and vg and the egg chromosome is part magenta, part blue`:"")+`. Middle: offspring flies fly into four sorting bins with counts and a dashed expected line: ${cnt}. Bottom: a graph of the running `+(s.mode==="link"?`recombination percent, which settles toward the expected ${(rfOf(s)*100).toFixed(1)} percent.`:s.mode==="x"?`percent of white eyed sons and daughters.`:`percent of black bodied flies.`);
+  return [lab,d]}
+/* ================= PART 2: cross and map trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const CTYPES=[["mix","All types, mixed"],["xl","X linked cross probabilities"],["rf","Recombination frequency from a testcross"],["pred","Expected offspring from a map distance"],["dist","Map distance from three gene data"],["order","Gene order from three gene data"]];
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:0,count:0,solT:0,pick:null};
+function frac(v){for(const d of [1,2,4,8,16,3]){const n=Math.round(v*d);if(Math.abs(n/d-v)<1e-9){if(n===0)return "0";if(n===d)return "1";const g=gcd(n,d);return (n/g)+"/"+(d/g)}}return String(+v.toFixed(3))}
+function gcd(a,b){return b?gcd(b,a%b):Math.abs(a)}
+const TRAITS=[{n:"hemophilia A",A:"H",a:"h",aff:"has hemophilia",un:"does not have hemophilia",carrierOK:true,affFemOK:false,human:true},
+  {n:"red green colour blindness",A:"N",a:"n",aff:"is colour blind",un:"has typical colour vision",carrierOK:true,affFemOK:true,human:true},
+  {n:"white eyes in fruit flies",A:"{w+}",a:"w",aff:"has white eyes",un:"has red eyes",carrierOK:true,affFemOK:true,human:false}];
+const GEN={
+ xl(){let tr=pick(TRAITS);let mg=pick(["Aa","Aa","Aa","AA","aa"]);if(mg==="aa"&&!tr.affFemOK)tr=TRAITS[1];const fa=pick(["A","a"]);
+  const X=k=>"X^"+(k==="A"?tr.A:tr.a);const pm=(mg==="Aa"?.5:mg==="aa"?1:0),fA=fa==="a";
+  const P_={son:pm,dau:fA?pm:0,car:fA?(1-pm):pm,affson:.5*pm,affdau:.5*(fA?pm:0),child:.5*pm+.5*(fA?pm:0)};
+  const kinds=Object.keys(P_).filter(k=>P_[k]>0);if(!kinds.length)return null;const k=pick(kinds);const ans=P_[k];
+  const mw=tr.human?"woman":"female",fw=tr.human?"man":"male";const mgt=mg==="AA"?X("A")+X("A"):mg==="Aa"?X("A")+X("a"):X("a")+X("a"),fgt=X(fa)+"Y";
+  let mdesc;if(mg==="Aa"&&tr.human&&Math.random()<.5)mdesc=`A ${mw} whose father ${tr.aff.replace("has","had").replace("is","was")} (she ${tr.un.replace("has","has").replace("does not have","does not have")})`;else mdesc=`A ${mw} who ${mg==="aa"?tr.aff:tr.un}${mg==="Aa"?" and is a carrier":""} (${supH(mgt)})`;
+  const fdesc=`a ${fw} who ${fA?tr.aff:tr.un} (${supH(fgt)})`;
+  const Q={son:"If they have a son, what is the chance he is affected?",dau:"If they have a daughter, what is the chance she is affected?",car:"If they have a daughter, what is the chance she is a carrier (heterozygous)?",affson:"What is the chance their first child is an affected son?",affdau:"What is the chance their first child is an affected daughter?",child:"What is the chance their first child is affected, whether a son or a daughter?"}[k];
+  const eggs=mg==="Aa"?[X("A"),X("a")]:mg==="AA"?[X("A"),X("A")]:[X("a"),X("a")];
+  const hints=["Sons get their only X from the mother and a Y from the father. Daughters get one X from each parent.",`Eggs: ${eggs[0]} or ${eggs[1]}. Sperm: ${X(fa)} or Y. Draw the 2 by 2 Punnett square.`,
+    k==="son"||k==="dau"||k==="car"?`You already know the sex, so look only at that column of the square and count the matching boxes out of 2.`:`The child must be a ${k==="affdau"?"daughter":k==="affson"?"son":"son or daughter"}: multiply 1/2 for the sex by the chance within that sex${k==="child"?", then add the two sexes":""}.`];
+  const rows=[{l:`mother ${mgt}, father ${fgt}`},{l:`eggs: ${eggs[0]}, ${eggs[1]}   sperm: ${X(fa)}, Y`},
+    {l:`sons: P(affected) = ${frac(pm)}`},{l:`daughters: P(affected) = ${frac(P_.dau)}, P(carrier) = ${frac(P_.car)}`},
+    k==="affson"?{l:`affected son = 1/2 × ${frac(pm)}`}:k==="affdau"?{l:`affected daughter = 1/2 × ${frac(P_.dau)}`}:k==="child"?{l:`= 1/2 × ${frac(pm)} + 1/2 × ${frac(P_.dau)}`}:{l:k==="son"?"given a son, use the son column only":"given a daughter, use the daughter column only"},
+    {ans:`answer = ${frac(ans)}`}];
+  const slips=[];if(k==="son")slips.push([.5*pm,"That is the chance of an affected son among all children. Given that the child is a son, do not multiply by 1/2."]);
+  if(k==="affson")slips.push([pm,"That is the chance for a son. Among all children, also multiply by 1/2 for the chance the child is a son."]);
+  if(k==="dau")slips.push([.5*pm,"Given a daughter, look only at the daughter column."]);if(k==="car")slips.push([P_.dau,"That is the chance she is affected, not a carrier."]);
+  if(k==="child")slips.push([pm,"That counts only sons. Weight each sex by 1/2 and add."]);if(k==="affdau")slips.push([P_.dau,"That is the chance for a daughter. Among all children, multiply by 1/2."]);
+  return {title:"X linked cross probability",html:`${mdesc} and ${fdesc} have children. The trait is ${tr.n}, which is X linked recessive. ${Q}`,ans,unit:"",kind:"prob",tol:.004,hints,rows,
+   miss:k==="affson"||k==="affdau"||k==="child"?"answering for one sex only instead of all children (or the reverse).":"multiplying by 1/2 for the sex when the sex is already given.",slips,vis:{k:"xl",mg,fa,eggs,sp:[X(fa),"Y"],q:k}}},
+ rf(){const G=pick([["b","vg","black body","vestigial wings","gray body","normal wings"],["pr","vg","purple eyes","vestigial wings","red eyes","normal wings"],["b","cn","black body","cinnabar eyes","gray body","red eyes"],["dp","b","dumpy wings","black body","long wings","gray body"]]);
+  const N=pick([500,800,1000,1200,1500,2000,2400]);const r=ri(4,38)/100;const R=Math.max(4,Math.round(N*r*(.92+Math.random()*.16)));const r1=Math.round(R/2+(Math.random()-.5)*R*.12),r2=R-r1;const Pn=N-R,p1=Math.round(Pn/2+(Math.random()-.5)*Pn*.05),p2=Pn-p1;
+  const cis=Math.random()<.5;const nm=(w1,w2)=>(w1?G[4]:G[2])+", "+(w2?G[5]:G[3]);
+  const cls=cis?[[nm(1,1),p1,1],[nm(0,0),p2,1],[nm(1,0),r1,0],[nm(0,1),r2,0]]:[[nm(1,0),p1,1],[nm(0,1),p2,1],[nm(1,1),r1,0],[nm(0,0),r2,0]];
+  const look=c=>({w1:c[0].indexOf(G[4])>=0,w2:c[0].indexOf(G[5])>=0});const order=shuffle([0,1,2,3]);const ans=R/N*100;
+  const tbl=`<table class="tptable"><thead><tr><th scope="col">Offspring phenotype</th><th scope="col">Number</th></tr></thead><tbody>${order.map(i=>`<tr><td>${cls[i][0]}</td><td class="n">${cls[i][1]}</td></tr>`).join("")}</tbody></table>`;
+  return {title:"Recombination frequency",html:`A female fruit fly heterozygous for ${G[0]} and ${G[1]} is testcrossed with a ${G[2]}, ${G[3]} male. The offspring are:${tbl}What is the recombination frequency between ${G[0]} and ${G[1]}, in percent?`,ans,unit:"%",kind:"num",dp:1,tol:.15,
+   hints:["In a testcross the two largest classes are parental and the two smallest are recombinant.",`Recombinants: ${r1} + ${r2} = ${R}. Total: ${N}.`,`RF = ${R} ÷ ${N} × 100.`],
+   rows:[{l:`parental (largest): ${p1} + ${p2} = ${Pn}`},{l:`recombinant (smallest): ${r1} + ${r2} = ${R}`},{l:`total = ${N}`},{l:`RF = ${R} ÷ ${N} × 100`},{ans:`RF = ${ans.toFixed(1)}% = ${ans.toFixed(1)} cM`}],
+   miss:"dividing recombinants by parentals instead of by the total, or using only one recombinant class.",
+   slips:[[R/Pn*100,"That divides by the parental total. Divide the recombinants by all offspring."],[Pn/N*100,"That is the parental percent. Use the two smallest classes."],[r1/N*100,"That uses only one recombinant class. Add both recombinant classes."],[r2/N*100,"That uses only one recombinant class. Add both recombinant classes."],[R/N,"Right fraction, but multiply by 100 for a percent."]],
+   vis:{k:"rf",cls,G,look}}},
+ pred(){let N,d,v;for(let i=0;i<60;i++){N=pick([200,400,500,600,800,1000,2000]);d=ri(4,40);v=pick(["tot","one","par"]);const x=v==="tot"?N*d/100:v==="one"?N*d/200:N*(100-d)/200;if(Number.isInteger(x))break}
+  const ans=v==="tot"?N*d/100:v==="one"?N*d/200:N*(100-d)/200;const G=pick([["a","b"],["d","e"],["m","n"]]);
+  const qtxt=v==="tot"?"How many recombinant offspring do you expect in total?":v==="one"?`How many offspring do you expect in <b>one</b> recombinant class, such as ${G[0]}<sup>+</sup> ${G[1]}?`:"How many offspring do you expect in <b>one</b> parental class?";
+  return {title:"Expected offspring from a map distance",html:`Genes ${G[0]} and ${G[1]} are ${d} map units apart. A dihybrid with ${G[0]} ${G[1]} on one homolog and ${G[0]}<sup>+</sup> ${G[1]}<sup>+</sup> on the other is testcrossed, giving ${N} offspring. ${qtxt}`,ans,unit:"offspring",kind:"num",dp:0,tol:.51,
+   hints:[`${d} map units means ${d}% recombinant offspring.`,`Total recombinants = ${d}% of ${N} = ${N*d/100}.`,v==="tot"?"That total is the answer.":v==="one"?"The recombinants are split between two classes equally, so divide by 2.":`Parentals are ${100-d}% of ${N}, split between two classes, so divide by 2.`],
+   rows:[{l:`${d} cM → ${d}% recombinant`},{l:`recombinants = ${d}/100 × ${N} = ${N*d/100}`},v==="tot"?{l:"asked for all recombinants"}:v==="one"?{l:`one class = ${N*d/100} ÷ 2`}:{l:`parentals = ${N} − ${N*d/100} = ${N-N*d/100}; one class = ÷ 2`},{ans:`expected = ${ans} offspring`}],
+   miss:v==="tot"?"dividing by 2 when the question asks for all recombinants.":"forgetting that recombinants (and parentals) are split between two classes.",
+   slips:[[N*d/100,v==="tot"?"":"That is all the recombinants. One class is half of that."],[N*d/200,v==="one"?"":"That is one recombinant class."],[d,"That is the map distance, not a number of offspring."],[N-N*d/100,v==="par"?"That is both parental classes together. Divide by 2.":"That is the number of parentals."]],
+   vis:{k:"pred",N,d,v,G}}},
+ dist(){return tp(false)},order(){return tp(true)}};
+function tp(isOrder){const sets=[["a","b","c"],["d","e","f"],["p","q","r"],["j","k","l"]];const disp=pick(sets);const ord=shuffle(disp);const N=pick([1000,2000]);
+  let d1,d2,D,S1,S2;for(let i=0;i<50;i++){d1=ri(5,20);d2=ri(5,20);const coc=ri(4,10)/10;D=Math.max(2,Math.round(N*d1/100*d2/100*coc));S1=Math.round(N*d1/100)-D;S2=Math.round(N*d2/100)-D;if(S1>4&&S2>4)break}
+  const sp=(n,f)=>{const a=Math.round(n/2+(Math.random()-.5)*n*f);return [a,n-a]};const [s1a,s1b]=sp(S1,.15),[s2a,s2b]=sp(S2,.15),[da,db]=sp(D,.4);const Pn=N-S1-S2-D;const [pa,pb]=sp(Pn,.04);
+  const c1={};ord.forEach(g=>c1[g]=Math.random()<.5?1:0);const c2={};ord.forEach(g=>c2[g]=1-c1[g]);
+  const gam=(src)=>disp.map(g=>src[g]?g:"+").join(" ");const mk=(from1)=>{const o={};ord.forEach((g,i)=>o[g]=from1[i]?c1[g]:c2[g]);return o};
+  const cls=[[gam(c1),pa,"P"],[gam(c2),pb,"P"],[gam(mk([1,0,0])),s1a,"S1"],[gam(mk([0,1,1])),s1b,"S1"],[gam(mk([1,1,0])),s2a,"S2"],[gam(mk([0,0,1])),s2b,"S2"],[gam(mk([1,0,1])),da,"D"],[gam(mk([0,1,0])),db,"D"]];
+  const order=shuffle(cls.map((c,i)=>i));const mid=ord[1];
+  const tbl=`<table class="tptable"><thead><tr><th scope="col">Offspring (alleles from the female)</th><th scope="col">Number</th></tr></thead><tbody>${order.map(i=>`<tr><td>${cls[i][0]}</td><td class="n">${cls[i][1]}</td></tr>`).join("")}</tbody></table>`;
+  const intro=`A female heterozygous for three linked genes, ${disp.join(", ")}, is testcrossed with a triple recessive male. Each class is written with the alleles the female passed on (+ means wild type):${tbl}`;
+  const dcoTxt=`double crossovers (smallest): ${cls[6][0]} and ${cls[7][0]}`;const parTxt=`parentals (largest): ${cls[0][0]} and ${cls[1][0]}`;
+  if(isOrder){const choices=disp.map(g=>[g,g===mid]);
+    return {title:"Gene order from three gene data",html:intro+"Which gene is in the middle?",ans:disp.indexOf(mid)+1,unit:"",kind:"choice",choices,
+      hints:["Find the two largest classes (parental) and the two smallest classes (double crossovers).",`Parentals: ${cls[0][0]} and ${cls[1][0]}. Double crossovers: ${cls[6][0]} and ${cls[7][0]}.`,"Compare a double crossover with the parental class it most resembles. The one gene that switched is the middle gene."],
+      rows:[{l:parTxt},{l:dcoTxt},{l:`compare ${cls[0][0]} with ${pickClose(cls)}`},{ans:`middle gene = ${mid}; order ${ord.join(" ")}`}],miss:"comparing with the largest single crossover classes instead of the double crossovers.",slips:[],vis:{k:"tp",cls,ord,disp,mid,N}}}
+  const which=pick([0,0,1,1,2]);const pair=which===0?[ord[0],ord[1]]:which===1?[ord[1],ord[2]]:[ord[0],ord[2]];const ans=(which===0?S1+D:which===1?S2+D:S1+S2+2*D)/N*100;
+  const sum=which===0?`${s1a} + ${s1b} + ${da} + ${db}`:which===1?`${s2a} + ${s2b} + ${da} + ${db}`:`${s1a} + ${s1b} + ${s2a} + ${s2b} + 2 × (${da} + ${db})`;
+  return {title:"Map distance from three gene data",html:intro+`What is the map distance between <b>${pair[0]}</b> and <b>${pair[1]}</b>, in cM?`,ans,unit:"cM",kind:"num",dp:1,tol:.15,
+   hints:[`First find the gene order: the gene that switches in the double crossovers (the smallest classes) is in the middle. Here the order is ${ord.join(" ")}.`,which===2?`${pair[0]} and ${pair[1]} are the outer genes. Add both intervals, counting each double crossover twice.`:`Count every class that is recombinant between ${pair[0]} and ${pair[1]}: the matching single crossovers plus the double crossovers.`,`Distance = (${sum}) ÷ ${N} × 100.`],
+   rows:[{l:dcoTxt},{l:`middle gene ${mid}, order ${ord.join(" ")}`},{l:`${pair[0]} to ${pair[1]}: (${sum}) ÷ ${N} × 100`},{ans:`= ${ans.toFixed(1)} cM`}],
+   miss:which===2?"forgetting to count the double crossovers twice for the outer genes.":"leaving out the double crossovers, which are recombinant in both intervals.",
+   slips:[[(which===0?S1:which===1?S2:S1+S2)/N*100,"Include the double crossover classes"+(which===2?", counted twice.":".")],[(which===2?S1+S2+D:(which===0?S2+D:S1+D))/N*100,which===2?"Count each double crossover twice for the outer genes.":"That is the other interval. Check which single crossover classes switch the two genes asked about."]],
+   vis:{k:"tp",cls,ord,disp,mid,N,pair,ans}}}
+function pickClose(cls){return cls[6][0]}
+const GKEYS=Object.keys(GEN);
+function genOne(k){let q=null;for(let i=0;i<60&&!q;i++){try{q=GEN[k]()}catch(e){console.error(e);q=null}if(q&&!(isFinite(q.ans)&&q.ans>0))q=null}q.kind2=k;q.slips=(q.slips||[]).filter(s=>isFinite(s[0])&&s[1]&&Math.abs(s[0]-q.ans)>(q.tol||0)*1.5);return q}
+function fmtAns(p,v){if(p.kind==="choice")return p.choices.find(c=>c[1])[0];if(p.kind==="prob")return frac(v);if(p.dp!=null)return v.toFixed(p.dp);return String(+v.toPrecision(4))}
+function parseAns(p,s){s=String(s).trim().replace(/,/g,"").replace(/[−–]/g,"-").replace(/\s*(cM|map units?|offspring|flies|%|percent)\s*$/i,m=>/%|percent/i.test(m)?"%":"").replace(/\s+/g,"");
+  if(p.kind==="prob"){let m=s.match(/^(\d+)\/(\d+)$/);if(m)return +m[2]?+m[1]/+m[2]:null;const pc=/%$/.test(s);s=s.replace(/%$/,"");if(!/^\d*\.?\d+$/.test(s))return null;let v=parseFloat(s);if(pc||v>1)v/=100;return v}
+  s=s.replace(/%$/,"");if(!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(s))return null;return parseFloat(s)}
+function judge(p,str){if(p.kind==="choice"){const c=p.choices.find(x=>x[0]===str);if(!c)return {ok:false,kind:"empty"};return c[1]?{ok:true}:{ok:false,kind:"slip",msg:`${str} is an outer gene. Compare a double crossover with its closest parental class: the gene that switched is in the middle.`}}
+  const v=parseAns(p,str);if(v==null)return {ok:false,kind:"empty"};if(Math.abs(v-p.ans)<=p.tol)return {ok:true};
+  const sl=p.slips.find(s=>Math.abs(v-s[0])<=Math.max(p.tol,Math.abs(s[0])*.004));if(sl)return {ok:false,kind:"slip",msg:sl[1]};
+  if(Math.abs(v-p.ans)<=Math.abs(p.ans)*.06)return {ok:false,kind:"close"};return {ok:false,kind:"wrong"}}
+function calcMsg(cls,t){const m=$("#calcMsg");m.className="msg show "+cls;m.textContent=t}
+function ansTxt(p){return fmtAns(p,p.ans)+(p.unit?" "+p.unit:"")}
+function calcNew(){const k=TR.type==="mix"?pick(GKEYS):TR.type;const q=genOne(k);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;
+  const rd=q.kind==="prob"?"Give a fraction, decimal or percent.":q.kind==="choice"?"Pick one gene.":q.dp===0?"Give a whole number.":"Give one decimal place.";
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}<span class="rd">${rd}</span>`;$("#calcUnit").textContent=q.unit;$("#calcAns").value="";
+  const ch=$("#calcChoices");if(q.kind==="choice"){$("#calcNumWrap").hidden=true;$("#calcCheck").hidden=true;ch.hidden=false;ch.innerHTML="";q.choices.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.textContent="Gene "+c[0];b.onclick=()=>{TR.pick=c[0];ch.querySelectorAll("button").forEach(x=>x.classList.remove("right","wrong"));b.classList.add(c[1]?"right":"wrong");calcCheck(c[0])};ch.appendChild(b)})}
+  else{$("#calcNumWrap").hidden=false;$("#calcCheck").hidden=false;ch.hidden=true}
+  $("#calcMsg").className="msg";$("#calcHintBox").hidden=true;$("#calcCap").textContent=q.title+": the picture shows the cross; the worked solution builds below it.";a11yKey=""}
+function calcCheck(val){const p=TR.p;const j=judge(p,val!=null?val:$("#calcAns").value);
+  if(j.kind==="empty"){calcMsg("info","Type an answer in the box first.");return}
+  if(j.ok){const wasFirst=TR.first&&!TR.sol;if(!TR.solved){TR.count++;if(wasFirst){TR.streak++;if(TR.streak>TR.best){TR.best=TR.streak;store.set("best",TR.best)}}}TR.solved=true;calcMsg("good",`✓ Correct: ${ansTxt(p)}. Watch the worked solution build.`);showSol(false)}
+  else{TR.first=false;TR.streak=0;let msg="Not quite. ";if(j.kind==="slip")msg+=j.msg;else if(j.kind==="close")msg+="Very close. Check your arithmetic and rounding.";else msg+="Check the setup. "+p.hints[0];calcMsg("warn",msg)}
+  updCalcMeter();a11yKey=""}
+function showSol(byBtn){if(byBtn&&!TR.solved){TR.streak=0;TR.first=false}TR.sol=true;TR.solT=performance.now();updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function calcInit(){const sel=$("#calcType");sel.innerHTML=CTYPES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");sel.onchange=()=>{TR.type=sel.value;calcNew()};
+  $("#calcCheck").onclick=()=>calcCheck();$("#calcAns").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();calcCheck()}});
+  $("#calcHint").onclick=()=>{const p=TR.p;const b=$("#calcHintBox");if(TR.hint<p.hints.length)TR.hint++;b.hidden=false;b.innerHTML=p.hints.slice(0,TR.hint).map((h,i)=>`<div><b>Hint ${i+1}:</b> ${supH(h)}</div>`).join("")+(TR.hint>=p.hints.length?`<div class="small">That is the whole ladder. Try it, or press Show worked solution.</div>`:"");a11yKey=""};
+  $("#calcSol").onclick=()=>{showSol(true);calcMsg("info",`Worked solution: ${ansTxt(TR.p)}. Watch each step, then try a new problem.`)};$("#calcNew").onclick=calcNew;
+  TR.best=+(store.get("best")||0)}
+/* ---------- trainer drawing ---------- */
+function drawCalc(now){use(S2);const T=now/1000;const p=TR.p;const v=p.vis;const show=TR.sol||TR.solved;
+  panelBox(10,10,780,262);
+  if(v.k==="xl"){levelTag(22,28,"cross");const cs=72,x=40,y=46;
+    punnett(x,y,cs,v.sp,v.eggs,(i,j,cx,cy)=>{const son=i===1;const ma=/\^(h|n|w)$/.test(v.eggs[j]);const fa=v.fa==="a";const st=son?(ma?1:0):(ma&&fa?1:ma||fa?2:0);pedSym(cx,cy-10,12,son?"m":"f",st);rich(cx,cy+16,son?v.eggs[j]+"Y":v.sp[0]+v.eggs[j],{size:11.5,weight:700,mono:true})},1,{gs:13});
+    const tgt=(i,j)=>{const son=i===1,ma=/\^(h|n|w)$/.test(v.eggs[j]),fa=v.fa==="a";if(v.q==="son"||v.q==="affson")return son&&ma;if(v.q==="dau"||v.q==="affdau")return !son&&ma&&fa;if(v.q==="car")return !son&&(ma!==fa);return ma&&(son||fa)};
+    const cond=(i)=>v.q==="son"?i===1:v.q==="dau"||v.q==="car"?i===0:true;
+    for(let i=0;i<2;i++)for(let j=0;j<2;j++){const cx=x+cs*(i+1),cy=y+cs*.55+cs*j;if(show&&tgt(i,j)){rr(cx+2,cy+2,cs-4,cs-4,5);ctx.strokeStyle=C.gold;ctx.lineWidth=3;ctx.stroke()}else if(show&&!cond(i)){ctx.save();ctx.globalAlpha=.55;rr(cx+2,cy+2,cs-4,cs-4,5);ctx.fillStyle=C.panel;ctx.fill();ctx.restore()}}
+    txt(x+cs*1.5,y+cs*2.75,"daughters",{size:11.5,weight:700,align:"center"});txt(x+cs*2.5,y+cs*2.75,"sons",{size:11.5,weight:700,align:"center"});
+    const tv=$("#calcAns").value.trim();panelBox(300,30,474,226,{fill:hexA(C.paper,.9)});title(314,50,"Probability reading",C["accent-ink"]);
+    const lines=[["P(son affected)",frac(v.eggs.filter(e=>/\^(h|n|w)$/.test(e)).length/2)],["P(daughter affected)",frac(v.fa==="a"?v.eggs.filter(e=>/\^(h|n|w)$/.test(e)).length/2:0)],["P(child is a son)","1/2"]];
+    lines.forEach((l,i)=>{txt(314,82+i*28,l[0],{size:13,weight:600,mono:true});txt(560,82+i*28,show||i===2?l[1]:"?",{size:13,weight:700,mono:true})});
+    label(540,210,"your answer: "+(tv||"?"),{size:13,weight:700,mono:true,border:TR.solved?C.good:C.accent});
+    wrapText("Gold boxes: the children the question asks about. Grey boxes: ruled out by what you already know.",314,240,450,15,{size:11.5,color:C["ink-soft"],a:show?1:0});}
+  else if(v.k==="rf"){levelTag(22,28,"data");const lab=show||TR.hint>=1;const mx=Math.max(...v.cls.map(c=>c[1]));
+    v.cls.forEach((c,i)=>{const X=60+i*180,base=236,h=c[1]/mx*104;const L=v.look(c);const isP=c[2]===1;
+      rr(X,base-h,120,h,3);ctx.fillStyle=lab?hexA(isP?C.par:C.rec,.7):hexA(C.auto,.55);ctx.fill();label(X+60,base-h-12,String(c[1]),{size:12.5,weight:700,mono:true});
+      fly(X+60,58,24,{body:/black/.test(c[0])?"black":"gray",wing:/vestigial|dumpy/.test(c[0])?"vestigial":"normal",eye:"red"});wrapText(c[0],X,base+14,124,13,{size:11.5,weight:600});
+      if(lab)txt(X+60,92,isP?"parental":"recombinant",{size:11.5,weight:700,align:"center",color:isP?C.par:mix(C.rec,C.ink,.4)})})}
+  else if(v.k==="pred"){levelTag(22,28,"chrom");chromoH(80,720,90,22,mix(C.auto,C.panel,.25),{});const a=200,b=200+v.d*12;
+    [[a,v.G[0]],[b,v.G[1]]].forEach(g=>{line(g[0],76,g[0],104,C.accent,4);rich(g[0],60,g[1],{size:14,weight:700,mono:true})});line(a,124,b,124,C.ink,1.6);label((a+b)/2,124,v.d+" cM",{size:12.5,weight:700,mono:true,border:C.accent});
+    const W=640,rf=v.d/100;rr(80,170,W*(1-rf),36,4);ctx.fillStyle=hexA(C.par,.7);ctx.fill();rr(80+W*(1-rf),170,W*rf,36,4);ctx.fillStyle=hexA(C.rec,.75);ctx.fill();
+    txt(80+W*(1-rf)/2,188,show?`parental ${v.N-v.N*rf}`:"parental",{size:12.5,weight:700,align:"center",color:inkOn(C.par)});txt(80+W*(1-rf)+W*rf/2,224,show?`recombinant ${v.N*rf}`:"recombinant",{size:12,weight:700,align:"center"});
+    txt(80,246,`${v.N} offspring in all`,{size:12,weight:600,color:C["ink-soft"]})}
+  else if(v.k==="tp"){levelTag(22,28,"chrom");title(110,28,show?"Parental and double crossover compared":"Three linked genes",C.ink);
+    const pc=v.cls[0][0].split(" "),dc=v.cls[6][0].split(" ");const ordIdx=v.ord.map(g=>v.disp.indexOf(g));
+    [[pc,"parental",60],[dc,"double crossover",120]].forEach((r,j)=>{chromoH(200,620,r[2]+10,20,j&&show?C.mat:C.mat,{segs:j&&show?[[.34,.66,C.pat]]:null});txt(186,r[2]+10,r[1],{size:12,weight:700,align:"right"});
+      (show?ordIdx:[0,1,2]).forEach((di,k)=>{const X=270+k*140;const s_=r[0][di];txt(X,r[2]+10,s_,{size:13,weight:700,mono:true,align:"center",color:inkOn(j&&show&&k===1?C.pat:C.mat)})})});
+    if(show){glow(410,130,20,C.gold,.5+.3*Math.sin(T*4));chromoH(200,620,210,14,mix(C.auto,C.panel,.25),{});
+      v.ord.forEach((g,k)=>{const xx=[230,410,590][k];line(xx,198,xx,222,C.accent,3);txt(xx,184,g,{size:13,weight:700,mono:true,align:"center"})});txt(410,246,"map order: "+v.ord.join(" ")+"   (middle gene "+v.mid+")",{size:12.5,weight:700,align:"center"})}
+    else txt(410,210,"The worked solution will line up the genes in map order.",{size:12.5,weight:600,align:"center",color:C["ink-soft"]})}
+  const WY=282;if(TR.sol){const el=(now-TR.solT)/1000;const per=Math.max(10,1+p.rows.length*1.4+4);wkR(10,WY,780,308,{rows:p.rows,miss:p.miss},Math.min(el,per-.01),{per,dt:1.3,t0:.5,fs:14.5,cy:48,title:"Worked solution"})}
+  else{panelBox(10,WY,780,308,{fill:hexA(C.paper,.96)});title(22,WY+18,"Worked solution",C["accent-ink"]);wrapText("The worked solution builds here line by line after a correct answer, or when you press Show worked solution. A common mistake is flagged at the end.",24,WY+50,750,18,{size:13,color:C["ink-soft"]})}}
+function calcA11y(){const p=TR.p,v=p.vis;const a=p.kind==="choice"?(TR.pick||"not chosen"):($("#calcAns").value.trim()||"not entered");const lab=`Practice problem, ${p.title}. Your answer ${a}.${TR.solved?" Correct.":""}`;
+  let pic="";if(v.k==="xl")pic=`a Punnett square with the father's sperm, ${plainA(v.sp[0])} and Y, across the top and the mother's eggs, ${plainA(v.eggs[0])} and ${plainA(v.eggs[1])}, down the side; each box shows a pedigree symbol for the child, filled if affected and dotted if a carrier`+(TR.sol?", with gold outlines on the children the question asks about":"");
+  else if(v.k==="rf")pic=`a bar chart of the four offspring classes: ${v.cls.map(c=>c[0]+" "+c[1]).join(", ")}`+(TR.sol||TR.hint?", with the two tallest bars blue for parental and the two shortest amber for recombinant":"");
+  else if(v.k==="pred")pic=`a chromosome with genes ${v.G[0]} and ${v.G[1]} ${v.d} map units apart, and a bar split into ${100-v.d} percent parental and ${v.d} percent recombinant offspring out of ${v.N}`;
+  else pic=`two chromosomes comparing the largest parental class with the smallest double crossover class`+(TR.sol?`, lined up in map order ${v.ord.join(" ")} with the middle gene ${v.mid} highlighted`:"");
+  return [lab,`The picture shows ${pic}. ${TR.sol?"Below it, the worked solution builds line by line, ending with "+ansTxt(p)+" in a green box and a common mistake note.":"The worked solution is hidden until you check a correct answer or ask for it."}`]}
+/* ================= PART 3: alteration and pedigree match ================= */
+function sBlk(x,y,w,l,f){return `<rect x="${x}" y="${y}" width="${w}" height="9" rx="2" style="fill:${f};stroke:var(--ink-soft)" stroke-width=".6"/><text x="${x+w/2}" y="${y+7}" text-anchor="middle" font-size="7" font-family="IBM Plex Mono,monospace" style="fill:var(--ink)">${l}</text>`}
+function sRow(x,y,letters,hi,col,w){w=w||7;return letters.split("").map((l,i)=>sBlk(x+i*w,y,w-.6,l,hi&&hi.indexOf(i)>=0?col:"var(--panel-2)")).join("")}
+function sChr(x,y,h,col){return `<rect x="${x}" y="${y}" width="5" height="${h}" rx="2.5" style="fill:${col};stroke:var(--ink)" stroke-width=".5"/>`}
+function pedSVG(N,M,K,w,h){const r=4.2;let s=`<svg viewBox="0 0 ${w||120} ${h||62}" aria-hidden="true">`;
+  M.forEach(m=>{const a=N[m[0]],b=N[m[1]];s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" style="stroke:var(--ink)" stroke-width="1"/>`});
+  K.forEach(k=>{const a=N[k[0]],b=N[k[1]];const mx=(a[0]+b[0])/2,my=a[1],ky=N[k[2][0]][1],sy=ky-r-4;const xs=k[2].map(i=>N[i][0]);s+=`<path d="M${mx} ${my}V${sy}M${Math.min(mx,...xs)} ${sy}H${Math.max(mx,...xs)}${k[2].map(i=>`M${N[i][0]} ${sy}V${N[i][1]-r}`).join("")}" style="stroke:var(--ink)" stroke-width="1" fill="none"/>`});
+  Object.keys(N).forEach(id=>{const n=N[id];const f=n[3]===1?"var(--aff)":"var(--panel)";s+=n[2]==="m"?`<rect x="${n[0]-r}" y="${n[1]-r}" width="${2*r}" height="${2*r}" style="fill:${f};stroke:var(--ink)" stroke-width="1"/>`:`<circle cx="${n[0]}" cy="${n[1]}" r="${r}" style="fill:${f};stroke:var(--ink)" stroke-width="1"/>`;if(n[3]===2)s+=`<circle cx="${n[0]}" cy="${n[1]}" r="1.4" style="fill:var(--aff)"/>`});
+  return s+"</svg>"}
+const PEDS={
+ ad:[{a:[30,10,"m",1],b:[60,10,"f",0],c:[20,32,"f",1],d:[45,32,"m",0],e:[70,32,"m",1],f:[95,32,"f",0],g:[82,54,"f",1],h:[106,54,"m",0]},[["a","b"],["e","f"]],[["a","b",["c","d","e"]],["e","f",["g","h"]]]],
+ ar:[{a:[30,10,"m",0],b:[60,10,"f",0],c:[20,32,"f",1],d:[45,32,"m",0],e:[70,32,"m",1],f:[95,32,"f",0]},[["a","b"]],[["a","b",["c","d","e","f"]]]],
+ xlr:[{a:[40,10,"m",1],b:[70,10,"f",0],c:[30,32,"m",0],d:[55,32,"f",2],e:[85,32,"m",0],g:[42,54,"m",1],h:[68,54,"f",0]},[["a","b"],["d","e"]],[["a","b",["c","d"]],["d","e",["g","h"]]]],
+ xld:[{a:[45,10,"m",1],b:[75,10,"f",0],c:[20,34,"f",1],d:[45,34,"m",0],e:[70,34,"f",1],f:[95,34,"m",0]},[["a","b"]],[["a","b",["c","d","e","f"]]]],
+ yl:[{a:[45,10,"m",1],b:[75,10,"f",0],c:[20,34,"m",1],d:[45,34,"f",0],e:[70,34,"m",1],f:[95,34,"f",0]},[["a","b"]],[["a","b",["c","d","e","f"]]]],
+ mt:[{a:[45,10,"f",1],b:[75,10,"m",0],c:[20,34,"m",1],d:[45,34,"f",1],e:[70,34,"m",1],f:[95,34,"f",1]},[["a","b"]],[["a","b",["c","d","e","f"]]]]};
+function binSVG(k){const W='<svg viewBox="0 0 56 46" aria-hidden="true">',E="</svg>";
+  if(k==="del")return W+sRow(0,8,"ABCDEFG",[2],"var(--bad)",8)+sRow(4,28,"ABDEFG",[],"",8)+E;
+  if(k==="dup")return W+sRow(4,8,"ABCDEF",[2],"var(--gold)",8)+sRow(0,28,"ABCCDEF",[2,3],"var(--gold)",8)+E;
+  if(k==="inv")return W+sRow(0,8,"ABCDEFG",[1,2,3],"var(--gold)",8)+sRow(0,28,"ADCBEFG",[1,2,3],"var(--gold)",8)+E;
+  if(k==="trans")return W+sRow(0,6,"ABCD",[2,3],"var(--gold)",8)+sRow(0,18,"MNOP",[2,3],"var(--accent-wash)",8)+`<path d="M34 10 L40 22 M40 10 L34 22" style="stroke:var(--ink)" stroke-width="1"/>`+sRow(0,32,"ABOP",[2,3],"var(--accent-wash)",8)+E;
+  if(k==="tri")return W+[0,1,2].map(i=>sChr(14+i*10,6,34,"var(--xchr)")).join("")+`<text x="28" y="45" text-anchor="middle" font-size="7" style="fill:var(--ink)">3 copies</text>`+E;
+  if(k==="mono")return W+sChr(25,6,34,"var(--xchr)")+`<text x="28" y="45" text-anchor="middle" font-size="7" style="fill:var(--ink)">1 copy</text>`+E;
+  if(k==="poly")return W+[0,1,2].map(s=>["var(--act1)","var(--act2)","var(--act5)"].map((c,j)=>sChr(4+j*18+s*5,6+((s+j)%2)*3,30-j*6,c)).join("")).join("")+`<text x="28" y="45" text-anchor="middle" font-size="7" style="fill:var(--ink)">3 full sets</text>`+E;
+  const P=PEDS[k];if(P)return pedSVG(P[0],P[1],P[2],120,62).replace('viewBox="0 0 120 62"','viewBox="0 0 120 62" width="56" height="46"');return W+E}
+function pedCard(k){const P=PEDS[k];return pedSVG(P[0],P[1],P[2],120,62)}
+const SROUNDS=[
+ {name:"Structure changes",goal:"Match each diagram or example to the kind of structural change.",bins:[["del","Deletion"],["dup","Duplication"],["inv","Inversion"],["trans","Reciprocal translocation"]],
+  cards:[["A B C D E F G H becomes A B D E F G H","del","Deletion: the C segment is lost."],["Cri du chat syndrome: part of the short arm of chromosome 5 is missing","del","Deletion: a lost piece of chromosome 5 removes genes."],
+   ["A B C D E F G H becomes A B C B C D E F G H","dup","Duplication: the B C segment appears twice."],["A spare copy of a gene region that can later evolve a new job","dup","Duplication: extra copies are raw material for evolution."],
+   ["A B C D E F G H becomes A D C B E F G H","inv","Inversion: B C D is reversed in place."],["A segment flips 180 degrees; no genes are lost or gained","inv","Inversion: same genes, reversed order."],
+   ["Chromosomes 9 and 22 swap ends, making the Philadelphia chromosome","trans","Reciprocal translocation: two nonhomologous chromosomes trade pieces."],["A B C D E F G H and M N O P Q become A B C D E F P Q and M N O G H","trans","Reciprocal translocation: G H and P Q trade places."]]},
+ {name:"Number changes",goal:"Match each example to trisomy, monosomy or polyploidy.",bins:[["tri","Trisomy (2n + 1)"],["mono","Monosomy (2n − 1)"],["poly","Polyploidy (3n, 4n and more)"]],
+  cards:[["Down syndrome, 47,+21","tri","Trisomy: three copies of chromosome 21."],["Trisomy 18 (Edwards syndrome)","tri","Trisomy: three copies of chromosome 18."],["An n + 1 egg fertilized by a normal sperm","tri","Trisomy: 2n + 1 in the zygote."],["Klinefelter syndrome, 47,XXY","tri","Trisomy of the sex chromosomes: one extra X."],
+   ["Turner syndrome, 45,X","mono","Monosomy: one sex chromosome instead of two."],["An n − 1 sperm fertilizes a normal egg","mono","Monosomy: 2n − 1 in the zygote."],
+   ["A seedless banana with three sets of chromosomes","poly","Polyploidy: triploid, 3n."],["Bread wheat with six sets of chromosomes","poly","Polyploidy: hexaploid, 6n."],["Chromosomes are copied but the cell never divides","poly","Polyploidy: the whole set doubles."]]},
+ {name:"Pattern from a clue",goal:"Match each family clue to the inheritance pattern it points to.",bins:[["ad","Autosomal dominant"],["ar","Autosomal recessive"],["xlr","X linked recessive"],["xld","X linked dominant"],["yl","Y linked"],["mt","Mitochondrial"]],
+  cards:[["Appears in every generation; each affected child has an affected parent","ad","Autosomal dominant: one copy is enough, so it rarely skips."],["One affected parent: about half the children are affected, of either sex","ad","Autosomal dominant: a heterozygous parent passes the allele half the time."],
+   ["Two unaffected parents have an affected daughter","ar","Autosomal recessive: both parents are carriers."],["Shows up more often when cousins have children together","ar","Autosomal recessive: relatives are more likely to carry the same rare allele."],
+   ["Mostly males affected; never passed from father to son","xlr","X linked recessive: sons get their X from their mother."],["An affected man's daughters are all carriers, and some of his grandsons are affected","xlr","X linked recessive: it skips through carrier daughters."],
+   ["An affected father: every daughter affected, no son affected","xld","X linked dominant: a father gives his X to every daughter."],["Affected females are about twice as common as affected males","xld","X linked dominant: females have two chances to inherit the X allele."],
+   ["Passed from a father to all of his sons and none of his daughters","yl","Y linked: only sons get the Y."],["The gene sits on the male specific part of the Y","yl","Y linked: no X copy, so only males have it."],
+   ["An affected mother passes it to all her children; an affected father to none","mt","Mitochondrial: mitochondria come from the egg."],["Siblings differ in severity because they carry different shares of mutant DNA","mt","Mitochondrial: heteroplasmy varies between children."]]},
+ {name:"Read the pedigree",goal:"Look at each small pedigree and match it to the most likely pattern.",bins:[["ad","Autosomal dominant"],["ar","Autosomal recessive"],["xlr","X linked recessive"],["xld","X linked dominant"],["mt","Mitochondrial"]],
+  cards:[["Pedigree 1: affected people in each generation, both sexes","ad","Autosomal dominant: every affected child has an affected parent.",pedCard("ad")],["Pedigree 2: unaffected parents, affected son and daughter","ar","Autosomal recessive: carrier parents.",pedCard("ar")],
+   ["Pedigree 3: affected grandfather, carrier daughter, affected grandson","xlr","X linked recessive: it passes through a carrier daughter.",pedCard("xlr")],["Pedigree 4: affected father, all daughters affected, sons not","xld","X linked dominant: father's X goes to every daughter.",pedCard("xld")],
+   ["Pedigree 5: affected mother, every child affected","mt","Mitochondrial: all children get the mother's mitochondria.",pedCard("mt")]]}];
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{}};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();const R=SROUNDS[i];SG.order=shuffle(R.cards.map((c,k)=>k));
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${binSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sRender();sTimerUI();a11yKey=""}
+function sRender(){const R=SROUNDS[SG.r];const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";items.appendChild(s)}})});
+  const n=Object.keys(SG.placed).length,tot=R.cards.length;$("#sStars").textContent=n===tot?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",n===tot?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";sMsg("good",`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();sRender()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(Object.keys(SG.placed).length<SROUNDS[SG.r].cards.length)$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= PART 4: chromosomes in the real world ================= */
+const LIFE=[
+{name:"Hemophilia in a family",who:"Scenario 1 · genetic counselling",
+ story:"Leo, age 6, was diagnosed with hemophilia A after a small cut kept bleeding. His parents, Ana and Tom, do not have hemophilia, but Ana's brother Ray does. Ana is expecting again, and Leo's older sister Mia wants to know her own risk. A blood test measured factor VIII activity in several relatives; the typical range is about 50 to 150 percent of normal.",
+ cap:"The family pedigree beside a bar chart of factor VIII activity for five relatives.",
+ desc:"On the left, a three generation pedigree. Generation one: Ana's father, unaffected, and Ana's mother, a circle with a carrier dot. Generation two: Ana, a circle with a carrier dot, married to Tom, an unaffected square, and Ana's brother Ray, a filled square. Generation three: Mia, an empty circle with a question mark, and Leo, a filled square with an arrow marking him as the person first diagnosed. A gold glow travels from Ana's mother to Ana to Leo. On the right, a bar chart of factor VIII activity grows: Tom about 105 percent, Ana about 52 percent, Mia about 60 percent, Ray below 1 percent and Leo below 1 percent, with a shaded band marking the typical range from 50 to 150 percent.",
+ draw(T){const t=P(T,10)*10;panelBox(10,10,400,480);levelTag(22,28,"fam");
+   const N={gf:[110,80,"m",0,"grandfather"],gm:[230,80,"f",2,"grandmother"],ana:[150,210,"f",2,"Ana"],tom:[60,210,"m",0,"Tom"],ray:[300,210,"m",1,"Ray"],mia:[80,350,"f",0,"Mia"],leo:[160,350,"m",1,"Leo"]};
+   pedigree(N,[["gf","gm"],["tom","ana"]],[["gf","gm",["ana","ray"]],["tom","ana",["mia","leo"]]],18,{hl:id=>id==="leo"?.5+.5*Math.sin(T*3):0});
+   txt(80,350,"?",{size:16,weight:700,align:"center",color:C.accent});arrow(214,394,178,366,C.ink,2);txt(222,404,"Leo (diagnosed first)",{size:12,weight:600});
+   const path=[[230,80],[170,80],[170,150],[150,150],[150,210],[105,210],[105,296],[160,296],[160,350]];const q=P(T,5);const p_=along(path,smooth(q));glow(p_[0],p_[1],18,C.gold,.9);circ(p_[0],p_[1],5,C.gold,C.ink,1);
+   wrapText("The F8 allele passed from Ana's mother to Ana, then to Leo.",24,448,370,16,{size:12,weight:600,color:C["ink-soft"]});
+   panelBox(420,10,370,480);levelTag(432,28,"data");title(432,52,"Factor VIII activity, % of normal");const g=graph({x:480,y:80,w:290,h:330,x0:0,x1:5,y0:0,y1:160,yt:[0,50,100,150],xt:[],yl:"",grid:true});
+   rr(g.x,g.Y(150),g.w,g.Y(50)-g.Y(150),2);ctx.fillStyle=hexA(C.good,.14);ctx.fill();txt(g.x+g.w-4,g.Y(150)+10,"typical range",{size:11.5,weight:700,align:"right",color:C.good});
+   const B=[["Tom",105],["Ana",52],["Mia",60],["Ray",.6],["Leo",.6]];const f=smooth(seg(t,.5,3));
+   B.forEach((b,i)=>{const X=g.x+14+i*56,h=(g.Y(0)-g.Y(b[1]))*f;rr(X,g.Y(0)-h-(b[1]<2?2:0),40,h+(b[1]<2?2:0),3);ctx.fillStyle=hexA(b[1]<5?C.bad:C.protein,.75);ctx.fill();label(X+20,g.Y(0)-h-14,b[1]<2?"<1":String(Math.round(b[1]*f)),{size:12,weight:700,mono:true});txt(X+20,g.Y(0)+14,b[0],{size:12,weight:700,align:"center"})});
+   wrapText("Carrier levels vary because of random X inactivation.",432,452,340,16,{size:12,weight:600,color:C["ink-soft"]})},
+ qs:[{q:"Ana and Tom's next child is a boy. What is the chance he has hemophilia A?",opts:[["1/2",1,"Right. Ana is a carrier (she has an affected son), so each son has a 1/2 chance of getting her X with the hemophilia allele."],["1/4",0,"1/4 is the chance that any child is an affected son. Given a boy, it is 1/2."],["0, because Tom does not have hemophilia",0,"A son's X comes from his mother, so Tom's status does not matter for sons."],["1, because his brother has it",0,"Each pregnancy is independent. Each son has a 1/2 chance."]]},
+  {q:"Read the chart: Ana's factor VIII activity is about 52 percent. What does this best suggest?",opts:[["She is a carrier: one working F8 allele, so her level is near the low end of normal",1,"Yes. With one working copy, carriers often have about half the usual activity, and random X inactivation makes it vary."],["She has hemophilia A",0,"Her level is within the typical range, far above Leo's and Ray's levels below 1 percent."],["The test must be wrong because carriers have normal levels",0,"Carriers often have lower than average levels. Hers fits a carrier."],["She has two working copies",0,"She has an affected son and an affected brother, and her level is at the low end, which fits one working copy."]]},
+  {q:"Mia is unaffected. What is the chance she is a carrier?",opts:[["1/2",1,"Right. She got Tom's normal X for sure and one of Ana's two X chromosomes, each equally likely."],["0, because she is not affected",0,"Carriers are usually unaffected. Mia could still have Ana's hemophilia allele."],["1, because her brother is affected",0,"Leo's diagnosis shows Ana is a carrier, but Mia only has a 1/2 chance of getting that X."],["1/4",0,"1/4 would be for any child to be a carrier daughter. Given a daughter, it is 1/2."]]}]},
+{name:"A male calico cat",who:"Scenario 2 · the animal shelter",
+ story:"A shelter vet notices that Patches, a calico cat with orange, black and white patches, is male. A blood test shows 39 chromosomes, including two X chromosomes and a Y (cats usually have 38). The vet also recalls that in 2001 researchers cloned a calico cat, and the clone's patch pattern did not match her genetic donor's.",
+ cap:"Patches the calico cat, his sex chromosomes, and a donor cat beside her clone with different patterns.",
+ desc:"On the left, Patches, a sitting calico cat with orange and black patches on white, swishes his tail. Beside him, his sex chromosomes are drawn: two violet X chromosomes and a smaller brown Y, labelled XXY, 39 chromosomes. A small inset shows one skin cell with one X active and the other folded into a Barr body. On the right, two cats sit side by side, labelled donor and clone, with the same DNA. Their orange and black patches sit in different places, and every few seconds the patches on the clone shuffle to show a new random pattern, with the label X inactivation is random in each embryo.",
+ draw(T){panelBox(10,10,390,480);levelTag(22,28,"org");cat(150,270,100,{patches:calicoPatches(),t:T*1.5});txt(150,420,"Patches, male",{size:13,weight:700,align:"center"});
+   chromo(300,130,80,14,C.xchr,{cen:.4});chromo(330,130,80,14,C.xchr,{cen:.4});chromo(360,112,36,14,C.ychr,{cen:.3});chipText(330,196,"XXY, 39 chromosomes",C.xchr);
+   cellO(320,300,60,46,{nuc:28});chromo(308,300,34,7,C.catorange,{cen:.4});ell(334,316,7,5,0,mix(C.catblack,C.xist,.3),C.ink,1);txt(320,362,"one X active per cell",{size:11.5,weight:600,align:"center"});
+   panelBox(410,10,380,480);levelTag(422,28,"org");title(510,28,"Same DNA, different patches");
+   cat(520,250,70,{patches:calicoPatches(),t:T*1.5+1});txt(520,350,"donor",{size:12.5,weight:700,align:"center"});
+   const k=Math.floor(T/3);const pp=CALICO.map((p,i)=>[p[0]+(rnd(i+k*7)-.5)*.5,p[1]+(rnd(i*3+k)-.5)*.5,p[2],C[rnd(i+k*11)<.5?"catorange":"catblack"]]);cat(690,250,70,{patches:pp,t:T*1.5+2});txt(690,350,"clone",{size:12.5,weight:700,align:"center"});
+   wrapText("X inactivation is random in each embryo, so cloned calico cats get new patch patterns.",426,410,350,16,{size:12.5,weight:600})},
+ qs:[{q:"Why can Patches be calico even though he is male?",opts:[["He has two X chromosomes, one with the orange allele and one with the black allele",1,"Right. Orange and black patches need two different X alleles, which an XXY male can have."],["The Y chromosome carries the black allele",0,"The coat colour gene is on the X, not the Y."],["White spotting makes any cat calico",0,"White spotting adds white areas, but orange plus black needs two X chromosomes."],["Male cats are often calico",0,"Calico males are rare, roughly 1 in a few thousand calico cats, because they need an extra X."]]},
+  {q:"Like people with Klinefelter syndrome, XXY male cats are usually:",opts:[["Sterile",1,"Yes. The extra X disrupts sperm production, so XXY tomcats rarely father kittens."],["Larger and more fertile than XY males",0,"An extra X does not raise fertility. XXY males are usually sterile."],["Female in appearance",0,"The Y with its testis determining gene makes XXY cats male."],["Unable to form Barr bodies",0,"XXY cells inactivate one X, forming one Barr body."]]},
+  {q:"Why did the cloned calico cat have a different pattern from her donor?",opts:[["Each embryo makes its own random choices about which X to inactivate",1,"Right. The DNA is identical, but which X each early skin cell silences is decided again in the clone."],["Cloning changes the coat colour genes",0,"The clone's DNA matches the donor's. The difference comes from random X inactivation."],["The clone must be a different breed",0,"A clone has the donor's genome. Patch placement is not fixed by DNA alone."],["Diet changes patch patterns",0,"Patch patterns are set in the embryo by X inactivation, not by diet."]]}]},
+{name:"CML and the Philadelphia chromosome",who:"Scenario 3 · the cancer clinic",
+ story:"Mr. Ortiz, 54, had a very high white blood cell count on a routine test. In his bone marrow cells, a test with glowing probes (FISH) labels the BCR gene green and the ABL gene red. He starts imatinib, and his BCR ABL level is measured every 3 months as a percent of the starting level.",
+ cap:"FISH nuclei with separate and fused signals, and a falling BCR ABL graph on imatinib.",
+ desc:"On the left, two cell nuclei are drawn as large blue circles. The normal nucleus shows two separate green dots and two separate red dots. The CML nucleus shows one green dot, one red dot and a yellow dot where a green and a red signal overlap, labelled fusion: BCR joined to ABL; the yellow dot pulses. On the right, a graph with months 0 to 18 on the bottom and BCR ABL percent on a log scale from 0.01 to 100. A line draws itself from 100 percent at month 0 down to about 8 at month 3, 0.9 at month 6, 0.3 at month 9, 0.1 at month 12 and about 0.04 at month 18. A dashed line marks 0.1 percent, the major molecular response line.",
+ draw(T){const t=P(T,10)*10;panelBox(10,10,370,480);levelTag(22,28,"cell");
+   [[100,140,"normal cell",0],[100,340,"CML cell",1]].forEach(n=>{circ(n[0]+90,n[1],78,mix(C.nuc,C.dna,.12),mix(C.dna,C.ink,.2),2);txt(n[0]+90,n[1]+96,n[2],{size:12.5,weight:700,align:"center"});
+     const dots=n[3]?[[-30,-20,"g"],[28,30,"r"],[10,-34,"y"]]:[[-34,-22,"g"],[30,-30,"g"],[-20,32,"r"],[34,22,"r"]];
+     dots.forEach(d=>{const col=d[2]==="g"?"#3DBE55":d[2]==="r"?"#E0443A":"#F2D03A";const pu=d[2]==="y"?.7+.3*Math.sin(T*5):1;glow(n[0]+90+d[0],n[1]+d[1],18*pu,col,.8);circ(n[0]+90+d[0],n[1]+d[1],7,col,C.ink,1)})});
+   lead(200,306,190,252,"fusion: BCR joined to ABL",{border:C.fus,size:12,align:"center"});
+   txt(24,462,"green = BCR (chr 22), red = ABL (chr 9)",{size:12,weight:600,color:C["ink-soft"]});
+   panelBox(390,10,400,480);levelTag(402,28,"data");title(470,28,"BCR ABL level on imatinib");
+   const g=graph({x:460,y:70,w:300,h:330,x0:0,x1:18,y0:-2,y1:2,xt:[0,3,6,9,12,15,18],yt:[-2,-1,0,1,2],yf:v=>String(Math.pow(10,v)),xl:"months of treatment",yl:"BCR ABL, % (log scale)",ylx:56});
+   ctx.setLineDash([5,4]);line(g.x,g.Y(-1),g.x+g.w,g.Y(-1),C.good,1.8);ctx.setLineDash([]);txt(g.x+g.w-4,g.Y(-1)+12,"0.1%: major molecular response",{size:11.5,weight:700,align:"right",color:C.good});
+   const D=[[0,100],[3,8],[6,.9],[9,.3],[12,.1],[15,.06],[18,.04]];const up=seg(t,.5,6)*18;ctx.beginPath();D.forEach((d,i)=>{if(d[0]>up+1e-6)return;const X=g.X(d[0]),Y=g.Y(Math.log10(d[1]));i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.strokeStyle=C.fus;ctx.lineWidth=3;ctx.stroke();
+   D.forEach(d=>{if(d[0]<=up)gdot(g,d[0],Math.log10(d[1]),C.fus,null,{r:5})})},
+ qs:[{q:"In the CML nucleus, what does the yellow fused signal show?",opts:[["The BCR and ABL genes have been joined by a 9 and 22 translocation",1,"Right. The green and red probes sit side by side because the Philadelphia chromosome carries the BCR ABL fusion gene."],["An extra copy of chromosome 9",0,"An extra copy would add a separate red dot, not a fused signal."],["A deletion of ABL",0,"The red ABL signal is still present; it is now next to BCR."],["Normal crossing over in meiosis",0,"Blood stem cells do not undergo meiosis. This is a translocation in a body cell."]]},
+  {q:"Read the graph: at about which month does the BCR ABL level first reach 0.1 percent or below?",opts:[["Month 12",1,"Yes. The line touches the dashed 0.1 percent line at month 12 and stays below after that."],["Month 3",0,"At month 3 the level is about 8 percent, far above 0.1."],["Month 6",0,"At month 6 it is just under 1 percent, still above 0.1."],["It never does",0,"It reaches 0.1 percent at month 12 and is lower at months 15 and 18."]]},
+  {q:"Can Mr. Ortiz pass the Philadelphia chromosome on to his children?",opts:[["No. The translocation arose in a blood stem cell, not in his eggs or sperm",1,"Right. It is a somatic change, so it is not inherited."],["Yes, to all of his children",0,"Only changes in germ line cells are inherited. This one is in blood stem cells."],["Yes, but only to his sons",0,"Chromosomes 9 and 22 are autosomes, and this change is not in his germ line anyway."],["Only if his partner also has CML",0,"CML from the Philadelphia chromosome is not inherited like a recessive trait."]]}]},
+{name:"Mitochondrial disease in a family",who:"Scenario 4 · the eye clinic",
+ story:"Several people in the Reyes family lost central vision in their teens or twenties. Testing finds a mitochondrial DNA mutation that causes Leber hereditary optic neuropathy (LHON). The pedigree shows who is affected, and a lab measured the share of mutant mitochondrial DNA in three siblings.",
+ cap:"A pedigree where the mutation passes only through mothers, plus heteroplasmy bars for three siblings.",
+ desc:"On the left, a three generation pedigree. Generation one: an affected grandmother circle, filled, and an unaffected grandfather. Generation two: their daughter Elena, unaffected but marked as carrying the mutation with a dot, and their son Marco, affected, with his wife. Generation three: Elena's three children, one affected son, and Marco's two children, both unaffected and marked as not carrying the mutation. Small orange mitochondria travel along the lines only from mothers to children. On the right, a bar chart shows Elena's children: 90, 55 and 25 percent mutant mitochondrial DNA, with a dashed threshold line near 60 percent; the 90 percent bar is labelled affected.",
+ draw(T){panelBox(10,10,430,480);levelTag(22,28,"fam");
+   const N={gm:[120,80,"f",1],gf:[230,80,"m",0],el:[100,210,"f",2,"Elena"],eh:[30,210,"m",0],ma:[260,210,"m",1,"Marco"],mw:[350,210,"f",0],c1:[40,350,"m",1],c2:[100,350,"f",0],c3:[160,350,"m",0],d1:[280,350,"f",0],d2:[340,350,"m",0]};
+   pedigree(N,[["gm","gf"],["eh","el"],["ma","mw"]],[["gm","gf",["el","ma"]],["eh","el",["c1","c2","c3"]],["ma","mw",["d1","d2"]]],17,{});
+   ["c1","c2","c3"].forEach((k,i)=>txt(N[k][0],N[k][1]+30,["90%","55%","25%"][i],{size:11.5,weight:700,mono:true,align:"center",color:C.bad}));["d1","d2"].forEach(k=>txt(N[k][0],N[k][1]+30,"0%",{size:11.5,weight:700,mono:true,align:"center",color:C.good}));
+   const paths=[[[120,80],[175,80],[175,150],[100,150],[100,210]],[[100,210],[65,210],[65,296],[40,296],[40,350]]];paths.forEach((pth,i)=>{const q=P(T*.4+i*.5,1);const p_=along(pth,q);mitoD(p_[0],p_[1],20,10,0,{})});
+   wrapText("Mitochondria pass from mothers to all their children. Marco's children do not inherit his mitochondria.",24,430,400,16,{size:12,weight:600,color:C["ink-soft"]});
+   panelBox(450,10,340,480);levelTag(462,28,"data");title(540,28,"Elena's children: % mutant mtDNA");const g=graph({x:510,y:70,w:250,h:320,x0:0,x1:3,y0:0,y1:100,yt:[0,25,50,75,100],xt:[]});
+   ctx.setLineDash([5,4]);line(g.x,g.Y(60),g.x+g.w,g.Y(60),C.warn,2);ctx.setLineDash([]);txt(g.x+g.w-4,g.Y(60)-10,"threshold",{size:11.5,weight:700,align:"right",color:C["warn-ink"]});
+   const f=smooth(seg(P(T,8)*8,.3,3));[["son 1",90],["daughter",55],["son 2",25]].forEach((b,i)=>{const X=g.x+20+i*80,h=(g.Y(0)-g.Y(b[1]))*f;rr(X,g.Y(0)-h,50,h,3);ctx.fillStyle=hexA(C.mito,.75);ctx.fill();label(X+25,g.Y(0)-h-14,Math.round(b[1]*f)+"%",{size:12,weight:700,mono:true});txt(X+25,g.Y(0)+14,b[0],{size:12,weight:700,align:"center"});if(b[1]>60&&f>.9)txt(X+25,g.Y(0)+32,"affected",{size:11.5,weight:700,align:"center",color:C.bad})})},
+ qs:[{q:"Marco is affected. What is the chance his children inherit the LHON mutation from him?",opts:[["Essentially zero, because children get their mitochondria from the egg",1,"Right. Fathers do not pass on their mitochondrial DNA."],["1/2 for each child",0,"That is the pattern for an autosomal dominant allele. Mitochondria are not inherited from fathers."],["All of his sons",0,"Mitochondrial DNA is not on the Y. It comes from the mother."],["All of his children",0,"That is what happens for an affected mother, not an affected father."]]},
+  {q:"Read the chart: which of Elena's children is most likely to lose vision?",opts:[["Son 1, with 90 percent mutant mtDNA, above the threshold",1,"Yes. The higher the share of mutant copies, the more likely energy hungry optic nerve cells fail."],["Son 2, with 25 percent",0,"25 percent is well below the threshold line."],["The daughter, because daughters are always affected",0,"Mitochondrial disease does not depend on the child's sex in this way. Her share is below the threshold."],["All three equally",0,"They inherited different shares of mutant mtDNA (heteroplasmy), so risk differs."]]},
+  {q:"Elena carries the mutation but has normal vision. Which explanation fits best?",opts:[["Her share of mutant mtDNA in the optic nerve is below the threshold, and other genetic and environmental factors also matter",1,"Right. Heteroplasmy levels and other factors explain why carriers can be unaffected."],["She inherited her mitochondria from her father",0,"Mitochondria come from the mother, and her mother is affected."],["The mutation is recessive, so she needs two copies",0,"Mitochondrial genes are not in pairs like nuclear genes. Share and threshold matter instead."],["Her X inactivation protects her",0,"X inactivation affects X linked genes, not mitochondrial DNA."]]}]}];
+const LS={i:0,ans:{}};
+function lifeUI(){const S=LIFE[LS.i];$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]?'<span class="ok" aria-label="all answered">✓</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-label="all answered">✓</span>')}
+function drawLife(now){use(S4);LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+/* ---------------- tabs / theme / loop ---------------- */
+const TABS=["sim","calc","sort","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S4].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+function frame(now){
+  try{if(curTab==="sim")drawSim(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__ev={tab:k=>showTab(k),set:o=>{Object.assign(SM.set,o);simButtons();simRun()},run:()=>simRun(),finish:()=>{const R=SM.run;R.t0=performance.now()-R.dur-10;simStep(performance.now())},sim:()=>{const R=SM.run;return R&&{shown:R.shown,n:R.off.length,counts:R.counts.slice(),metric:simMetric(R),exp:expP(R.set),rf:rfOf(R.set),done:R.done}},chal:()=>[...SM.chal],
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,fmt:fmtAns(TR.p,TR.p.ans),unit:TR.p.unit,kind:TR.p.kind}),
+  gen:t=>{const q=genOne(t);const good=fmtAns(q,q.ans);let bad,alt=null;if(q.kind==="choice"){bad=q.choices.find(c=>!c[1])[0]}else if(q.kind==="prob"){bad=frac(q.ans>=.5?q.ans/2:q.ans*2);alt=(q.ans*100).toFixed(1)+"%"}else{bad=fmtAns(q,q.ans*1.5+1);alt=good+" "+q.unit}
+    return {ans:q.ans,good,kind:q.kind,j1:judge(q,good),j1u:alt?judge(q,alt):{ok:true},j2:judge(q,bad),j3:judge(q,"abc"),hints:q.hints.length,rows:q.rows.length,html:q.html,slips:q.slips.map(s=>judge(q,fmtAns(q,s[0])).ok)}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards.length}),lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();simInit();calcInit();calcNew();updCalcMeter();sLoad(0);lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

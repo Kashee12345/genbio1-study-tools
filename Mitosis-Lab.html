@@ -1,0 +1,1399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cell Cycle Lab</title>
+<meta name="description" content="Cell cycle and mitosis lab for majors biology: a cell cycle bench simulator with growth factor, DNA damage, spindle poisons, mutant p53 and cyclin overexpression, a live phase distribution and DNA content graph; an onion root tip virtual microscope for counting phases and the mitotic index; a randomized counting trainer for chromosomes, chromatids, DNA content, mitotic index and phase duration with animated worked solutions; stage ordering and sorting games; and real world scenarios on chemotherapy, HeLa cells, flow cytometry, wound healing assays and colchicine in plant breeding.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0F5759;--accent-wash:#DCEEEE;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#B8561A;--act2:#2F7FC1;--act3:#5E8A1A;--act4:#C0455A;--act5:#2E8A7A;--act6:#7B5CC9;--act7:#A04E8C;--act8:#5E7183;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF2F2;--grid:#D3DCDD;--paper:#FFFDF7;
+  --dna:#2F6FB8;--dna2:#7B5CC9;--rna:#E07A1E;--prot:#C0455A;--lipid:#C9A227;--carb:#E08A1E;--atp:#E3BD2A;--elec:#1FA2C0;--water:#5AA9E6;--plant:#3E8A3A;
+  --dna-ink:#1D5592;--dna2-ink:#5B3FA8;--prot-ink:#9B2C40;--plant-ink:#2A6B2A;--mt-ink:#1E6B5E;
+  --mt:#2E8A7A;--kin:#9B2C40;--cen:#B07A10;--mem:#C9A227;--actin:#A04E8C;--wall:#5E9A3A;--wall-in:#E6F0DC;
+  --cyto:#F6EEE4;--cyto-edge:#C9A227;--nucleo:#E2ECF6;--nucleolus:#8EA6C4;--golgi:#D0802A;--vesicle:#E3BD2A;
+  --g0:#5E7183;--g1:#5E8A1A;--s:#2F6FB8;--g2:#B07A10;--m:#C0455A;--dead:#7A6E66;
+  --cyclin:#C0455A;--cdk:#5E7183;--mpf:#B8561A;--gf:#D0802A;--uv:#5B4FA8;--drug:#A9372F;--p53:#C0455A;--rb:#A04E8C;--e2f:#2E8A7A;
+  --cancer:#8A3A2A;--tumor:#D98A7A;--blood:#C8453F;--vessel:#E8A9A0;--bm:#9AA6AF;--skin:#E8C2A0;--skin2:#B98462;--hair:#3D3029;--shirt:#4F7FA8;--shirt2:#A0577A;
+  --bact:#9CC48A;--bact-edge:#4E8A3A;--ftsz:#C0455A;--dish:#E9F1F4;--dish-edge:#8FA8B2;--medium:#F6E3D6;
+  --field:#F4EBDD;--fwall:#B39A70;--fnuc:#D6B3C6;--fchrom:#6A1E4E;--fcyto:#F8F0E4;--froot:#E9DCC4;
+  --flow1:#2F6FB8;--flow2:#B8561A;--hela:#C0455A;--frog:#B8A06A;--egg:#3D3530;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8EE3E3;--accent-wash:#12302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#A6CC5A;--act4:#EE7A8C;--act5:#5CC4B0;--act6:#A98BEF;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#121B20;--grid:#26323A;--paper:#1A2328;
+  --dna:#6FA8EC;--dna2:#A98BEF;--rna:#F29A4A;--prot:#EE7A8C;--lipid:#E0BE48;--carb:#F2A24A;--atp:#F2D857;--elec:#5FD0EA;--water:#8CC6F2;--plant:#6EB85A;
+  --dna-ink:#8CC0F2;--dna2-ink:#BFA6F4;--prot-ink:#F49AA8;--plant-ink:#8AD878;--mt-ink:#7AD6C4;
+  --mt:#5CC4B0;--kin:#F49AA8;--cen:#E8BE5A;--mem:#E0BE48;--actin:#D186C0;--wall:#7EB85A;--wall-in:#1E2A1A;
+  --cyto:#22292A;--cyto-edge:#E0BE48;--nucleo:#1A2834;--nucleolus:#5E7A9A;--golgi:#F0A85A;--vesicle:#F2D857;
+  --g0:#A9B7C2;--g1:#A6CC5A;--s:#6FA8EC;--g2:#E8BE5A;--m:#EE7A8C;--dead:#9E928A;
+  --cyclin:#EE7A8C;--cdk:#A9B7C2;--mpf:#F0985A;--gf:#F0A85A;--uv:#8A7FD8;--drug:#E07067;--p53:#EE7A8C;--rb:#D186C0;--e2f:#5CC4B0;
+  --cancer:#E07A6A;--tumor:#8A4A40;--blood:#E0605A;--vessel:#7A4A46;--bm:#5E6B75;--skin:#C99A78;--skin2:#9A6A4C;--hair:#1E1814;--shirt:#5A8FBF;--shirt2:#B9698F;
+  --bact:#4E6E40;--bact-edge:#9CD08A;--ftsz:#EE7A8C;--dish:#1A2830;--dish-edge:#5E7A86;--medium:#2E2622;
+  --field:#F4EBDD;--fwall:#B39A70;--fnuc:#D6B3C6;--fchrom:#6A1E4E;--fcyto:#F8F0E4;--froot:#E9DCC4;
+  --flow1:#6FA8EC;--flow2:#F0985A;--hela:#EE7A8C;--frog:#8A7850;--egg:#1E1A18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8EE3E3;--accent-wash:#12302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#A6CC5A;--act4:#EE7A8C;--act5:#5CC4B0;--act6:#A98BEF;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#121B20;--grid:#26323A;--paper:#1A2328;
+  --dna:#6FA8EC;--dna2:#A98BEF;--rna:#F29A4A;--prot:#EE7A8C;--lipid:#E0BE48;--carb:#F2A24A;--atp:#F2D857;--elec:#5FD0EA;--water:#8CC6F2;--plant:#6EB85A;
+  --dna-ink:#8CC0F2;--dna2-ink:#BFA6F4;--prot-ink:#F49AA8;--plant-ink:#8AD878;--mt-ink:#7AD6C4;
+  --mt:#5CC4B0;--kin:#F49AA8;--cen:#E8BE5A;--mem:#E0BE48;--actin:#D186C0;--wall:#7EB85A;--wall-in:#1E2A1A;
+  --cyto:#22292A;--cyto-edge:#E0BE48;--nucleo:#1A2834;--nucleolus:#5E7A9A;--golgi:#F0A85A;--vesicle:#F2D857;
+  --g0:#A9B7C2;--g1:#A6CC5A;--s:#6FA8EC;--g2:#E8BE5A;--m:#EE7A8C;--dead:#9E928A;
+  --cyclin:#EE7A8C;--cdk:#A9B7C2;--mpf:#F0985A;--gf:#F0A85A;--uv:#8A7FD8;--drug:#E07067;--p53:#EE7A8C;--rb:#D186C0;--e2f:#5CC4B0;
+  --cancer:#E07A6A;--tumor:#8A4A40;--blood:#E0605A;--vessel:#7A4A46;--bm:#5E6B75;--skin:#C99A78;--skin2:#9A6A4C;--hair:#1E1814;--shirt:#5A8FBF;--shirt2:#B9698F;
+  --bact:#4E6E40;--bact-edge:#9CD08A;--ftsz:#EE7A8C;--dish:#1A2830;--dish-edge:#5E7A86;--medium:#2E2622;
+  --field:#F4EBDD;--fwall:#B39A70;--fnuc:#D6B3C6;--fchrom:#6A1E4E;--fcyto:#F8F0E4;--froot:#E9DCC4;
+  --flow1:#6FA8EC;--flow2:#F0985A;--hela:#EE7A8C;--frog:#8A7850;--egg:#1E1A18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ordwrap{margin:6px 0 10px}
+.ordwrap .item .tag{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-left:6px}
+.stagebtns{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:8px 0}
+.stagebtns .tbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:12.5px;line-height:1.2}
+.stagebtns .tbtn svg{width:40px;height:32px}
+.scard svg{width:46px;height:36px;display:block;margin-bottom:3px}
+.scard.pic{display:flex;flex-direction:column;align-items:flex-start}
+.seg3 .tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+@media (max-width:420px){.stagebtns{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.readouts.chart td,.readouts.chart th{text-align:center;font-family:var(--mono);font-size:13px;padding:4px 2px}
+.readouts.chart th{font-family:var(--sans);font-weight:600;color:var(--ink-soft)}
+.abbox b{font-family:var(--mono)}
+.seg3 .tbtn small{display:block;font-size:11.5px;color:var(--ink-soft);font-weight:500}.seg3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}.seg2 .tbtn small{font-size:11.5px;color:var(--ink-soft);font-weight:500}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 9 &middot; The cell cycle and mitosis</div>
+    <h1>Cell Cycle and Mitosis Lab</h1>
+    <p class="sub">Run a dish of dividing cells and break its checkpoints; count stages in an onion root tip; practise chromosome, DNA and mitotic index math with animated worked solutions; order and sort the stages; and use it all on real cases. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-bench" data-tab="bench" id="tabbtn-bench" type="button">Part 1 &middot; Cell Cycle Bench</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-scope" data-tab="scope" id="tabbtn-scope" type="button" tabindex="-1">Part 2 &middot; Root Tip Microscope</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 3 &middot; Counting Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sort" data-tab="sort" id="tabbtn-sort" type="button" tabindex="-1">Part 4 &middot; Stage Games</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 5 &middot; Biology in the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-bench" role="tabpanel" aria-labelledby="tabbtn-bench">
+    <h2 class="gk-sr">Part 1: Cell Cycle Bench</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvBench" role="img" aria-label="Cell cycle bench."></canvas></div>
+        <div class="stagebar"><span class="caption" id="benchCap"></span></div>
+        <div class="legend">
+          <span><i style="background:var(--g1)"></i>G1</span><span><i style="background:var(--s)"></i>S</span><span><i style="background:var(--g2)"></i>G2</span><span><i class="d" style="background:var(--m)"></i>M (chromosome bars)</span><span><i class="s" style="background:var(--g0)"></i>G0 (small, pale)</span><span><i style="background:var(--dead)"></i>Apoptotic fragments</span><span><i style="background:transparent;border:2px solid var(--bad)"></i>Red ring: DNA damage</span>
+          <span><i class="ln" style="border-top-color:var(--dna)"></i>DNA per cell (C)</span><span><i class="ln" style="border-top-color:var(--prot);border-top-style:dashed"></i>Chromosomes per cell</span>
+        </div>
+        <table class="readouts" id="benchRead"><caption class="gk-sr">Dish readouts</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">A teaching model, not a real cell line. Phase lengths are typical for cultured human cells (G1 about 10 h, S 8 h, G2 4 h, M about 1 h) with random variation, and time is sped up (simulated hours per second shown). Cells are drawn with 2n = 4. The dish holds about 140 cells in one layer. Growth factor below about 15% sends cells to G0. Damaged cells with normal p53 pause in G1 or G2 to repair, and some undergo apoptosis; with mutant p53 the G1 stop and apoptosis fail and only a brief G2 pause remains, so damage is passed on. Spindle poisons hold cells at the M checkpoint, and long arrests end in cell death. Overexpressed G1 cyclin pushes cells past the G1 checkpoint even without growth factor or space (simplified).</p>
+      </div>
+      <aside class="card side" aria-label="Bench controls">
+        <div class="ctl"><label for="bGF">Growth factor (PDGF) <output id="bGFo">60%</output></label><input type="range" id="bGF" min="0" max="100" step="5" value="60"><div class="ticks"><span>none</span><span>plenty</span></div></div>
+        <div class="ctl"><label for="bSpeed">Speed <output id="bSpeedo">3 h per s</output></label><input type="range" id="bSpeed" min="1" max="8" step="1" value="3"></div>
+        <h3 id="poison-h">Spindle poison</h3>
+        <div class="seg3" id="bPoison" role="group" aria-labelledby="poison-h"></div>
+        <h3>Treatments and mutations</h3>
+        <div class="bar">
+          <button class="tbtn" type="button" id="bDamage">Damage DNA (UV pulse)</button>
+          <button class="tbtn" type="button" id="bP53" aria-pressed="false">Mutate p53</button>
+          <button class="tbtn" type="button" id="bCyc" aria-pressed="false">Overexpress G1 cyclin</button>
+        </div>
+        <div class="bar">
+          <button class="tbtn" type="button" id="bScratch">Scratch the dish</button>
+          <button class="tbtn" type="button" id="bTrack">Follow another cell</button>
+          <button class="tbtn" type="button" id="bReset">Reset dish</button>
+        </div>
+        <div class="alerts" id="bAlerts" role="status"></div>
+        <h3>Challenges</h3>
+        <ul class="chal" id="bChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-scope" role="tabpanel" aria-labelledby="tabbtn-scope" hidden>
+    <h2 class="gk-sr">Part 2: Root Tip Microscope</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvScope" role="img" aria-label="Onion root tip under the microscope."></canvas></div>
+        <div class="stagebar"><span class="caption" id="scopeCap"></span></div>
+        <p class="sim-note">A drawn, stained onion root tip (chromosomes dark purple). Click or tap a cell to select it, or use Previous and Next. Real slides are messier: cells can be cut at angles and stages blend into each other. Stage proportions are typical of a root tip meristem.</p>
+      </div>
+      <aside class="card side" aria-label="Microscope controls">
+        <div class="ctl"><label for="mFocus">Fine focus <output id="mFocuso">off</output></label><input type="range" id="mFocus" min="0" max="100" step="2" value="40"></div>
+        <h3 id="mag-h">Objective</h3>
+        <div class="seg2" id="mMag" role="group" aria-labelledby="mag-h"></div>
+        <h3 id="cls-h">Selected cell: <span id="mSel">1</span></h3>
+        <div class="bar"><button class="tbtn" type="button" id="mPrev">&larr; Previous cell</button><button class="tbtn" type="button" id="mNext">Next cell &rarr;</button></div>
+        <div class="stagebtns" id="mStages" role="group" aria-labelledby="cls-h"></div>
+        <div class="bar"><button class="btn" type="button" id="mCheck">Check my calls</button><button class="tbtn" type="button" id="mShow">Show answers</button><button class="tbtn" type="button" id="mNew">New slide</button></div>
+        <div class="msg" id="mMsg" role="status"></div>
+        <table class="readouts chart" id="mTally"><caption class="gk-sr">Your tally</caption><thead><tr><th scope="col">Stage</th><th scope="col">I</th><th scope="col">P</th><th scope="col">M</th><th scope="col">A</th><th scope="col">T</th><th scope="col">Total</th></tr></thead><tbody></tbody></table>
+        <div class="ctl"><label for="mCycle">Cell cycle length <output id="mCycleo">20 h</output></label><input type="range" id="mCycle" min="12" max="30" step="1" value="20"></div>
+        <div class="abbox" id="mCalc"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 3: Counting Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Problems are randomly generated. Cells with large chromosome numbers are drawn with a few representative chromosomes; the problem text gives the real 2n. The worked solution appears line by line, with units cancelling (struck through in red) where there is arithmetic.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcNumWrap" class="ansrow">
+          <label for="calcAns" class="ans-l">Your answer</label>
+          <div class="ansbox"><input type="text" id="calcAns" inputmode="decimal" autocomplete="off" spellcheck="false"><span id="calcUnit" class="unit"></span></div>
+        </div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices" hidden></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">Type a number (units are optional). The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-sort" role="tabpanel" aria-labelledby="tabbtn-sort" hidden>
+    <h2 class="gk-sr">Part 4: Stage Games</h2>
+    <div class="rounds" id="sRounds" role="group" aria-label="Rounds"></div>
+    <div class="card">
+      <div class="sorthead">
+        <div><div class="lvl-n" id="sN"></div><h2 class="sec" id="sTitle"></h2></div>
+        <div class="sortbar">
+          <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+          <span class="timer" id="sTimer" hidden>0:00</span>
+          <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+        </div>
+      </div>
+      <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+      <p class="small" id="sHow"></p>
+      <div class="ordwrap" id="sOrder" hidden><ol class="list" id="sList" aria-label="Cards in order"></ol></div>
+      <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+      <div class="bins" id="sBins"></div>
+      <div class="bar">
+        <button class="btn" id="sCheck" type="button" hidden>Check order</button>
+        <button class="tbtn" id="sHint" type="button">Hint</button>
+        <button class="tbtn" id="sShow" type="button">Show answer</button>
+        <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+        <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <p class="small" id="sBest"></p>
+    </div>
+  </section>
+
+  <!-- PART 5 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 5: Biology in the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note">Simplified teaching scenarios. Data in graphs are illustrative, shaped like typical published results.</p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h2 class="sc-title" id="lifeTitle"></h2>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Mitosis-Walkthrough.html">Cell Cycle and Mitosis Walkthrough</a>. Simulations are teaching models with stated simplifications.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "dna", "dna2", "rna", "prot", "lipid", "carb", "atp", "elec", "water", "plant", "dna-ink", "dna2-ink", "prot-ink", "plant-ink", "mt-ink", "mt", "kin", "cen", "mem", "actin", "wall", "wall-in", "cyto", "cyto-edge", "nucleo", "nucleolus", "golgi", "vesicle", "g0", "g1", "s", "g2", "m", "dead", "cyclin", "cdk", "mpf", "gf", "uv", "drug", "p53", "rb", "e2f", "cancer", "tumor", "blood", "vessel", "bm", "skin", "skin2", "hair", "shirt", "shirt2", "bact", "bact-edge", "ftsz", "dish", "dish-edge", "medium", "field", "fwall", "fnuc", "fchrom", "fcyto", "froot", "flow1", "flow2", "hela", "frog", "egg"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=fg||onFill();ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= biology drawing kit (shared by both pages) ================= */
+let SYS={},SC={};
+function levelTag(x,y,k){const m={org:["ORGANISM",C.act1],cell:["CELL VIEW",C.act5],mol:["MOLECULE VIEW",C.act6],math:["THE MATH",C.accent],data:["THE DATA",C.act2],pop:["POPULATION",C.act3],tis:["TISSUE",C.act4],exp:["THE EXPERIMENT",C.act8]}[k]||[k,C.accent];
+  ctx.font=`700 11px ${MONO}`;const w=ctx.measureText(m[0]).width;rr(x,y-9,w+14,18,9);ctx.fillStyle=hexA(m[1],.16);ctx.fill();ctx.strokeStyle=m[1];ctx.lineWidth=1.3;ctx.stroke();txt(x+7,y+.5,m[0],{size:11,weight:700,mono:true,color:C.ink});return w+14}
+function cardBox(x,y,w,h,col,on){rr(x,y,w,h,8);ctx.fillStyle=on?hexA(col,.16):hexA(C.panel,.88);ctx.fill();ctx.strokeStyle=on?col:C.rule;ctx.lineWidth=on?2.4:1.2;ctx.stroke()}
+function tick(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function bar(x,y,w,h,f,col){rr(x,y,w,h,Math.min(4,h/2));ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){rr(x,y,w*clamp(f,0,1),h,Math.min(4,h/2));ctx.fillStyle=col;ctx.fill()}}
+function wrapCount(t,w,size,weight){ctx.font=`${weight||500} ${size}px ${FONT}`;let n=1,ln="";t.split(" ").forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){n++;ln=wd}else ln=test});return n}
+function fitTxt(x,y,t,maxW,o){o=o||{};let sz=o.size||13;ctx.font=`${o.weight||600} ${sz}px ${o.mono?MONO:FONT}`;const w=ctx.measureText(t).width;if(w>maxW)sz=Math.max(9.5,sz*maxW/w);txt(x,y,t,Object.assign({},o,{size:sz}))}
+/* worked example with rows: {c:[items,res]} chain row, {l:"text"} line row, {ans:"text"} answer row */
+function wk(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);
+  const sw=o.split||0;const sz=o.size||12.5;
+  if(sw){let ly=wrapText(W_.q,x+12,y+38,sw-22,sz+4,{size:sz,weight:600})+sz+8;(W_.given||[]).forEach((g,i)=>{const a=seg(t,.6+i*.4,1+i*.4);if(a>0)withA(a,()=>wrapText(g,x+14,ly,sw-26,sz+3,{size:sz-.5,mono:true,weight:500}));ly+=wrapCount(g,sw-26,sz-.5)*(sz+3)+6});line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2)}
+  const rx=x+sw+14,rw=w-sw-28;let cy=y+(o.cy||30);const fs=o.cfs||14;const t0=o.t0||1.2;const dt=o.dt||1.8;
+  W_.rows.forEach((r,i)=>{const p_=clamp((t-t0-i*dt)/(dt*.85),0,1);
+    if(r.c){cy+=fs+6;if(p_>0){const cw=chainWidth(r.c[0],r.c[1],{size:fs});const sc=Math.min(1,rw/cw);ctx.save();ctx.translate(rx,cy);ctx.scale(sc,sc);chain(0,0,r.c[0],r.c[1],p_,{size:fs});ctx.restore()}cy+=fs+(o.rowGap||16)}
+    else if(r.l){cy+=12;if(p_>0)withA(p_,()=>fitTxt(rx,cy,r.l,rw,{size:o.lfs||13.5,weight:600,mono:true}));cy+=(o.lh||16)}
+    else if(r.ans){cy+=16;if(p_>0)withA(p_,()=>{ctx.font=`700 15px ${MONO}`;const tw=Math.min(rw,ctx.measureText(r.ans).width);rr(rx-4,cy-14,tw+14,28,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(rx+3,cy,r.ans,rw-6,{size:15,weight:700,mono:true})});cy+=18}});
+  if(W_.miss){const tm=t0+W_.rows.length*dt+.4;const a=seg(t,tm,tm+.6);if(a>0){const mw=o.missFull?w-24:rw+8;const mx=o.missFull?x+12:rx-4;const n=wrapCount("Common mistake: "+W_.miss,mw-16,sz-1);const mh=n*(sz+2)+10;
+    withA(a,()=>{rr(mx,y+h-mh-8,mw,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,mx+8,y+h-mh-8+5+(sz)/2+1,mw-16,sz+2,{size:sz-1})})}}
+  return t}
+function tryBox(x,y,w,t,o){o=o||{};const n=wrapCount("Now you try: "+t,w-16,12.5);const h=n*16+12;rr(x,y,w,h,6);ctx.fillStyle=C["gold-wash"];ctx.fill();ctx.strokeStyle=C.gold;ctx.lineWidth=1.4;ctx.stroke();wrapText("Now you try: "+t,x+8,y+14,w-16,16,{size:12.5,weight:600});return h}
+function noteBox(x,y,w,t,col,o){o=o||{};const sz=o.size||12.5;const n=wrapCount(t,w-16,sz);const h=n*(sz+3.5)+12;rr(x,y,w,h,6);ctx.fillStyle=hexA(col||C.accent,.12);ctx.fill();ctx.strokeStyle=col||C.accent;ctx.lineWidth=1.3;ctx.stroke();wrapText(t,x+8,y+6+sz/2+2,w-16,sz+3.5,{size:sz,weight:o.weight||500});return h}
+function plotPts(g,pts,col,lw,dash){if(!pts.length)return;ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-3,g.w+2,g.h+6);ctx.clip();ctx.beginPath();pts.forEach((p,i)=>{const X=g.X(p[0]),Y=g.Y(p[1]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function stepPts(g,pts,col,lw){const q=[];pts.forEach((p,i)=>{if(i)q.push([p[0],pts[i-1][1]]);q.push(p)});plotPts(g,q,col,lw)}
+/* ---------- molecules ---------- */
+function dnaLadder(x,y,len,ang,T,o){o=o||{};const n=Math.max(4,Math.floor(len/7));const ca=Math.cos(ang),sa=Math.sin(ang);const amp=o.amp||7;const c1=o.col||C.dna,c2=o.col2||mix(o.col||C.dna,C.panel,.35);
+  for(let i=0;i<=n;i++){const u=i/n*len;const ph=u/12+(o.spin||0)*T;const a1=Math.sin(ph)*amp,a2=-a1;const X=x+ca*u,Y=y+sa*u;line(X-sa*a1,Y+ca*a1,X-sa*a2,Y+ca*a2,hexA(C["ink-soft"],.5),1.2)}
+  [1,-1].forEach((sg,k)=>{ctx.beginPath();for(let i=0;i<=n*3;i++){const u=i/(n*3)*len;const ph=u/12+(o.spin||0)*T;const a=sg*Math.sin(ph)*amp;const X=x+ca*u-sa*a,Y=y+sa*u+ca*a;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=k?c2:c1;ctx.lineWidth=o.lw||3;ctx.stroke()})}
+function histone(x,y,r,o){o=o||{};circ(x,y,r,o.col||hexA(C.prot,.75),C["prot-ink"],1.2);ctx.beginPath();ctx.arc(x,y,r+2.5,Math.PI*.15,Math.PI*1.85);ctx.strokeStyle=o.dna||C.dna;ctx.lineWidth=2.6;ctx.stroke();ctx.beginPath();ctx.arc(x,y,r+5,Math.PI*1.2,Math.PI*2.75);ctx.stroke()}
+function protBlob(x,y,r,col,seed,T,o){o=o||{};blobPath(x,y,r,seed||1,T||0,o.amp==null?.1:o.amp);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=o.edge||hexA(C.ink,.45);ctx.lineWidth=1.2;ctx.stroke();if(o.t)txt(x,y+.5,o.t,{size:o.size||11,weight:700,align:"center",mono:true,color:o.tc||inkOn(col)})}
+/* ---------- cell parts ---------- */
+function centrosome(x,y,sz,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;withA(a,()=>{glow(x,y,sz*1.9,C.cen,.35);const r=o.rot||0;ctx.save();ctx.translate(x,y);ctx.rotate(r);rr(-sz*.75,-sz*.28,sz*1.5,sz*.56,2);fillStroke(C.cen,hexA(C.ink,.5),1);rr(-sz*.28+sz*.5,-sz*.75,sz*.56,sz*1.5,2);fillStroke(mix(C.cen,C.panel,.25),hexA(C.ink,.5),1);ctx.restore()})}
+function memLine(pts,o){o=o||{};poly(pts,o.col||C.mem,o.lw||3.4,o.dash)}
+/* animal cell outline with optional furrow pinch f (0..1) and elongation */
+function cellPath(x,y,rx,ry,f,wob,T){ctx.beginPath();const N=72;for(let i=0;i<=N;i++){const th=i/N*TAU;const c=Math.cos(th),s=Math.sin(th);const g=Math.exp(-(c*c)/.05);const w=1+(wob||0)*Math.sin(th*3+(T||0)*1.3)*.02;const X=x+rx*c*w,Y=y+ry*s*(1-(f||0)*.93*g)*w;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function animalCell(x,y,rx,ry,o){o=o||{};cellPath(x,y,rx,ry,o.f||0,o.wob==null?1:o.wob,o.T||0);ctx.fillStyle=o.fill||C.cyto;ctx.fill();ctx.strokeStyle=o.edge||C.mem;ctx.lineWidth=o.lw||3.2;ctx.stroke();if(o.hi){ctx.strokeStyle=hexA(o.hi,.7);ctx.lineWidth=6;ctx.globalAlpha*=.5;ctx.stroke();ctx.globalAlpha/=.5}}
+function nucleusDraw(x,y,r,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0.01)return;withA(a,()=>{circ(x,y,r,hexA(C.nucleo,.95));
+    if(o.frag){ctx.setLineDash([10*(1-o.frag)+3,8*o.frag+3])}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.strokeStyle=C.mem;ctx.lineWidth=2.4;ctx.stroke();ctx.beginPath();ctx.arc(x,y,r-4,0,TAU);ctx.lineWidth=1.4;ctx.stroke();ctx.setLineDash([]);
+    if(o.pores){for(let i=0;i<10;i++){const t=i/10*TAU+.2;circ(x+Math.cos(t)*(r-2),y+Math.sin(t)*(r-2),2.2,C.panel,C.mem,1)}}});
+  if((o.nl==null?1:o.nl)>0)withA(a*(o.nl==null?1:o.nl),()=>{blobPath(x+r*.25,y-r*.2,r*.22,3,0,.12);ctx.fillStyle=hexA(C.nucleolus,.85);ctx.fill()})}
+/* one chromatid: centromere at (x,y), (ux,uy) points toward the pole its kinetochore faces.
+   arms a,b (condensed length), bend 0..1 trails arms behind, c condensation 0..1 */
+function chromatid(x,y,ux,uy,a,b,bend,c,col,w,seed,T,o){o=o||{};const px=-uy,py=ux;const th=bend*1.05;const cs=Math.cos(th),sn=Math.sin(th);const stretch=1+1.7*(1-c);
+  const lw=lerp(1.5,w,smooth(c));ctx.lineCap="round";ctx.lineJoin="round";
+  [[a,1],[b,-1]].forEach((arm,k)=>{const L=arm[0]*stretch;const dx=arm[1]*px*cs-ux*sn,dy=arm[1]*py*cs-uy*sn;ctx.beginPath();const N=14;
+    for(let i=0;i<=N;i++){const u=i/N*L;const wig=(1-c)*7*Math.sin(u*.21+seed*3+k*2+T*.7)+(1-c)*3*Math.sin(u*.53+seed);const X=x+dx*u-dy*wig,Y=y+dy*u+dx*wig;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}
+    ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.stroke();if(c>.6){ctx.strokeStyle=hexA("#ffffff",.25*(c-.6)/.4);ctx.lineWidth=Math.max(1,lw*.28);ctx.stroke()}});
+  ctx.lineCap="butt";const kx=x+ux*lw*.45,ky=y+uy*lw*.45;if(o.kin&&c>.5)withA((c-.5)*2,()=>{circ(kx,ky,Math.max(2.5,lw*.42),C.kin,C.panel,1)});return [kx,ky]}
+/* replicated chromosome: two sisters joined at the centromere */
+function repChrom(x,y,ux,uy,a,b,c,col,w,seed,T,o){o=o||{};const g=(o.gap==null?w*.62:o.gap);const k1=chromatid(x+ux*g/2,y+uy*g/2,ux,uy,a,b,o.bend||0,c,col,w,seed,T,{kin:o.kin});const k2=chromatid(x-ux*g/2,y-uy*g/2,-ux,-uy,a,b,o.bend||0,c,col,w,seed+.7,T,{kin:o.kin});
+  if(o.cohesin!==false&&c>.4){const px=-uy,py=ux;withA((c-.4)/.6*(o.coA==null?1:o.coA),()=>{[-.6,0,.6].forEach(f=>{const off=f*Math.min(a,b)*.5;circ(x+px*off,y+py*off,1.9,hexA(C.ink,.6))})})}
+  return [k1,k2]}
+/* standard teaching karyotype: n2 chromosomes (pairs of blue and violet homologs) */
+function karyo(n2){const out=[];const cens=[.5,.36,.22,.45,.3,.5,.4,.25];for(let k=0;k<n2/2;k++){const L=Math.max(.38,1-k*.17);for(let h=0;h<2;h++)out.push({L,cen:cens[k%8],col:h?"dna2":"dna",pair:k,hom:h})}return out}
+/* ---------- the master mitosis drawing ----------
+   ph: 0 late G2 · 0-1 prophase · 1-2 prometaphase · 2-3 metaphase · 3-4 anaphase · 4-5 telophase · 5-6 cytokinesis */
+function mitosisCell(cx,cy,s,ph,o){o=o||{};const T=o.T||0;const ch=o.chroms||karyo(4);const n=ch.length;const poison=o.poison||null;
+  const pr=seg(ph,0,1),pm=seg(ph,1,2),an=seg(ph,3,3.9),tel=seg(ph,4,5),cy_=seg(ph,4.3,5.85);
+  let cond=ph<1?lerp(.14,1,smooth(pr)):ph<4?1:lerp(1,.18,smooth(tel));if(o.cond!=null)cond=o.cond;
+  const elong=smooth(seg(ph,3,4.2));const RX=s*(1+.24*elong),RY=s*(1-.08*elong);
+  /* pole positions */
+  const e=smooth(seg(ph,0,1));const Rp=lerp(s*.78,s*.74,e)+elong*s*.2;const th1=lerp(-Math.PI/2-.18,-Math.PI,e),th2=lerp(-Math.PI/2+.18,0,e);
+  const P1=[cx+Math.cos(th1)*Rp,cy+Math.sin(th1)*Rp*(ph<1?.9:1)],P2=[cx+Math.cos(th2)*Rp,cy+Math.sin(th2)*Rp*(ph<1?.9:1)];
+  const split=ph>=5.85;const sp=seg(ph,5.85,6)*s*.12;
+  /* cell body */
+  if(!split){animalCell(cx,cy,RX,RY,{f:cy_,T,fill:o.fill,edge:o.edge,hi:o.hi})}
+  else{[-1,1].forEach(d=>{const X=cx+d*(RX*.5+sp);cellPath(X,cy,RX*.5,RY*.78,0,1,T);ctx.fillStyle=o.fill||C.cyto;ctx.fill();ctx.strokeStyle=C.mem;ctx.lineWidth=3.2;ctx.stroke()})}
+  /* contractile ring */
+  if(cy_>0&&!split){const yy=RY*(1-cy_*.93);withA(Math.min(1,cy_*3),()=>{for(let i=-2;i<=2;i++){circ(cx+i*3.4,cy-yy+3,2.4,C.actin);circ(cx+i*3.4,cy+yy-3,2.4,C.actin)}})}
+  /* nucleus (interphase / prophase) */
+  const envA=ph<1?1:ph<1.45?1-seg(ph,1,1.45):0;const frag=seg(ph,.95,1.45);const NR=s*.56;
+  if(envA>0)nucleusDraw(cx,cy,NR,{a:envA,frag:frag>0?frag:0,nl:1-smooth(seg(ph,.2,.8))});
+  if(ph>1&&ph<1.6){for(let i=0;i<9;i++){const t=i/9*TAU+.3;const r=NR+seg(ph,1,1.6)*s*.3;withA(.7*(1-seg(ph,1.2,1.6)),()=>{ctx.beginPath();ctx.arc(cx+Math.cos(t)*r*.2,cy+Math.sin(t)*r*.2,r*.8,t-.12,t+.12);ctx.strokeStyle=C.mem;ctx.lineWidth=2.2;ctx.stroke()})}}
+  /* chromosome positions */
+  const Lc0=s*.42;const sumL=ch.reduce((a,c_)=>a+c_.L*Lc0+s*.05,0);const plate=s*1.62;const lsc=Math.min(1,plate/sumL);let acc=-Math.min(plate,sumL)/2;
+  const ys=ch.map(c_=>{const L=c_.L*Lc0*lsc;const y0=acc+L*c_.cen+s*.025*lsc;acc+=L+s*.05*lsc;return y0});
+  const pos=ch.map((c_,i)=>{const r1=rnd(i*7.3+1),r2=rnd(i*3.1+5),r3=rnd(i*5.7+2);
+    const ip=[cx+(r1-.5)*NR*1.05,cy+(r2-.5)*NR*1.05];const iang=r3*TAU;
+    const my=cy+ys[i];const osc=Math.sin(T*2.2+i*1.7)*s*.025;const mp=[cx+osc,my];
+    const att=1.12+.62*i/Math.max(1,n-1);const at=ph>=att;let p=ip,ang=iang;
+    if(ph>=1&&ph<2.2){const m=smooth(seg(ph,att,att+.55));const jig=[Math.sin(T*3+i)*s*.03*(1-m),Math.cos(T*2.6+i*2)*s*.03*(1-m)];p=[lerp(ip[0],mp[0],m)+jig[0],lerp(ip[1],mp[1],m)+jig[1]];ang=lerp(iang,0,m)}
+    else if(ph>=2.2)p=mp,ang=0;
+    if(poison==="colch"&&ph>=1){p=[ip[0]+Math.sin(T*1.3+i)*3,ip[1]+Math.cos(T*1.1+i)*3];ang=iang}
+    if(poison==="taxol"&&ph>=1){const m=.45;p=[lerp(ip[0],mp[0],m)+Math.sin(T*.6+i)*2,lerp(ip[1],mp[1],m)];ang=iang*.5}
+    return {p,ang,att:at&&!poison,c_}});
+  /* spindle */
+  const spA=poison==="colch"?0:(ph<.25?0:ph<4?smooth(seg(ph,.25,.9)):1-smooth(seg(ph,4,4.9)));
+  const showMT=o.mt!==false;
+  if(showMT&&spA>0&&!split)withA(spA,()=>{
+    [P1,P2].forEach((P_,k)=>{const dir=k?1:-1;for(let i=0;i<7;i++){const a=(dir>0?0:Math.PI)+(i-3)*.42+Math.PI;const L=s*(.18+.08*Math.sin(T*2+i))*spA;line(P_[0],P_[1],P_[0]+Math.cos(a)*L,P_[1]+Math.sin(a)*L,hexA(C.mt,.7),1.4)}});
+    if(ph>=.6&&poison!=="colch"){const ov=ph<3?s*.1:s*(.1-.06*an);for(let i=0;i<3;i++){const dy=(i-1)*s*.16;[[P1,1],[P2,-1]].forEach(q=>{const P_=q[0],d=q[1];const ex=cx+d*ov;const L=seg(ph,.6,1.4);line(P_[0],P_[1],lerp(P_[0],ex,L),lerp(P_[1],cy+dy,L),hexA(C.mt,.8),1.6)})}
+      if(ph>=3&&ph<4.6)withA(.9,()=>{for(let i=0;i<3;i++){const dy=(i-1)*s*.16;circ(cx,cy+dy,2.4,C.prot)}})}});
+  /* chromosomes + kinetochore MTs */
+  const w=Math.max(3.2,s*.075*Math.sqrt(lsc));const Lc=Lc0*lsc;
+  ctx.save();if(ph<.95){ctx.beginPath();ctx.arc(cx,cy,NR-3,0,TAU);ctx.clip()}else if(ph>4.6){ctx.beginPath();[-1,1].forEach(d=>{const X=cx+d*(Rp*.64)+(split?d*sp:0);ctx.moveTo(X+s*.34,cy);ctx.arc(X,cy,s*.34+lerp(40,0,seg(ph,4.6,5)),0,TAU)});ctx.clip()}
+  pos.forEach((q,i)=>{const c_=q.c_;const a=Lc*c_.L*c_.cen,b=Lc*c_.L*(1-c_.cen);const col=C[c_.col];const ux=Math.cos(q.ang),uy=Math.sin(q.ang);
+    if(ph<3||poison){const k=repChrom(q.p[0],q.p[1],ux,uy,a,b,cond,col,w,i*1.9,T,{kin:ph>=.7,gap:lerp(1.2,w*.62,cond)});
+      if(showMT&&ph>=1.05&&!poison){const lft=ux>=0?k[1]:k[0],rgt=ux>=0?k[0]:k[1];
+        if(q.att){line(P1[0],P1[1],lft[0],lft[1],C.mt,1.9);line(P2[0],P2[1],rgt[0],rgt[1],C.mt,1.9)}
+        else{const L=.45+.45*Math.sin(T*3.2+i*2);line(P1[0],P1[1],lerp(P1[0],lft[0],L),lerp(P1[1],lft[1],L),hexA(C.mt,.75),1.5,[4,3])}}
+      if(showMT&&poison==="taxol"&&ph>=1){const k2=k;line(P1[0],P1[1],k2[1][0],k2[1][1],hexA(C.mt,.9),1.8)}}
+    else{const d=smooth(an);const gap=w*.62;const tgt=Rp*.62;const yy=lerp(q.p[1],cy+(q.p[1]-cy)*.5,d);const bend=Math.min(1,d*2.4)*(1-.5*tel);
+      [[-1,P1],[1,P2]].forEach((sd,k)=>{const xx=lerp(cx+sd[0]*gap/2,cx+sd[0]*tgt,d)+(split?sd[0]*sp:0);const kp=chromatid(xx,yy,sd[0],0,a,b,bend,cond,col,w,i*1.9+k*.7,T,{kin:cond>.5});
+        if(showMT&&ph<4.7){withA(1-smooth(seg(ph,4,4.7)),()=>{line(sd[1][0],sd[1][1],kp[0],kp[1],C.mt,1.9);if(o.subunits&&ph<4){for(let j=0;j<2;j++){const pp=P(T*1.4+j*.5+i*.3,1);circ(kp[0]+sd[0]*-8*pp+(j?3:-3),kp[1]-6-pp*10,1.8,hexA(C.mt,1-pp))}}})}})}});
+  ctx.restore();
+  /* centrosomes */
+  if(o.nocent){}
+  else if(!split&&poison!=="colch"||ph<1){centrosome(P1[0],P1[1],s*.065,{rot:.3});if(ph>.02)centrosome(P2[0],P2[1],s*.065,{rot:-.4})}
+  else if(poison==="colch"){centrosome(P1[0],P1[1],s*.065,{rot:.3});centrosome(P2[0],P2[1],s*.065,{rot:-.4})}
+  else if(split){[-1,1].forEach(d=>centrosome(cx+d*(RX*.5+sp)+d*s*.3,cy-s*.3,s*.055,{rot:d}))}
+  /* daughter nuclei */
+  if(ph>4.15){const ra=smooth(seg(ph,4.15,4.8));[-1,1].forEach(d=>{const X=cx+d*(Rp*.64)+(split?d*sp:0);withA(ra,()=>{ctx.beginPath();ctx.arc(X,cy,s*.34,0,TAU);ctx.fillStyle=hexA(C.nucleo,.35);ctx.fill();ctx.strokeStyle=C.mem;ctx.lineWidth=2.2;ctx.setLineDash(ra<1?[8*ra+2,6*(1-ra)+2]:[]);ctx.stroke();ctx.setLineDash([])});
+    if(ph>4.8)withA(seg(ph,4.8,5.4)*.85,()=>{blobPath(X+s*.1,cy-s*.08,s*.07,2,0,.12);ctx.fillStyle=hexA(C.nucleolus,.85);ctx.fill()})})}
+  return {P1,P2,RX,RY,cond}}
+const STAGE_NAMES=["Late G2 (interphase)","Prophase","Prometaphase","Metaphase","Anaphase","Telophase","Cytokinesis"];
+function stageOf(ph){return ph<.05?0:ph<1?1:ph<2?2:ph<3?3:ph<4?4:ph<5?5:6}
+/* interphase cell with chromatin; rep = replicated fraction 0..1 (S phase), cent 1 or 2 */
+function interCell(cx,cy,s,o){o=o||{};const T=o.T||0;const ch=o.chroms||karyo(4);animalCell(cx,cy,s,s*.94,{T,fill:o.fill,hi:o.hi});const NR=s*.56;nucleusDraw(cx,cy,NR,{nl:1,pores:o.pores});
+  const rep=o.rep||0;ctx.save();ctx.beginPath();ctx.arc(cx,cy,NR-3,0,TAU);ctx.clip();
+  ch.forEach((c_,i)=>{const r1=rnd(i*7.3+1),r2=rnd(i*3.1+5),r3=rnd(i*5.7+2);const x=cx+(r1-.5)*NR*1.05,y=cy+(r2-.5)*NR*1.05;const ux=Math.cos(r3*TAU),uy=Math.sin(r3*TAU);const Lc=s*.42;const a=Lc*c_.L*c_.cen,b=Lc*c_.L*(1-c_.cen);
+    const done=rep>=(i+1)/ch.length?1:rep>i/ch.length?(rep*ch.length-i):0;const col=C[c_.col];
+    if(done<=0)chromatid(x,y,ux,uy,a,b,0,.12,col,s*.075,i*1.9,T);
+    else{repChrom(x,y,ux,uy,a,b,.12,col,s*.075,i*1.9,T,{gap:2.2+done*1.5,cohesin:false});if(done<1&&o.forks){circ(x,y,4,C.atp,C.ink,1)}}});
+  ctx.restore();
+  const cA=[cx-s*.2,cy-s*.74],cB=[cx+s*.2,cy-s*.74];if((o.cent||1)===1)centrosome(cx,cy-s*.74,s*.065,{rot:.2});else{centrosome(cA[0],cA[1],s*.065,{rot:.2});centrosome(cB[0],cB[1],s*.065,{rot:-.5})}}
+/* plant cell dividing: ph same scale; cell plate grows 4.2..6 */
+function plantCell(cx,cy,w,h,ph,o){o=o||{};const T=o.T||0;rr(cx-w/2-5,cy-h/2-5,w+10,h+10,6);ctx.fillStyle=C.wall;ctx.fill();rr(cx-w/2,cy-h/2,w,h,4);ctx.fillStyle=o.fill||C.cyto;ctx.fill();ctx.strokeStyle=C.mem;ctx.lineWidth=2;ctx.stroke();
+  const s=Math.min(w,h)*.5;ctx.save();rr(cx-w/2,cy-h/2,w,h,4);ctx.clip();const m=mitosisCell(cx,cy,s*.95,Math.min(ph,5.6),{T,chroms:o.chroms,fill:"rgba(0,0,0,0)",edge:"rgba(0,0,0,0)",mt:o.mt,nocent:true});ctx.restore();
+  /* cell plate */
+  const g=seg(ph,4.3,5.9);if(g>0){const L=(h/2)*g;for(let i=0;i<12;i++){const yy=cy+(i/11-.5)*h*1.0;if(Math.abs(yy-cy)<=L+6){const fused=Math.abs(yy-cy)<L-8;circ(cx+Math.sin(i*2.3)*2,yy,fused?0:4,C.vesicle,C.golgi,1)}}
+    rr(cx-3,cy-L,6,2*L,3);ctx.fillStyle=mix(C.wall,C.vesicle,.4);ctx.fill();
+    for(let i=0;i<5;i++){const pp=P(T*.5+i/5,1);const side=i%2?1:-1;const sy=cy+(rnd(i)-.5)*L*1.6;circ(cx+side*(40-36*pp),sy,3.4,C.vesicle,C.golgi,1)}
+    if(g>.97){line(cx,cy-h/2,cx,cy+h/2,C.wall,6)}}
+  return m}
+/* ---------- organisms and tissues ---------- */
+function person(x,y,h,o){o=o||{};const hr=h*.11;circ(x,y-h+hr,hr,C[o.skin||"skin"],hexA(C.ink,.35),1);circ(x,y-h+hr*.75,hr*1.02,null);ctx.beginPath();ctx.arc(x,y-h+hr*.85,hr*1.04,Math.PI,TAU);ctx.fillStyle=C.hair;ctx.fill();
+  rr(x-h*.15,y-h+hr*2.15,h*.3,h*.42,h*.07);ctx.fillStyle=C[o.shirt||"shirt"];ctx.fill();rr(x-h*.12,y-h*.36,h*.1,h*.36,h*.04);ctx.fillStyle=hexA(C.ink,.55);ctx.fill();rr(x+h*.02,y-h*.36,h*.1,h*.36,h*.04);ctx.fill();
+  line(x-h*.15,y-h+hr*2.4,x-h*.24,y-h*.42,C[o.shirt||"shirt"],h*.07);line(x+h*.15,y-h+hr*2.4,x+h*.24+(o.wave?Math.sin((o.T||0)*3)*h*.05:0),y-h*.42,C[o.shirt||"shirt"],h*.07)}
+function bacterium(x,y,len,r,o){o=o||{};const f=o.f||0;/* f: septum 0..1 */const hl=len/2-r;const pin=X=>1-f*.92*Math.exp(-(X*X)/(2*(r*.45)*(r*.45)));
+  ctx.beginPath();const N=40;for(let i=0;i<=N;i++){const X=-hl+i/N*2*hl;const Y=-r*pin(X);i?ctx.lineTo(x+X,y+Y):ctx.moveTo(x+X,y+Y)}
+  ctx.arc(x+hl,y,r,-Math.PI/2,Math.PI/2);for(let i=0;i<=N;i++){const X=hl-i/N*2*hl;ctx.lineTo(x+X,y+r*pin(X))}ctx.arc(x-hl,y,r,Math.PI/2,Math.PI*1.5);ctx.closePath();
+  ctx.fillStyle=o.fill||C.bact;ctx.fill();ctx.strokeStyle=C["bact-edge"];ctx.lineWidth=2.4;ctx.stroke()}
+function plasmidLoop(x,y,rx,ry,col,T,o){o=o||{};ctx.beginPath();for(let i=0;i<=60;i++){const th=i/60*TAU;const w=1+.08*Math.sin(th*5+T);const X=x+Math.cos(th)*rx*w,Y=y+Math.sin(th)*ry*w;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.strokeStyle=col;ctx.lineWidth=o.lw||3;ctx.stroke()}
+function onionBulb(x,y,s,T){ell(x,y,s*.55,s*.48,0,C.froot,C.fwall,2);ctx.beginPath();ctx.moveTo(x-s*.18,y-s*.4);ctx.quadraticCurveTo(x,y-s*1.05,x+s*.05,y-s*1.2);ctx.quadraticCurveTo(x+s*.08,y-s*.9,x+s*.18,y-s*.4);ctx.fillStyle=C.plant;ctx.fill();
+  for(let i=0;i<5;i++){const a=-.6+i*.3;const L=s*(.7+.15*Math.sin(i*2.1));ctx.beginPath();ctx.moveTo(x+(i-2)*s*.08,y+s*.42);ctx.quadraticCurveTo(x+(i-2)*s*.14+Math.sin(T+i)*2,y+s*.42+L*.5,x+(i-2)*s*.22,y+s*.42+L);ctx.strokeStyle=C.fwall;ctx.lineWidth=2.4;ctx.stroke()}}
+function petri(x,y,r,o){o=o||{};circ(x,y,r+5,hexA(C["dish-edge"],.35),C["dish-edge"],2);circ(x,y,r,o.fill||C.medium,C["dish-edge"],1.4)}
+function tinyCell(x,y,r,col,o){o=o||{};blobPath(x,y,r,o.seed||1,o.T||0,.12);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=o.edge||hexA(C.ink,.45);ctx.lineWidth=1;ctx.stroke();if(o.nuc!==false)circ(x,y,r*.38,hexA(C.dna,.55))}
+/* ---------- cycle wheel ---------- */
+const PHC={G0:"g0",G1:"g1",S:"s",G2:"g2",M:"m"};
+function wheel(x,y,r,segs,o){o=o||{};let a0=-Math.PI/2;const out={};const tot=segs.reduce((a,s)=>a+s[1],0);
+  segs.forEach(sg=>{const a1=a0+sg[1]/tot*TAU;ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,r,a0,a1);ctx.closePath();const on=o.hi===sg[0];ctx.fillStyle=hexA(C[sg[2]],on?.85:.5);ctx.fill();ctx.strokeStyle=C.panel;ctx.lineWidth=2.5;ctx.stroke();
+    const am=(a0+a1)/2;const lr=r*(o.lr||.68);out[sg[0]]=[a0,a1];if(sg[1]/tot>.04)txt(x+Math.cos(am)*lr,y+Math.sin(am)*lr,sg[0],{size:o.fs||14,weight:700,align:"center",mono:true,color:inkOn(mix(C[sg[2]],C.panel,on?.15:.5))});a0=a1});
+  circ(x,y,r*(o.hole||.36),C.panel,C.rule,1.2);if(o.ptr!=null){const a=o.ptr;arrow(x,y,x+Math.cos(a)*r*.98,y+Math.sin(a)*r*.98,C.ink,2.6)}return out}
+function phaseBadge(x,y,t,colKey){return chipText(x,y,t,C[colKey],inkOn(C[colKey]))}
+/* small arrow with a label above */
+function flowArrow(x1,y1,x2,y2,t,col,o){o=o||{};arrow(x1,y1,x2,y2,col||C["ink-soft"],o.lw||2);if(t)txt((x1+x2)/2,(y1+y2)/2-(o.dy||10),t,{size:o.size||11.5,weight:600,align:"center",color:o.tc||C["ink-soft"]})}
+function lamp(x,y,r,state,lab){const col=state==="pass"?C.good:state==="hold"?C.warn:state==="fail"?C.bad:C["ink-soft"];circ(x,y,r,hexA(col,.25),col,2);circ(x,y,r*.55,col);if(state==="hold"){rr(x-r*.32,y-r*.28,r*.22,r*.56,1);ctx.fillStyle=C.panel;ctx.fill();rr(x+r*.1,y-r*.28,r*.22,r*.56,1);ctx.fill()}
+  else if(state==="pass")tick(x,y,r*.32,C.panel);else if(state==="fail")crossMark(x,y,r*.28,C.panel);if(lab)txt(x+r+6,y,lab,{size:12,weight:600})}
+/* stained root-tip cell (brightfield look, same in both themes) */
+function rootCell(x,y,w,h,st,seed,o){o=o||{};rr(x,y,w,h,2);ctx.fillStyle=C.fcyto;ctx.fill();ctx.strokeStyle=C.fwall;ctx.lineWidth=1.6;ctx.stroke();const cx=x+w/2,cy=y+h/2;const s=Math.min(w,h)*.42;const cc=C.fchrom;ctx.lineCap="round";
+  const R=i=>rnd(seed*13.7+i*3.3);
+  if(st==="I"){circ(cx+(R(1)-.5)*w*.15,cy+(R(2)-.5)*h*.12,s*.62,C.fnuc,hexA(cc,.5),1);for(let i=0;i<5;i++)circ(cx+(R(i+3)-.5)*s*.8,cy+(R(i+9)-.5)*s*.8,1.3,hexA(cc,.6));circ(cx+s*.15,cy-s*.1,s*.17,hexA(cc,.75))}
+  else if(st==="P"){circ(cx,cy,s*.68,hexA(C.fnuc,.8),hexA(cc,.4),1);for(let i=0;i<6;i++){const a=R(i)*TAU;const x0=cx+(R(i+20)-.5)*s*.7,y0=cy+(R(i+30)-.5)*s*.7;ctx.beginPath();ctx.moveTo(x0,y0);ctx.quadraticCurveTo(x0+Math.cos(a+1)*s*.3,y0+Math.sin(a+1)*s*.3,x0+Math.cos(a)*s*.45,y0+Math.sin(a)*s*.45);ctx.strokeStyle=cc;ctx.lineWidth=2;ctx.stroke()}}
+  else if(st==="M"){for(let i=0;i<7;i++){const px=cx+(i-3)*w*.085,py=cy+(R(i)-.5)*3;line(px+(R(i+5)-.5)*2,py-h*.07,px,py+h*.07,cc,3)}}
+  else if(st==="A"){[-1,1].forEach(d=>{for(let i=0;i<5;i++){const py=cy+d*h*.22;const px=cx+(i-2)*w*.11;ctx.beginPath();ctx.moveTo(px-3,py+d*h*.1);ctx.lineTo(px,py);ctx.lineTo(px+3,py+d*h*.1);ctx.strokeStyle=cc;ctx.lineWidth=2.2;ctx.stroke()}})}
+  else if(st==="T"){[-1,1].forEach(d=>{const py=cy+d*h*.26;ell(cx,py,w*.3,h*.12,0,hexA(C.fnuc,.8),hexA(cc,.5),1);for(let i=0;i<5;i++)circ(cx+(i-2)*w*.1,py+(R(i+d+5)-.5)*h*.08,1.8,cc)});line(x+3,cy,x+w-3,cy,hexA(C.fwall,.9),1.6)}
+  ctx.lineCap="butt";
+  if(o.sel){rr(x-2,y-2,w+4,h+4,3);ctx.strokeStyle=o.selCol||C.accent;ctx.lineWidth=3.2;ctx.stroke()}
+  if(o.mark){rr(x+1,y+1,w-2,h-2,2);ctx.strokeStyle=o.mark;ctx.lineWidth=2.6;ctx.setLineDash([4,3]);ctx.stroke();ctx.setLineDash([])}}
+/* cultured cell for dish scenes */
+function fibro(x,y,r,ang,col,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.beginPath();ctx.moveTo(-r*1.6,0);ctx.quadraticCurveTo(-r*.4,-r*.9,r*.5,-r*.55);ctx.quadraticCurveTo(r*1.7,-r*.1,r*1.5,r*.2);ctx.quadraticCurveTo(r*.3,r*.9,-r*.6,r*.5);ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=o.edge||hexA(C.ink,.4);ctx.lineWidth=1;ctx.stroke();circ(0,0,r*.36,hexA(C.dna,.6));ctx.restore()}
+/* flow cytometry style histogram */
+function histo(g,bins,col,o){o=o||{};const bw=(g.x1-g.x0)/bins.length;bins.forEach((v,i)=>{const x0=g.X(g.x0+i*bw),x1=g.X(g.x0+(i+1)*bw);const y=g.Y(Math.min(v,g.y1));ctx.fillStyle=hexA(col,o.a||.55);ctx.fillRect(x0,y,x1-x0+.5,g.y+g.h-y)});
+  ctx.beginPath();bins.forEach((v,i)=>{const X=g.X(g.x0+(i+.5)*bw),Y=g.Y(Math.min(v,g.y1));i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke()}
+function flowBins(f1,fS,f2,n,o){o=o||{};const out=[];const N=n||60;const sd=o.sd||.09;for(let i=0;i<N;i++){const x=1+i/(N-1)*4.0;/* DNA content from 1C .. 5C, peaks at 2 and 4 */
+  const g1=f1*Math.exp(-((x-2)*(x-2))/(2*sd*sd*4))/(sd*2),g2=f2*Math.exp(-((x-4)*(x-4))/(2*sd*sd*16))/(sd*4);const s=(x>2.1&&x<3.9)?fS/1.8:fS/1.8*Math.exp(-Math.pow(Math.min(Math.abs(x-2.1),Math.abs(x-3.9))/.08,2));out.push(g1+g2+s+(o.sub&&x<1.9?o.sub*Math.exp(-((x-1.5)*(x-1.5))/.08):0))}return out}
+
+function cube(x,y,L,o){o=o||{};const d=L*.45;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+L,y);ctx.lineTo(x+L,y-L);ctx.lineTo(x,y-L);ctx.closePath();ctx.fillStyle=o.front||C.cyto;ctx.fill();ctx.strokeStyle=C.mem;ctx.lineWidth=2.4;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x,y-L);ctx.lineTo(x+d,y-L-d);ctx.lineTo(x+L+d,y-L-d);ctx.lineTo(x+L,y-L);ctx.closePath();ctx.fillStyle=mix(o.front||C.cyto,C.panel,.25);ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x+L,y);ctx.lineTo(x+L+d,y-d);ctx.lineTo(x+L+d,y-L-d);ctx.lineTo(x+L,y-L);ctx.closePath();ctx.fillStyle=mix(o.front||C.cyto,C.ink,.08);ctx.fill();ctx.stroke()}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("b1-mitosis-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("b1-mitosis-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+let DT=0;
+/* ---------------- small SVG drawings for buttons, bins and cards ---------------- */
+function svgWrap(s,vb){return `<svg viewBox="${vb||"0 0 56 46"}" aria-hidden="true">${s}</svg>`}
+function svX(x,y,col,h){h=h||8;return `<path d="M${x-2.5} ${y-h/2} L${x-.6} ${y} L${x-2.5} ${y+h/2} M${x+2.5} ${y-h/2} L${x+.6} ${y} L${x+2.5} ${y+h/2}" stroke="${col}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`}
+function svCell(rx,ry,extra){return `<ellipse cx="28" cy="23" rx="${rx||20}" ry="${ry||19}" fill="var(--cyto)" stroke="var(--mem)" stroke-width="2"/>`+(extra||"")}
+function svPole(x,y){return `<rect x="${x-2.5}" y="${y-2.5}" width="5" height="5" rx="1" fill="var(--cen)"/>`}
+function stageSVG(k){const B="var(--dna)",V="var(--dna2)",MT="var(--mt)";
+  switch(k){
+  case "I":return svgWrap(svCell(20,19,`<circle cx="28" cy="23" r="11" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.6"/><path d="M20 22 q3 -5 6 0 t6 0 t5 2" stroke="${B}" stroke-width="1.4" fill="none"/><path d="M21 27 q3 -4 6 0 t6 -1" stroke="${V}" stroke-width="1.4" fill="none"/>`+svPole(28,6)));
+  case "P":return svgWrap(svCell(20,19,`<circle cx="28" cy="23" r="12" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.6"/>`+svX(23,21,B)+svX(31,25,V)+svX(29,17,B,6)+svPole(14,10)+svPole(42,10)));
+  case "PM":return svgWrap(svCell(20,19,`<circle cx="28" cy="23" r="12" fill="none" stroke="var(--mem)" stroke-width="1.4" stroke-dasharray="3 3"/><path d="M10 23 L24 21 M46 23 L32 26 M10 23 L26 30" stroke="${MT}" stroke-width="1.2"/>`+svX(24,21,B)+svX(32,26,V)+svX(27,31,B,6)+svPole(10,23)+svPole(46,23)));
+  case "M":return svgWrap(svCell(20,19,`<path d="M10 23 L28 14 M10 23 L28 23 M10 23 L28 32 M46 23 L28 14 M46 23 L28 23 M46 23 L28 32" stroke="${MT}" stroke-width="1.2"/>`+svX(28,14,B,7)+svX(28,23,V,7)+svX(28,32,B,7)+svPole(10,23)+svPole(46,23)));
+  case "A":return svgWrap(svCell(23,17,`<path d="M7 23 L19 16 M7 23 L19 30 M49 23 L37 16 M49 23 L37 30" stroke="${MT}" stroke-width="1.2"/><path d="M22 13 l-4 3 l4 3 M22 27 l-4 3 l4 3 M34 13 l4 3 l-4 3 M34 27 l4 3 l-4 3" stroke="${B}" stroke-width="2.2" fill="none"/>`+svPole(7,23)+svPole(49,23)));
+  case "T":return svgWrap(`<path d="M6 23 C6 6, 24 6, 28 15 C32 6, 50 6, 50 23 C50 40, 32 40, 28 31 C24 40, 6 40, 6 23 Z" fill="var(--cyto)" stroke="var(--mem)" stroke-width="2"/><circle cx="17" cy="23" r="7" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.4"/><circle cx="39" cy="23" r="7" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.4"/><path d="M14 21 q2 -3 4 0 t3 1 M36 21 q2 -3 4 0 t3 1" stroke="${B}" stroke-width="1.3" fill="none"/><circle cx="28" cy="13" r="1.8" fill="var(--actin)"/><circle cx="28" cy="33" r="1.8" fill="var(--actin)"/>`);
+  case "G1":return svgWrap(svCell(16,15,`<circle cx="28" cy="23" r="8" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.4"/><path d="M23 23 q3 -4 5 0 t5 0" stroke="${B}" stroke-width="1.3" fill="none"/>`)+`<text x="50" y="12" font-size="10" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="var(--ink)">G1</text>`);
+  case "S":return svgWrap(svCell(18,17,`<circle cx="28" cy="23" r="10" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.4"/><path d="M21 21 h14 M21 25 h9" stroke="${B}" stroke-width="1.6"/><circle cx="31" cy="25" r="2.2" fill="var(--atp)"/>`)+`<text x="50" y="12" font-size="10" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="var(--ink)">S</text>`);
+  case "G2":return svgWrap(svCell(20,19,`<circle cx="28" cy="23" r="11" fill="var(--nucleo)" stroke="var(--mem)" stroke-width="1.4"/><path d="M21 21 h14 M21 23 h14 M22 27 h10 M22 29 h10" stroke="${B}" stroke-width="1.2"/>`+svPole(24,6)+svPole(32,6))+`<text x="50" y="12" font-size="10" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="var(--ink)">G2</text>`);
+  case "C":return svgWrap(`<ellipse cx="15" cy="23" rx="12" ry="14" fill="var(--cyto)" stroke="var(--mem)" stroke-width="2"/><ellipse cx="41" cy="23" rx="12" ry="14" fill="var(--cyto)" stroke="var(--mem)" stroke-width="2"/><circle cx="15" cy="23" r="5" fill="var(--nucleo)" stroke="var(--mem)"/><circle cx="41" cy="23" r="5" fill="var(--nucleo)" stroke="var(--mem)"/>`);
+  case "ck1":return svgWrap(`<circle cx="28" cy="23" r="18" fill="none" stroke="var(--g1)" stroke-width="6"/><line x1="40" y1="10" x2="48" y2="2" stroke="var(--bad)" stroke-width="4"/><text x="28" y="27" font-size="11" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="var(--ink)">G1</text>`);
+  case "ck2":return svgWrap(`<circle cx="28" cy="23" r="18" fill="none" stroke="var(--g2)" stroke-width="6"/><line x1="12" y1="14" x2="4" y2="6" stroke="var(--bad)" stroke-width="4"/><text x="28" y="27" font-size="11" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" fill="var(--ink)">G2</text>`);
+  case "ckm":return svgWrap(`<circle cx="28" cy="23" r="18" fill="none" stroke="var(--m)" stroke-width="6"/>`+svX(28,23,"var(--dna)",12)+`<circle cx="25" cy="23" r="2" fill="var(--kin)"/><circle cx="31" cy="23" r="2" fill="var(--kin)"/>`);
+  case "onc":return svgWrap(`<rect x="12" y="20" width="32" height="12" rx="3" fill="var(--gf)" transform="rotate(20 28 26)"/><path d="M8 40 h40" stroke="var(--ink-soft)" stroke-width="2"/><path d="M40 6 l4 8 l-8 -2 z" fill="var(--bad)"/>`);
+  case "tsg":return svgWrap(`<rect x="12" y="22" width="32" height="12" rx="3" fill="var(--prot)"/><path d="M8 40 h40" stroke="var(--ink-soft)" stroke-width="2"/><circle cx="28" cy="10" r="7" fill="none" stroke="var(--prot)" stroke-width="2.5"/><line x1="23" y1="5" x2="33" y2="15" stroke="var(--prot)" stroke-width="2.5"/>`);
+  case "animal":return svgWrap(`<path d="M6 23 C6 6, 24 6, 28 16 C32 6, 50 6, 50 23 C50 40, 32 40, 28 30 C24 40, 6 40, 6 23 Z" fill="var(--cyto)" stroke="var(--mem)" stroke-width="2"/><circle cx="28" cy="15" r="2" fill="var(--actin)"/><circle cx="28" cy="31" r="2" fill="var(--actin)"/>`);
+  case "plant":return svgWrap(`<rect x="5" y="6" width="46" height="34" rx="3" fill="var(--cyto)" stroke="var(--wall)" stroke-width="3.5"/><line x1="28" y1="10" x2="28" y2="36" stroke="var(--wall)" stroke-width="3" stroke-dasharray="4 2"/><circle cx="16" cy="23" r="5" fill="var(--nucleo)" stroke="var(--mem)"/><circle cx="40" cy="23" r="5" fill="var(--nucleo)" stroke="var(--mem)"/>`);
+  case "bact":return svgWrap(`<path d="M12 12 h12 q4 6 8 0 h12 a11 11 0 0 1 0 22 h-12 q-4 -6 -8 0 h-12 a11 11 0 0 1 0 -22 z" fill="var(--bact)" stroke="var(--bact-edge)" stroke-width="2"/><ellipse cx="18" cy="23" rx="6" ry="4" fill="none" stroke="var(--dna)" stroke-width="1.6"/><ellipse cx="38" cy="23" rx="6" ry="4" fill="none" stroke="var(--dna)" stroke-width="1.6"/>`);
+  }return svgWrap("")}
+/* stained root tip look for microscope buttons */
+function scopeSVG(k){const c="#6A1E4E",wall="#B39A70",cyt="#F8F0E4",nuc="#D6B3C6";let s=`<rect x="10" y="3" width="36" height="40" rx="2" fill="${cyt}" stroke="${wall}" stroke-width="2"/>`;
+  if(k==="I")s+=`<circle cx="28" cy="23" r="9" fill="${nuc}"/><circle cx="31" cy="21" r="3" fill="${c}"/>`;
+  if(k==="P")s+=`<circle cx="28" cy="23" r="11" fill="${nuc}"/><path d="M21 19 q4 6 8 0 M24 27 q3 -5 8 1 M30 16 q2 5 -2 8" stroke="${c}" stroke-width="2" fill="none"/>`;
+  if(k==="M")s+=`<path d="M17 23 h22" stroke="${c}" stroke-width="5" stroke-dasharray="2.5 1.5"/>`;
+  if(k==="A")s+=`<path d="M18 13 l3 -4 l3 4 M26 13 l3 -4 l3 4 M34 13 l3 -4 l3 4 M18 33 l3 4 l3 -4 M26 33 l3 4 l3 -4 M34 33 l3 4 l3 -4" stroke="${c}" stroke-width="1.8" fill="none"/>`;
+  if(k==="T")s+=`<ellipse cx="28" cy="11" rx="10" ry="5" fill="${nuc}"/><ellipse cx="28" cy="35" rx="10" ry="5" fill="${nuc}"/><circle cx="25" cy="11" r="1.6" fill="${c}"/><circle cx="31" cy="35" r="1.6" fill="${c}"/><line x1="12" y1="23" x2="44" y2="23" stroke="${wall}" stroke-width="1.6"/>`;
+  return svgWrap(s)}
+/* ================= PART 1: cell cycle bench ================= */
+const BN={cells:[],time:0,gf:.6,speed:3,poison:null,p53mut:false,cycOver:false,track:null,hist:[],nextId:1,done:new Set(),uvT:-1e9,damDivs:0,divs:[],scratchT:-1e9,damaged:false};
+const CAP=140,HARD=300,DCX=205,DCY=168,DR=136;
+const DUR={G1:[10,3],S:[8,1],G2:[4,.8],M:[1.2,.2]};
+function rdur(k){const d=DUR[k];return Math.max(d[0]*.5,d[0]+(Math.random()*2-1)*d[1])}
+function bnPlace(){const a=Math.random()*TAU,r=Math.sqrt(Math.random())*(DR-8);return [DCX+Math.cos(a)*r,DCY+Math.sin(a)*r]}
+function bnNew(ph,x,y){return {id:BN.nextId++,ph,t:0,dur:ph==="G0"?1:rdur(ph),x,y,dmg:0,arrest:null,at:0,rep:0,seed:Math.random()*10,deathAt:0,mtag:0}}
+function bnReset(){BN.cells=[];BN.time=0;BN.hist=[];BN.divs=[];BN.damDivs=0;BN.damaged=false;for(let i=0;i<34;i++){const k=["G1","G1","G1","S","S","G2","M"][i%7];const p=bnPlace();const c=bnNew(k,p[0],p[1]);c.t=Math.random()*c.dur;BN.cells.push(c)}BN.track=BN.cells[0].id;bnUI()}
+const bnAlive=()=>BN.cells.filter(c=>c.ph!=="dead");
+function bnDie(c){c.ph="dead";c.t=0;c.arrest=null}
+function mPh(c){return c.arrest==="M"?1.55:clamp(c.t/c.dur,0,1)*6}
+function bnStep(dt){BN.time+=dt;const al=bnAlive();const n=al.length;const com=al.filter(c=>c.ph==="S"||c.ph==="G2"||c.ph==="M").length;let proj=n+com;const crowded=()=>proj>=CAP*.98;const gfOK=BN.gf>=.15;const born=[];
+  BN.cells.forEach(c=>{
+    if(c.ph==="dead"){c.t+=dt;return}
+    if(c.arrest){c.at+=dt;
+      if(c.arrest==="G1"||c.arrest==="G2"){
+        if(BN.p53mut){if(c.arrest==="G1"){c.arrest=null;c.ph="S";c.t=0;c.dur=rdur("S")}else if(c.at>2){c.arrest=null;c.ph="M";c.t=0;c.dur=rdur("M")}return}
+        if(c.rep===0)c.rep=Math.random()<.22?-1:1;
+        if(c.rep<0&&c.at>3){bnDie(c);return}
+        if(c.rep>0&&c.at>6){c.dmg=0;c.arrest=null;c.rep=0;c.at=0;if(c.ph==="G2"){c.ph="M";c.dur=rdur("M")}else{c.ph="S";c.dur=rdur("S")}c.t=0}return}
+      if(c.arrest==="M"){if(!BN.poison){c.arrest=null;c.t=c.dur*.26;return}if(c.at>c.deathAt)bnDie(c);return}}
+    c.t+=dt;
+    if(c.ph==="G0"){const can=BN.cycOver||(gfOK&&proj<CAP*.92);if(can&&Math.random()<dt*.25){c.ph="G1";c.t=0;c.dur=rdur("G1")*.6}return}
+    if(c.ph==="M"&&BN.poison&&c.t/c.dur*6>=1.5){c.arrest="M";c.at=0;c.deathAt=10+Math.random()*12;return}
+    if(c.t<c.dur)return;
+    if(c.ph==="G1"){if(c.dmg&&!BN.p53mut){c.arrest="G1";c.at=0;c.rep=0;return}
+      const go=BN.cycOver||(gfOK&&!crowded());if(!go){c.ph="G0";c.t=0;c.reason=gfOK?"crowd":"gf";return}proj++;c.ph="S";c.t=0;c.dur=rdur("S")}
+    else if(c.ph==="S"){c.ph="G2";c.t=0;c.dur=rdur("G2")}
+    else if(c.ph==="G2"){if(c.dmg){c.arrest="G2";c.at=0;c.rep=0;return}c.ph="M";c.t=0;c.dur=rdur("M")}
+    else if(c.ph==="M"){if(n+born.length>=HARD){c.ph="G0";c.t=0;return}
+      const a=Math.random()*TAU;let nx=c.x+Math.cos(a)*11,ny=c.y+Math.sin(a)*11;const d=Math.hypot(nx-DCX,ny-DCY);if(d>DR-8){nx=DCX+(nx-DCX)*(DR-8)/d;ny=DCY+(ny-DCY)*(DR-8)/d}
+      if(!BN.cycOver&&n<CAP){const p=bnPlace();let best=p,bd=0;for(let k=0;k<6;k++){const q=k?bnPlace():p;let md=1e9;for(const o of al){const e=Math.hypot(o.x-q[0],o.y-q[1]);if(e<md)md=e}const near=Math.hypot(q[0]-c.x,q[1]-c.y);const sc=md-near*.08;if(sc>bd){bd=sc;best=q}}if(Math.hypot(nx-c.x,ny-c.y)<11){nx=lerp(nx,best[0],.35);ny=lerp(ny,best[1],.35)}}
+      const d2=bnNew("G1",nx,ny);d2.dmg=c.dmg;d2.mtag=c.mtag+(c.dmg?1:0);if(c.dmg){BN.damDivs++}c.mtag=d2.mtag;c.ph="G1";c.t=0;c.dur=rdur("G1")*(BN.cycOver?.6:1);d2.dur=c.dur;born.push(d2);BN.divs.push(BN.time)}});
+  BN.cells=BN.cells.concat(born).filter(c=>!(c.ph==="dead"&&c.t>8));BN.divs=BN.divs.filter(t=>t>BN.time-10);
+  let tr=BN.cells.find(c=>c.id===BN.track);if(!tr||tr.ph==="dead"&&tr.t>4){const al2=bnAlive();if(al2.length){BN.track=al2[Math.floor(Math.random()*al2.length)].id;tr=BN.cells.find(c=>c.id===BN.track)}}
+  if(tr)BN.hist.push([BN.time,bnC(tr),bnChr(tr)]);BN.hist=BN.hist.filter(h=>h[0]>BN.time-48)}
+function bnC(c){if(c.ph==="S")return 2+2*clamp(c.t/c.dur,0,1);if(c.ph==="G2"||c.ph==="M")return 4;if(c.ph==="dead")return 0;return 2}
+function bnChr(c){if(c.ph==="dead")return 0;return c.ph==="M"&&mPh(c)>=3?8:4}
+function bnStats(){const al=bnAlive();const n=al.length||1;const k={G0:0,G1:0,S:0,G2:0,M:0};al.forEach(c=>k[c.ph]++);const dead=BN.cells.length-al.length;
+  return {n:al.length,k,dead,mi:k.M/n,ar1:al.filter(c=>c.arrest==="G1"||c.arrest==="G2").length,arM:al.filter(c=>c.arrest==="M").length,dmg:al.filter(c=>c.dmg).length,divs10:BN.divs.length}}
+const BCHAL=["Starve the cells: drop growth factor to 0 and let most cells pile up in G0.","Let the dish fill up: watch density-dependent inhibition stop division.","Add a spindle poison and push the mitotic index above 25%.","With normal p53, damage DNA and see the checkpoints hold damaged cells.","Mutate p53, then damage DNA: watch damaged cells keep dividing.","Overexpress G1 cyclin with no growth factor: cells divide anyway."];
+function bnChal(){const s=bnStats();const d=BN.done;const add=i=>{if(!d.has(i)){d.add(i);chalUI($("#bChal"),BCHAL,d)}};
+  if(BN.gf<.1&&s.n>10&&s.k.G0/s.n>.6)add(0);if(!BN.cycOver&&s.n>=CAP*.95&&s.k.M<=1&&s.k.G0/s.n>.5)add(1);if(BN.poison&&s.mi>.25)add(2);if(!BN.p53mut&&s.ar1>=6)add(3);if(BN.p53mut&&BN.damDivs>=10)add(4);if(BN.cycOver&&BN.gf<.1&&s.divs10>=5)add(5)}
+function bnAlerts(){const s=bnStats();const out=[];
+  if(BN.gf<.15)out.push(["warn","GF","Growth factor below the threshold: cells finishing G1 leave for G0."+(BN.cycOver?" (Extra G1 cyclin overrides this.)":"")]);
+  if(s.n>=CAP*.95&&!BN.cycOver)out.push(["info","FULL","The dish is full: density-dependent inhibition sends cells to G0."]);
+  if(s.ar1>0&&!BN.p53mut)out.push(["info","G1/G2","Checkpoints holding "+s.ar1+" damaged cells for repair; some undergo apoptosis."]);
+  if(BN.p53mut&&s.dmg>0)out.push(["bad","p53","Mutant p53: damaged cells pass the G1 checkpoint and divide. Divisions with damaged DNA: "+BN.damDivs+"."]);
+  if(BN.poison)out.push(["warn","M","Spindle poison: the M checkpoint holds "+s.arM+" cells before anaphase; long arrests end in cell death."]);
+  if(BN.cycOver)out.push(["bad","CYC","Too much G1 cyclin pushes cells past the G1 checkpoint, ignoring growth factor and crowding."]);
+  if(!out.length)out.push(["good","OK","Cycling normally: all checkpoints passing."]);
+  const h=out.map(a=>`<div class="alert ${a[0]}"><span class="ic">${a[1]}</span><span>${a[2]}</span></div>`).join("");if(h!==BN.lastAlerts){$("#bAlerts").innerHTML=h;BN.lastAlerts=h}}
+function bnRead(){const s=bnStats();const pc=v=>Math.round(v/(s.n||1)*100)+"%";const rows=[["Living cells",s.n],["Simulated time",BN.time.toFixed(0)+" h"],["G1",pc(s.k.G1)],["S",pc(s.k.S)],["G2",pc(s.k.G2)],["M (mitotic index)",pc(s.k.M)],["G0",pc(s.k.G0)],["Held at G1 or G2 (damage)",s.ar1],["Held at M checkpoint",s.arM],["Apoptotic cells (visible)",s.dead],["Divisions with damaged DNA",BN.damDivs]];
+  const h=rows.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join("");if(h!==BN.lastRead){$("#benchRead tbody").innerHTML=h;BN.lastRead=h}}
+function bnUI(){$("#bGFo").textContent=Math.round(BN.gf*100)+"%";$("#bSpeedo").textContent=BN.speed+" h per s";$("#bP53").setAttribute("aria-pressed",String(BN.p53mut));$("#bCyc").setAttribute("aria-pressed",String(BN.cycOver));
+  $("#bP53").textContent=BN.p53mut?"p53 mutated (press to restore)":"Mutate p53";$("#bCyc").textContent=BN.cycOver?"G1 cyclin overexpressed (press to restore)":"Overexpress G1 cyclin";a11yKey=""}
+function bnInit(){$("#bGF").oninput=e=>{BN.gf=+e.target.value/100;bnUI()};$("#bSpeed").oninput=e=>{BN.speed=+e.target.value;bnUI()};
+  segBtns($("#bPoison"),[[null,"None"],["colch","Colchicine-like<small>blocks microtubules</small>"],["taxol","Taxol-like<small>freezes microtubules</small>"]],()=>BN.poison,v=>{BN.poison=v;a11yKey=""});
+  $("#bDamage").onclick=()=>{bnAlive().forEach(c=>{if(c.ph!=="M"&&Math.random()<.85)c.dmg=1});BN.uvT=performance.now();BN.damaged=true;a11yKey=""};
+  $("#bP53").onclick=()=>{BN.p53mut=!BN.p53mut;bnUI()};$("#bCyc").onclick=()=>{BN.cycOver=!BN.cycOver;bnUI()};
+  $("#bScratch").onclick=()=>{BN.cells=BN.cells.filter(c=>Math.abs(c.x-DCX)>24);BN.scratchT=performance.now();a11yKey=""};
+  $("#bTrack").onclick=()=>{const al=bnAlive();if(al.length){BN.track=al[Math.floor(Math.random()*al.length)].id;BN.hist=[]}a11yKey=""};$("#bReset").onclick=()=>{bnReset()};
+  chalUI($("#bChal"),BCHAL,BN.done);bnReset()}
+/* ---------- drawing ---------- */
+const PHCOL={G0:"g0",G1:"g1",S:"s",G2:"g2",M:"m",dead:"dead"};
+function drawBench(now){use(S1);const T=now/1000;let sim=DT*BN.speed;while(sim>0){const d=Math.min(.1,sim);bnStep(d);sim-=d}
+  const s=bnStats();
+  /* dish */
+  panelBox(10,10,390,300);levelTag(22,26,"pop");petri(DCX,DCY,DR+4);
+  if(now-BN.scratchT<2500)withA(1-(now-BN.scratchT)/2500,()=>{rr(DCX-24,DCY-DR,48,DR*2,4);ctx.fillStyle=hexA(C.bad,.18);ctx.fill()});
+  BN.cells.forEach(c=>{const col=C[PHCOL[c.ph]];if(c.ph==="dead"){withA(1-c.t/8,()=>{for(let i=0;i<3;i++)circ(c.x+Math.cos(i*2.1+c.seed)*5,c.y+Math.sin(i*2.1+c.seed)*5,2.6,col)});return}
+    if(c.ph==="G0"){ell(c.x,c.y,7,4.5,c.seed,hexA(col,.55),hexA(C.ink,.35),1)}else if(c.ph==="M"){circ(c.x,c.y,8.5,col,hexA(C.ink,.5),1.2);const p=mPh(c);if(p<3){line(c.x,c.y-5,c.x,c.y+5,C.panel,2.2)}else{poly([[c.x-1.5,c.y-4],[c.x-4.5,c.y],[c.x-1.5,c.y+4]],C.panel,1.8);poly([[c.x+1.5,c.y-4],[c.x+4.5,c.y],[c.x+1.5,c.y+4]],C.panel,1.8)}}
+    else{tinyCell(c.x,c.y,7.2,col,{seed:c.seed,T:T*.3,nuc:false,edge:hexA(C.ink,.4)});if(c.ph==="S")circ(c.x,c.y,2.2,C.panel)}
+    if(c.dmg)circ(c.x,c.y,10,null,C.bad,1.8);if(c.id===BN.track){circ(c.x,c.y,13,null,C.gold,2.6)}});
+  if(now-BN.uvT<1600)withA(1-(now-BN.uvT)/1600,()=>{circ(DCX,DCY,DR,hexA(C.uv,.25));for(let i=0;i<6;i++)poly([[60+i*55,20],[50+i*55,40],[62+i*55,52],[52+i*55,72]],C.uv,2.4)});
+  txt(392,296,s.n+" cells",{size:12,weight:700,mono:true,align:"right"});
+  /* followed cell */
+  panelBox(410,10,380,300);levelTag(422,26,"cell");const tr=BN.cells.find(c=>c.id===BN.track);
+  if(tr){const nm=tr.ph==="dead"?"apoptosis":tr.ph==="M"?STAGE_NAMES[Math.max(1,stageOf(mPh(tr)))]:tr.ph;title(530,26,"Followed cell (gold ring): "+nm);const cx=600,cy=158,sz=92;
+    if(tr.ph==="M"){const pz=tr.arrest==="M"?BN.poison:null;mitosisCell(cx,cy,sz,mPh(tr),{T,poison:pz})}
+    else if(tr.ph==="dead"){for(let i=0;i<7;i++){const a=i*.9+tr.seed;const d=20+tr.t*6;circ(cx+Math.cos(a)*d,cy+Math.sin(a)*d,lerp(26,10,clamp(tr.t/4,0,1)),C.cyto,C.mem,1.5)}}
+    else{const rep=tr.ph==="S"?clamp(tr.t/tr.dur,0,1):tr.ph==="G2"?1:0;interCell(cx,cy,sz*(tr.ph==="G0"?.85:1),{T,rep,cent:tr.ph==="G2"||(tr.ph==="S"&&rep>.5)?2:1,forks:tr.ph==="S"});
+      if(tr.ph==="G0"){rr(cx+72,cy-90,8,24,2);ctx.fillStyle=C.g0;ctx.fill();rr(cx+84,cy-90,8,24,2);ctx.fill()}}
+    if(tr.dmg&&tr.ph!=="dead"){poly([[cx-12,cy+4],[cx-4,cy-8],[cx+4,cy+6],[cx+12,cy-6]],C.bad,3.4);label(cx,cy+sz+10,"DNA damage",{size:12,weight:700,border:C.bad})}
+    const why=tr.arrest==="G1"?"held at G1 checkpoint":tr.arrest==="G2"?"held at G2 checkpoint":tr.arrest==="M"?"held at M checkpoint":tr.ph==="G0"?(tr.reason==="crowd"?"G0: too crowded":"G0: no growth factor"):"";if(why)label(cx,48,why,{size:12,weight:700,border:C.warn})}
+  const st1=BN.p53mut&&s.dmg>0?"fail":BN.cycOver?"fail":(s.ar1>0||BN.gf<.15||s.k.G0>s.n*.5)?"hold":"pass";const st2=s.ar1>0&&!BN.p53mut?"hold":BN.p53mut&&s.dmg>0?"fail":"pass";const st3=BN.poison?"hold":"pass";
+  [[st1,"G1"],[st2,"G2"],[st3,"M"]].forEach((q,i)=>{lamp(440+i*118,290,9,q[0],q[1]+" "+(q[0]==="pass"?"passing":q[0]==="hold"?"holding":"bypassed"))});
+  /* bars */
+  panelBox(10,320,390,270);levelTag(22,336,"data");title(130,336,"Phase distribution (live)");const keys=[["G0","g0"],["G1","g1"],["S","s"],["G2","g2"],["M","m"],["Apoptotic","dead"]];
+  keys.forEach((k,i)=>{const y=360+i*31;const v=k[0]==="Apoptotic"?s.dead:s.k[k[0]];const f=v/Math.max(1,s.n);txt(24,y+9,k[0],{size:12.5,weight:700,mono:true});bar(110,y,200,18,f,C[k[1]]);txt(318,y+9,Math.round(f*100)+"%",{size:12.5,weight:700,mono:true});txt(390,y+9,String(v),{size:12,mono:true,align:"right",color:C["ink-soft"]})});
+  txt(24,560,"Mitotic index "+Math.round(s.mi*100)+"%   ·   "+s.n+" living cells",{size:13,weight:700});txt(24,578,"(apoptotic shown as a share of living cells)",{size:11,color:C["ink-soft"]});
+  /* graphs */
+  panelBox(410,320,380,270);title(422,338,"Followed cell, last 48 simulated hours");const t0=BN.time-48;
+  const g1=graph({x:462,y:362,w:310,h:80,x0:-48,x1:0,y0:0,y1:5,xt:[-48,-24,0],xf:v=>v?v+" h":"now",yt:[0,2,4],yf:v=>v+"C",grid:true});plotPts(g1,BN.hist.map(h=>[h[0]-BN.time,h[1]]),C.dna,2.6);txt(470,372,"DNA",{size:11,weight:700,color:C["dna-ink"]});
+  const g2=graph({x:462,y:478,w:310,h:80,x0:-48,x1:0,y0:0,y1:10,xt:[-48,-24,0],xf:v=>v?v+" h":"now",yt:[0,4,8],grid:true});plotPts(g2,BN.hist.map(h=>[h[0]-BN.time,h[2]]),C.prot,2.4,[6,3]);txt(470,488,"chromosomes",{size:11,weight:700,color:C["prot-ink"]});
+  $("#benchCap").textContent="Simulated time "+BN.time.toFixed(0)+" h · "+s.n+" cells · mitotic index "+Math.round(s.mi*100)+"%";
+  if((BN.frame=(BN.frame||0)+1)%15===0){bnRead();bnAlerts();bnChal()}}
+function benchA11y(){const s=bnStats();const r5=v=>Math.round(v/(s.n||1)*20)*5;const tr=BN.cells.find(c=>c.id===BN.track);
+  const lab=`Cell cycle bench: about ${Math.round(s.n/5)*5} cells, G1 ${r5(s.k.G1)}%, S ${r5(s.k.S)}%, G2 ${r5(s.k.G2)}%, M ${r5(s.k.M)}%, G0 ${r5(s.k.G0)}%.`;
+  const d=`Top left: a culture dish seen from above with cells coloured by phase (olive G1, blue S, amber G2, rose round M cells with chromosome bars, small pale slate G0 cells, grey fragments for apoptotic cells, red rings for DNA damage). About ${Math.round(s.n/5)*5} cells. Growth factor ${Math.round(BN.gf*100)}%, spindle poison ${BN.poison?BN.poison==="colch"?"colchicine-like":"taxol-like":"none"}, p53 ${BN.p53mut?"mutated":"normal"}, G1 cyclin ${BN.cycOver?"overexpressed":"normal"}. Top right: the followed cell is in ${tr?(tr.ph==="M"?"mitosis":tr.ph):"none"}${tr&&tr.arrest?", held at the "+tr.arrest+" checkpoint":""}. Below: bars for the share of cells in each phase, and two graphs of the followed cell's DNA content (2C to 4C) and chromosome number (4, jumping to 8 in anaphase).`;
+  return [lab,d]}
+/* ================= PART 2: root tip microscope ================= */
+const MS={tissue:[],calls:{},sel:0,checked:false,show:false,focus:40,mag:"40",cycle:20,vis:[],slide:0};
+const MST=[["I","Interphase"],["P","Prophase"],["M","Metaphase"],["A","Anaphase"],["T","Telophase"]];
+const MSN={I:"interphase",P:"prophase",M:"metaphase",A:"anaphase",T:"telophase"};
+function msNew(){MS.slide++;MS.tissue=[];MS.calls={};MS.checked=false;MS.show=false;MS.sel=0;const pr=[["I",.8],["P",.07],["M",.045],["A",.035],["T",.05]];
+  for(let c=-7;c<=7;c++){const off=Math.random()*.6;for(let r=-6;r<=6;r++){let u=Math.random(),st="I";for(const p of pr){if(u<p[1]){st=p[0];break}u-=p[1]}MS.tissue.push({c,r,off,st,seed:Math.random()*100})}}
+  /* make sure each stage appears near the middle */
+  const mid=MS.tissue.filter(t=>Math.abs(t.c)<=2&&Math.abs(t.r)<=1);shuffle(mid).slice(0,4).forEach((t,i)=>t.st=["P","M","A","T"][i]);msLayout();msUI()}
+function msGeom(){return MS.mag==="40"?{w:50,h:62}:{w:96,h:118}}
+function msLayout(){const g=msGeom();const cx=400,cy=270,R=246;MS.vis=[];MS.tissue.forEach((t,i)=>{const x=cx+t.c*g.w-g.w/2,y=cy+(t.r+t.off)*g.h-g.h/2;const dx=x+g.w/2-cx,dy=y+g.h/2-cy;if(Math.hypot(dx,dy)<R-Math.max(g.w,g.h)*.45)MS.vis.push({i,x,y,w:g.w,h:g.h})});
+  MS.vis.sort((a,b)=>a.y-b.y||a.x-b.x);if(MS.sel>=MS.vis.length)MS.sel=0}
+function msTally(src){const t={I:0,P:0,M:0,A:0,T:0};MS.vis.forEach(v=>{const k=src==="truth"?MS.tissue[v.i].st:MS.calls[v.i];if(k)t[k]++});return t}
+function msUI(){$("#mSel").textContent=(MS.sel+1)+" of "+MS.vis.length;const cur=MS.vis[MS.sel];const call=cur?MS.calls[cur.i]:null;
+  $("#mStages").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===call)));
+  const me=msTally("me"),tr=msTally("truth");const tot=Object.values(me).reduce((a,b)=>a+b,0);
+  let h=`<thead><tr><th scope="col">Stage</th>${MST.map(s=>`<th scope="col">${s[0]}</th>`).join("")}<th scope="col">Total</th></tr></thead><tbody><tr><th scope="row">You</th>${MST.map(s=>`<td>${me[s[0]]}</td>`).join("")}<td>${tot}</td></tr>`;
+  if(MS.show||MS.checked){const tt=MS.vis.length;h+=`<tr><th scope="row">Slide</th>${MST.map(s=>`<td>${tr[s[0]]}</td>`).join("")}<td>${tt}</td></tr>`}
+  $("#mTally").innerHTML='<caption class="gk-sr">Your tally</caption>'+h+"</tbody>";
+  const mit=me.P+me.M+me.A+me.T;$("#mCycleo").textContent=MS.cycle+" h";
+  $("#mCalc").innerHTML=tot?`<b>Mitotic index</b> = ${mit} ÷ ${tot} × 100 = <b>${(mit/tot*100).toFixed(1)}%</b><br>`+MST.slice(1).map(s=>{const f=me[s[0]]/tot;return `${s[1]}: ${me[s[0]]} ÷ ${tot} × ${MS.cycle} h = <b>${(f*MS.cycle).toFixed(2)} h</b> (${Math.round(f*MS.cycle*60)} min)`}).join("<br>")+`<br><span class="small">Each phase length assumes cells are dividing at random times, so the share of cells in a phase matches the share of time spent in it.</span>`:`Classify some cells to calculate the mitotic index and phase lengths from <b>your</b> counts.`;
+  $("#mFocuso").textContent=Math.abs(MS.focus-62)<=6?"sharp":MS.focus<62?"too low":"too high";a11yKey=""}
+function msClassify(k){const cur=MS.vis[MS.sel];if(!cur)return;MS.calls[cur.i]=k;MS.checked=false;const nx=MS.vis.findIndex((v,j)=>j>MS.sel&&!MS.calls[v.i]);if(nx>=0)MS.sel=nx;else{const any=MS.vis.findIndex(v=>!MS.calls[v.i]);if(any>=0)MS.sel=any}
+  const m=$("#mMsg");m.className="msg show info";const left=MS.vis.filter(v=>!MS.calls[v.i]).length;m.textContent=`Called ${MSN[k]}. ${left?left+" cells left to classify.":"All cells classified: press Check my calls."}`;msUI()}
+function msCheck(){const called=MS.vis.filter(v=>MS.calls[v.i]);if(!called.length){const m=$("#mMsg");m.className="msg show info";m.textContent="Classify at least one cell first.";return}MS.checked=true;
+  const right=called.filter(v=>MS.calls[v.i]===MS.tissue[v.i].st).length;const wrong=called.filter(v=>MS.calls[v.i]!==MS.tissue[v.i].st);const conf={};wrong.forEach(v=>{const k=MS.calls[v.i]+">"+MS.tissue[v.i].st;conf[k]=(conf[k]||0)+1});
+  const top=Object.keys(conf).sort((a,b)=>conf[b]-conf[a])[0];const tips={"I>P":"Prophase shows thick, thread-like chromosomes filling the nucleus; interphase has a smooth nucleus and a dark nucleolus.","P>I":"Interphase nuclei are evenly stained with a distinct nucleolus; prophase has visible threads.","M>A":"Anaphase has two separate groups moving apart; metaphase has one band in the middle.","A>M":"Metaphase is a single band across the middle; anaphase is two groups heading to opposite ends.","A>T":"Telophase has two compact nuclei at the ends and often a new cell plate line.","T>A":"Anaphase groups are V shaped and still moving; telophase has rounded new nuclei.","M>P":"Prophase threads are inside a round nucleus; metaphase chromosomes form a line across the cell.","P>M":"Metaphase chromosomes line up in one band; prophase chromosomes are scattered in the nucleus."};
+  const m=$("#mMsg");m.className="msg show "+(wrong.length?"warn":"good");m.textContent=`${right} of ${called.length} calls match the slide.`+(wrong.length?` Cells outlined in red dashes were called wrong. `+(top?(tips[top]||"Compare them with the key drawings on the buttons."):""):" Well done.");msUI()}
+function msInit(){const sb=$("#mStages");sb.innerHTML=MST.map(s=>`<button type="button" class="tbtn" data-k="${s[0]}" aria-pressed="false">${scopeSVG(s[0])}<span>${s[1]}</span></button>`).join("");sb.querySelectorAll("button").forEach(b=>b.onclick=()=>msClassify(b.dataset.k));
+  segBtns($("#mMag"),[["40","40× objective<br><small>more cells</small>"],["100","100× objective<br><small>closer look</small>"]],()=>MS.mag,v=>{MS.mag=v;msLayout();msUI()});
+  $("#mPrev").onclick=()=>{MS.sel=(MS.sel+MS.vis.length-1)%MS.vis.length;msUI()};$("#mNext").onclick=()=>{MS.sel=(MS.sel+1)%MS.vis.length;msUI()};
+  $("#mCheck").onclick=msCheck;$("#mShow").onclick=()=>{MS.show=!MS.show;$("#mShow").textContent=MS.show?"Hide answers":"Show answers";msUI()};$("#mNew").onclick=()=>{msNew();$("#mMsg").className="msg"};
+  $("#mFocus").oninput=e=>{MS.focus=+e.target.value;msUI()};$("#mCycle").oninput=e=>{MS.cycle=+e.target.value;msUI()};
+  $("#cvScope").addEventListener("click",e=>{const r=e.currentTarget.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*800,y=(e.clientY-r.top)/r.height*560;const k=MS.vis.findIndex(v=>x>=v.x&&x<=v.x+v.w&&y>=v.y&&y<=v.y+v.h);if(k>=0){MS.sel=k;msUI()}});
+  msNew()}
+function drawScope(now){use(S2);const T=now/1000;ctx.fillStyle="#0B0F12";ctx.fillRect(0,0,800,560);const cx=400,cy=270,R=246;
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.clip();ctx.fillStyle=C.froot;ctx.fillRect(0,0,800,560);
+  const b=Math.abs(MS.focus-62)/7;const key=MS.slide+"|"+MS.mag+"|"+S2.cv.width;
+  if(!MS.cache||MS.cache.key!==key){const off=MS.cache&&MS.cache.cv||document.createElement("canvas");off.width=S2.cv.width;off.height=S2.cv.height;const save=ctx;ctx=off.getContext("2d");ctx.setTransform(S2.K,0,0,S2.K,0,0);ctx.clearRect(0,0,800,560);
+    const g=msGeom();MS.tissue.forEach((t,i)=>{const x=cx+t.c*g.w-g.w/2,y=cy+(t.r+t.off)*g.h-g.h/2;if(x>cx+R||x+g.w<cx-R||y>cy+R||y+g.h<cy-R)return;rootCell(x+1,y+1,g.w-2,g.h-2,t.st,t.seed,{})});ctx=save;MS.cache={key,cv:off}}
+  const bk=key+"|"+b.toFixed(1);if(!MS.bcache||MS.bcache.key!==bk){const bc=MS.bcache&&MS.bcache.cv||document.createElement("canvas");bc.width=S2.cv.width;bc.height=S2.cv.height;const x2=bc.getContext("2d");x2.setTransform(1,0,0,1,0,0);x2.clearRect(0,0,bc.width,bc.height);x2.filter=b>.3?`blur(${(b*S2.K).toFixed(1)}px)`:"none";x2.drawImage(MS.cache.cv,0,0);x2.filter="none";MS.bcache={key:bk,cv:bc}}
+  ctx.drawImage(MS.bcache.cv,0,0,800,560);
+  MS.vis.forEach((v,j)=>{const call=MS.calls[v.i];const tr=MS.tissue[v.i].st;
+    if(MS.checked&&call){rr(v.x+3,v.y+3,v.w-6,v.h-6,2);ctx.strokeStyle=call===tr?"#2F6F4F":"#A9372F";ctx.lineWidth=2.4;ctx.setLineDash(call===tr?[]:[5,3]);ctx.stroke();ctx.setLineDash([])}
+    if(call){rr(v.x+4,v.y+4,16,15,3);ctx.fillStyle="rgba(255,255,255,.9)";ctx.fill();txt(v.x+12,v.y+12,call,{size:11,weight:700,mono:true,align:"center",color:"#10161A"})}
+    if(MS.show){rr(v.x+v.w-20,v.y+v.h-19,16,15,3);ctx.fillStyle="#136B6E";ctx.fill();txt(v.x+v.w-12,v.y+v.h-11,tr,{size:11,weight:700,mono:true,align:"center",color:"#fff"})}});
+  const cur=MS.vis[MS.sel];if(cur){rr(cur.x-1,cur.y-1,cur.w+2,cur.h+2,3);ctx.strokeStyle="#C9A227";ctx.lineWidth=3.6+Math.sin(T*4)*.8;ctx.stroke()}
+  ctx.restore();circ(cx,cy,R,null,"#3A444B",8);
+  txt(30,30,MS.mag+"× objective",{size:14,weight:700,mono:true,color:"#E8EEF1"});txt(30,52,"onion root tip, stained",{size:12,color:"#C5D0D6"});
+  const sb=MS.mag==="40"?50:96;line(640,520,640+sb,520,"#E8EEF1",4);txt(640+sb/2,538,"about 15 µm",{size:11,align:"center",color:"#E8EEF1"});
+  txt(30,520,Math.abs(MS.focus-62)<=6?"in focus":"adjust the fine focus",{size:12.5,weight:700,color:Math.abs(MS.focus-62)<=6?"#8FD6A8":"#F2C95C"});
+  $("#scopeCap").textContent=`Selected cell ${MS.sel+1} of ${MS.vis.length}`+(MS.calls[cur&&cur.i]?`, you called it ${MSN[MS.calls[cur.i]]}`:", not yet classified")+".";}
+function scopeA11y(){const me=msTally("me");const tot=Object.values(me).reduce((a,b)=>a+b,0);const cur=MS.vis[MS.sel];const st=cur?MS.tissue[cur.i].st:"I";
+  const lab=`Root tip microscope, ${MS.mag}× objective, ${MS.vis.length} cells in view, cell ${MS.sel+1} selected.`;
+  const look={I:"an evenly stained round nucleus with a dark nucleolus",P:"a round nucleus filled with thick dark threads",M:"a single dark band of chromosomes across the middle of the cell",A:"two V-shaped groups of chromosomes moving toward the top and bottom ends",T:"two compact nuclei at the top and bottom ends with a faint new wall between them"}[st];
+  return [lab,`A round microscope field shows rows of brick-shaped plant cells with pale walls; chromosomes are stained dark purple. The selected cell is outlined in gold and shows ${look}. ${Math.abs(MS.focus-62)<=6?"The image is in focus.":"The image is blurred; adjust the fine focus."} You have classified ${tot} cells.${MS.show?" Answer letters are shown in teal boxes.":""}`]}
+/* ================= PART 3: counting trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const ORGS=[[6,"a mosquito"],[8,"a fruit fly"],[12,"a housefly"],[14,"a garden pea"],[16,"an onion"],[18,"a cabbage"],[20,"a corn plant"],[24,"a tomato"],[26,"a leopard frog"],[38,"a cat"],[40,"a mouse"],[46,"a human"],[48,"a chimpanzee"],[64,"a horse"],[78,"a dog"],[4,"a teaching model organism"],[10,"a teaching model organism"]];
+/* chr, dna: multiples of 2n per cell; C: DNA content */
+const STG={G1:{nm:"G1",chr:1,dna:1,C:2,rep:0,why:"Chromosomes are not yet copied: one DNA molecule each."},
+  S2:{nm:"the end of S phase",chr:1,dna:2,C:4,rep:1,why:"Every chromosome has just been copied into two sister chromatids, still joined."},
+  G2:{nm:"G2",chr:1,dna:2,C:4,rep:1,why:"Chromosomes are replicated: two sister chromatids joined at one centromere."},
+  P:{nm:"prophase",chr:1,dna:2,C:4,rep:1,why:"Chromosomes condense, but sisters are still joined at the centromere."},
+  PM:{nm:"prometaphase",chr:1,dna:2,C:4,rep:1,why:"Kinetochores attach to the spindle; sisters are still joined."},
+  M:{nm:"metaphase",chr:1,dna:2,C:4,rep:1,why:"Chromosomes line up; each still has two sister chromatids."},
+  A:{nm:"anaphase (whole cell)",chr:2,dna:2,C:4,rep:0,why:"Separase has cut cohesin: every chromatid now has its own centromere and counts as a chromosome."},
+  T:{nm:"telophase, whole cell before cytokinesis",chr:2,dna:2,C:4,rep:0,why:"Two full sets sit in one cell (two nuclei forming), each chromosome now a single chromatid."},
+  TN:{nm:"telophase, in one of the two new nuclei",chr:1,dna:1,C:2,rep:0,why:"Each new nucleus holds one complete set of unreplicated chromosomes."},
+  D:{nm:"each daughter cell after cytokinesis",chr:1,dna:1,C:2,rep:0,why:"Each daughter has one complete set, the same as the parent's G1."}};
+const CTYPES=[["mix","All types, mixed"],["chrom","Chromosomes per cell"],["chromatid","Sister chromatids per cell"],["dna","DNA molecules per cell"],["cval","DNA content: the C value"],["mass","DNA mass in picograms"],["mi","Mitotic index from counts"],["dur","Phase length from counts"],["gen","Bacterial doubling (binary fission)"],["sav","Surface area to volume"],["stage","Name the stage (picture)"]];
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:0,count:0,solT:0,pick:null};
+function orgTxt(o){return o[1]==="a teaching model organism"?`an organism with <b>2n = ${o[0]}</b>`:`${o[1]} cell (<b>2n = ${o[0]}</b>)`}
+const GEN={
+ chrom(){const o=pick(ORGS);const k=pick(["G1","G2","P","PM","M","A","A","T","TN","D","S2","M"]);const s=STG[k];const n2=o[0];const ans=s.chr*n2;
+  return {title:"Chromosomes per cell",html:`A body cell of ${orgTxt(o)} is in <b>${s.nm}</b>. How many <b>chromosomes</b> are there?`,ans,unit:"chromosomes",dp:0,tol:.01,
+   hints:["Count centromeres. A chromosome with two sister chromatids still has one centromere, so it counts once.",s.why,s.chr===2?`So the count is 2 × ${n2} = ${ans}.`:`So the count equals 2n = ${n2}.`],
+   rows:[{l:"Rule: chromosomes = centromeres"},{l:s.nm+": "+s.why.split(":")[0]},{ans:ans+" chromosomes"}],miss:"counting chromatids (arms) instead of centromeres, or halving the number as if this were meiosis.",
+   slips:[[s.chr===1&&s.rep?2*n2:NaN,"That counted chromatids. Count centromeres: sisters joined at one centromere are one chromosome."],[s.chr===2?n2:NaN,"In anaphase and telophase (whole cell) the sisters have separated, so each has its own centromere: the count doubles."],[n2/2,"Halving the number happens in meiosis, not mitosis."]],vis:{k:"count",mode:k,n2}}},
+ chromatid(){const o=pick(ORGS);const k=pick(["G2","P","PM","M","S2"]);const s=STG[k];const n2=o[0];const ans=2*n2;
+  return {title:"Sister chromatids per cell",html:`A cell of ${orgTxt(o)} is in <b>${s.nm}</b>. How many <b>sister chromatids</b> does it contain in total?`,ans,unit:"chromatids",dp:0,tol:.01,
+   hints:["After S phase every chromosome is made of two sister chromatids.",`There are ${n2} chromosomes (count centromeres).`,`Chromatids = 2 × ${n2} = ${ans}.`],
+   rows:[{l:`${n2} chromosomes, each replicated`},{c:[[F(n2,["chromosomes"]),F("2",["chromatids"],"1",["chromosome"])],[String(ans),["chromatids"]]]},{ans:ans+" sister chromatids"}],miss:"giving the chromosome number. Replication doubles chromatids, not centromeres.",
+   slips:[[n2,"That is the number of chromosomes. Each one has two chromatids now."],[4*n2,"Each chromosome has two chromatids, not four."],[n2/2,"Halving belongs to meiosis."]],vis:{k:"count",mode:k,n2}}},
+ dna(){const o=pick(ORGS);const k=pick(["G1","G2","M","A","T","TN","D","P","S2"]);const s=STG[k];const n2=o[0];const ans=s.dna*n2;
+  return {title:"DNA molecules per cell",html:`How many <b>DNA molecules</b> (double helices) are in a cell of ${orgTxt(o)} at <b>${s.nm}</b>?`,ans,unit:"DNA molecules",dp:0,tol:.01,
+   hints:["Each chromatid is one DNA double helix. An unreplicated chromosome is one DNA molecule.",s.why,s.dna===2?`DNA molecules = 2 × ${n2} = ${ans}.`:`DNA molecules = ${n2}.`],
+   rows:[{l:"Rule: 1 chromatid = 1 DNA molecule"},{l:s.nm+": "+(s.dna===2?"twice 2n":"equal to 2n")},{ans:ans+" DNA molecules"}],miss:"counting chromosomes instead of chromatids when chromosomes are replicated.",
+   slips:[[s.dna===2&&s.chr===1?n2:NaN,"That is the chromosome count. Replicated chromosomes carry two DNA molecules each."],[s.dna===1?2*n2:NaN,"These chromosomes are not replicated (or have been split between nuclei): one DNA molecule each."],[s.dna===2?4*n2:NaN,"DNA is copied once per cycle, so the most is twice 2n."]],vis:{k:"count",mode:k,n2}}},
+ cval(){const k=pick(["G1","G2","M","A","TN","D","S2","P","T"]);const s=STG[k];const ans=s.C;
+  return {title:"DNA content (C value)",html:`A diploid cell is at <b>${s.nm}</b>. What is its DNA content as a <b>C value</b>? (1C = the DNA in one haploid set.) Type just the number.`,ans,unit:"C",dp:0,tol:.01,
+   hints:["A diploid cell in G1 has two haploid sets of DNA: 2C.","S phase doubles the DNA to 4C; it stays 4C until the cell splits.",s.C===4?"This stage is after S and before the cell divides: 4C.":"This is a G1 cell or a single new nucleus or daughter: 2C."],
+   rows:[{l:"G1: 2C → S doubles → G2 to telophase: 4C"},{l:"cytokinesis splits it: each daughter 2C"},{ans:s.nm+": "+ans+"C"}],miss:"thinking DNA halves at anaphase. It halves only when the content is split into two nuclei or cells.",
+   slips:[[s.C===4?2:NaN,"After S phase the cell has 4C until the DNA is split between two nuclei or cells."],[s.C===2?4:NaN,"This DNA has already been split between two nuclei or cells, or has not been copied yet: 2C."],[1,"1C is a haploid gamete after meiosis, not a stage of mitosis."],[8,"DNA is copied once per cycle; the most is 4C."]],vis:{k:"count",mode:k,n2:pick([4,6,8])}}},
+ mass(){const m=pick([3,4,5,6,6.6,7,8,9,10,12,13]);const from=pick(["G1","G1","G2","M"]);let to,ans;if(from==="G1"){to=pick(["G2","M","A","D","S2","TN"]);ans=m*STG[to].C/2}else{to=pick(["D","G1","TN"]);ans=m*STG[to].C/4}
+  const fromC=STG[from].C,toC=STG[to].C;const nm=v=>STG[v].nm;const fac=toC/fromC;
+  return {title:"DNA mass",html:`A cell in <b>${nm(from)}</b> contains <b>${m} pg</b> of DNA. How much DNA does a cell of the same type contain at <b>${nm(to)}</b>?`,ans,unit:"pg",dp:1,tol:.051,
+   hints:[`Convert both stages to C values: ${nm(from)} is ${fromC}C.`,`${nm(to)} is ${toC}C.`,`Multiply by ${toC}/${fromC}: ${m} × ${fac} = ${+(ans).toFixed(2)} pg.`],
+   rows:[{l:`${nm(from)} = ${fromC}C = ${m} pg`},{c:[[F(m,["pg"],fromC,["C"]),F(toC,["C"])],[String(+ans.toFixed(2)),["pg"]]]},{ans:`${nm(to)}: ${+ans.toFixed(2)} pg`}],miss:"doubling or halving at the wrong step. DNA doubles only in S and halves only when the cell or nucleus divides.",
+   slips:[[fac===1?m*2:NaN,"No change in DNA amount between these stages: neither involves S phase or a split."],[fac===2?m:NaN,"S phase doubles the DNA between these stages."],[fac===.5?m:NaN,"The DNA is split between two daughter nuclei, so each has half."],[fac===2?m/2:NaN,"The DNA goes up, not down: S phase doubles it."]],vis:{k:"count",mode:to,n2:4,mass:[m,from]}}},
+ mi(){const N=pick([150,200,240,250,300,400,500,600]);const mit=ri(Math.round(N*.04),Math.round(N*.16));const p=ri(1,Math.max(1,Math.floor(mit*.45)));const mm=ri(1,Math.max(1,Math.floor((mit-p)*.4)));const a=ri(1,Math.max(1,Math.floor((mit-p-mm)*.5)));const t=mit-p-mm-a;
+  if(t<1)return null;const I=N-mit;const ans=mit/N*100;
+  return {title:"Mitotic index",html:`In a root tip squash you count <b>${I} interphase</b>, <b>${p} prophase</b>, <b>${mm} metaphase</b>, <b>${a} anaphase</b> and <b>${t} telophase</b> cells. What is the <b>mitotic index</b>?`,ans,unit:"%",dp:1,tol:.06,
+   hints:["Mitotic index = cells in mitosis ÷ total cells × 100.",`Cells in mitosis = ${p} + ${mm} + ${a} + ${t} = ${mit}. Total = ${N}.`,`${mit} ÷ ${N} × 100.`],
+   rows:[{l:`mitotic = ${p} + ${mm} + ${a} + ${t} = ${mit}; total = ${N}`},{c:[[F(mit,["cells"],N,["cells"]),F("100",["%"])],[ans.toFixed(1),["%"]]]},{ans:"mitotic index = "+ans.toFixed(1)+"%"}],miss:"dividing by the interphase count instead of the total, or forgetting to multiply by 100.",
+   slips:[[mit/I*100,"That divided by the interphase cells only. Divide by the total of all cells counted."],[mit/N,"Multiply by 100 to turn the fraction into a percent."],[I/N*100,"That is the share in interphase. The mitotic index counts the dividing cells."]],vis:{k:"tally",t:{I,P:p,M:mm,A:a,T:t}}}},
+ dur(){const N=pick([200,250,300,400,500]);const cyc=pick([12,16,18,20,22,24]);const k=pick(["P","M","A","T","mit"]);const n=k==="mit"?ri(Math.round(N*.05),Math.round(N*.12)):ri(2,Math.round(N*.05));const ans=n/N*cyc*60;
+  const nm={P:"prophase",M:"metaphase",A:"anaphase",T:"telophase",mit:"mitosis (all four stages)"}[k];
+  return {title:"Phase length from counts",html:`Of <b>${N}</b> cells counted, <b>${n}</b> are in <b>${nm}</b>. The whole cell cycle takes <b>${cyc} hours</b>. Estimate how long ${nm} lasts, in <b>minutes</b>.`,ans,unit:"min",dp:0,tol:.75,
+   hints:["Fraction of cells in a phase = fraction of the cycle spent in it (if cells divide at random times).",`Fraction = ${n} ÷ ${N} = ${(n/N).toFixed(4)}.`,`Time = fraction × ${cyc} h × 60 min per h.`],
+   rows:[{c:[[F(n,["cells"],N,["cells"]),F(cyc,["h"]),F("60",["min"],"1",["h"])],[ans.toFixed(0),["min"]]]},{ans:nm+" ≈ "+ans.toFixed(0)+" min"}],miss:"leaving the answer in hours, or multiplying the percent instead of the fraction.",
+   slips:[[n/N*cyc,"That is in hours. Multiply by 60 for minutes."],[n/N*100*cyc*60,"Use the fraction (for example 0.04), not the percent (4)."],[n/N*100*cyc,"Use the fraction, not the percent, and convert hours to minutes."]],vis:{k:"tally",one:[k,n,N],cyc}}},
+ gen(){const g=pick([20,20,30,30,40,60]);const n=ri(2,8);const t=g*n;const N0=pick([1,1,2,5,10,100]);const ans=N0*Math.pow(2,n);const tt=t%60===0?(t/60)+" hours":t+" minutes";
+  return {title:"Binary fission",html:`A bacterium divides by binary fission every <b>${g} minutes</b>. Starting with <b>${N0}</b> cell${N0>1?"s":""}, how many cells are there after <b>${tt}</b> (assume all survive)?`,ans,unit:"cells",dp:0,tol:.01,
+   hints:["Find the number of generations: time ÷ generation time.",`${t} min ÷ ${g} min = ${n} generations.`,`Cells = ${N0} × 2^${n} = ${N0} × ${Math.pow(2,n)}.`],
+   rows:[{c:[[F(t,["min"],g,["min"])],[String(n),["generations"]]]},{l:`cells = ${N0} × 2^${n}`},{ans:ans+" cells"}],miss:"adding instead of doubling (each generation multiplies by 2), or forgetting the starting number.",
+   slips:[[N0*2*n,"That added 2 per generation. Each generation doubles the number: multiply by 2 again and again."],[N0>1?Math.pow(2,n):NaN,"Multiply by the starting number of cells, "+N0+"."],[N0*n,"That is starting cells × generations. Use powers of 2."]],vis:{k:"gen",n,N0}}},
+ sav(){const v=Math.random()<.65;if(v){const L=pick([1,2,3,4,5,6,8,10,12,20,25,30]);const ans=6/L;
+   return {title:"Surface area to volume",html:`A cube-shaped cell has sides of <b>${L} µm</b>. What is its <b>surface area to volume ratio</b> (per µm)?`,ans,unit:"per µm",dp:2,tol:.0051,
+    hints:["Surface area = 6 × L²; volume = L³.",`SA = 6 × ${L}² = ${6*L*L} µm²; V = ${L}³ = ${L*L*L} µm³.`,`Ratio = ${6*L*L} ÷ ${L*L*L} (or simply 6 ÷ ${L}).`],
+    rows:[{l:`SA = 6 × ${L}² = ${6*L*L} µm²   V = ${L}³ = ${L*L*L} µm³`},{c:[[F(6*L*L,["µm²"],L*L*L,["µm³"])],[ans.toFixed(2),["per µm"]]]},{ans:"SA : V = "+ans.toFixed(2)+" per µm"}],miss:"dividing volume by surface area (the ratio is upside down) or using L² for volume.",
+    slips:[[L/6,"That is volume ÷ surface area. Put surface area on top."],[6*L*L,"That is the surface area alone. Divide by the volume."],[6/(L*L),"Volume is L cubed, not L squared."]],vis:{k:"sav",L}}}
+   const a=pick([1,2,3,5]),f=pick([2,3,4,5,10]);const b=a*f;const ans=f;
+   return {title:"Surface area to volume",html:`A cube cell grows from <b>${a} µm</b> to <b>${b} µm</b> on a side. Its surface area to volume ratio falls by what <b>factor</b>? (For example, 2 means it is cut in half.)`,ans,unit:"times",dp:0,tol:.01,
+    hints:["SA : V = 6 ÷ L for a cube.",`Before: 6 ÷ ${a} = ${+(6/a).toFixed(3)}. After: 6 ÷ ${b} = ${+(6/b).toFixed(3)}.`,`Factor = before ÷ after = ${b} ÷ ${a}.`],
+    rows:[{l:`before 6 ÷ ${a} = ${+(6/a).toFixed(3)} per µm; after 6 ÷ ${b} = ${+(6/b).toFixed(3)} per µm`},{c:[[F(+(6/a).toFixed(3),["per µm"],+(6/b).toFixed(3),["per µm"])],[String(ans),[]]]},{ans:"falls "+ans+" times"}],miss:"cubing or squaring the factor. The ratio scales simply as 1/L.",
+    slips:[[f*f,"That is how much the surface area grew. The ratio scales as 1/L."],[f*f*f,"That is how much the volume grew. The ratio scales as 1/L."]],vis:{k:"sav",L:b,from:a}}},
+ stage(){const opts=[["P",.55,"Prophase"],["PM",1.55,"Prometaphase"],["M",2.55,"Metaphase"],["A",3.6,"Anaphase"],["T",4.6,"Telophase"],["I",-1,"Interphase (G2)"]];const ch=pick(opts);const names=opts.map(o=>o[2]);const ans=names.indexOf(ch[2]);
+  const feat={P:"chromosomes condensing inside an intact nucleus; centrosomes moving apart",PM:"nuclear envelope gone; microtubules attaching to kinetochores; chromosomes not yet lined up",M:"all chromosomes lined up on the middle plane, attached to both poles",A:"sister chromatids pulled apart toward opposite poles, V shaped",T:"two new nuclear envelopes forming; chromosomes loosening; furrow starting",I:"loose chromatin in an intact nucleus, two centrosomes side by side"}[ch[0]];
+  return {title:"Name the stage",html:`Which stage of the animal cell cycle is shown in the picture?`,choices:names,ans,unit:"",
+   hints:["Look first at the nuclear envelope: intact, broken or re-forming?","Then look at the chromosomes: loose, condensing, lined up, or moving apart?","Clue: "+feat+"."],
+   rows:[{l:"Envelope and chromosome position give it away:"},{l:feat},{ans:names[ans]}],miss:"mixing up prometaphase (attaching, not lined up) and metaphase (lined up), or anaphase (moving) and telophase (new nuclei).",vis:{k:"stage",ph:ch[1]}}}};
+const GKEYS=Object.keys(GEN);
+function genOne(k){let q=null;for(let i=0;i<40&&!q;i++){try{q=GEN[k]()}catch(e){console.error(e);q=null}if(q&&!q.choices&&!(isFinite(q.ans)&&q.ans>0))q=null}q.kind=k;return q}
+function fmtAns(p,v){if(p.choices)return p.choices[v];if(p.dp!=null)return (+v).toFixed(p.dp);return String(+(+v).toPrecision(4))}
+function normAns(s){return String(s).trim().replace(/,/g,"").replace(/[−–]/g,"-").replace(/\s*(per\s*µm|per\s*um|\/\s*µm|chromosomes?|chromatids?|dna molecules?|molecules?|cells?|times|generations?|minutes?|min|hours?|h|pg|%|c)\s*$/i,"").replace(/\s+/g,"")}
+function parseAns(s){s=normAns(s);if(!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(s))return null;return parseFloat(s)}
+function judge(p,str){if(p.choices){const v=+str;if(!(str!==""&&v>=0))return {ok:false,kind:"empty"};return v===p.ans?{ok:true}:{ok:false,kind:"choice"}}
+  const v=parseAns(str);if(v==null)return {ok:false,kind:"empty"};if(Math.abs(v-p.ans)<=p.tol)return {ok:true};
+  const sl=(p.slips||[]).find(s=>isFinite(s[0])&&s[1]&&Math.abs(v-s[0])<=Math.max(Math.abs(s[0])*.012,p.dp!=null?Math.pow(10,-p.dp)*.6:0));if(sl&&Math.abs(sl[0]-p.ans)>p.tol)return {ok:false,kind:"slip",msg:sl[1]};
+  if(Math.abs(v-p.ans)<=Math.abs(p.ans)*.06)return {ok:false,kind:"close"};return {ok:false,kind:"wrong"}}
+function calcMsg(cls,t){const m=$("#calcMsg");m.className="msg show "+cls;m.textContent=t}
+function ansTxt(p){return p.choices?p.choices[p.ans]:fmtAns(p,p.ans)+" "+p.unit}
+function calcNew(){const k=TR.type==="mix"?pick(GKEYS):TR.type;const q=genOne(k);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;
+  const rd=q.choices?"Pick one answer.":q.dp===0?"Give a whole number.":q.dp?"Give "+q.dp+" decimal place"+(q.dp>1?"s":"")+".":"Give the number.";
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}<span class="rd">${rd}</span>`;$("#calcUnit").textContent=q.unit;$("#calcAns").value="";
+  $("#calcNumWrap").hidden=!!q.choices;const cb=$("#calcChoices");cb.hidden=!q.choices;cb.innerHTML="";
+  if(q.choices)q.choices.forEach((c,i)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=c;b.setAttribute("aria-pressed","false");b.onclick=()=>{TR.pick=i;cb.querySelectorAll(".opt").forEach((x,j)=>{x.setAttribute("aria-pressed",String(j===i));x.classList.remove("wrong","right")});calcCheck()};cb.appendChild(b)});
+  $("#calcMsg").className="msg";$("#calcHintBox").hidden=true;$("#calcCap").textContent=q.title+": the picture shows the problem; the worked solution builds below it.";a11yKey=""}
+function calcCheck(){const p=TR.p;const str=p.choices?(TR.pick==null?"":String(TR.pick)):$("#calcAns").value;const j=judge(p,str);
+  if(j.kind==="empty"){calcMsg("info",p.choices?"Pick one of the answers first.":"Type a number in the answer box first.");return}
+  if(p.choices){$("#calcChoices").querySelectorAll(".opt").forEach((x,i)=>{x.classList.toggle("right",j.ok&&i===TR.pick);x.classList.toggle("wrong",!j.ok&&i===TR.pick)})}
+  if(j.ok){const wasFirst=TR.first&&!TR.sol;if(!TR.solved){TR.count++;if(wasFirst){TR.streak++;if(TR.streak>TR.best){TR.best=TR.streak;store.set("best",TR.best)}}}TR.solved=true;calcMsg("good",`✓ Correct: ${ansTxt(p)}. Watch the worked solution build.`);showSol(false)}
+  else{TR.first=false;TR.streak=0;let msg="Not quite. ";if(j.kind==="slip")msg+=j.msg;else if(j.kind==="close")msg+="Very close. Check your rounding.";else if(j.kind==="choice")msg+=p.hints[2];else msg+="Check the setup. "+p.hints[0];calcMsg("warn",msg)}
+  updCalcMeter();a11yKey=""}
+function showSol(byBtn){if(byBtn&&!TR.solved){TR.streak=0;TR.first=false}TR.sol=true;TR.solT=performance.now();updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function calcInit(){const sel=$("#calcType");sel.innerHTML=CTYPES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");sel.onchange=()=>{TR.type=sel.value;calcNew()};
+  $("#calcCheck").onclick=calcCheck;$("#calcAns").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();calcCheck()}});
+  $("#calcHint").onclick=()=>{const p=TR.p;const b=$("#calcHintBox");if(TR.hint<p.hints.length)TR.hint++;b.hidden=false;b.innerHTML=p.hints.slice(0,TR.hint).map((h,i)=>`<div><b>Hint ${i+1}:</b> ${h}</div>`).join("")+(TR.hint>=p.hints.length?`<div class="small">That is the whole ladder. Try it, or press Show worked solution.</div>`:"")};
+  $("#calcSol").onclick=()=>{showSol(true);calcMsg("info",`Worked solution: ${ansTxt(TR.p)}. Watch each step, then try a new problem.`)};$("#calcNew").onclick=calcNew;
+  TR.best=+(store.get("best")||0)}
+/* ---------- trainer drawing ---------- */
+function tvTyped(){const v=parseAns($("#calcAns").value);return v==null||!isFinite(v)?null:v}
+/* clear counting picture: returns centromere points */
+function countPic(x,y,s,mode,n2,T){const nd=Math.min(n2,8);const ch=karyo(nd);const pts=[];const st=STG[mode]||STG.G1;const L=c_=>s*.5*c_.L;
+  const rods=(cx,cy,rad,rep,list)=>{const cols=Math.ceil(Math.sqrt(list.length*1.6));list.forEach((c_,i)=>{const col=i%cols,row=Math.floor(i/cols);const rows=Math.ceil(list.length/cols);const xx=cx+(col-(cols-1)/2)*rad*1.5/cols*1.15,yy=cy+(row-(rows-1)/2)*rad*1.3/Math.max(1,rows)*1.1;cChromB(xx,yy,Math.min(L(c_),rad*1.1/rows+6),C[c_.col],rep);pts.push([xx,yy])})};
+  if(mode==="G1"||mode==="D"||mode==="G2"||mode==="S2"||mode==="P"){animalCell(x,y,s,s*.92,{T});nucleusDraw(x,y,s*.66,{nl:0});rods(x,y,s*.6,st.rep,ch)}
+  else if(mode==="PM"){animalCell(x,y,s,s*.92,{T});centrosome(x-s*.8,y,6,{});centrosome(x+s*.8,y,6,{});ch.forEach((c_,i)=>{const xx=x+(rnd(i*3+1)-.5)*s*.9,yy=y+(rnd(i*5+2)-.5)*s*1.1;line(x-s*.8,y,xx-3,yy,hexA(C.mt,.6),1);cChromB(xx,yy,L(c_)*.85,C[c_.col],1);pts.push([xx,yy])})}
+  else if(mode==="M"){animalCell(x,y,s,s*.92,{T});centrosome(x-s*.8,y,6,{});centrosome(x+s*.8,y,6,{});const sp=s*1.6/nd;ch.forEach((c_,i)=>{const yy=y+(i-(nd-1)/2)*sp;line(x-s*.8,y,x-3,yy,hexA(C.mt,.6),1);line(x+s*.8,y,x+3,yy,hexA(C.mt,.6),1);cChromB(x,yy,Math.min(L(c_),sp*.95),C[c_.col],1,true);pts.push([x,yy])})}
+  else if(mode==="A"){animalCell(x,y,s*1.15,s*.85,{T});centrosome(x-s*.95,y,6,{});centrosome(x+s*.95,y,6,{});const sp=s*1.3/nd;ch.forEach((c_,i)=>{const yy=y+(i-(nd-1)/2)*sp;[-1,1].forEach(d=>{const xx=x+d*s*.45;line(x+d*s*.95,y,xx,yy,hexA(C.mt,.6),1);vChrom(xx,yy,d,Math.min(L(c_),sp*.95),C[c_.col]);pts.push([xx,yy])})})}
+  else if(mode==="T"||mode==="TN"){cellPath(x,y,s*1.2,s*.85,.4,1,T);ctx.fillStyle=C.cyto;ctx.fill();ctx.strokeStyle=C.mem;ctx.lineWidth=3;ctx.stroke();[-1,1].forEach(d=>{const cx=x+d*s*.55;nucleusDraw(cx,y,s*.4,{nl:0});const before=pts.length;rods(cx,y,s*.36,0,ch);if(mode==="TN"&&d===1)pts.splice(before)});if(mode==="TN"){circ(x-s*.55,y,s*.46,null,C.gold,3)}}
+  if(n2>nd)txt(x,y+s+14,`drawn with ${nd} of ${n2} chromosomes`,{size:11.5,align:"center",color:C["ink-soft"]});return pts}
+function cChromB(x,y,len,col,rep,vert){ctx.lineCap="round";const w=4.4;if(rep){const g=w*.8;line(x-g,y-len/2,x-g*.45,y,col,w);line(x-g*.45,y,x-g,y+len/2,col,w);line(x+g,y-len/2,x+g*.45,y,col,w);line(x+g*.45,y,x+g,y+len/2,col,w)}else line(x,y-len/2,x,y+len/2,col,w);ctx.lineCap="butt";circ(x,y,2.3,hexA(C.ink,.75))}
+function vChrom(x,y,d,len,col){ctx.lineCap="round";line(x,y,x-d*len*.35,y-len*.4,col,4.2);line(x,y,x-d*len*.35,y+len*.4,col,4.2);ctx.lineCap="butt";circ(x,y,2.3,hexA(C.ink,.75))}
+function drawCalc(now){use(S3);const T=now/1000;const p=TR.p;const vs=p.vis;const tv=p.choices?null:tvTyped();const ok=TR.solved;const tvs=v=>v==null?"?":String(+(+v).toPrecision(5));
+  panelBox(10,10,780,262);if(ok){circ(766,30,13,C.good);tick(766,30,7,"#ffffff")}
+  if(vs.k==="count"){const pts=countPic(170,140,92,vs.mode,vs.n2,T);label(170,24,STG[vs.mode].nm,{size:12.5,weight:700,border:C.m});
+    if(TR.sol&&pts.length){const k=Math.floor(P(T,Math.max(2,pts.length*.4))*pts.length);circ(pts[k][0],pts[k][1],8,null,C.gold,3)}
+    const st=STG[vs.mode];const X=360;txt(X,50,"2n = "+vs.n2+(vs.mass?"":""),{size:15,weight:700,mono:true});
+    const rows=[["chromosomes",st.chr===2?"2 × 2n":"2n"],["chromatids",st.rep?"2 × 2n (joined pairs)":"none paired"],["DNA molecules",st.dna===2?"2 × 2n":"2n"],["DNA content",st.C+"C"]];
+    rows.forEach((r,i)=>{const y=86+i*30;txt(X,y,r[0],{size:13,weight:600});withA(TR.sol?1:.18,()=>txt(X+150,y,TR.sol?r[1]:"?",{size:13,weight:700,mono:true}))});
+    if(vs.mass)txt(X,214,`given: ${vs.mass[0]} pg at ${STG[vs.mass[1]].nm} (${STG[vs.mass[1]].C}C)`,{size:12.5,weight:600,color:C["accent-ink"]});
+    label(X+160,246,"your answer: "+tvs(tv)+" "+p.unit,{size:13.5,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="tally"){const t=vs.t;if(t){const keys=["I","P","M","A","T"];const mx=Math.max(t.P,t.M,t.A,t.T);keys.forEach((k,i)=>{const x=40+i*120;rootCell(x,40,44,54,k,i+3,{});const h=k==="I"?130:t[k]/mx*100;if(k==="I")txt(x+73,246,"(bar not to scale)",{size:10.5,align:"center",color:C["ink-soft"]});rr(x+56,230-h,34,h,3);ctx.fillStyle=hexA(k==="I"?C.g0:C.m,.75);ctx.fill();txt(x+73,222-h,String(t[k]),{size:13,weight:700,mono:true,align:"center"});txt(x+22,112,MSN[k],{size:11.5,weight:600,align:"center"})});
+      label(660,60,"your answer: "+tvs(tv)+" %",{size:13.5,weight:700,mono:true,border:ok?C.good:C.accent})}
+    else{const o=vs.one;const k=o[0];if(k!=="mit")rootCell(60,60,60,74,k,4,{});else{rootCell(40,60,44,54,"P",1,{});rootCell(90,60,44,54,"M",2,{});rootCell(40,120,44,54,"A",3,{});rootCell(90,120,44,54,"T",4,{})}
+      const cx=420,cy=140,R=100;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+o[1]/o[2]*TAU);ctx.closePath();ctx.fillStyle=C.m;ctx.fill();circ(cx,cy,R,null,C.rule,2);
+      txt(cx,cy+R+18,`${o[1]} of ${o[2]} cells = ${(o[1]/o[2]*100).toFixed(1)}% of the cycle`,{size:12.5,weight:600,align:"center"});txt(cx,26,"cycle clock: "+vs.cyc+" h",{size:13,weight:700,align:"center"});
+      label(660,140,"your answer: "+tvs(tv)+" min",{size:13.5,weight:700,mono:true,border:ok?C.good:C.accent})}}
+  else if(vs.k==="gen"){const shown=Math.min(vs.n,6);const g=Math.floor(P(T,shown*1.2+1.5)*(shown+1.2));const gg=Math.min(shown,g);const cnt=Math.pow(2,gg);
+    for(let i=0;i<Math.min(cnt,64);i++){const x=40+(i%16)*44,y=60+Math.floor(i/16)*34;rr(x,y-9,34,18,9);ctx.fillStyle=C.bact;ctx.fill();ctx.strokeStyle=C["bact-edge"];ctx.lineWidth=1.5;ctx.stroke()}
+    txt(40,30,`generation ${gg}: ${cnt} × ${vs.N0} cells`+(vs.n>6?`  (shown up to 6 of ${vs.n} generations)`:""),{size:13.5,weight:700,mono:true});label(560,234,"your answer: "+tvs(tv)+" cells",{size:13.5,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="sav"){const px=Math.min(150,Math.max(30,vs.L*(vs.L>10?6:14)));cube(140-px/2,160+px/2,px,{});txt(140,250,"side "+vs.L+" µm",{size:13,weight:700,align:"center",mono:true});
+    if(vs.from){const p2=Math.max(16,px*vs.from/vs.L);cube(330-p2/2,160+p2/2,p2,{});txt(330,250,"side "+vs.from+" µm",{size:13,weight:700,align:"center",mono:true})}
+    txt(470,60,"SA = 6 × L²",{size:14,weight:700,mono:true});txt(470,86,"V = L³",{size:14,weight:700,mono:true});txt(470,112,"SA : V = 6 ÷ L",{size:14,weight:700,mono:true,color:C["accent-ink"]});
+    label(600,200,"your answer: "+tvs(tv)+" "+p.unit,{size:13.5,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="stage"){if(vs.ph<0)interCell(260,140,105,{T,rep:1,cent:2});else mitosisCell(260,140,105,vs.ph+Math.sin(T*.8)*.04,{T});
+    txt(560,60,"Look at:",{size:13.5,weight:700});txt(560,86,"1. the nuclear envelope",{size:13});txt(560,110,"2. where the chromosomes are",{size:13});txt(560,134,"3. the spindle and the cell shape",{size:13});
+    if(TR.pick!=null)label(600,220,"you picked: "+p.choices[TR.pick],{size:13,weight:700,border:ok?C.good:C.warn})}
+  const WY=282;if(TR.sol){const el=(now-TR.solT)/1000;const per=Math.max(8,1.2+p.rows.length*1.8+3);wk(10,WY,780,308,{q:"",rows:p.rows,miss:p.miss},Math.min(el,per-.01),{per,cfs:14,dt:1.8,t0:.6,rowGap:18,cy:30,title:"Worked solution",missFull:true})}
+  else{panelBox(10,WY,780,308,{fill:hexA(C.paper,.96)});title(22,WY+18,"Worked solution",C["accent-ink"]);wrapText("The worked solution builds here after a correct answer, or when you press Show worked solution. For counting problems a gold ring hops from centromere to centromere in the picture.",24,WY+50,750,18,{size:13,color:C["ink-soft"]})}}
+function calcA11y(){const p=TR.p;const v=p.choices?(TR.pick==null?"not chosen":p.choices[TR.pick]):($("#calcAns").value.trim()||"not entered");const lab=`Practice problem, ${p.title}. Your answer ${v}.${TR.solved?" Correct.":""}`;const vs=p.vis;
+  const vk={count:`a cell drawn at ${vs.mode?STG[vs.mode].nm:""} with blue and violet chromosomes (each dark dot is a centromere), and a table of chromosomes, chromatids, DNA molecules and C value that fills in with the solution`,tally:"stained root tip cells with bars for the number of cells in each stage, or a cycle clock with the share of cells in one phase",gen:"rows of rod-shaped bacteria doubling each generation",sav:"a cube cell with its side length and the surface area and volume formulas",stage:"a dividing animal cell at one stage, with blue and violet chromosomes, gold centrosomes and teal spindle fibres"}[vs.k];
+  return [lab,`The picture shows ${vk}. ${TR.sol?"Below it the worked solution builds line by line, ending with "+ansTxt(p)+" in a green box.":"The worked solution is hidden until you check a correct answer or ask for it."}`]}
+/* ================= PART 4: stage games ================= */
+const SROUNDS=[
+{name:"Put the cell cycle in order",type:"order",goal:"Arrange one full animal cell cycle, starting just after a cell is born.",tip:"interphase (G1, S, G2) comes first, then the five stages of mitosis, then the split.",
+ items:[["G1","interphase"],["S","interphase"],["G2","interphase"],["Prophase","mitosis"],["Prometaphase","mitosis"],["Metaphase","mitosis"],["Anaphase","mitosis"],["Telophase","mitosis"],["Cytokinesis","cytoplasm divides"]],
+ why:["The new cell grows and works.","DNA is replicated and the centrosome is copied.","The cell grows more and checks its copied DNA.","Chromosomes condense and the spindle starts to form.","The nuclear envelope breaks and kinetochores are captured.","Chromosomes line up at the metaphase plate.","Sister chromatids separate and move to the poles.","Nuclear envelopes re-form around the two sets.","The cytoplasm divides, usually overlapping telophase."]},
+{name:"Events of mitosis in order",type:"order",goal:"Arrange these events in the order they happen during one division.",tip:"condensing and spindle building happen before the envelope breaks; separase acts before chromatids move.",
+ items:[["Chromatin condenses into visible chromosomes",""],["Centrosomes move apart and the spindle begins",""],["The nuclear envelope breaks into fragments",""],["Microtubules capture the kinetochores",""],["Chromosomes line up at the metaphase plate",""],["Separase cuts the cohesin between sisters",""],["Chromatids move to opposite poles",""],["Nuclear envelopes re-form around each set",""],["The cleavage furrow pinches the cell in two",""]],
+ why:["Prophase begins with condensation.","Also prophase: the centrosomes separate.","This marks prometaphase.","Prometaphase: search and capture.","Metaphase.","The trigger for anaphase.","Anaphase A, with the poles also moving apart (B).","Telophase.","Cytokinesis."]},
+{name:"Feature to stage",goal:"Match each feature or picture to the stage it describes.",
+ bins:[["I","Interphase"],["P","Prophase"],["PM","Prometaphase"],["M","Metaphase"],["A","Anaphase"],["T","Telophase"]],
+ cards:[["DNA is replicated","I","Interphase (S phase): every chromosome is copied."],["Nucleolus disappears; chromosomes become visible","P","Prophase: condensation begins and the nucleolus fades."],["Picture: loose chromatin inside an intact nucleus","I","Interphase: chromatin is loose and the envelope is whole.",stageSVG("I")],
+  ["Kinetochores first attach to microtubules","PM","Prometaphase: the envelope is gone, so microtubules reach the kinetochores."],["Picture: envelope in dashed pieces, chromosomes scattered","PM","Prometaphase: the envelope has broken up.",stageSVG("PM")],["Nuclear envelope fragments","PM","Prometaphase begins when the envelope breaks down."],
+  ["Chromosomes lined up at the cell's equator","M","Metaphase: all centromeres sit on the metaphase plate."],["Picture: chromosomes in one line between two poles","M","Metaphase: one row in the middle.",stageSVG("M")],["The spindle checkpoint is satisfied","M","End of metaphase: all kinetochores attached and under tension."],
+  ["Chromosome number per cell briefly doubles","A","Anaphase: separated chromatids count as chromosomes."],["Picture: V-shaped chromosomes moving to both poles","A","Anaphase: centromeres lead the way to the poles.",stageSVG("A")],["Cohesin is cut by separase","A","The start of anaphase."],
+  ["Two nuclear envelopes re-form","T","Telophase: new nuclei form around each set."],["Picture: two nuclei and a pinching cell","T","Telophase overlapping cytokinesis.",stageSVG("T")],["Chromosomes decondense again","T","Telophase reverses prophase's condensation."],["Centrosomes start moving apart","P","Prophase: the spindle starts to form between them."]]},
+{name:"Which checkpoint?",goal:"Sort each question or event to the checkpoint where it is checked.",
+ bins:[["ck1","G1 checkpoint (restriction point)"],["ck2","G2 checkpoint"],["ckm","M (spindle) checkpoint"]],
+ cards:[["Is the cell big enough to divide?","ck1","G1: size is checked before committing to S phase."],["Are growth factors present?","ck1","G1: growth factor signals are needed to pass the restriction point."],["Are there enough nutrients?","ck1","G1: conditions are checked before committing."],["Cells may leave for G0 here","ck1","G1: cells that do not pass can exit to G0."],["Is the DNA undamaged before replication?","ck1","G1: p53 can stop the cycle before S if DNA is damaged."],
+  ["Has all the DNA been replicated?","ck2","G2: replication must be complete before mitosis."],["Is replicated DNA free of damage?","ck2","G2: damage found after S is caught here."],["Is enough MPF active to enter mitosis?","ck2","G2 to M: MPF activity switches the cell into mitosis."],
+  ["Is every kinetochore attached to the spindle?","ckm","M checkpoint: a single unattached kinetochore delays anaphase."],["Is there tension across each sister pair?","ckm","M checkpoint: tension shows correct attachment to opposite poles."],["Colchicine-treated cells stop here","ckm","M checkpoint: with no spindle, kinetochores stay unattached."]]},
+{name:"Accelerator or brake?",goal:"Sort each gene, protein or idea: does it belong to proto-oncogenes (accelerators) or tumour suppressors (brakes)?",
+ bins:[["onc","Proto-oncogene or oncogene (accelerator)"],["tsg","Tumour suppressor (brake)"]],
+ cards:[["Ras signalling protein","onc","Ras relays growth factor signals; stuck-on Ras is a common oncogene."],["Growth factor receptor","onc","Receptors start the go signal; overactive ones drive division."],["Cyclin D (a G1 cyclin)","onc","Too much G1 cyclin pushes cells past the G1 checkpoint."],["Myc transcription factor","onc","Myc turns on growth genes; overexpression drives cancer."],["One mutant copy is enough (gain of function)","onc","Oncogene mutations act dominantly in the cell."],
+  ["p53","tsg","p53 stops the cycle after DNA damage or triggers apoptosis."],["Rb","tsg","Rb holds E2F until the cell is ready for S phase."],["p21","tsg","p21 blocks Cdks when p53 switches it on."],["BRCA1 (DNA repair)","tsg","Repair genes are tumour suppressors: losing them lets mutations pile up."],["Both copies must usually be lost (two hits)","tsg","Tumour suppressor mutations act recessively in the cell."]]},
+{name:"Animal, plant or bacterium?",goal:"Sort each feature of cell division to the kind of cell it describes.",
+ bins:[["animal","Animal cells"],["plant","Plant cells"],["bact","Bacteria (binary fission)"]],
+ cards:[["Cleavage furrow","animal","Animal cells pinch in two with a furrow."],["Actin and myosin contractile ring","animal","The ring tightens to make the furrow."],["Centrioles inside the centrosomes","animal","Animal centrosomes have centrioles; plant cells do not."],
+  ["Cell plate","plant","Plant cells build a new wall from the middle out."],["Golgi vesicles carry new wall material to the middle","plant","The vesicles fuse into the cell plate."],["Spindle forms without centrioles","plant","Plant spindles organize without centrioles."],
+  ["FtsZ ring at the middle of the cell","bact","FtsZ, a tubulin relative, marks and helps build the division site."],["One circular chromosome copied from one origin","bact","Prokaryotes usually have one circular chromosome."],["No nucleus, no spindle, no mitosis","bact","Binary fission does not use a mitotic spindle."]]}];
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{},order:[],ord:[],checks:0,solved:false,hints:0};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();SG.checks=0;SG.solved=false;SG.hints=0;const R=SROUNDS[i];const isO=R.type==="order";
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  $("#sHow").textContent=isO?"Drag a card up or down, or use its arrow buttons (Tab and Enter work too). Press Check order when you are ready.":"Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.";
+  $("#sOrder").hidden=!isO;$("#sPool").hidden=isO;$("#sBins").hidden=isO;$("#sCheck").hidden=!isO;
+  if(isO){let o;do{o=shuffle(R.items.map((c,k)=>k))}while(o.every((v,k)=>v===k));SG.ord=o;oRender()}
+  else{SG.order=shuffle(R.cards.map((c,k)=>k));const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${stageSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});sRender()}
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sTimerUI();starUI();a11yKey=""}
+/* ---------- ordering ---------- */
+function oRender(mark){const R=SROUNDS[SG.r];const ol=$("#sList");ol.innerHTML="";SG.ord.forEach((k,pos)=>{const it=R.items[k];const li=document.createElement("li");li.className="item"+(mark?(k===pos?" right":" off"):"")+(SG.hint===k?" hinted":"")+(SG.dragK===k?" drag":"");li.dataset.k=k;
+    li.innerHTML=`<span class="pos">${pos+1}</span><span class="grip" aria-hidden="true">⋮⋮</span><span class="txt">${it[0]}${it[1]?`<span class="tag">${it[1]}</span>`:""}${mark&&k===pos?'<span class="gk-sr"> (in the right place)</span>':""}</span><span class="mv"><button type="button" aria-label="Move ${it[0]} up">▲</button><button type="button" aria-label="Move ${it[0]} down">▼</button></span>`;
+    const [up,dn]=li.querySelectorAll(".mv button");up.onclick=()=>oMove(pos,-1);dn.onclick=()=>oMove(pos,1);up.disabled=pos===0;dn.disabled=pos===SG.ord.length-1;
+    li.addEventListener("pointerdown",e=>oDragStart(e,k));ol.appendChild(li)})}
+function oMove(pos,d){const np=pos+d;if(np<0||np>=SG.ord.length||SG.solved)return;const a=SG.ord;[a[pos],a[np]]=[a[np],a[pos]];SG.hint=null;oRender();const b=$("#sList").children[np].querySelectorAll(".mv button")[d<0?0:1];if(b&&!b.disabled)b.focus();else $("#sList").children[np].querySelector(".mv button:not(:disabled)").focus();a11yKey=""}
+let odrag=null;
+function oDragStart(e,k){if(e.button>0||e.target.closest(".mv")||SG.solved)return;odrag={k,id:e.pointerId,y:e.clientY,moved:false};window.addEventListener("pointermove",oDragMove);window.addEventListener("pointerup",oDragEnd);window.addEventListener("pointercancel",oDragEnd)}
+function oDragMove(e){if(!odrag||e.pointerId!==odrag.id)return;if(!odrag.moved&&Math.abs(e.clientY-odrag.y)<5)return;odrag.moved=true;SG.dragK=odrag.k;e.preventDefault();
+  const items=[...$("#sList").children];let tgt=items.length-1;for(let i=0;i<items.length;i++){const r=items[i].getBoundingClientRect();if(e.clientY<r.top+r.height/2){tgt=i;break}}
+  const cur=SG.ord.indexOf(odrag.k);if(tgt!==cur){SG.ord.splice(cur,1);SG.ord.splice(tgt,0,odrag.k);SG.hint=null;oRender()}else if(!$("#sList .item.drag"))oRender()}
+function oDragEnd(){window.removeEventListener("pointermove",oDragMove);window.removeEventListener("pointerup",oDragEnd);window.removeEventListener("pointercancel",oDragEnd);odrag=null;SG.dragK=null;oRender();a11yKey=""}
+function oCheck(){if(SG.solved)return;const R=SROUNDS[SG.r];SG.checks++;const n=SG.ord.filter((k,p)=>k===p).length;oRender(true);
+  if(n===SG.ord.length){SG.solved=true;SG.mist=Math.max(0,SG.checks-1)+SG.hints;sFinish()}else{SG.mist++;sMsg("warn",`Not quite. ${n} of ${SG.ord.length} are in the right place (green). Amber cards need to move. Hint: ${R.tip}`)}a11yKey=""}
+/* ---------- sorting ---------- */
+function sRender(){const R=SROUNDS[SG.r];if(R.type==="order")return;const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";if(c[3])b.classList.add("pic");b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";if(c[3])s.classList.add("pic");items.appendChild(s)}})});starUI()}
+function sDone(){const R=SROUNDS[SG.r];return R.type==="order"?SG.solved:Object.keys(SG.placed).length===R.cards.length}
+function starUI(){const d=sDone();$("#sStars").textContent=d?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",d?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";const R=SROUNDS[SG.r];
+  sMsg("good",(R.type==="order"?"Everything is in order. ":"")+`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();if(R.type!=="order")sRender();starUI()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sCheck").onclick=oCheck;
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];
+  if(R.type==="order"){if(SG.solved){sMsg("info","The order is already correct.");return}const pos=SG.ord.findIndex((k,p)=>k!==p);const k=pos;SG.hint=k;SG.hints++;sMsg("info",`Hint: position ${pos+1} should be "${R.items[k][0]}". ${R.why[k]} It glows gold in the list.`);oRender();return}
+  const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];if(R.type==="order"){SG.ord=R.items.map((c,k)=>k);SG.mist=Math.max(SG.mist,3);SG.solved=true;oRender(true);sMsg("info","Here is the correct order. Read each card from top to bottom.");sFinish();return}
+  R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(!sDone())$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];if(R.type==="order")return [null,`Round ${SG.r+1}, ${R.name}. The list currently reads: `+SG.ord.map((k,p)=>(p+1)+" "+R.items[k][0]).join(", ")+"."+(SG.solved?" The order is correct.":"")];
+  const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= PART 5: biology in the real world ================= */
+const LS={i:0,ans:{}};
+function flask(x,y,w,h,T,n,col){ctx.beginPath();ctx.moveTo(x+w*.35,y);ctx.lineTo(x+w*.65,y);ctx.lineTo(x+w*.65,y+h*.25);ctx.lineTo(x+w,y+h*.75);ctx.quadraticCurveTo(x+w,y+h,x+w*.85,y+h);ctx.lineTo(x+w*.15,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h*.75);ctx.lineTo(x+w*.35,y+h*.25);ctx.closePath();
+  ctx.fillStyle=hexA(C.medium,.8);ctx.fill();ctx.strokeStyle=C["dish-edge"];ctx.lineWidth=2.4;ctx.stroke();for(let i=0;i<n;i++){const xx=x+w*.12+rnd(i)*w*.76,yy=y+h-8-Math.floor(i/14)*7-rnd(i+4)*4;circ(xx,yy,4.2,col,hexA(C.ink,.4),.8)}}
+const LIFE=[
+{name:"Chemotherapy and dividing cells",who:"Scenario 1 · medicine",
+ story:"Jordan is starting chemotherapy with paclitaxel, a drug from the bark of the Pacific yew tree. It binds microtubules and freezes them so they cannot grow or shrink. The oncology team warns about hair loss, mouth sores and low blood counts. A research graph shows what the drug does to tumour cells growing in a dish.",
+ cap:"Fast-dividing tissues in the body light up; the graph shows the tumour's mitotic index rising after paclitaxel, then falling as trapped cells die.",
+ desc:"Left: a body outline with three fast-dividing tissues pulsing: hair follicles on the head, the gut lining in the abdomen and bone marrow in the thigh bone, plus a rose tumour in the chest. Middle: a dividing cell with blue and violet chromosomes stuck scattered near the middle and stiff teal microtubules, labelled held at the M checkpoint. Right: a graph of mitotic index against hours after the drug. A grey control line stays near 4 percent. A rose drug line climbs to about 30 percent at 12 hours and then falls as the trapped cells die.",
+ draw(T){panelBox(10,10,200,480);person(110,420,330,{shirt:"shirt2"});const pu=.5+.5*Math.sin(T*3);
+   for(let i=0;i<7;i++)circ(80+i*10,108+Math.abs(i-3)*3,3,hexA(C.dna,.4+.6*pu));lead(96,104,24,44,"hair follicles",{align:"left"});
+   ctx.beginPath();for(let i=0;i<8;i++){const x=88+i*6,y=250+Math.sin(i*1.4)*8;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.strokeStyle=hexA(C.gf,.5+.5*pu);ctx.lineWidth=4;ctx.stroke();lead(130,252,150,300,"gut lining",{align:"left"});
+   line(92,330,92,400,hexA(C.blood,.5+.5*pu),8);lead(92,370,30,450,"bone marrow",{align:"left"});circ(124,200,9,C.prot,C.ink,1);lead(124,200,150,166,"tumour",{align:"left"});
+   panelBox(220,10,250,250);mitosisCell(345,135,85,1.8,{T,poison:"taxol"});label(345,240,"held at the M checkpoint",{size:12,weight:700,border:C.warn});
+   panelBox(220,270,570,220);const g=graph({x:280,y:300,w:480,h:150,x0:0,x1:48,y0:0,y1:40,xt:[0,12,24,36,48],yt:[0,10,20,30,40],yf:v=>v+"%",xl:"hours after drug",yl:"mitotic index",grid:true});
+   const u=P(T,8)*48;const A=[],B=[];for(let i=0;i<=96;i++){const h=i/2;if(h>u)break;A.push([h,4+Math.sin(h)*.4]);B.push([h,h<12?4+26*smooth(h/12):30-25*smooth((h-12)/30)])}plotPts(g,A,C["ink-soft"],2.4);plotPts(g,B,C.prot,3);txt(700,318,"drug",{size:12,weight:700,color:C["prot-ink"]});txt(700,434,"control",{size:12,weight:700})
+   ;panelBox(480,10,310,250);wrapText("Drugs that target dividing cells hit tumours hardest, but also any healthy tissue that divides fast.",494,40,282,19,{size:13,weight:600});txt(494,150,"paclitaxel: freezes microtubules",{size:12.5});txt(494,172,"vinca drugs: block microtubule assembly",{size:12.5});txt(494,194,"both: cells trapped in mitosis",{size:12.5,weight:600})},
+ qs:[{q:"Why do many patients on this kind of chemotherapy lose hair and get mouth sores?",opts:[["Hair follicle and mouth lining cells divide rapidly, so a drug that targets dividing cells harms them too.",true,"Right. The drug cannot tell a tumour cell from any other dividing cell; fast-dividing healthy tissues take collateral damage."],["The drug directly dissolves hair proteins.",false,"Paclitaxel acts on microtubules in dividing cells, not on keratin in hair."],["Hair cells are cancer cells in disguise.",false,"Hair follicle cells are normal; they are simply among the fastest-dividing cells in the body."],["The drug makes cells divide faster until they run out.",false,"It stops division in mitosis; it does not speed it up."]]},
+  {q:"Read the graph: the tumour's mitotic index jumps from about 4% to about 30% within 12 hours. What best explains this?",opts:[["Frozen microtubules cannot attach properly, so the spindle checkpoint holds cells in mitosis and they pile up there.",true,"Right. Cells keep entering mitosis but cannot leave it, so the share of cells in M rises."],["The drug makes the cells divide more often.",false,"A higher mitotic index here means cells are stuck in M, not dividing faster; the later fall shows they die."],["The drug causes extra rounds of DNA replication.",false,"Replication is not the target; the drug acts on the spindle."],["More cells are leaving the cycle for G0.",false,"Cells in G0 would lower the mitotic index, not raise it."]]},
+  {q:"Why might a very slow-growing tumour respond poorly to a spindle poison?",opts:[["Few of its cells are in mitosis at any time, so few are trapped by a drug that acts in M phase.",true,"Right. Drugs that act in one phase work best on populations where many cells pass through that phase."],["Slow tumours have no microtubules.",false,"All eukaryotic cells have microtubules; the issue is how many cells are dividing."],["Slow tumours are always benign.",false,"Growth rate and malignancy are different things; some slow tumours are malignant."],["The drug only works on bacteria.",false,"Paclitaxel targets eukaryotic tubulin; bacteria have FtsZ instead."]]}]},
+{name:"HeLa cells",who:"Scenario 2 · research history and ethics",
+ story:"In 1951 doctors took a sample of a cervical tumour from Henrietta Lacks, a Black woman treated in Baltimore, without her knowledge or consent. Her cells, named HeLa, became the first human cells to keep dividing in the lab. They were used to develop the polio vaccine and in many thousands of studies. Later research found that the tumour was caused by human papillomavirus (HPV), whose DNA sits in the HeLa genome.",
+ cap:"A culture flask of HeLa cells keeps filling; the molecule view shows HPV proteins disabling p53 and Rb.",
+ desc:"Left: a culture flask whose floor fills with rose cells, then a second flask fills, labelled from 1951 to today. Right: two molecule panels. In the first, an orange viral E6 protein grabs a rose p53 protein and a barrel-shaped proteasome destroys it, so the stop signal for damaged DNA is gone. In the second, an orange viral E7 protein binds the purple Rb protein, and the teal E2F protein is released to switch on S phase genes.",
+ draw(T){panelBox(10,10,300,480);const n=Math.floor(10+P(T,10)*60);flask(40,60,120,150,T,Math.min(n,56),C.hela);flask(160,240,120,150,T,Math.max(0,n-20),C.hela);txt(160,420,"1951 → decades of division",{size:13,weight:700,align:"center"});txt(160,442,"in labs around the world",{size:12,align:"center",color:C["ink-soft"]});
+   panelBox(320,10,470,230);title(334,32,"HPV E6 removes p53");const q=P(T,6);protBlob(lerp(360,470,smooth(seg(q,0,.3))),130,18,C.rna,1,T,{t:"E6",size:10});protBlob(lerp(560,500,smooth(seg(q,.3,.5))),130,18,C.p53,3,T,{t:"p53",size:10});
+   rr(650,95,54,80,10);ctx.fillStyle=hexA(C.cdk,.35);ctx.fill();ctx.strokeStyle=C.cdk;ctx.lineWidth=2;ctx.stroke();txt(677,190,"proteasome",{size:11.5,align:"center"});if(q>.6)withA(1-seg(q,.8,1),()=>protBlob(lerp(500,677,seg(q,.6,.85)),130,16,C.p53,4,T,{}));
+   txt(555,222,"no p53: damaged cells keep dividing",{size:12.5,weight:600,align:"center"});
+   panelBox(320,250,470,240);title(334,272,"HPV E7 frees E2F from Rb");const r=P(T,6);protBlob(500,360,26,C.rb,4,T,{t:"Rb"});protBlob(lerp(400,470,smooth(seg(r,0,.3))),340,16,C.rna,5,T,{t:"E7",size:10});const rel=seg(r,.35,.7);protBlob(lerp(530,640,rel),lerp(370,420,rel),16,C.e2f,6,T,{t:"E2F",size:9});
+   dnaLadder(560,450,200,0,T,{amp:6});txt(660,474,"S phase genes switched on",{size:12,weight:600,align:"center"})},
+ qs:[{q:"HPV's E6 protein targets p53 for destruction and its E7 protein binds Rb. Which outcome fits?",opts:[["The cells lose both the DNA damage brake and the G1 to S brake, so they divide without normal control.",true,"Right. Knocking out two major tumour suppressors removes key checkpoints."],["The cells stop dividing because both brakes are pressed.",false,"E6 and E7 disable the brakes; they do not activate them."],["Only the M checkpoint is affected.",false,"p53 and Rb act mainly at G1 (and p53 at G2), not at the spindle checkpoint."],["The cells become haploid.",false,"Losing p53 and Rb does not halve the chromosomes; HeLa cells actually have extra chromosomes."]]},
+  {q:"Most normal human cells stop dividing after a limited number of divisions, but HeLa cells keep going. Which explanation fits best?",opts:[["Their limits on cell division are switched off; for example, the enzyme telomerase keeps their chromosome ends from wearing down.",true,"Right. HeLa cells have active telomerase and disabled checkpoint proteins, so they never reach the normal limit."],["They divide by binary fission.",false,"HeLa cells are human cells and divide by mitosis."],["They do not need DNA replication.",false,"Every division still needs a full S phase."],["They stay in G0.",false,"G0 cells are not dividing at all."]]},
+  {q:"Henrietta Lacks's cells were taken and studied without her knowledge or consent. Which statement best reflects research ethics today?",opts:[["Researchers are expected to obtain informed consent for research use of identifiable samples and to protect donors' privacy; in 2013 the NIH and the Lacks family agreed on controlled access to HeLa genome data.",true,"Right. Genome data can reveal information about relatives, so families now have a voice in how such data are shared."],["Once cells leave the body, donors and their families have no interest in how they are used.",false,"Genetic data from a cell line can reveal health information about living relatives, which is why privacy protections matter."],["Cell lines from patients are banned from research.",false,"Patient-derived cell lines are widely used, with consent and oversight."],["Consent matters only if the research makes money.",false,"Respect for persons applies to all research, profitable or not."]]}]},
+{name:"Reading a flow cytometry DNA histogram",who:"Scenario 3 · research lab data",
+ story:"A lab stains a culture's DNA with a fluorescent dye and runs the cells one at a time past a laser in a flow cytometer. Brighter cells contain more DNA. The result is a histogram: number of cells against DNA content. The lab compares untreated cells with cells treated for 16 hours with a spindle poison.",
+ cap:"Control: tall 2C peak (G0 and G1), S phase in between, small 4C peak (G2 and M). With a spindle poison the 4C peak grows.",
+ desc:"Top left: a thin stream of single cells passes a cyan laser beam and a detector, each flash brighter for cells with more DNA. Main graph: a histogram of cell number against DNA content from 1C to 5C. The blue control histogram has a tall peak at 2C, a low plateau between 2C and 4C, and a smaller peak at 4C. Every few seconds an orange treated histogram fades in, in which the 2C peak shrinks and the 4C peak becomes the tallest. Labels mark G0 and G1 at 2C, S between, and G2 and M at 4C.",
+ draw(T){panelBox(10,10,780,480);const sw=P(T,10)>.5;const a=smooth(seg(P(T,10),.45,.6))*(1-smooth(seg(P(T,10),.95,1)));
+   line(40,80,220,80,C["ink-soft"],2);for(let i=0;i<6;i++){const x=40+((i*34+T*60)%180);circ(x,80,6,C.cyto,C.mem,1.2);circ(x,80,2.5,C.dna)}line(150,40,150,120,hexA(C.elec,.7),3);rr(232,66,40,28,4);ctx.fillStyle=C.cdk;ctx.fill();txt(252,80,"detector",{size:10,align:"center",color:inkOn(C.cdk)});glow(150,80,24,C.elec,.4+.4*Math.sin(T*12));txt(40,130,"one cell at a time past a laser",{size:12,color:C["ink-soft"]});
+   const g=graph({x:320,y:60,w:440,h:340,x0:1,x1:5,y0:0,y1:7,xt:[1,2,3,4,5],xf:v=>v+"C",yt:[0,7],yf:v=>v?"many":"0",xl:"DNA content per cell",yl:"number of cells",grid:true});
+   histo(g,flowBins(.6,.25,.15,64),C.flow1,{a:.45});if(a>0)withA(a,()=>histo(g,flowBins(.2,.12,.68,64),C.flow2,{a:.45}));
+   label(g.X(2),78,"G0 / G1",{size:12,weight:700,border:C.flow1});label(g.X(3),300,"S",{size:12,weight:700});label(g.X(4),110,"G2 / M",{size:12,weight:700,border:C.flow2});
+   txt(40,200,"blue: untreated control",{size:13,weight:700,color:C["dna-ink"]});txt(40,224,"orange: 16 h spindle poison",{size:13,weight:700,color:C.mpf});
+   txt(40,280,"Control shares of cells:",{size:12.5,weight:600});txt(40,302,"2C peak 60%",{size:12.5,mono:true});txt(40,322,"between 25%",{size:12.5,mono:true});txt(40,342,"4C peak 15%",{size:12.5,mono:true})},
+ qs:[{q:"In the control histogram, which part contains cells in G0 and G1?",opts:[["The tall peak at 2C",true,"Right. Cells that have not replicated have 2C DNA, and most cells are in G1 (or G0)."],["The peak at 4C",false,"4C cells have replicated their DNA: G2 and M."],["The region between the peaks",false,"That is S phase, partway through replication."],["The far left edge below 2C",false,"Below 2C would be cells with less than a full set, such as dying cells breaking up their DNA."]]},
+  {q:"After 16 hours with a spindle poison, the 4C peak becomes the tallest. Where are the cells stuck?",opts:[["In G2 or M, with replicated DNA (mostly held in mitosis by the spindle checkpoint)",true,"Right. They copied their DNA (4C) but cannot finish mitosis, so they collect at 4C."],["In G1",false,"Cells stuck in G1 would make the 2C peak grow."],["In S phase",false,"An S block would pile cells between the peaks."],["They have doubled to 8C",false,"The peak sits at 4C, not 8C."]]},
+  {q:"In the control, 60% of cells are in the 2C peak, 25% between the peaks and 15% in the 4C peak. The cycle takes 20 hours. About how long is G1 (assume few cells are in G0)?",opts:[["About 12 hours (0.60 × 20 h)",true,"Right. The share of cells in a phase estimates the share of time: 0.60 × 20 h = 12 h."],["About 60 hours",false,"Use the fraction 0.60, not 60, and multiply by the 20 hour cycle."],["About 3 hours",false,"That uses the 4C share (15%), which is G2 plus M."],["About 5 hours",false,"That uses the S phase share (25%)."]]}]},
+{name:"Wound healing in a dish: the scratch assay",who:"Scenario 4 · research lab experiment",
+ story:"Researchers grow a single layer of skin cells, scrape a straight gap through it, and photograph the gap every few hours. They compare four dishes: normal medium, medium with extra PDGF, medium with no growth factors, and normal medium plus a drug that blocks DNA replication.",
+ cap:"Cells close a scraped gap: fastest with PDGF, partly with a replication blocker, slowly without growth factors.",
+ desc:"Top: four small dishes in a row, each with a gap through a layer of cells; the gaps narrow at different speeds and stop narrowing when the edges meet. Bottom: a graph of percent of gap closed against hours. A green PDGF line reaches 100 percent first, at about 24 hours. A blue normal medium line reaches 100 percent at about 36 hours. An amber replication blocker line levels off near 50 percent. A slate no growth factor line rises slowly to about 30 percent.",
+ draw(T){panelBox(10,10,780,480);const u=P(T,10)*48;const conds=[["PDGF",C.good,24,1],["normal",C.dna,36,1],["blocker",C.warn,20,.5],["no GF",C.g0,48,.3]];
+   const cl=(c,h)=>c[3]*smooth(clamp(h/c[2],0,1));
+   conds.forEach((c,i)=>{const x=110+i*190;petri(x,110,70);const gap=40*(1-cl(c,u));for(let gx=-3;gx<=3;gx++)for(let gy=-3;gy<=3;gy++){const X=x+gx*18,Y=110+gy*18;if(Math.hypot(X-x,Y-110)>62)continue;if(Math.abs(X-x)<gap)continue;tinyCell(X,Y,7,C.skin,{seed:gx*7+gy,T:T*.3})}txt(x,198,c[0],{size:13,weight:700,align:"center",color:c[1]===C.dna?C["dna-ink"]:C.ink})});
+   const g=graph({x:80,y:240,w:640,h:190,x0:0,x1:48,y0:0,y1:100,xt:[0,12,24,36,48],yt:[0,50,100],yf:v=>v+"%",xl:"hours",yl:"gap closed",grid:true});
+   conds.forEach(c=>{const A=[];for(let i=0;i<=96;i++){const h=i/2;if(h>u)break;A.push([h,cl(c,h)*100])}plotPts(g,A,c[1],3)});txt(730,250,"PDGF",{size:11.5,weight:700});txt(730,268,"normal",{size:11.5,weight:700});txt(730,330,"blocker",{size:11.5,weight:700});txt(730,370,"no GF",{size:11.5,weight:700})},
+ qs:[{q:"Read the graph: which condition closed the gap fastest?",opts:[["Medium with extra PDGF",true,"Right. More growth factor signal drives more cells past the G1 checkpoint, so the edges fill in faster."],["Normal medium",false,"Normal medium closes the gap, but later (about 36 h) than PDGF (about 24 h)."],["The replication blocker",false,"That line levels off near 50%: it never closes."],["No growth factors",false,"That is the slowest line."]]},
+  {q:"With the replication blocker, the gap closes only about halfway and then stalls. What does this suggest?",opts:[["Some closing comes from cells crawling into the gap, but full closure needs new cells made by division.",true,"Right. Blocking S phase stops division but not cell movement, so the gap only partly closes."],["The blocker kills all the cells immediately.",false,"If all cells died, the gap would not close at all."],["The cells were already in G0, so the drug had no effect.",false,"Edge cells re-enter the cycle when the gap opens; blocking S phase changes the result."],["Closing has nothing to do with cell division.",false,"Compare it with normal medium: division is needed to finish closing the gap."]]},
+  {q:"In the normal dish, cells stop dividing once the gap closes, even though growth factors are still present. Why?",opts:[["Density-dependent inhibition: once cells touch on all sides they stop dividing.",true,"Right. Crowding and cell contact send stop signals, so normal cells form one layer and stop."],["The growth factor runs out exactly when the gap closes.",false,"The PDGF dish shows growth factors are not the only control; contact also matters."],["The cells enter meiosis.",false,"Skin cells do not do meiosis."],["The cells become cancer cells.",false,"Cancer cells would keep piling up instead of stopping."]]}]},
+{name:"Colchicine and seedless watermelons",who:"Scenario 5 · agriculture",
+ story:"Plant breeders treat a growing shoot tip of a diploid watermelon (2n = 22) with colchicine, which stops spindle microtubules from forming. Some cells end up with 44 chromosomes, and a tetraploid plant grows from them. Crossing the tetraploid with a normal diploid gives seeds that grow into triploid plants with mostly seedless fruit.",
+ cap:"No spindle, no separation into two nuclei: the chromosome number doubles. Tetraploid × diploid gives a triploid, seedless watermelon.",
+ desc:"Left: a watermelon seedling with a drop of colchicine on its shoot tip. Middle: a cell where chromosomes have been copied and condensed but there are no spindle fibres; the copies stay in one nucleus, and a counter goes from 22 to 44. Right: a cross diagram: a tetraploid parent (44) makes gametes with 22 and a diploid parent makes gametes with 11, giving a triploid with 33; a slice of watermelon below has only small white seed coats instead of dark seeds.",
+ draw(T){panelBox(10,10,230,480);line(120,420,120,250,C.plant,6);ell(90,300,30,12,-.5,C.plant);ell(150,280,30,12,.5,C.plant);ell(120,240,10,14,0,C.plant);const d=P(T,3);circ(120,lerp(150,222,d),6*(1-d*.3),C.water,hexA(C.ink,.4),1);txt(120,130,"colchicine",{size:12.5,weight:700,align:"center"});txt(120,450,"shoot tip treated",{size:12,align:"center",color:C["ink-soft"]});
+   panelBox(250,10,250,480);const k=P(T,8);mitosisCell(375,200,95,lerp(.6,1.5,smooth(seg(k,0,.4))),{T,poison:"colch"});label(375,330,k<.5?"no spindle: copies stay together":"one nucleus, chromosomes doubled",{size:12,weight:700,border:C.warn});label(375,370,k<.5?"22 chromosomes":"44 chromosomes",{size:14,weight:700,mono:true,border:k<.5?C.dna:C.bad});
+   panelBox(510,10,280,480);const box=(x,y,t,col)=>{rr(x-46,y-16,92,32,8);ctx.fillStyle=hexA(col,.18);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=1.8;ctx.stroke();txt(x,y,t,{size:13,weight:700,align:"center",mono:true})};
+   box(580,60,"4n = 44",C.dna2);box(720,60,"2n = 22",C.dna);arrow(580,78,620,140,C["ink-soft"],1.8);arrow(720,78,680,140,C["ink-soft"],1.8);txt(560,110,"gamete 22",{size:11.5,align:"center"});txt(740,110,"gamete 11",{size:11.5,align:"center"});box(650,160,"3n = 33",C.bad);
+   circ(650,340,90,C.plant);circ(650,340,80,C.panel);circ(650,340,74,"#E8545A");for(let i=0;i<12;i++){const a=i/12*TAU;ell(650+Math.cos(a)*44,340+Math.sin(a)*44,4,6,a,"#F4EEE0")}txt(650,454,"triploid fruit: few seeds",{size:12,align:"center",weight:600})},
+ qs:[{q:"How does colchicine give a cell 44 chromosomes instead of 22?",opts:[["The chromosomes are copied and the sister chromatids eventually separate, but with no spindle they are not pulled into two nuclei, so one nucleus keeps them all.",true,"Right. Copying happens in S phase as usual; without a spindle the copies are never divided between two cells."],["Colchicine makes the cell copy its DNA twice in one S phase.",false,"Replication still happens once; the doubling comes from failed separation."],["Colchicine fuses two cells together.",false,"Colchicine acts on microtubules, not on membranes."],["Colchicine causes meiosis.",false,"Meiosis would halve the number, not double it."]]},
+  {q:"A tetraploid (4n = 44) is crossed with a diploid (2n = 22). How many chromosomes are in the triploid offspring's body cells?",opts:[["33",true,"Right. Gametes carry half: 22 from the tetraploid plus 11 from the diploid gives 33."],["66",false,"That adds the parents' body cell numbers. Offspring get a gamete from each."],["44",false,"That would be two gametes from the tetraploid parent."],["22",false,"That would be two gametes from the diploid parent."]]},
+  {q:"Why are triploid watermelons mostly seedless?",opts:[["Three sets of chromosomes cannot pair and separate evenly in meiosis, so most eggs and pollen are unbalanced and seeds rarely develop.",true,"Right. Mitosis works fine in triploids, so the plant grows; meiosis is what fails, so seeds do not form."],["Colchicine in the fruit kills the seeds.",false,"The triploid plant itself is not treated with colchicine."],["Triploid cells cannot do mitosis.",false,"The plant grows by mitosis, which works with any number of sets."],["The seeds are removed by hand.",false,"Seedlessness comes from the chromosomes, not from processing."]]}]}];
+function lifeUI(){const S=LIFE[LS.i];$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]?'<span class="ok" aria-label="all answered">✓</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-label="all answered">✓</span>')}
+function drawLife(now){use(S5);LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvBench",800,600),S2=makeStage("cvScope",800,560),S3=makeStage("cvCalc",800,600),S5=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+const A11Y={bench:{cv:"#cvBench",f:benchA11y},scope:{cv:"#cvScope",f:scopeA11y},calc:{cv:"#cvCalc",f:calcA11y},sort:{cv:null,f:sortA11y},life:{cv:"#cvLife",f:lifeA11y}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(a.cv&&lab)$(a.cv).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=a.cv?$(a.cv).closest(".canvas-holder"):$("#sPool").hidden?$("#sOrder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(a.cv)$(a.cv).setAttribute("aria-describedby","gk-desc")}}
+/* ---------------- tabs / theme / loop ---------------- */
+let curTab="bench";
+const TABS=["bench","scope","calc","sort","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S3,S5].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;DT=dt;
+  try{if(curTab==="bench")drawBench(now);else if(curTab==="scope")drawScope(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__mb={tab:k=>showTab(k),bench:()=>bnStats(),bn:BN,benchStep:h=>{for(let i=0;i<h*10;i++)bnStep(.1)},
+  scopeN:()=>MS.vis.length,scopeCallAll:right=>{MS.vis.forEach(v=>{MS.calls[v.i]=right?MS.tissue[v.i].st:(MS.tissue[v.i].st==="I"?"P":"I")});msUI()},scopeTruth:()=>msTally("truth"),
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,choices:TR.p.choices?TR.p.choices.length:0,fmt:TR.p.choices?String(TR.p.ans):fmtAns(TR.p,TR.p.ans),unit:TR.p.unit,kind:TR.p.kind}),
+  gen:t=>{const q=genOne(t);if(q.choices){return {choice:true,ans:q.ans,j1:judge(q,String(q.ans)),j2:judge(q,String((q.ans+1)%q.choices.length)),hints:q.hints.length,rows:q.rows.length}}
+    const good=fmtAns(q,q.ans);const bad=fmtAns(q,q.ans*1.5+1);return {ans:q.ans,good,j1:judge(q,good),j1u:judge(q,good+" "+q.unit),j2:judge(q,bad),j3:judge(q,"abc"),hints:q.hints.length,rows:q.rows.length,html:q.html}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortType:()=>SROUNDS[SG.r].type||"sort",sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards?SROUNDS[SG.r].cards.length:0,solved:SG.solved}),lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();bnInit();msInit();calcInit();calcNew();updCalcMeter();sLoad(0);lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

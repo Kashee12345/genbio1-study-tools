@@ -1,0 +1,1464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meiosis Lab</title>
+<meta name="description" content="Meiosis lab: a meiosis bench where you choose 2n, switch crossing over and nondisjunction on, watch gametes form with a live genotype tally and fertilize them; a counting trainer for independent assortment, chromosome, chromatid and DNA counts and nondisjunction outcomes with animated worked solutions; a mitosis versus meiosis sorting and ordering game; and real-world data scenarios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0E5558;--accent-wash:#DCEFEE;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#B8561A;--act2:#2F7FC1;--act3:#3E9B4F;--act4:#7B5CC9;--act5:#2E8A7A;--act6:#B07A10;--act7:#A9372F;--act8:#A04E8C;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF1F6;--grid:#D5DAE6;--paper:#FFFDF7;
+  --dna:#2F6FC1;--rna:#E07A1F;--prot:#C0455A;--lipid:#C9A227;--carb:#E08A1E;--atp:#E3B90F;--elec:#1797AB;--water:#6BB6E6;--plant:#3E9B4F;
+  --dna-ink:#1D4F93;--prot-ink:#9B2C40;--plant-ink:#2A6B37;
+  --mat:#B4357F;--pat:#2D68B8;--mat-ink:#8E1F60;--pat-ink:#1D4F93;--mat-lt:#F2D3E6;--pat-lt:#D4E2F5;
+  --hap:#C47F12;--dip:#6A4FB5;--hap-ink:#8A5600;--dip-ink:#4F3896;
+  --mt:#4E8F80;--cent:#7A5CC9;--cyto:#F6F1E8;--nuc:#E7EDF6;--memb:#C9A227;--memb2:#E9D27A;--coh:#E07A1F;--sc:#8A6A3A;
+  --skin1:#E8C2A0;--skin2:#B98462;--skin3:#7A5038;--skin4:#F0D2B8;--hair:#3D3029;--hair2:#B9853F;--shirt1:#4F7FA8;--shirt2:#A0577A;--shirt3:#5E8A4A;--shirt4:#8C6BB0;
+  --leaf:#4E9A3A;--leaf2:#2F7A3A;--soil:#9A7A55;--fung:#C9A27A;--fung2:#8A6A4A;--egg:#F3D3C2;--egg-edge:#C08A72;--sperm:#5E7183;--hydra:#7FB07A;--fish1:#E08A1E;--fish2:#2F7FC1;--fish3:#A04E8C;
+  --risk:#A9372F;--births:#8AA7C0;--partner:#6B7A85;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123536;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#6CCB7C;--act4:#A98BEF;--act5:#5CC4B0;--act6:#E8BE5A;--act7:#E07067;--act8:#D186C0;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#6FA8EC;--rna:#F2A05A;--prot:#EE7A8C;--lipid:#E0BE48;--carb:#F2A24A;--atp:#F2D857;--elec:#5FD3E3;--water:#8CC6F2;--plant:#6CCB7C;
+  --dna-ink:#8FBEF2;--prot-ink:#F49AA8;--plant-ink:#8AD898;
+  --mat:#E27BB8;--pat:#6FA3EC;--mat-ink:#F0A3D0;--pat-ink:#9CC1F4;--mat-lt:#4A2140;--pat-lt:#1D3352;
+  --hap:#F0B54E;--dip:#A98BEF;--hap-ink:#F5C877;--dip-ink:#C3AEF5;
+  --mt:#7CC9B8;--cent:#A98BEF;--cyto:#1E282D;--nuc:#1A2630;--memb:#E0BE48;--memb2:#8A7530;--coh:#F2A05A;--sc:#C9A57A;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--skin4:#D8B596;--hair:#1E1814;--hair2:#9A6E34;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --leaf:#6EB85A;--leaf2:#4E9A4A;--soil:#7A6248;--fung:#B8946C;--fung2:#8A6E54;--egg:#5A4038;--egg-edge:#D8A892;--sperm:#A9B7C2;--hydra:#7FB07A;--fish1:#F2A24A;--fish2:#5AA9E6;--fish3:#D186C0;
+  --risk:#E07067;--births:#5E7F9C;--partner:#A9B7C2;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123536;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#6CCB7C;--act4:#A98BEF;--act5:#5CC4B0;--act6:#E8BE5A;--act7:#E07067;--act8:#D186C0;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#6FA8EC;--rna:#F2A05A;--prot:#EE7A8C;--lipid:#E0BE48;--carb:#F2A24A;--atp:#F2D857;--elec:#5FD3E3;--water:#8CC6F2;--plant:#6CCB7C;
+  --dna-ink:#8FBEF2;--prot-ink:#F49AA8;--plant-ink:#8AD898;
+  --mat:#E27BB8;--pat:#6FA3EC;--mat-ink:#F0A3D0;--pat-ink:#9CC1F4;--mat-lt:#4A2140;--pat-lt:#1D3352;
+  --hap:#F0B54E;--dip:#A98BEF;--hap-ink:#F5C877;--dip-ink:#C3AEF5;
+  --mt:#7CC9B8;--cent:#A98BEF;--cyto:#1E282D;--nuc:#1A2630;--memb:#E0BE48;--memb2:#8A7530;--coh:#F2A05A;--sc:#C9A57A;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--skin4:#D8B596;--hair:#1E1814;--hair2:#9A6E34;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --leaf:#6EB85A;--leaf2:#4E9A4A;--soil:#7A6248;--fung:#B8946C;--fung2:#8A6E54;--egg:#5A4038;--egg-edge:#D8A892;--sperm:#A9B7C2;--hydra:#7FB07A;--fish1:#F2A24A;--fish2:#5AA9E6;--fish3:#D186C0;
+  --risk:#E07067;--births:#5E7F9C;--partner:#A9B7C2;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ctl input[type=range]:disabled{opacity:.45}
+.modes3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes3 .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.modes3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.modes3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.gsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gsel .tbtn{font-size:13.5px;padding:7px 4px;line-height:1.25}
+.gsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.gsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.lifeq .opts{margin-top:6px}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.hgrid{grid-template-columns:1fr}}
+.target{border:2px solid var(--act6);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-bottom:10px}
+.target .k{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block}
+.eqn{font-family:var(--mono);font-size:15.5px;font-weight:600;overflow-wrap:anywhere}
+.hzone{border:2px dashed var(--rule);border-radius:var(--r);padding:8px;min-height:90px;display:flex;flex-direction:column;gap:8px}
+.hzone.over{border-color:var(--accent);background:var(--accent-wash)}
+.hzone h3{margin:0;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.hzone .empty{font-size:13.5px;color:var(--ink-soft);margin:0}
+.hcard{background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--exo);border-radius:var(--r);padding:8px 10px;touch-action:none}
+.hcard.pos{border-left-color:var(--endo)}
+.hcard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.hcard.drag{opacity:.9;box-shadow:var(--shadow);position:relative;z-index:20}
+.hcard .top{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.hcard .grip{cursor:grab;font-family:var(--mono);font-size:13px;color:var(--ink-soft);border:1px dashed var(--rule);border-radius:4px;padding:2px 6px;background:var(--panel-2)}
+.hcard .dh{font-family:var(--mono);font-weight:700;font-size:14.5px}
+.hcard .dh.neg{color:var(--bad)}.hcard .dh.posv{color:var(--endo-ink)}
+.hcard .ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.hcard .ctrls .tbtn{padding:5px 9px;font-size:13.5px}
+.hcard .mult{font-family:var(--mono);font-weight:700;min-width:44px;text-align:center}
+.sumbox{border:1.5px solid var(--rule);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-top:10px}
+.sumbox .eqn s{color:var(--bad)}
+.sumbox .tot{font-family:var(--mono);font-weight:700;font-size:16px;margin-top:4px}
+.dhpos{color:var(--endo-ink)}.dhneg{color:var(--bad)}
+.hintline{font-size:14.5px;margin:4px 0}
+h3.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.seg4b .tbtn[aria-pressed="true"],.seg2 .tbtn[aria-pressed="true"],.seg3 .tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.subtabs .tbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+#benchPair{width:100%;padding:6px 8px;font-size:14.5px}
+.item{border-left-color:var(--act4)}
+.item .mk{font-weight:700;min-width:16px}
+.item.right .mk{color:var(--good)}.item.off .mk{color:var(--warn-ink)}
+.readouts td.l{font-family:var(--sans)}
+.probcard b{font-family:var(--mono)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 10 &middot; Meiosis and sexual life cycles</div>
+    <h1>Meiosis Lab</h1>
+    <p class="sub">Run meiosis on a virtual bench and watch the gametes add up, practise the counting that exams love with animated worked solutions, sort mitosis from meiosis and put events in order, then use meiosis to read real data. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-bench" data-tab="bench" id="tabbtn-bench" type="button">Part 1 &middot; Meiosis Bench</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 2 &middot; Counting Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-game" data-tab="game" id="tabbtn-game" type="button" tabindex="-1">Part 3 &middot; Sort and Order</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 4 &middot; Meiosis in the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-bench" role="tabpanel" aria-labelledby="tabbtn-bench">
+    <h2 class="gk-sr">Part 1: Meiosis Bench</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvBench" role="img" aria-label="Meiosis bench."></canvas></div>
+        <div class="stagebar"><span class="caption" id="benchCap"></span></div>
+        <div class="legend">
+          <span><i class="s" style="background:var(--mat)"></i>Maternal chromosome (capital alleles: A, B, D...)</span><span><i class="s" style="background:var(--pat)"></i>Paternal chromosome (small alleles: a, b, d...)</span>
+          <span><i class="s" style="background:var(--partner)"></i>Partner's gamete (at fertilization)</span><span><i class="ln" style="border-top-color:var(--mt)"></i>Spindle fibres</span>
+        </div>
+        <table class="readouts" id="benchRead"><caption class="gk-sr">Bench readouts</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">Simplified model. Pair 1 carries two linked genes (A near one end, B near the other); every other pair carries one gene. When crossing over is on, every pair gets one crossover at a random point, as most real pairs get at least one. Which homolog faces which pole at metaphase I, and which sister chromatid goes up in meiosis II, are random (50:50). The partner's gamete is always normal (n). Speeds are exaggerated.</p>
+      </div>
+      <aside class="card side" aria-label="Bench controls">
+        <h3 id="n-h">Diploid number (2n)</h3>
+        <div class="seg4b" id="benchN" role="group" aria-labelledby="n-h"></div>
+        <h3 id="co-h">Crossing over</h3>
+        <div class="seg2" id="benchCO" role="group" aria-labelledby="co-h"></div>
+        <h3 id="nd-h">Nondisjunction</h3>
+        <div class="seg3" id="benchND" role="group" aria-labelledby="nd-h"></div>
+        <label class="lab-sel" for="benchPair">Pair that fails to separate</label>
+        <select id="benchPair"></select>
+        <h3>Run</h3>
+        <div class="bar"><button class="btn" type="button" id="benchPlay">Pause</button><button class="tbtn" type="button" id="benchStep">Next stage</button><button class="tbtn" type="button" id="benchNew">New meiosis</button></div>
+        <div class="ctl"><label for="benchSpeed">Speed <output id="benchSpeedOut">1&times;</output></label><input type="range" id="benchSpeed" min="0.5" max="3" step="0.5" value="1"></div>
+        <div class="bar"><button class="tbtn" type="button" id="benchFast">Tally 100 more meioses</button><button class="tbtn" type="button" id="benchClear">Clear tally</button></div>
+        <h3>Fertilize</h3>
+        <p class="small">After the four gametes form, pick one to fuse with a normal gamete from a partner.</p>
+        <div class="seg4b" id="benchFert" role="group" aria-label="Choose a gamete to fertilize"></div>
+        <div class="status" id="benchStatus" role="status"></div>
+        <h3>Challenges</h3>
+        <ul class="chal" id="benchChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 2: Counting Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Problems are generated at random. The picture shows the cell or numbers in the problem; the worked solution builds step by step underneath, with a common-mistake note. For "predict, then watch" problems, the bench animation plays the answer once you have chosen.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcNumWrap" class="ansrow">
+          <label for="calcAns" class="ans-l">Your answer</label>
+          <div class="ansbox"><input type="text" id="calcAns" inputmode="numeric" autocomplete="off" spellcheck="false"><span id="calcUnit" class="unit"></span></div>
+        </div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices" hidden></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">Type a whole number (commas are fine). The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-game" role="tabpanel" aria-labelledby="tabbtn-game" hidden>
+    <h2 class="gk-sr">Part 3: Sort and Order</h2>
+    <div class="subtabs" role="group" aria-label="Choose a game">
+      <button class="tbtn" type="button" id="gSortBtn" aria-pressed="true">Sort it: mitosis or meiosis</button>
+      <button class="tbtn" type="button" id="gSeqBtn" aria-pressed="false">Order it: meiosis events</button>
+    </div>
+    <div id="gSort">
+      <div class="rounds" id="sRounds" role="group" aria-label="Sorting rounds"></div>
+      <div class="card">
+        <div class="sorthead">
+          <div><div class="lvl-n" id="sN"></div><h3 class="sec" id="sTitle"></h3></div>
+          <div class="sortbar">
+            <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+            <span class="timer" id="sTimer" hidden>0:00</span>
+            <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+          </div>
+        </div>
+        <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+        <p class="small">Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.</p>
+        <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+        <div class="bins" id="sBins"></div>
+        <div class="bar">
+          <button class="tbtn" id="sHint" type="button">Hint</button>
+          <button class="tbtn" id="sShow" type="button">Show answer</button>
+          <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+          <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+        </div>
+        <div class="msg" id="sMsg" role="status"></div>
+        <p class="small" id="sBest"></p>
+      </div>
+    </div>
+    <div id="gSeq" hidden>
+      <div class="rounds" id="qRounds" role="group" aria-label="Ordering rounds"></div>
+      <div class="case wide">
+        <div class="card stage">
+          <div class="canvas-holder"><canvas id="cvSeq" role="img" aria-label="Order of events picture."></canvas></div>
+          <div class="stagebar"><span class="caption" id="qCap"></span></div>
+        </div>
+        <div class="card">
+          <div class="sorthead"><div><div class="lvl-n" id="qN"></div><h3 class="sec" id="qT"></h3></div>
+            <div class="sortbar"><label class="mode"><input type="checkbox" id="qRelaxed" checked> Relaxed mode (no timer)</label><span class="timer" id="qTimer" hidden>0:00</span></div></div>
+          <p class="goal" id="qGoal"></p>
+          <p class="small">Drag the cards into order, or use the up and down buttons. Press Check when you are ready.</p>
+          <ol class="list" id="qList" aria-label="Events to put in order"></ol>
+          <div class="bar">
+            <button class="btn" id="qCheck" type="button">Check</button>
+            <button class="tbtn" id="qPlay" type="button">Play my order</button>
+            <button class="tbtn" id="qHint" type="button">Hint</button>
+            <button class="tbtn" id="qShow" type="button">Show answer</button>
+            <button class="tbtn" id="qShuffle" type="button">Shuffle again</button>
+          </div>
+          <div class="msg" id="qMsg" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 4: Meiosis in the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note">Fictional people. Figures are rounded teaching values from published data, not personal medical advice.</p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h3 class="sc-title" id="lifeTitle"></h3>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Meiosis-Walkthrough.html">Meiosis Walkthrough</a>. Chromosomes are drawn magenta (maternal, M) and blue (paternal, P); real chromosomes are not coloured.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "dna", "rna", "prot", "lipid", "carb", "atp", "elec", "water", "plant", "dna-ink", "prot-ink", "plant-ink", "mat", "pat", "mat-ink", "pat-ink", "mat-lt", "pat-lt", "hap", "dip", "hap-ink", "dip-ink", "mt", "cent", "cyto", "nuc", "memb", "memb2", "coh", "sc", "skin1", "skin2", "skin3", "skin4", "hair", "hair2", "shirt1", "shirt2", "shirt3", "shirt4", "leaf", "leaf2", "soil", "fung", "fung2", "egg", "egg-edge", "sperm", "hydra", "fish1", "fish2", "fish3", "risk", "births", "partner"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=fg||onFill();ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= biology drawing helpers (shared by both pages) ================= */
+let SC={};let SYS={};
+function spark(x,y,s,col,p){if(p<=0||p>=1)return;ctx.save();ctx.globalAlpha*=Math.sin(p*Math.PI);ctx.translate(x,y-p*14);ctx.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8;const r=i%2?s*.4:s;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fillStyle=col||C.atp;ctx.fill();ctx.restore()}
+/* bezier helpers */
+function qpt(a,c,b,t){return [(1-t)*(1-t)*a[0]+2*(1-t)*t*c[0]+t*t*b[0],(1-t)*(1-t)*a[1]+2*(1-t)*t*c[1]+t*t*b[1]]}
+function levelTag(x,y,kind){const m={organism:["ORGANISM",C.act3],cell:["CELL",C.act5],chromosome:["CHROMOSOMES",C.act4],molecule:["MOLECULE (DNA)",C.dna],graph:["GRAPH",C.act6],data:["DATA",C.act6],population:["FAMILY",C.act3]};const v=m[kind]||[String(kind).toUpperCase(),C.accent];return chipL(x,y,v[0],v[1])}
+function hcol(h){return h===0?C.mat:C.pat}
+function hink(h){return h===0?C["mat-ink"]:C["pat-ink"]}
+function dark(c,t){return mix(c,isDark()?"#000000":"#10161A",t==null?.35:t)}
+/* ---------- chromatid: polyline body, centromere, coloured segments, loci ----------
+   (x,y) = centromere; th = rotation (0 = long axis vertical); L = length; w = width; cen = centromere fraction from top
+   segs = [[f0,f1,colour],...]; o.k = condensation 0..1; o.side = -1/+1 for splay; o.splay = radians */
+function chromPts(x,y,th,L,w,cen,o){const k=o.k==null?1:o.k;const side=o.side||0,spl=(o.splay||0);const Lk=L*lerp(1.7,1,k);
+  const tA=th+side*spl,bA=th-side*spl;const ut=[Math.sin(tA),-Math.cos(tA)],ub=[-Math.sin(bA),Math.cos(bA)];const n=[Math.cos(th),Math.sin(th)];
+  const N=o.N||(k>.95?10:30);const pts=[];const amp=(1-k)*w*2.2;const sd=o.seed||0;const tt=o.T||0;
+  for(let i=0;i<=N;i++){const f=i/N;const d=Math.abs(f-cen)*Lk;const u=f<cen?ut:ub;const wv=amp*Math.sin(f*TAU*4.5+sd+tt*.6)*Math.min(1,d/(w*1.5+1));
+    pts.push([x+u[0]*d+n[0]*wv,y+u[1]*d+n[1]*wv,f])}
+  return pts}
+function ptAt(pts,f){for(let i=0;i<pts.length-1;i++){if(f<=pts[i+1][2]){const a=pts[i],b=pts[i+1];const t=(f-a[2])/((b[2]-a[2])||1);return [lerp(a[0],b[0],t),lerp(a[1],b[1],t)]}}const l=pts[pts.length-1];return [l[0],l[1]]}
+function polyRange(pts,f0,f1){const out=[ptAt(pts,f0)];pts.forEach(p=>{if(p[2]>f0&&p[2]<f1)out.push([p[0],p[1]])});out.push(ptAt(pts,f1));return out}
+function drawChromatid(x,y,th,L,w,cen,segs,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;
+  const k=o.k==null?1:o.k;const lw=w*lerp(.34,1,k);const pts=chromPts(x,y,th,L,w,cen,o);
+  ctx.lineJoin="round";ctx.lineCap="round";
+  /* outline */
+  ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=o.outline||(isDark()?"rgba(0,0,0,.65)":"rgba(16,22,26,.55)");ctx.lineWidth=lw+2.6;ctx.stroke();
+  if(o.glow){ctx.strokeStyle=hexA(o.glow,.45);ctx.lineWidth=lw+9;ctx.stroke()}
+  ctx.lineCap="butt";
+  segs.forEach(s=>{const f0=clamp(s[0],0,1),f1=clamp(s[1],0,1);if(f1<=f0)return;const pp=polyRange(pts,f0,f1);ctx.beginPath();pp.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=s[2];ctx.lineWidth=lw;ctx.stroke()});
+  const segAt=f=>{let c=segs[0][2];segs.forEach(s=>{if(f>=s[0]&&f<=s[1])c=s[2]});return c};
+  circ(pts[0][0],pts[0][1],lw/2,segAt(0));circ(pts[pts.length-1][0],pts[pts.length-1][1],lw/2,segAt(1));
+  /* bands (karyotype style) */
+  if(o.bands&&k>.8)o.bands.forEach(b=>{const p0=ptAt(pts,clamp(b[0],0,1)),p1=ptAt(pts,clamp(b[1],0,1));ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);ctx.strokeStyle=hexA(isDark()?"#000":"#10161A",.32);ctx.lineWidth=lw;ctx.stroke()});
+  /* centromere */
+  const cp=ptAt(pts,cen);if(k>.5){ell(cp[0],cp[1],lw*.62,lw*.36,th,dark(segAt(cen),.45))}
+  /* loci */
+  if(o.loci&&k>.6){const n=[Math.cos(th),Math.sin(th)];const sd=o.lside||o.side||1;o.loci.forEach(l=>{const p=ptAt(pts,l.f);const q=ptAt(pts,clamp(l.f+.02,0,1));const dx=q[0]-p[0],dy=q[1]-p[1];const dl=Math.hypot(dx,dy)||1;const px=-dy/dl,py=dx/dl;
+      line(p[0]-px*lw*.5,p[1]-py*lw*.5,p[0]+px*lw*.5,p[1]+py*lw*.5,isDark()?"#0E1519":"#FFFFFF",2.2);
+      if(l.t&&o.letters!==false){if(o.lin){const fz=o.lsize||12;rr(p[0]-fz*.48,p[1]-fz*.62,fz*.96,fz*1.24,3);ctx.fillStyle=hexA(C.panel,.94);ctx.fill();txt(p[0],p[1]+.5,l.t,{size:fz,weight:700,mono:true,align:"center",color:C.ink})}else{const lx=p[0]+n[0]*sd*(lw/2+9),ly=p[1]+n[1]*sd*(lw/2+9);txt(lx,ly,l.t,{size:o.lsize||12,weight:700,mono:true,align:"center",color:l.col||C.ink})}}})}
+  ctx.restore();return pts}
+/* replicated chromosome = two sister chromatids side by side */
+function drawChromosome(x,y,th,L,w,cen,segA,segB,o){o=o||{};const dS=o.dS==null?w*.56:o.dS;const n=[Math.cos(th),Math.sin(th)];
+  const A=Object.assign({},o,{side:-1});const B=Object.assign({},o,{side:1});if(o.lociA)A.loci=o.lociA;if(o.lociB)B.loci=o.lociB;
+  drawChromatid(x-n[0]*dS,y-n[1]*dS,th,L,w,cen,segA,A);if(segB)drawChromatid(x+n[0]*dS,y+n[1]*dS,th,L,w,cen,segB,Object.assign(B,{a:(o.a==null?1:o.a)*(o.bA==null?1:o.bA)}));
+  if(o.coh&&(o.k==null||o.k>.6)){const cy_=[x,y];ctx.save();ctx.globalAlpha*=(o.a==null?1:o.a);ell(cy_[0],cy_[1],w*.5,w*.75,th,null,C.coh,2.2);ctx.restore()}}
+/* ---------- cells ---------- */
+function cellShapes(list,o){o=o||{};const mw=o.mw||3.2;ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;
+  list.forEach(e=>{ctx.beginPath();ctx.ellipse(e[0],e[1],Math.max(1,e[2]),Math.max(1,e[3]),e[4]||0,0,TAU);ctx.strokeStyle=o.col||C.memb;ctx.lineWidth=mw*2;ctx.stroke()});
+  list.forEach(e=>{ctx.beginPath();ctx.ellipse(e[0],e[1],Math.max(1,e[2]),Math.max(1,e[3]),e[4]||0,0,TAU);ctx.fillStyle=o.fill||C.cyto;ctx.fill()});
+  if(o.inner!==false)list.forEach(e=>{ctx.beginPath();ctx.ellipse(e[0],e[1],Math.max(1,e[2]-mw*1.1),Math.max(1,e[3]-mw*1.1),e[4]||0,0,TAU);ctx.strokeStyle=hexA(C.memb,.35);ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.stroke();ctx.setLineDash([])});
+  ctx.restore()}
+function nucEnv(x,y,r,a,o){o=o||{};if(a<=0)return;ctx.save();ctx.globalAlpha*=a;ctx.beginPath();ctx.ellipse(x,y,r,o.ry||r,0,0,TAU);ctx.fillStyle=hexA(C.nuc,o.fa==null?.85:o.fa);ctx.fill();
+  ctx.setLineDash(o.broken?[7,6]:[]);ctx.strokeStyle=hexA(C["ink-soft"],.85);ctx.lineWidth=1.6;ctx.stroke();ctx.beginPath();ctx.ellipse(x,y,r+3,(o.ry||r)+3,0,0,TAU);ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function centrosome(x,y,a,rays){if(a<=0)return;ctx.save();ctx.globalAlpha*=a;const n=rays||10;for(let i=0;i<n;i++){const an=i/n*TAU;line(x+Math.cos(an)*6,y+Math.sin(an)*6,x+Math.cos(an)*15,y+Math.sin(an)*15,hexA(C.mt,.7),1.2)}
+  rr(x-6,y-2.2,12,4.4,2);ctx.fillStyle=C.cent;ctx.fill();rr(x-2.2,y-6,4.4,12,2);ctx.fill();ctx.restore()}
+function fibre(x1,y1,x2,y2,a){if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(x1,y1,x2,y2,C.mt,1.4);ctx.restore()}
+/* ---------- people and organisms ---------- */
+function person(x,y,h,o){o=o||{};const sk=C["skin"+(o.skin||1)],sh=o.shirtC||C["shirt"+(o.shirt||1)],hr=o.hairC||C.hair;const hd=h*.12;const hy=y-h+hd;ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;
+  /* legs */
+  line(x-h*.07,y-h*.42,x-h*.08,y-2,dark(sh,.45),h*.07);line(x+h*.07,y-h*.42,x+h*.08,y-2,dark(sh,.45),h*.07);
+  /* body */
+  ctx.beginPath();if(o.sex==="f"){ctx.moveTo(x-h*.13,y-h*.74);ctx.lineTo(x+h*.13,y-h*.74);ctx.lineTo(x+h*.2,y-h*.36);ctx.lineTo(x-h*.2,y-h*.36)}else{ctx.moveTo(x-h*.16,y-h*.74);ctx.lineTo(x+h*.16,y-h*.74);ctx.lineTo(x+h*.13,y-h*.4);ctx.lineTo(x-h*.13,y-h*.4)}ctx.closePath();fillStroke(sh,dark(sh,.4),1.2);
+  /* arms */
+  const sw=o.wave?Math.sin((o.T||0)*3)*.3:0;line(x-h*.15,y-h*.72,x-h*.24,y-h*.47+sw*h*.1,sk,h*.055);line(x+h*.15,y-h*.72,x+h*.24+sw*h*.05,y-h*.47-sw*h*.15,sk,h*.055);
+  /* head */
+  line(x,y-h*.74,x,y-h*.78,sk,h*.05);circ(x,hy,hd,sk,dark(sk,.35),1);
+  if(o.sex==="f"){ctx.beginPath();ctx.ellipse(x,hy-hd*.2,hd*1.08,hd*1.05,0,Math.PI*1.02,Math.PI*1.98);ctx.fillStyle=hr;ctx.fill();rr(x-hd*1.1,hy-hd*.4,hd*.45,hd*1.6,3);ctx.fill();rr(x+hd*.65,hy-hd*.4,hd*.45,hd*1.6,3);ctx.fill()}
+  else{ctx.beginPath();ctx.ellipse(x,hy-hd*.35,hd*1.02,hd*.75,0,Math.PI,TAU);ctx.fillStyle=hr;ctx.fill()}
+  if(o.mark){circ(x+hd*1.3,hy-hd*1.1,4,o.mark)}
+  ctx.restore()}
+function fern(x,y,s,T,o){o=o||{};const sw=Math.sin((T||0)*1.3)*.05;ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;
+  for(let f=0;f<5;f++){const a=-Math.PI/2+(f-2)*.38+sw;const L=s*(f===2?1:.82);const ex=x+Math.cos(a)*L,ey=y+Math.sin(a)*L;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+Math.cos(a)*L*.5+(f-2)*6,y+Math.sin(a)*L*.55,ex,ey);ctx.strokeStyle=C.leaf2;ctx.lineWidth=2.2;ctx.stroke();
+    for(let i=1;i<9;i++){const t=i/9;const px=lerp(x,ex,t),py=lerp(y,ey,t);const ll=s*.16*(1-t*.7);[1,-1].forEach(sd=>{const aa=a+sd*1.1;ell(px+Math.cos(aa)*ll*.5,py+Math.sin(aa)*ll*.5,ll*.55,ll*.2,aa,C.leaf);if(o.sori&&i%2===0)circ(px+Math.cos(aa)*ll*.5,py+Math.sin(aa)*ll*.5,1.8,C.soil)})}}
+  ctx.restore()}
+function gametophyte(x,y,s,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;ctx.beginPath();ctx.moveTo(x,y+s*.35);ctx.bezierCurveTo(x-s*1.1,y-s*.1,x-s*.7,y-s*.9,x,y-s*.45);ctx.bezierCurveTo(x+s*.7,y-s*.9,x+s*1.1,y-s*.1,x,y+s*.35);ctx.closePath();fillStroke(hexA(C.plant,.75),C.leaf2,1.5);
+  for(let i=0;i<6;i++)line(x-s*.25+i*s*.1,y+s*.2,x-s*.3+i*s*.12,y+s*.55,C.soil,1);ctx.restore()}
+function mushroom(x,y,s,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;rr(x-s*.12,y-s*.7,s*.24,s*.7,4);fillStroke(C.fung,C.fung2,1.2);ctx.beginPath();ctx.ellipse(x,y-s*.7,s*.55,s*.32,0,Math.PI,TAU);ctx.closePath();fillStroke(C.fung2,dark(C.fung2,.3),1.2);
+  for(let i=0;i<5;i++)circ(x-s*.3+i*s*.15,y-s*.85+Math.sin(i)*s*.05,s*.04,C.fung);
+  for(let i=0;i<7;i++){ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+(i-3)*s*.25,y+s*.15,x+(i-3)*s*.4,y+s*.3+Math.sin(i*2)*s*.06);ctx.strokeStyle=hexA(C.fung2,.8);ctx.lineWidth=1.2;ctx.stroke()}ctx.restore()}
+function chlamy(x,y,r,T,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;const wv=Math.sin((T||0)*6)*.5;
+  [-1,1].forEach(sd=>{ctx.beginPath();ctx.moveTo(x+sd*r*.2,y-r*.95);ctx.quadraticCurveTo(x+sd*r*(1.1+wv*.3),y-r*1.6,x+sd*r*(.6+wv*.5),y-r*2.3);ctx.strokeStyle=C.leaf2;ctx.lineWidth=1.4;ctx.stroke()});
+  ell(x,y,r*.82,r,0,hexA(C.plant,.8),C.leaf2,1.4);ell(x,y+r*.15,r*.5,r*.58,0,hexA(C.leaf2,.5));circ(x-r*.45,y-r*.35,r*.14,C.bad);if(o.lab)txt(x,y,o.lab,{size:Math.max(11,r*.55),weight:700,mono:true,align:"center",color:"#0E1519"});ctx.restore()}
+function hydra(x,y,s,T,bud,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;const col=C.hydra;
+  ctx.beginPath();ctx.moveTo(x-s*.12,y);ctx.quadraticCurveTo(x-s*.16,y-s*.5,x-s*.1,y-s);ctx.lineTo(x+s*.1,y-s);ctx.quadraticCurveTo(x+s*.16,y-s*.5,x+s*.12,y);ctx.closePath();fillStroke(col,dark(col,.4),1.3);
+  for(let i=0;i<5;i++){const a=-Math.PI/2+(i-2)*.5;const wv=Math.sin((T||0)*2+i)*.2;ctx.beginPath();ctx.moveTo(x+(i-2)*s*.04,y-s);ctx.quadraticCurveTo(x+Math.cos(a+wv)*s*.3,y-s+Math.sin(a+wv)*s*.3,x+Math.cos(a-wv)*s*.45,y-s+Math.sin(a-wv)*s*.42);ctx.strokeStyle=dark(col,.2);ctx.lineWidth=2;ctx.stroke()}
+  if(bud>0){const b=bud;const bx=x+s*.12+s*.22*b,by=y-s*.45-s*.08*b;ctx.save();ctx.translate(bx,by);ctx.rotate(.9);ctx.scale(.55*b+.05,.55*b+.05);ctx.translate(-x,-y+s*.2);
+    ctx.beginPath();ctx.moveTo(x-s*.1,y);ctx.lineTo(x-s*.08,y-s*.7);ctx.lineTo(x+s*.08,y-s*.7);ctx.lineTo(x+s*.1,y);ctx.closePath();fillStroke(col,dark(col,.4),1.3);
+    for(let i=0;i<4;i++){const a=-Math.PI/2+(i-1.5)*.55;line(x,y-s*.7,x+Math.cos(a)*s*.32,y-s*.7+Math.sin(a)*s*.3,dark(col,.2),2)}ctx.restore()}
+  ctx.restore()}
+function fish(x,y,s,col,pat,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;ctx.translate(x,y);if(o.flip)ctx.scale(-1,1);const wag=Math.sin((o.T||0)*5)*.15;
+  ctx.beginPath();ctx.moveTo(-s*.5,0);ctx.lineTo(-s*.85,-s*.28+wag*s);ctx.lineTo(-s*.85,s*.28+wag*s);ctx.closePath();fillStroke(dark(col,.15),dark(col,.45),1.2);
+  ell(0,0,s*.55,s*.3,0,col,dark(col,.45),1.3);
+  if(pat===1){for(let i=0;i<3;i++)line(-s*.25+i*s*.18,-s*.26,-s*.25+i*s*.18,s*.26,hexA(C.panel,.75),3)}
+  if(pat===2){for(let i=0;i<5;i++)circ(-s*.25+(i%3)*s*.2,(i<3?-1:1)*s*.1,s*.05,hexA(C.panel,.8))}
+  if(pat===3){ell(s*.05,0,s*.3,s*.12,0,hexA(C.panel,.6))}
+  circ(s*.33,-s*.06,s*.06,C.panel,C.ink,1);circ(s*.34,-s*.06,s*.025,C.ink);ctx.restore()}
+function sperm(x,y,s,ang,T,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;ctx.translate(x,y);ctx.rotate(ang||0);const col=o.col||C.sperm;
+  ctx.beginPath();for(let i=0;i<=20;i++){const t=i/20;const xx=-s*.35-t*s*1.6;const yy=Math.sin(t*TAU*1.4-(T||0)*12)*s*.18*t;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.strokeStyle=col;ctx.lineWidth=Math.max(1.2,s*.06);ctx.stroke();
+  rr(-s*.42,-s*.07,s*.2,s*.14,2);ctx.fillStyle=dark(col,.2);ctx.fill();ell(0,0,s*.25,s*.16,0,o.head||mix(col,C.panel,.25),dark(col,.45),1.2);if(o.lab)txt(0,0,o.lab,{size:Math.max(9,s*.2),weight:700,align:"center",mono:true,color:C.ink});ctx.restore()}
+function eggCell(x,y,r,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;circ(x,y,r+r*.12,hexA(C["egg-edge"],.25),hexA(C["egg-edge"],.8),1.4);circ(x,y,r,C.egg,C["egg-edge"],1.6);
+  if(o.nuc!==false)nucEnv(x+(o.nx||0),y+(o.ny||0),r*.3,1,{fa:.9});if(o.lab)txt(x,y+r*.62,o.lab,{size:Math.max(11,r*.2),weight:700,mono:true,align:"center"});ctx.restore()}
+/* DNA double helix along a direction; bases: string of letters for the top strand */
+const BASEPAIR={A:"T",T:"A",G:"C",C:"G"};
+function dnaHelix(x,y,len,T,o){o=o||{};const n=o.n||12;const amp=o.amp||14;const ph=(T||0)*(o.spin==null?1.4:o.spin);const pts1=[],pts2=[];ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;
+  for(let i=0;i<=60;i++){const t=i/60;const xx=x+t*len;pts1.push([xx,y+Math.sin(t*n*.9+ph)*amp]);pts2.push([xx,y-Math.sin(t*n*.9+ph)*amp])}
+  const bases=o.bases||"";for(let i=0;i<n;i++){const t=(i+.5)/n;const xx=x+t*len;const s1=Math.sin(t*n*.9+ph)*amp;const b=bases[i]||"ATGC"[i%4];const c1={A:C.act6,T:C.act1,G:C.plant,C:C.prot}[b]||C.act8;const c2={A:C.act6,T:C.act1,G:C.plant,C:C.prot}[BASEPAIR[b]]||C.act8;
+    line(xx,y+s1,xx,y,c1,3);line(xx,y,xx,y-s1,c2,3);if(o.letters&&Math.abs(s1)>amp*.55){txt(xx,y+s1+(s1>0?11:-11),b,{size:11,weight:700,mono:true,align:"center",color:o.hl&&o.hl.indexOf(i)>=0?C.bad:C.ink})}
+    if(o.hl&&o.hl.indexOf(i)>=0){ctx.save();ctx.globalAlpha*=.5+.5*Math.sin((T||0)*5);rr(xx-6,y-amp-4,12,amp*2+8,4);ctx.strokeStyle=C.bad;ctx.lineWidth=2;ctx.stroke();ctx.restore()}}
+  poly(pts1,o.col||C.dna,3.2);poly(pts2,o.col2||mix(o.col||C.dna,C.panel,.35),3.2);ctx.restore()}
+/* ---------- human karyotype ---------- */
+const HUM=[[1,249,.50],[2,242,.39],[3,198,.47],[4,190,.27],[5,181,.27],[6,171,.39],[7,159,.39],[8,145,.32],[9,138,.35],[10,134,.30],[11,135,.40],[12,133,.27],[13,114,.15],[14,107,.16],[15,102,.17],[16,90,.41],[17,83,.33],[18,80,.23],[19,59,.45],[20,64,.45],[21,47,.24],[22,51,.27],["X",156,.39],["Y",57,.18]];
+function bandsFor(id){const b=[];const s=typeof id==="number"?id:(id==="X"?31:37);for(let i=0;i<7;i++){const f=rnd(s*13+i*7.3);if(f>.08&&f<.92)b.push([f,f+.04+rnd(s+i)*.05])}return b}
+/* karyotype layout: returns chromosome placements; counts from o.sex ("XX","XY","X","XXY") and o.extra {id:copies} */
+function karyoLayout(x,y,w,h,o){o=o||{};const counts={};HUM.forEach(c=>counts[c[0]]=typeof c[0]==="number"?2:0);const sex=o.sex||"XX";counts.X=(sex.match(/X/g)||[]).length;counts.Y=(sex.match(/Y/g)||[]).length;
+  Object.assign(counts,o.extra||{});const rows=[[1,2,3,4,5],[6,7,8,9,10,11,12],[13,14,15,16,17,18],[19,20,21,22,"X","Y"]];const rh=h/4;const sc=o.sc||(rh*.7/249);const w0=o.cw||Math.max(3.2,rh*.08);const out=[],slots=[];
+  rows.forEach((r,ri)=>{const cw=w/r.length;r.forEach((id,ci)=>{const c=HUM.find(q=>q[0]===id);const n=counts[id];const cx=x+cw*(ci+.5),base=y+rh*(ri+1)-14;const L=c[1]*sc;slots.push({id,cx,base,cw,rh,n});
+    for(let k=0;k<n;k++){const xx=cx+(k-(n-1)/2)*(w0*2.7+3);const col=o.mono?(isDark()?"#B8C4CC":"#6B7A85"):(id==="Y"?C.pat:id==="X"&&counts.X===1&&counts.Y===0?C.mat:(k%2===0?C.mat:C.pat));
+      out.push({id,k,x:xx,y:base-L*(1-c[2]),L,cen:c[2],w:w0,col})}})});
+  return {chroms:out,slots}}
+function karyotype(x,y,w,h,o){o=o||{};const K=karyoLayout(x,y,w,h,o);
+  K.slots.forEach(sl=>{const hl=o.hl&&o.hl.indexOf(sl.id)>=0;if(hl){ctx.save();ctx.globalAlpha*=.55+.35*Math.sin((o.T||0)*4);rr(sl.cx-sl.cw*.47,sl.base-sl.rh*.8,sl.cw*.94,sl.rh*.86,6);ctx.fillStyle=C["bad-wash"];ctx.fill();ctx.strokeStyle=C.bad;ctx.lineWidth=2;ctx.stroke();ctx.restore()}
+    if(sl.n===0&&o.showEmpty!==false&&sl.id!=="Y")txt(sl.cx,sl.base-8,"none",{size:10,align:"center",color:C["ink-faint"]});
+    txt(sl.cx,sl.base+8,String(sl.id),{size:11,weight:hl?700:600,mono:true,align:"center",color:hl?C.bad:C["ink-soft"]})});
+  K.chroms.forEach(c=>drawChromosome(c.x,c.y,0,c.L,c.w,c.cen,[[0,1,c.col]],[[0,1,c.col]],{dS:c.w*.55,bands:bandsFor(c.id),N:8}));return K}
+/* ---------- small UI-ish canvas pieces ---------- */
+function stat(x,y,w,lab,val,col,o){o=o||{};const h=o.h||46;panelBox(x,y,w,h,{fill:hexA(C.panel,.95),stroke:col||C.rule,lw:1.6});ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();txt(x+8,y+h*.3,lab,{size:10.5,weight:600,color:C["ink-soft"],mono:true});txt(x+8,y+h*.72,String(val),{size:o.size||16,weight:700,mono:true,color:o.vcol||C.ink});ctx.restore()}
+function stageStrip(x,y,w,names,cur,o){o=o||{};const n=names.length;const sw=w/n;names.forEach((nm,i)=>{const on=i===cur;rr(x+i*sw+2,y,sw-4,o.h||24,5);ctx.fillStyle=on?C.accent:hexA(C.panel,.9);ctx.fill();ctx.strokeStyle=on?C.accent:C.rule;ctx.lineWidth=1.2;ctx.stroke();
+  txt(x+i*sw+sw/2,y+(o.h||24)/2,nm,{size:o.size||11,weight:on?700:500,align:"center",color:on?C["on-accent"]:C["ink-soft"],mono:o.mono})})}
+function ploidyTag(x,y,t){const hp=/^n/.test(t)&&!/^2n|^3n/.test(t);const col=hp?C.hap:C.dip;return chipText(x,y,t,col,isDark()?"#0E1519":"#fff")}
+function cardBox(x,y,w,h,col,on){rr(x,y,w,h,8);ctx.fillStyle=on?hexA(col,.18):hexA(C.panel,.9);ctx.fill();ctx.strokeStyle=on?col:C.rule;ctx.lineWidth=on?2.4:1.2;ctx.stroke()}
+function fwdArrow(x1,y1,x2,y2,col,lab,o){o=o||{};arrow(x1,y1,x2,y2,col||C["ink-soft"],o.lw||2);if(lab)label((x1+x2)/2+(o.dx||0),(y1+y2)/2+(o.dy==null?-12:o.dy),lab,{size:o.size||11.5,weight:700,border:o.border||col})}
+/* worked example card: lines revealed one by one. lines: [{t:"text", b:bold?, col, mono}] ; t = seconds into loop */
+function workCard(x,y,w,h,ttl,lines,t,o){o=o||{};panelBox(x,y,w,h,{fill:hexA(C.paper,.97),stroke:o.border||C.rule});title(x+10,y+15,ttl,C["accent-ink"]);let yy=y+36;const dt=o.dt||1.1,t0=o.t0||.6;const sz=o.size||12.5;
+  lines.forEach((l,i)=>{const a=seg(t,t0+i*dt,t0+i*dt+.45);if(l.miss){if(a>0)withA(a,()=>{const hh=o.missH||40;rr(x+8,yy-11,w-16,hh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+l.t,x+15,yy+2,w-30,sz+3,{size:sz-1,color:C.ink})});yy+=(o.missH||40)+6;return}
+    if(l.ans){if(a>0)withA(a,()=>{let fz=sz+1;ctx.font=`700 ${fz}px ${MONO}`;while(fz>9&&ctx.measureText(l.t).width>w-38){fz-=.5;ctx.font=`700 ${fz}px ${MONO}`}const tw=Math.min(w-20,ctx.measureText(l.t).width+14);rr(x+10,yy-12,tw,24,5);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.6;ctx.stroke();txt(x+17,yy,l.t,{size:fz,weight:700,mono:true})});yy+=30;return}
+    if(a>0)withA(a,()=>{yy=wrapText(l.t,x+12,yy,w-24,sz+4,{size:l.size||sz,weight:l.b?700:500,mono:l.mono,color:l.col||C.ink})});else{ctx.font=`500 ${sz}px ${FONT}`;yy+=Math.max(0,Math.ceil(ctx.measureText(l.t).width/(w-24))-1)*(sz+4)}yy+=sz+(l.gap||8)});return yy}
+function dottedPath(pts,col,a){ctx.save();ctx.globalAlpha*=a==null?1:a;poly(pts,col,1.5,[3,4]);ctx.restore()}
+
+const DS_RISK=[[20,1500],[25,1350],[30,950],[35,350],[40,85],[45,30]];
+function dsRiskPer1000(age){for(let i=0;i<DS_RISK.length-1;i++){const a=DS_RISK[i],b=DS_RISK[i+1];if(age<=b[0]){const t=(age-a[0])/(b[0]-a[0]);return Math.exp(lerp(Math.log(1000/a[1]),Math.log(1000/b[1]),t))}}return 1000/30}
+let GC_NOTAG=false;
+function gcell(x,y,r,pl,col,o){o=o||{};circ(x,y,r,col||C.cyto,C.memb,2.4);if(o.dot!==false)circ(x,y,r*.32,hexA(pl==="2n"?C.dip:C.hap,.75));if(o.tag!==false&&!GC_NOTAG)ploidyTag(x,y+r+12,pl)}
+/* ================= meiosis and mitosis model + renderer (shared) ================= */
+const MEIO_LEN=[1,.8,.64,.52,.44],MEIO_CEN=[.42,.3,.5,.36,.45];
+const MEIO_LOCI=[[{f:.12,g:"A"},{f:.88,g:"B"}],[{f:.8,g:"D"}],[{f:.78,g:"E"}],[{f:.74,g:"F"}],[{f:.72,g:"G"}]];
+const MEIO_GENES=["A","B","D","E","F","G"];
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+/* o: {n pairs, co:bool, coF:[f per pair], orient:[0/1], flip2:[[0/1,0/1]], ndj:{mi:p}|{mii:p,cell:0/1}, seed} */
+function meioModel(o){o=o||{};const N=o.n||2;const seed=o.seed==null?Math.floor(Math.random()*1e9):o.seed;const R=mulberry(seed);
+  const M={N,seed,pairs:[],ct:[],orient:[],flip2:[],co:[],ndj:o.ndj||null,coT:1.78};
+  for(let p=0;p<N;p++){M.pairs.push({len:MEIO_LEN[p],cen:MEIO_CEN[p],loci:MEIO_LOCI[p]});
+    M.orient.push(o.orient&&o.orient[p]!=null?o.orient[p]:(R()<.5?0:1));
+    M.flip2.push([0,1].map(h=>o.flip2&&o.flip2[p]&&o.flip2[p][h]!=null?o.flip2[p][h]:(R()<.5?0:1)));
+    const row=[];for(let h=0;h<2;h++){const sis=[];for(let s=0;s<2;s++){const al={};MEIO_LOCI[p].forEach(l=>al[l.g]=h===0?l.g:l.g.toLowerCase());sis.push({p,h,s,segs0:[[0,1,h]],segs:[[0,1,h]],al})}row.push(sis)}M.ct.push(row);
+    /* crossing over between the two inner (non-sister) chromatids */
+    let f=null;if(o.coF&&o.coF[p]!=null)f=o.coF[p];else if(o.co){for(let tries=0;tries<20;tries++){f=.06+R()*.88;if(Math.abs(f-MEIO_CEN[p])>.07)break}}
+    if(f!=null&&(o.co||o.coF)){const cen=MEIO_CEN[p];const reg=f>cen?[f,1]:[0,f];M.co.push({p,f,reg});
+      const a=row[0][1],b=row[1][0];const mk=(h,oth)=>f>cen?[[0,f,h],[f,1,oth]]:[[0,f,oth],[f,1,h]];a.segs=mk(0,1);b.segs=mk(1,0);
+      MEIO_LOCI[p].forEach(l=>{if(l.f>=reg[0]&&l.f<=reg[1]){const t=a.al[l.g];a.al[l.g]=b.al[l.g];b.al[l.g]=t}})}else M.co.push(null)}
+  /* destinations */
+  M.dest1=[];for(let p=0;p<N;p++){const mS=M.orient[p]===0?0:1;const d=[mS,1-mS];if(M.ndj&&M.ndj.mi===p){d[1]=mS}M.dest1.push(d)}
+  M.gam=[[],[],[],[]];
+  for(let p=0;p<N;p++)for(let h=0;h<2;h++)for(let s=0;s<2;s++){const D=M.dest1[p][h];let tb=(s^M.flip2[p][h])===0?0:1;if(M.ndj&&M.ndj.mii===p&&D===(M.ndj.cell||0))tb=0;const c=M.ct[p][h][s];c.D=D;c.tb=tb;c.g=D*2+tb;M.gam[c.g].push(c)}
+  M.gam.forEach(g=>g.sort((a,b)=>a.p-b.p||a.h-b.h));
+  M.geno=M.gam.map(g=>meioGeno(M,g));
+  return M}
+function meioGeno(M,list){const parts=[];for(let p=0;p<M.N;p++){MEIO_LOCI[p].forEach(l=>{const al=list.filter(c=>c.p===p).map(c=>c.al[l.g]).sort().join("");parts.push(al||"0")})}return parts.join(" ")}
+function meioCountN(M,g){return M.gam[g].length}
+function meioStageName(s){return s<.3?"G1 of interphase":s<1?"S phase: DNA is copied":s<2?"Prophase I":s<3?"Metaphase I":s<4?"Anaphase I":s<5?"Telophase I and cytokinesis":s<6?"Prophase II and metaphase II":s<7?"Anaphase II":s<8?"Telophase II and cytokinesis":"Four haploid cells"}
+function meioStageIdx(s){return s<1?0:Math.min(8,Math.floor(s))}
+/* counts per cell for a normal meiosis with haploid number n (s = stage time) */
+function meioCounts(n,s){if(s<.6)return {cells:1,chrom:2*n,ctd:2*n,C:2};if(s<4.5)return {cells:1,chrom:2*n,ctd:4*n,C:4};if(s<6.45)return {cells:2,chrom:n,ctd:2*n,C:2};if(s<7.5)return {cells:2,chrom:2*n,ctd:2*n,C:2};return {cells:4,chrom:n,ctd:n,C:1}}
+/* geometry for a box */
+function meioGeo(M,box,o){o=o||{};const [bx,by,bw,bh]=box;const N=M.N;const cx=bx+bw/2,cy=by+bh/2;const RX=bw*.47,RY=bh*.45;
+  const rxD=RX*.47,ryD=RY*.94,rxG=rxD*.92,ryG=ryD*.47;const rowH=Math.min(RY*1.55/N,RY*.8);
+  const mm=N+(M.ndj?1:0);const Lmax=Math.min(rowH*.84,(2*rxD*.84)/mm*.92,ryG*1.45,o.Lmax||90);const w=clamp(Lmax*.17,3.6,o.wmax||10);
+  return {cx,cy,RX,RY,rxD,ryD,rxG,ryG,rowH,Lmax,w,dX:[cx-RX*.5,cx+RX*.5],Rn:Math.min(RX,RY)*.66}}
+function homPos(M,G,p,h,s){const N=M.N;const L=G.Lmax*M.pairs[p].len;const w=G.w;const dH=w*1.32;const sd=M.seed%997;
+  const a=rnd(p*7.1+h*3.3+sd)*TAU,r=G.Rn*.55*Math.sqrt(.25+rnd(p*2.7+h*5.9+sd)*.75);const sx=G.cx+Math.cos(a)*r*1.15,sy=G.cy+Math.sin(a)*r*.8;const th0=(rnd(p+h*9+sd)-.5)*2.6;
+  const py=G.cy+(p-(N-1)/2)*G.rowH;const sideM=M.orient[p]===0?-1:1;const side=h===0?sideM:-sideM;const jx=(rnd(p*4.4+sd)-.5)*G.RX*.5;
+  const ndjI=M.ndj&&M.ndj.mi===p;const D=M.dest1[p][h];const dside=D===0?-1:1;
+  let x=sx,y=sy,th=th0;
+  if(s>=1){const k=smooth(seg(s,1.15,1.65));x=lerp(sx,G.cx+jx+side*dH,k);y=lerp(sy,py,k);th=lerp(th0,0,k)}
+  if(s>=2){const k=smooth(seg(s,2,2.7));x=lerp(G.cx+jx+side*dH,G.cx+side*dH,k);y=py}
+  if(s>=3){const k=smooth(seg(s,3,3.85));x=lerp(G.cx+side*dH,G.cx+dside*G.RX*.56,k);y=py+(ndjI?(h===0?-1:1)*G.rowH*.24*k:0)}
+  if(s>=4){const list=[];for(let q=0;q<N;q++)for(let hh=0;hh<2;hh++)if(M.dest1[q][hh]===D)list.push(q*2+hh);const m=list.length,kk=list.indexOf(p*2+h);const rh=Math.min(G.rowH,G.RY*1.6/m);
+    const k=smooth(seg(s,4,4.75));const ex=G.dX[D],ey=G.cy+(kk-(m-1)/2)*rh;x=lerp(G.cx+dside*G.RX*.56,ex,k);y=lerp(py+(ndjI?(h===0?-1:1)*G.rowH*.24:0),ey,k);
+    if(s>=5){const k2=smooth(seg(s,5,5.6));const colW=Math.min(G.Lmax*1.1,2*G.rxD*.84/m);const fx=G.dX[D]+(kk-(m-1)/2)*colW;x=lerp(ex,fx,k2);y=lerp(ey,G.cy,k2);
+      const fl=M.flip2[p][h]?-1:1;th=lerp(0,fl*Math.PI/2,smooth(seg(s,5,5.5)))}}
+  return {x,y,th,L,w}}
+function ctdPos(M,G,c,s,hp){/* hp = homolog position at this s */const w=G.w;const n=[Math.cos(hp.th),Math.sin(hp.th)];const rep=smooth(seg(s,.3,.9));const dS=w*.56*rep;
+  const sg=c.s===0?-1:1;let x=hp.x+n[0]*dS*sg,y=hp.y+n[1]*dS*sg,th=hp.th;
+  if(s>=6){const up=c.tb===0;const ndj2=M.ndj&&M.ndj.mii===c.p&&c.D===(M.ndj.cell||0);const k=smooth(seg(s,6,6.85));const ty=G.cy+(up?-1:1)*G.ryD*.56;const tx=hp.x+(ndj2?sg*w*1.6:0);x=lerp(x,tx,k);y=lerp(y,ty,k)}
+  if(s>=7){const list=M.gam[c.g];const m=list.length,kk=list.indexOf(c);const gX=G.dX[c.D],gY=G.cy+(c.tb===0?-1:1)*G.ryD*.5;const colG=Math.min(w*3.4,2*G.rxG*.8/Math.max(1,m));const k=smooth(seg(s,7,7.7));
+    const fx=gX+(kk-(m-1)/2)*colG,fy=gY;const ux=hp.x+(M.ndj&&M.ndj.mii===c.p&&c.D===(M.ndj.cell||0)?sg*w*1.6:0),uy=G.cy+(c.tb===0?-1:1)*G.ryD*.56;x=lerp(ux,fx,k);y=lerp(uy,fy,k);th=lerp(hp.th,0,k)}
+  return {x,y,th,dS}}
+function meioCells(M,G,s){const {cx,cy,RX,RY,rxD,ryD,rxG,ryG,dX}=G;
+  if(s<4)return [[cx,cy,RX,RY]];
+  if(s<5){const k=smooth(seg(s,4,4.85));return [-1,1].map(sd=>[cx+sd*lerp(RX*.3,RX*.5,k),cy,lerp(RX*.72,rxD,k),lerp(RY,ryD,k)])}
+  if(s<7)return dX.map(x=>[x,cy,rxD,ryD]);
+  const k=smooth(seg(s,7,7.85));const out=[];dX.forEach(x=>[-1,1].forEach(sd=>out.push([x,cy+sd*lerp(ryD*.3,ryD*.5,k),lerp(rxD,rxG,k),lerp(ryD*.72,ryG,k)])));return out}
+/* main renderer. o: {labels, alleles, counts, gameteLabels, T, hlPair, noSpindle} */
+function meioDraw(M,s,box,o){o=o||{};const G=meioGeo(M,box,o);const N=M.N;const T=o.T||0;
+  cellShapes(meioCells(M,G,s),{mw:o.mw||3});
+  /* nucleus */
+  if(s<1.95)nucEnv(G.cx,G.cy,G.Rn,1-seg(s,1.35,1.9),{broken:s>1.3,ry:G.Rn*.86});
+  /* homolog positions */
+  const HP=[];for(let p=0;p<N;p++){HP.push([homPos(M,G,p,0,s),homPos(M,G,p,1,s)])}
+  /* spindle meiosis I */
+  const a1=seg(s,1.65,2.25)*(1-seg(s,4.5,4.95));if(a1>0&&!o.noSpindle){const PL=[[G.cx-G.RX*.86,G.cy],[G.cx+G.RX*.86,G.cy]];
+    for(let i=0;i<5;i++){const yy=G.cy+(i-2)*G.RY*.16;ctx.save();ctx.globalAlpha*=a1*.45;ctx.beginPath();ctx.moveTo(PL[0][0],PL[0][1]);ctx.quadraticCurveTo(G.cx,yy*1.0+(yy-G.cy)*1.3,PL[1][0],PL[1][1]);ctx.strokeStyle=C.mt;ctx.lineWidth=1;ctx.stroke();ctx.restore()}
+    if(s>=1.9)for(let p=0;p<N;p++)for(let h=0;h<2;h++){const hp=HP[p][h];const pl=PL[M.dest1[p][h]];fibre(pl[0],pl[1],hp.x,hp.y-2,a1*seg(s,1.9,2.5));fibre(pl[0],pl[1],hp.x,hp.y+2,a1*seg(s,1.9,2.5))}
+    PL.forEach(q=>centrosome(q[0],q[1],a1))}
+  /* spindle meiosis II */
+  const a2=seg(s,5.2,5.7)*(1-seg(s,7.3,7.75));if(a2>0&&!o.noSpindle){G.dX.forEach((x,D)=>{const PT=[x,G.cy-G.ryD*.88],PB=[x,G.cy+G.ryD*.88];
+    for(let p=0;p<N;p++)for(let h=0;h<2;h++)if(M.dest1[p][h]===D){const hp=HP[p][h];for(let ss=0;ss<2;ss++){const c=M.ct[p][h][ss];const cp=ctdPos(M,G,c,s,hp);const pl=c.tb===0?PT:PB;fibre(pl[0],pl[1],cp.x,cp.y,a2*seg(s,5.45,5.9))}}
+    centrosome(PT[0],PT[1],a2);centrosome(PB[0],PB[1],a2)})}
+  /* synapsis ladder and chiasmata */
+  const k=s<1?.12:s<1.5?lerp(.12,1,smooth(seg(s,1,1.5))):s<7.8?1:lerp(1,.86,seg(s,7.8,8.6));
+  for(let p=0;p<N;p++){const a=HP[p][0],b=HP[p][1];const L=a.L;const cen=M.pairs[p].cen;
+    const sa=seg(s,1.45,1.65)*(1-seg(s,2.1,2.5));if(sa>0&&!o.noSC){ctx.save();ctx.globalAlpha*=sa*.85;const x1=Math.min(a.x,b.x)+G.w*.6,x2=Math.max(a.x,b.x)-G.w*.6;line(x1,a.y-L*cen,x1,a.y+L*(1-cen),C.sc,1.4);line(x2,a.y-L*cen,x2,a.y+L*(1-cen),C.sc,1.4);for(let i=0;i<10;i++){const yy=a.y-L*cen+L*(i+.5)/10;line(x1,yy,x2,yy,C.sc,1)}ctx.restore()}}
+  /* chromatids */
+  const useSeg=s>=M.coT;
+  for(let p=0;p<N;p++)for(let h=0;h<2;h++){const hp=HP[p][h];for(let ss=0;ss<2;ss++){const c=M.ct[p][h][ss];const cp=ctdPos(M,G,c,s,hp);const segs=(useSeg?c.segs:c.segs0).map(q=>[q[0],q[1],hcol(q[2])]);
+      const al=s<.6&&ss===1?seg(s,.3,.6):1;const sep=s>=6;const side=sep?0:(ss===0?-1:1);
+      let loci=null;if(o.alleles!==false){loci=MEIO_LOCI[p].map(l=>({f:l.f,t:(useSeg?c.al[l.g]:(h===0?l.g:l.g.toLowerCase())),col:C.ink}))}
+      const showL=o.alleles!==false&&s>=1.7;
+      const lin=hp.w>=7.5;drawChromatid(cp.x,cp.y,cp.th,hp.L,hp.w,M.pairs[p].cen,segs,{k,side,splay:s>=1.5&&s<6?.07:0,a:al,seed:p*3+h+ss,T,loci:showL?loci:(o.alleles!==false?loci:null),letters:showL,lin,lside:side||1,lsize:lin?Math.min(o.lsize||11.5,hp.w*1.1):(o.lsize||11.5),glow:o.hlPair===p&&s>2.5?C.bad:null})}}
+  /* chiasmata markers */
+  M.co.forEach(x=>{if(!x)return;const ca=seg(s,1.72,1.85)*(1-seg(s,3.0,3.15));if(ca<=0)return;const a=HP[x.p][0],b=HP[x.p][1];const cen=M.pairs[x.p].cen;const yy=a.y+(x.f-cen)*a.L;const xm=(a.x+b.x)/2;
+    ctx.save();ctx.globalAlpha*=ca;line(xm-G.w*.7,yy-G.w*.9,xm+G.w*.7,yy+G.w*.9,C.ink,2);line(xm-G.w*.7,yy+G.w*.9,xm+G.w*.7,yy-G.w*.9,C.ink,2);if(o.labels)label(xm+G.w*4,yy,"chiasma",{size:11,weight:700,align:"left",border:C.coh});ctx.restore()});
+  /* new nuclei and gamete labels */
+  if(s>=7.6){const na=seg(s,7.7,8.3);for(let g=0;g<4;g++){const D=g>>1,tb=g&1;const gx=G.dX[D],gy=G.cy+(tb===0?-1:1)*G.ryD*.5;const m=M.gam[g].length;const r=Math.max(G.Lmax*.62,m*Math.min(G.w*3.4,2*G.rxG*.8/Math.max(1,m))/2+G.w*1.4);
+      ctx.save();ctx.globalAlpha*=na*.8;ctx.beginPath();ctx.ellipse(gx,gy,Math.min(r,G.rxG*.92),Math.min(G.Lmax*.68,G.ryG*.9),0,0,TAU);ctx.setLineDash([5,4]);ctx.strokeStyle=C["ink-soft"];ctx.lineWidth=1.3;ctx.stroke();ctx.setLineDash([]);ctx.restore();
+      if(o.gameteLabels!==false&&s>=8.05){const d=m-N;const t=d===0?"n = "+N:(d>0?"n+"+d+" = "+m:"n"+d+" = "+m);const col=d===0?C.good:C.bad;withA(seg(s,8.05,8.4),()=>{const yy=gy+(tb===0?-G.ryG-10:G.ryG+11);label(gx,yy,t,{size:o.gsize||11.5,weight:700,mono:true,border:col})})}}}
+  /* stage label */
+  if(o.labels){if(s<8)label(box[0]+box[2]/2,box[1]+12,meioStageName(s),{size:12.5,weight:700,border:C.accent});else label(G.cx,G.cy,M.ndj?"Four cells: check the counts":meioStageName(s),{size:12.5,weight:700,border:C.accent})}
+  return G}
+/* ---------- mitosis model for comparisons ---------- */
+function mitoDraw(M,s,box,o){o=o||{};const [bx,by,bw,bh]=box;const N=M.N;const cx=bx+bw/2,cy=by+bh/2;const RX=bw*.47,RY=bh*.45;const T=o.T||0;
+  const n2=2*N;const rowH=Math.min(RY*1.62/n2,RY*.5);const Lmax=Math.min(rowH*1.5,RY*.55,o.Lmax||70);const w=clamp(Lmax*.17,3.4,o.wmax||9);const rxD=RX*.47,ryD=RY*.94;const dX=[cx-RX*.5,cx+RX*.5];const Rn=Math.min(RX,RY)*.66;
+  let cells;if(s<4)cells=[[cx,cy,RX,RY]];else{const k=smooth(seg(s,4,4.85));cells=[-1,1].map(sd=>[cx+sd*lerp(RX*.3,RX*.5,k),cy,lerp(RX*.72,rxD,k),lerp(RY,ryD,k)])}cellShapes(cells,{mw:o.mw||3});
+  if(s<1.95)nucEnv(cx,cy,Rn,1-seg(s,1.35,1.9),{broken:s>1.3,ry:Rn*.86});
+  const a1=seg(s,1.65,2.25)*(1-seg(s,4.5,4.95));const PL=[[cx-RX*.86,cy],[cx+RX*.86,cy]];if(a1>0)PL.forEach(q=>centrosome(q[0],q[1],a1));
+  const k=s<1?.12:s<1.5?lerp(.12,1,smooth(seg(s,1,1.5))):1;const sd=M.seed%997;
+  const order=[];for(let p=0;p<N;p++)for(let h=0;h<2;h++)order.push([p,h]);
+  order.forEach((ph,i)=>{const [p,h]=ph;const L=Math.min(Lmax*M.pairs[p].len*1.25,rowH*1.7);const a=rnd(p*7.1+h*3.3+sd)*TAU,r=Rn*.55*Math.sqrt(.25+rnd(p*2.7+h*5.9+sd)*.75);const sx=cx+Math.cos(a)*r*1.15,sy=cy+Math.sin(a)*r*.8;const th0=(rnd(p+h*9+sd)-.5)*2.6;
+    const ord=(i*5)%n2;const py=cy+(ord-(n2-1)/2)*rowH;const zx=cx+(ord%2?1:-1)*w*1.3;let x=sx,y=sy,th=th0;if(s>=1){const kk=smooth(seg(s,1.15,2.6));x=lerp(sx,zx,kk);y=lerp(sy,py,kk);th=lerp(th0,0,kk)}
+    const rep=smooth(seg(s,.3,.9));for(let ss=0;ss<2;ss++){const sg=ss===0?-1:1;let X=x+sg*w*.56*rep,Y=y;
+      if(s>=3){const kk=smooth(seg(s,3,3.85));X=lerp(X,cx+sg*RX*.56+(ord%2?1:-1)*w*1.3,kk)}
+      if(s>=4){const kk=smooth(seg(s,4,4.75));const ex=dX[ss]+(ord-(n2-1)/2)*Math.min(w*3.2,rxD*1.5/n2);const ey=cy;X=lerp(cx+sg*RX*.56+(ord%2?1:-1)*w*1.3,ex,kk);Y=lerp(y,ey,kk)}
+      if(a1>0&&s>=1.9&&s<4.6)fibre(PL[ss][0],PL[ss][1],X,Y,a1*seg(s,1.9,2.5));
+      const al=s<.6&&ss===1?seg(s,.3,.6):1;drawChromatid(X,Y,th,L,w,M.pairs[p].cen,[[0,1,hcol(h)]],{k,side:s>=3?0:sg,splay:s>=1.5&&s<3?.07:0,a:al,seed:p*3+h+ss,T})}});
+  if(s>=4.6){dX.forEach(x=>{ctx.save();ctx.globalAlpha*=seg(s,4.6,5)*.8;ctx.beginPath();ctx.ellipse(x,cy,rxD*.78,ryD*.8,0,0,TAU);ctx.setLineDash([5,4]);ctx.strokeStyle=C["ink-soft"];ctx.lineWidth=1.3;ctx.stroke();ctx.setLineDash([]);ctx.restore()})}
+  if(o.labels){const nm=s<.3?"G1 of interphase":s<1?"S phase: DNA is copied":s<2?"Prophase":s<3?"Metaphase":s<4?"Anaphase":"Telophase and cytokinesis";label(bx+bw/2,by+12,nm,{size:12.5,weight:700,border:C.accent})}
+  if(s>=4.9&&o.gameteLabels!==false){dX.forEach(x=>withA(seg(s,4.9,5),()=>label(x,cy+ryD+12,"2n = "+n2,{size:11.5,weight:700,mono:true,border:C.good})))}}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("meiosis-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("meiosis-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+let DT=0;
+/* ================= PART 1: meiosis bench ================= */
+const BN={n:2,co:false,nd:"none",ndPair:0,s:0,playing:true,speed:1,M:null,hold:0,counted:false,tally:{},cls:{n:0,plus:0,minus:0},rec:{par:0,rec:0},zyg:{normal:0,tri:0,mono:0},fert:null,lastZ:null,done:new Set(),meioses:0,fertT:0};
+const BCHAL=["Watch one meiosis finish: four gametes form.","With 2n = 6 and crossing over off, tally at least 100 gametes. Count the kinds: is it 2³ = 8?","Turn crossing over on and get a recombinant gamete (Ab or aB).","Make a meiosis I error: all four gametes come out abnormal.","Make a meiosis II error: two gametes normal, one n + 1, one n − 1.","Fertilize an n + 1 gamete to make a trisomic zygote."];
+function bnModel(){const nd=BN.nd==="mi"?{mi:BN.ndPair}:BN.nd==="mii"?{mii:BN.ndPair,cell:Math.random()<.5?0:1}:null;return meioModel({n:BN.n,co:BN.co,ndj:nd})}
+function bnNew(){BN.M=bnModel();BN.s=0;BN.hold=0;BN.counted=false;BN.fert=null;bnFertUI();a11yKey=""}
+function bnSettingsChanged(){BN.tally={};BN.cls={n:0,plus:0,minus:0};BN.rec={par:0,rec:0};BN.zyg={normal:0,tri:0,mono:0};BN.meioses=0;BN.lastZ=null;bnPairSel();bnNew();bnRead()}
+function bnRecOf(g,M){/* recombinant for A-B? only for single-copy pair 1 */const c=g.filter(x=>x.p===0);if(c.length!==1)return null;const a=c[0].al.A,b=c[0].al.B;return (a==="A")!==(b==="B")}
+function bnAddModel(M){M.gam.forEach(g=>{const key=meioGeno(M,g);BN.tally[key]=(BN.tally[key]||0)+1;const d=g.length-M.N;if(d===0)BN.cls.n++;else if(d>0)BN.cls.plus++;else BN.cls.minus++;const r=bnRecOf(g,M);if(r!=null){if(r)BN.rec.rec++;else BN.rec.par++}});BN.meioses++}
+function bnTotal(){return Object.values(BN.tally).reduce((a,b)=>a+b,0)}
+function bnCountDone(){const M=BN.M;bnAddModel(M);BN.counted=true;bnChal(0);
+  if(BN.n===3&&!BN.co&&BN.nd==="none"&&bnTotal()>=100)bnChal(1);
+  if(BN.co&&M.gam.some(g=>bnRecOf(g,M)===true))bnChal(2);
+  const ds=M.gam.map(g=>g.length-M.N);if(BN.nd==="mi"&&ds.every(d=>d!==0))bnChal(3);if(BN.nd==="mii"&&ds.filter(d=>d===0).length===2)bnChal(4);
+  bnFertUI();bnRead()}
+function bnChal(i){if(BN.done.has(i))return;BN.done.add(i);chalUI($("#benchChal"),BCHAL,BN.done);bnStatus("good","Challenge done: "+BCHAL[i])}
+function bnStatus(cls,t){const el=$("#benchStatus");el.className="status "+(cls||"");el.textContent=t}
+function bnFast(k){for(let i=0;i<k;i++)bnAddModel(bnModel());if(BN.n===3&&!BN.co&&BN.nd==="none"&&bnTotal()>=100)bnChal(1);if(BN.co)bnChal(2);bnRead();bnStatus("","Added "+k+" meioses ("+4*k+" gametes) to the tally.")}
+function bnFertilize(g){if(!BN.M||BN.s<8.2)return;const M=BN.M;const list=M.gam[g];const d=list.length-M.N;BN.fert={g,t0:performance.now(),d};BN.playing=true;BN.hold=0;
+  const kind=d===0?"normal":d>0?"tri":"mono";BN.zyg[kind]++;BN.lastZ={g,d,list:list.map(c=>({p:c.p,segs:c.segs})),N:M.N,pair:d!==0?bnOddPair(list,M.N):null};
+  if(d>0)bnChal(5);bnStatus(d===0?"good":"bad","Zygote from gamete "+(g+1)+": "+(2*M.N+d)+" chromosomes. "+(d===0?"Normal diploid (2n = "+2*M.N+").":d>0?"Trisomic: three copies of pair "+(BN.lastZ.pair+1)+" (2n + 1).":"Monosomic: only one copy of pair "+(BN.lastZ.pair+1)+" (2n − 1)."));bnRead();a11yKey=""}
+function bnOddPair(list,N){for(let p=0;p<N;p++){const c=list.filter(x=>x.p===p).length;if(c!==1)return p}return 0}
+function bnFertUI(){const box=$("#benchFert");box.innerHTML="";const ready=BN.M&&BN.s>=8.2;for(let g=0;g<4;g++){const b=document.createElement("button");b.type="button";b.className="tbtn";b.textContent="Gamete "+(g+1);b.disabled=!ready;b.setAttribute("aria-pressed",String(!!(BN.fert&&BN.fert.g===g)));b.onclick=()=>{bnFertilize(g);bnFertUI()};box.appendChild(b)}}
+function bnPairSel(){const sel=$("#benchPair");const v=Math.min(BN.ndPair,BN.n-1);sel.innerHTML="";for(let p=0;p<BN.n;p++){const o=document.createElement("option");o.value=p;o.textContent="Pair "+(p+1)+(p===0?" (longest, genes A and B)":" (gene "+MEIO_LOCI[p][0].g+")");sel.appendChild(o)}sel.value=v;BN.ndPair=v;sel.disabled=BN.nd==="none"}
+function bnCellCounts(){const M=BN.M,s=BN.s;if(s<.6)return "1 cell: "+2*M.N+" chromosomes, "+2*M.N+" chromatids, 2C";if(s<4.5)return "1 cell: "+2*M.N+" chromosomes, "+4*M.N+" chromatids, 4C";
+  if(s<7.5){const per=[0,1].map(D=>{let ch=0,ct=0;for(let p=0;p<M.N;p++)for(let h=0;h<2;h++)if(M.dest1[p][h]===D){ct+=2;const ndj2=M.ndj&&M.ndj.mii===p&&D===(M.ndj.cell||0);ch+=s>=6.45&&!ndj2?2:1}return ch+" chromosomes, "+ct+" chromatids"});return "2 cells: "+per.join(" | ")}
+  return "4 cells: "+M.gam.map(g=>g.length).join(", ")+" chromosomes (single chromatids)"}
+function bnRead(){const tb=$("#benchRead tbody");if(!BN.M)return;const tot=bnTotal();const kinds=Object.keys(BN.tally).length;const rp=BN.rec.par+BN.rec.rec;
+  const rows=[["Stage",meioStageName(BN.s)],["Cells now",bnCellCounts()],["Settings","2n = "+2*BN.n+", crossing over "+(BN.co?"on":"off")+", "+(BN.nd==="none"?"no nondisjunction":"nondisjunction in meiosis "+(BN.nd==="mi"?"I":"II")+" (pair "+(BN.ndPair+1)+")")],
+    ["Gametes tallied",tot+" from "+BN.meioses+" meioses"],["Kinds of gametes seen",kinds+(BN.nd==="none"?" (2ⁿ = "+Math.pow(2,BN.n)+" without crossing over)":"")],["Chromosome number","n: "+BN.cls.n+" · n + 1: "+BN.cls.plus+" · n − 1: "+BN.cls.minus],
+    ["Genes A and B",rp?BN.rec.rec+" recombinant of "+rp+" ("+Math.round(BN.rec.rec/rp*100)+"%)":"none yet"],["Zygotes","normal "+BN.zyg.normal+" · trisomic "+BN.zyg.tri+" · monosomic "+BN.zyg.mono]];
+  tb.innerHTML=rows.map(r=>`<tr><th scope="row">${r[0]}</th><td class="l">${r[1]}</td></tr>`).join("");$("#benchCap").textContent=meioStageName(BN.s)+" · 2n = "+2*BN.n+(BN.co?" · crossing over on":"")+(BN.nd!=="none"?" · nondisjunction in meiosis "+(BN.nd==="mi"?"I":"II"):"")}
+let bnReadT=0;
+function drawBench(now){use(S1);const T=now/1000;
+  if(BN.playing){if(BN.s<9)BN.s=Math.min(9,BN.s+DT*.6*BN.speed);else{BN.hold+=DT;if(BN.hold>(BN.fert?6:3)){bnNew()}}}
+  if(BN.s>=8.2&&!BN.counted)bnCountDone();
+  if((bnReadT+=DT)>.25){bnReadT=0;bnRead();const btns=document.querySelectorAll("#benchFert button");const ready=BN.s>=8.2;btns.forEach(b=>b.disabled=!ready)}
+  const M=BN.M;panelBox(6,6,510,548);title(16,22,"Cell",C["ink-soft"]);
+  const G=meioDraw(M,BN.s,[12,34,498,456],{labels:true,T,lsize:12,hlPair:BN.nd!=="none"?BN.ndPair:null,gsize:12});
+  if(BN.s>=8.2){for(let g=0;g<4;g++){const D=g>>1,tb=g&1;const gx=G.dX[D]+(D===0?-1:1)*G.rxG*.78,gy=G.cy+(tb===0?-1:1)*G.ryD*.5-(tb===0?G.ryG*.55:-G.ryG*.55);const on=BN.fert&&BN.fert.g===g;badge(gx,gy,g+1,on?C.accent:C.ink,12);if(on){ctx.save();ctx.globalAlpha*=.5+.4*Math.sin(T*5);ctx.beginPath();ctx.ellipse(G.dX[D],G.cy+(tb===0?-1:1)*G.ryD*.5,G.rxG+6,G.ryG+6,0,0,TAU);ctx.strokeStyle=C.accent;ctx.lineWidth=3;ctx.stroke();ctx.restore()}}}
+  /* stage strip */
+  const nm=["Inter","Pro I","Meta I","Ana I","Telo I","Meta II","Ana II","Telo II","Gametes"];const si=meioStageIdx(BN.s);const sw=496/9;
+  nm.forEach((x,i)=>{const on=i===si;rr(14+i*sw,500,sw-3,22,4);ctx.fillStyle=on?C.accent:hexA(C.panel,.95);ctx.fill();ctx.strokeStyle=on?C.accent:C.rule;ctx.lineWidth=1;ctx.stroke();txt(14+i*sw+sw/2-1.5,511,x,{size:10.5,weight:on?700:500,align:"center",color:on?C["on-accent"]:C["ink-soft"]})});
+  rr(14,530,496*(BN.s/9),8,4);ctx.fillStyle=hexA(C.accent,.7);ctx.fill();rr(14,530,496,8,4);ctx.strokeStyle=C.rule;ctx.lineWidth=1;ctx.stroke();
+  /* tally panel */
+  panelBox(524,6,270,548);title(536,22,"Live gamete tally",C.act6);const tot=bnTotal();
+  txt(536,42,tot+" gametes from "+BN.meioses+" meioses",{size:12,weight:600});
+  const cls=[["n (normal)",BN.cls.n,C.good],["n + 1",BN.cls.plus,C.bad],["n − 1",BN.cls.minus,C.warn]];const cm=Math.max(4,BN.cls.n,BN.cls.plus,BN.cls.minus);
+  cls.forEach((c,i)=>{const y=64+i*22;txt(536,y,c[0],{size:11.5,weight:600});const bw=150*c[1]/cm;rr(616,y-7,Math.max(2,bw),14,3);ctx.fillStyle=hexA(c[2],.85);ctx.fill();txt(620+bw,y,String(c[1]),{size:11.5,weight:700,mono:true})});
+  const keys=Object.keys(BN.tally).sort((a,b)=>BN.tally[b]-BN.tally[a]||(a<b?-1:1));const kinds=keys.length;
+  title(536,138,"Kinds seen: "+kinds+(BN.nd==="none"?"  (2ⁿ = "+Math.pow(2,BN.n)+")":""),C["ink-soft"]);
+  const show=keys.slice(0,12);const km=Math.max(1,...show.map(k=>BN.tally[k]));
+  show.forEach((k,i)=>{const y=156+i*17;const kp=k.split(" ");const rec=kp[0].length===1&&kp[1].length===1&&((kp[0]==="A")!==(kp[1]==="B"));txt(536,y,k,{size:11,weight:700,mono:true,color:rec?C["warn-ink"]:C.ink});const bw=100*BN.tally[k]/km;rr(650,y-6,Math.max(2,bw),12,3);ctx.fillStyle=rec?hexA(C.act6,.9):hexA(C.act5,.75);ctx.fill();txt(654+bw,y,String(BN.tally[k]),{size:10.5,weight:600,mono:true})});
+  if(kinds>12)txt(536,156+12*17,"+ "+(kinds-12)+" more kinds",{size:11,color:C["ink-soft"]});
+  if(!tot)wrapText("Gametes are added here each time a meiosis finishes. Try Tally 100 more meioses for a big sample.",536,170,246,16,{size:12,color:C["ink-soft"]});
+  /* zygote panel */
+  const zy=380;line(530,zy-10,788,zy-10,C["rule-soft"],1);title(536,zy+4,"Fertilization",C.act8);
+  if(!BN.lastZ){wrapText(BN.s>=8.2?"Pick Gamete 1 to 4 in the controls to fuse it with a partner's normal gamete.":"Four gametes appear at the end of meiosis. Then you can fertilize one.",536,zy+30,246,16,{size:12,color:C["ink-soft"]})}
+  else{const Z=BN.lastZ;const el=BN.fert?(now-BN.fert.t0)/1000:9;const mv=smooth(seg(el,0,1.4));const zx=659,zyc=zy+92;
+    if(el<1.6){const ax=lerp(580,zx-14,mv),bx=lerp(740,zx+14,mv);circ(ax,zyc,30,C.cyto,C.memb,2);Z.list.forEach((c,i)=>drawChromatid(ax+(i-(Z.list.length-1)/2)*7,zyc,0,30*MEIO_LEN[c.p],4,MEIO_CEN[c.p],c.segs.map(q=>[q[0],q[1],hcol(q[2])]),{N:6}));
+      circ(bx,zyc,30,C.cyto,C.memb,2);for(let p=0;p<Z.N;p++)drawChromatid(bx+(p-(Z.N-1)/2)*7,zyc,0,30*MEIO_LEN[p],4,MEIO_CEN[p],[[0,1,C.partner]],{N:6});txt(580,zyc+44,"gamete "+(Z.g+1),{size:11,weight:600,align:"center"});txt(740,zyc+44,"partner (n)",{size:11,weight:600,align:"center"})}
+    else{const all=Z.list.map(c=>({p:c.p,segs:c.segs.map(q=>[q[0],q[1],hcol(q[2])])}));for(let p=0;p<Z.N;p++)all.push({p,segs:[[0,1,C.partner]]});all.sort((a,b)=>a.p-b.p);
+      glow(zx,zyc,70,C.atp,.35*(1-seg(el,2,4)));circ(zx,zyc,54,C.egg,Z.d===0?C.dip:C.bad,3);all.forEach((c,i)=>{const L=40*MEIO_LEN[c.p];drawChromatid(zx+(i-(all.length-1)/2)*Math.min(10,90/all.length),zyc,0,L,4.5,MEIO_CEN[c.p],c.segs,{N:6,glow:Z.pair===c.p&&Z.d!==0?C.bad:null})});
+      label(zx,zyc+68,(Z.d===0?"2n = ":Z.d>0?"2n + 1 = ":"2n − 1 = ")+(2*Z.N+Z.d)+(Z.d===0?": normal":Z.d>0?": trisomic":": monosomic"),{size:12,weight:700,mono:true,border:Z.d===0?C.good:C.bad})}}
+}
+function benchA11y(){const M=BN.M;const s=BN.s;const lab=`Meiosis bench, 2n = ${2*M.N}. ${meioStageName(s)}.`+(s>=8.2?" Gamete chromosome numbers: "+M.gam.map(g=>g.length).join(", ")+".":"");
+  const parts=[`A cell with ${M.N} pairs of chromosomes, magenta for maternal and blue for paternal, is shown. Stage: ${meioStageName(s)}.`,bnCellCounts()+"."];
+  if(s>=8.2)parts.push("The four gametes, numbered 1 to 4, carry: "+M.geno.map((g,i)=>"gamete "+(i+1)+" "+g.replace(/0/g,"none")).join("; ")+".");
+  parts.push("The right panel tallies "+bnTotal()+" gametes: "+BN.cls.n+" normal, "+BN.cls.plus+" with an extra chromosome and "+BN.cls.minus+" missing one, with "+Object.keys(BN.tally).length+" different kinds.");
+  if(BN.lastZ)parts.push("Last zygote: "+(2*BN.lastZ.N+BN.lastZ.d)+" chromosomes, "+(BN.lastZ.d===0?"normal":BN.lastZ.d>0?"trisomic":"monosomic")+".");
+  return [lab,parts.join(" ")]}
+function bnInit(){segBtns($("#benchN"),[[1,"2"],[2,"4"],[3,"6"],[4,"8"]],()=>BN.n,v=>{BN.n=v;bnSettingsChanged()});
+  segBtns($("#benchCO"),[[false,"Off"],[true,"On"]],()=>BN.co,v=>{BN.co=v;bnSettingsChanged()});
+  segBtns($("#benchND"),[["none","None"],["mi","Meiosis I"],["mii","Meiosis II"]],()=>BN.nd,v=>{BN.nd=v;bnSettingsChanged()});
+  $("#benchPair").onchange=e=>{BN.ndPair=+e.target.value;bnSettingsChanged()};
+  $("#benchPlay").onclick=()=>{BN.playing=!BN.playing;$("#benchPlay").textContent=BN.playing?"Pause":"Play"};
+  $("#benchStep").onclick=()=>{BN.playing=false;$("#benchPlay").textContent="Play";if(BN.s>=9){bnNew();BN.s=0}else BN.s=Math.min(9,Math.floor(BN.s+1e-6)+1);if(BN.s>=8.2&&!BN.counted)bnCountDone();bnRead();a11yKey=""};
+  $("#benchNew").onclick=()=>{bnNew();bnRead()};
+  $("#benchSpeed").oninput=e=>{BN.speed=+e.target.value;$("#benchSpeedOut").textContent=BN.speed+"×"};
+  $("#benchFast").onclick=()=>bnFast(100);$("#benchClear").onclick=()=>{bnSettingsChanged();bnStatus("","Tally cleared.")};
+  chalUI($("#benchChal"),BCHAL,BN.done);bnPairSel();bnNew();bnRead();bnStatus("","The cell runs through meiosis on its own and starts a new one when it finishes. Change the settings to see what happens.")}
+/* ================= PART 2: counting trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const fmtN=v=>Math.round(v).toLocaleString("en-US");
+const SUPD="⁰¹²³⁴⁵⁶⁷⁸⁹";const sup=n=>String(n).split("").map(d=>SUPD[+d]).join("");const pw=(b,e)=>b+sup(e);
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const CTYPES=[["mix","All types, mixed"],["assort","Independent assortment: count combinations"],["count","Chromosomes, chromatids and DNA by stage"],["ndj","Nondisjunction: predict the gametes"],["stage","Name the stage: predict, then watch"]];
+const SPEC=[["a fruit fly",8],["a garden pea",14],["corn (maize)",20],["a human",46],["a mosquito",6],["a tomato",24],["a house cat",38],["a rice plant",24]];
+const STG=[{nm:"G1 of interphase, before DNA replication",ch:2,ct:2,C:2,s:.15,mito:false},{nm:"G2 of interphase, after DNA replication",ch:2,ct:4,C:4,s:.98},{nm:"prophase I",ch:2,ct:4,C:4,s:1.85,tet:true},{nm:"metaphase I",ch:2,ct:4,C:4,s:2.7,tet:true},{nm:"anaphase I",ch:2,ct:4,C:4,s:3.5},
+  {nm:"one cell just after telophase I",ch:1,ct:2,C:2,s:5.0},{nm:"metaphase II (one cell)",ch:1,ct:2,C:2,s:5.85},{nm:"anaphase II (one cell, before it divides)",ch:2,ct:2,C:2,s:6.75},{nm:"a gamete, after telophase II",ch:1,ct:1,C:1,s:8.7}];
+const GEN={
+ assort(){const v=pick(["gam","gam","zyg","prob","rev"]);
+  if(v==="gam"){const sp=Math.random()<.35?pick(SPEC.filter(s=>s[1]<=46)):null;const n2=sp?sp[1]:2*ri(1,10);const n=n2/2;const ans=Math.pow(2,n);
+   return {kind:"assort",title:"Kinds of gametes",html:`${sp?cap(sp[0])+" has":"An organism has"} <b>2n = ${n2}</b>. Ignoring crossing over, how many genetically different kinds of gametes can independent assortment produce?`,ans,unit:"kinds",
+    hints:["Each homologous pair lines up 2 ways at metaphase I, independently of the other pairs.",`Find the number of pairs: n = 2n ÷ 2 = ${n2} ÷ 2 = ${n}.`,`Kinds of gametes = 2ⁿ = ${pw(2,n)}.`],
+    rows:[{t:`2n = ${n2}, so there are n = ${n} homologous pairs.`},{t:`Each pair: 2 orientations. Pairs are independent, so multiply.`},{t:`${pw(2,n)} = ${fmtN(ans)}`,mono:true},{t:fmtN(ans)+" kinds of gametes",ans:true}],miss:`using 2n as the exponent (${pw(2,n2)}) or multiplying 2 × n (${2*n}).`,
+    slips:[[Math.pow(2,n2),"That used 2n as the exponent. The exponent is the number of pairs, n = "+n+"."],[2*n,"That multiplied 2 × n. Multiply 2 by itself n times instead."],[n*n,"That squared n. It is 2 to the power n."],[n2,"That is just 2n. Each pair doubles the number of combinations."]],vis:{k:"assort",n,mode:"gam"}}}
+  if(v==="zyg"){const n=ri(1,8);const g=Math.pow(2,n),ans=g*g;
+   return {kind:"assort",title:"Combinations in offspring",html:`A species has <b>2n = ${2*n}</b>. Ignoring crossing over, how many different chromosome combinations are possible in the zygotes of one couple?`,ans,unit:"combinations",
+    hints:["First find how many kinds of gametes each parent can make: 2ⁿ.",`n = ${n}, so each parent makes ${pw(2,n)} = ${g} kinds.`,`Any egg can meet any sperm, so multiply: ${g} × ${g}.`],
+    rows:[{t:`Each parent: ${pw(2,n)} = ${g} kinds of gametes.`},{t:`Random fertilization: egg kinds × sperm kinds.`},{t:`${g} × ${g} = ${fmtN(ans)}   (= ${pw(2,2*n)})`,mono:true},{t:fmtN(ans)+" combinations",ans:true}],miss:"adding the two parents' gamete numbers instead of multiplying.",
+    slips:[[2*g,"That added the two parents' numbers. Every egg kind can pair with every sperm kind, so multiply."],[g,"That is the number for ONE parent. Multiply by the other parent's number."],[Math.pow(2*n,2),"That squared 2n. Find 2ⁿ for each parent first."]],vis:{k:"assort",n,mode:"zyg"}}}
+  if(v==="prob"){const n=ri(2,10);const ans=Math.pow(2,n);
+   return {kind:"assort",title:"Chance of an all-maternal gamete",html:`An organism has <b>2n = ${2*n}</b>. Ignoring crossing over, what is the chance that one gamete gets ONLY maternal chromosomes? Answer as "1 in ___" and type the number.`,ans,unit:"",
+    hints:["For each pair, the chance that the maternal homolog ends up in a given gamete is 1/2.","The pairs assort independently, so multiply the chances.",`(1/2) multiplied ${n} times = 1/${pw(2,n)}.`],
+    rows:[{t:`Chance per pair = 1/2; there are n = ${n} pairs.`},{t:`Independent events: multiply. (1/2)${sup(n)} = 1/${pw(2,n)}`,mono:true},{t:`1 in ${fmtN(ans)}`,ans:true}],miss:"adding 1/2 for each pair instead of multiplying.",
+    slips:[[2*n,"That multiplied 2 × n. Multiply 1/2 by itself n times."],[Math.pow(2,2*n),"That used 2n pairs. There are only n pairs."],[2,"That is the chance for ONE pair. All "+n+" pairs must come out maternal."]],vis:{k:"assort",n,mode:"prob"}}}
+  const k=ri(2,10);const g=Math.pow(2,k);
+  return {kind:"assort",title:"Work backwards to 2n",html:`Ignoring crossing over, an organism can make <b>${fmtN(g)}</b> kinds of gametes by independent assortment. What is its diploid number, 2n?`,ans:2*k,unit:"chromosomes",
+   hints:["Kinds of gametes = 2ⁿ, where n is the number of pairs.",`Find n: 2 to what power is ${fmtN(g)}?`,`${pw(2,k)} = ${fmtN(g)}, so n = ${k}. Now double it.`],
+   rows:[{t:`2ⁿ = ${fmtN(g)}`,mono:true},{t:`${pw(2,k)} = ${fmtN(g)}, so n = ${k}`,mono:true},{t:`2n = 2 × ${k} = ${2*k}`,mono:true},{t:`2n = ${2*k}`,ans:true}],miss:"stopping at n. The question asks for 2n.",
+   slips:[[k,"That is n, the number of pairs. Double it for 2n."],[g/2,"Halving the number of gametes does not give 2n. Find the power of 2 first."],[g,"That is the number of gamete kinds, not the chromosome number."]],vis:{k:"assort",n:k,mode:"rev"}}},
+ count(){const n2=pick([4,6,8,10,12,14,16,18,20,24,46]);const n=n2/2;const sti=ri(0,STG.length-1);const st=STG[sti];const qs=st.tet?["chrom","ctd","tet","dna"]:["chrom","ctd","dna","chrom","ctd"];const q=pick(qs);
+  const chrom=st.ch*n,ctd=st.ct*n;const cellW=sti>=5?" (in one cell)":"";
+  if(q==="dna"){const g1=pick([4,6,8,10,12]);const ans=g1*st.C/2;
+   return {kind:"count",title:"DNA amount at a stage",html:`A G1 cell of an organism (2n = ${n2}) contains <b>${g1} pg</b> of DNA. How much DNA is in <b>${st.nm}</b>?`,ans,unit:"pg",dp:1,
+    hints:["DNA doubles in S phase (2C to 4C), halves at the end of meiosis I (2C) and halves again at the end of meiosis II (1C).",`G1 = 2C = ${g1} pg, so 1C = ${g1/2} pg.`,`${cap(st.nm)} has ${st.C}C.`],
+    rows:[{t:`G1 diploid cell = 2C = ${g1} pg, so 1C = ${g1/2} pg.`},{t:`${cap(st.nm)}: ${st.C}C.`},{t:`${st.C} × ${g1/2} pg = ${ans} pg`,mono:true},{t:ans+" pg",ans:true}],miss:"halving the DNA only once. It halves in meiosis I AND again in meiosis II.",
+    slips:[[g1,"That is the G1 amount (2C). Check whether this stage is before or after S phase and the divisions."],[g1*2,st.C===4?"":"That is 4C, the amount between S phase and the end of meiosis I."],[g1/2,st.C===1?"":"That is 1C, the amount in a finished gamete."]],vis:{k:"count",n2,sti,q}}}
+  if(q==="tet"){return {kind:"count",title:"Tetrads",html:`How many <b>tetrads</b> are in a cell at <b>${st.nm}</b> in an organism with 2n = ${n2}?`,ans:n,unit:"tetrads",
+    hints:["A tetrad (bivalent) is one synapsed homologous pair.","Count the homologous pairs: 2n ÷ 2.",`${n2} ÷ 2 = ${n}.`],rows:[{t:"1 tetrad = 1 homologous pair = 2 chromosomes = 4 chromatids."},{t:`${n2} chromosomes ÷ 2 = ${n} pairs`,mono:true},{t:n+" tetrads",ans:true}],miss:"counting chromatids (4 per tetrad) or chromosomes instead of pairs.",
+    slips:[[n2,"That is the number of chromosomes. Each tetrad holds two."],[2*n2,"That is the number of chromatids. Each tetrad holds four."]],vis:{k:"count",n2,sti,q}}}
+  const ans=q==="chrom"?chrom:ctd;const what=q==="chrom"?"chromosomes":"chromatids";
+  const why=q==="chrom"?(st.ch===2?(sti===7?"Sister chromatids have separated, so each one now counts as a chromosome: 2n in this cell until it divides.":"Meiosis I has not finished, so the cell still has 2n chromosomes."):"Meiosis I has halved the number, so this cell has n chromosomes."):(st.ct===4?"After S phase every chromosome has 2 chromatids: 2 × 2n.":st.ct===2&&st.ch===1?"n chromosomes, each still with 2 chromatids.":st.ct===2&&st.ch===2&&sti===0?"Before S phase each chromosome has 1 chromatid.":st.ct===2?"2n single chromatids (sisters have separated).":"n single chromatids.");
+  return {kind:"count",title:"Count at a stage",html:`An organism has <b>2n = ${n2}</b>. How many <b>${what}</b> are in ${st.nm.startsWith("a ")||st.nm.startsWith("one")?"":"a cell at "}<b>${st.nm}</b>?`,ans,unit:what,
+   hints:["Chromosomes = centromeres. Chromatids = DNA molecules (2 per chromosome after S phase, until sisters separate).",`Here: ${st.ch===2?"2n":"n"} chromosomes, each with ${st.ct/st.ch} chromatid${st.ct/st.ch>1?"s":""}.`,`2n = ${n2}, n = ${n}.`],
+   rows:[{t:`2n = ${n2}, n = ${n}.`},{t:why},{t:`${what} = ${q==="chrom"?(st.ch===2?"2n":"n"):(st.ct===4?"2 × 2n":st.ct===2&&st.ch===1?"2 × n":st.ct===2?"2n":"n")} = ${ans}`,mono:true},{t:ans+" "+what,ans:true}],miss:q==="chrom"?"counting chromatids as chromosomes, or halving the number in meiosis II instead of meiosis I.":"forgetting that each replicated chromosome has two chromatids.",
+   slips:[[q==="chrom"?ctd:chrom,q==="chrom"?"That is the chromatid count. Count centromeres for chromosomes.":"That is the chromosome count. Multiply by the chromatids per chromosome."],[ans*2,"That doubles it. "+why],[ans/2,"That halves it. "+why]],vis:{k:"count",n2,sti,q}}},
+ ndj(){const v=pick(["pattern","pattern","zyg","which","syn","normal"]);const n2=pick([4,6,8,10,12,14,16,20,24,46]);const n=n2/2;const div=Math.random()<.5?1:2;
+  if(v==="pattern"){const pat=d=>d===1?`${n+1}, ${n+1}, ${n-1}, ${n-1}`:`${n+1}, ${n-1}, ${n}, ${n}`;const opts=shuffle([pat(div),pat(3-div),`${n}, ${n}, ${n}, ${n+1}`,`${n2}, ${n2}, 0, 0`]);const ans=opts.indexOf(pat(div));
+   return {kind:"ndj",title:"Gametes after nondisjunction",html:`An organism has <b>2n = ${n2}</b>. One homologous pair fails to separate in <b>meiosis ${div===1?"I":"II"}</b>${div===2?" (in one of the two cells)":""}. What are the chromosome numbers in the four gametes?`,choices:opts.map(o=>o+" chromosomes"),ans,unit:"",
+    hints:[div===1?"In meiosis I, a whole homologous pair goes to one cell; the other cell gets none of that pair.":"In meiosis II, only one of the two cells makes the error; the other divides normally.",`Normal gametes have n = ${n}.`,div===1?"Both cells from meiosis I are wrong, so all four gametes are wrong: two have one extra, two have one fewer.":"The normal cell gives two n gametes; the faulty cell gives one n + 1 and one n − 1."],
+    rows:[{t:`n = ${n}. Nondisjunction in meiosis ${div===1?"I":"II"}.`},{t:div===1?`Meiosis I: one cell gets ${n+1} chromosomes, the other ${n-1}.`:`Meiosis I normal: two cells with ${n} each.`},{t:div===1?`Meiosis II splits each normally: ${n+1}, ${n+1} and ${n-1}, ${n-1}.`:`Meiosis II: one cell gives ${n}, ${n}; the faulty one gives ${n+1}, ${n-1}.`},{t:pat(div),ans:true}],
+    miss:"mixing up the two patterns. Meiosis I error: all four abnormal. Meiosis II error: two normal.",vis:{k:"ndj",div,n,mode:"pattern"}}}
+  if(v==="zyg"){const plus=Math.random()<.6;const ans=n2+(plus?1:-1);
+   return {kind:"ndj",title:"Zygote from an abnormal gamete",html:`In a species with <b>2n = ${n2}</b>, an <b>n ${plus?"+":"−"} 1</b> gamete is fertilized by a normal gamete. How many chromosomes does the zygote have?`,ans,unit:"chromosomes",
+    hints:[`A normal gamete has n = ${n}.`,`The abnormal gamete has ${n} ${plus?"+":"−"} 1 = ${plus?n+1:n-1}.`,"Add the two gametes together."],
+    rows:[{t:`Normal gamete: n = ${n}. Abnormal gamete: ${plus?n+1:n-1}.`},{t:`${n} + ${plus?n+1:n-1} = ${ans}`,mono:true},{t:`${ans} chromosomes: ${plus?"trisomic (2n + 1)":"monosomic (2n − 1)"}`,ans:true}],miss:"adding or subtracting 1 from n instead of from 2n.",
+    slips:[[plus?n+1:n-1,"That is the abnormal gamete alone. Add the normal gamete's n = "+n+"."],[n2,"That is the normal 2n. One chromosome is "+(plus?"extra":"missing")+"."],[n2+(plus?2:-2),"Only one chromosome is "+(plus?"extra":"missing")+"."]],vis:{k:"ndj",div:1,n,mode:"zyg",plus}}}
+  if(v==="which"){const d=Math.random()<.5?1:2;const g=d===1?`${n+1}, ${n+1}, ${n-1}, ${n-1}`:`${n}, ${n+1}, ${n}, ${n-1}`;const opts=["Meiosis I","Meiosis II","Mitosis before meiosis","No error happened"];
+   return {kind:"ndj",title:"Which division went wrong?",html:`One meiosis in an organism with <b>2n = ${n2}</b> gives four gametes with <b>${g}</b> chromosomes. In which division did nondisjunction happen?`,choices:opts,ans:d-1,unit:"",
+    hints:[`Normal gametes have n = ${n}.`,"Count how many of the four gametes are normal.","Meiosis I errors leave no normal gametes; meiosis II errors leave two."],
+    rows:[{t:`n = ${n}. Normal gametes here: ${d===1?0:2} of 4.`},{t:d===1?"All four abnormal: the error happened before the first split.":"Two normal: one cell from meiosis I divided normally."},{t:"Meiosis "+(d===1?"I":"II"),ans:true}],miss:"thinking any extra chromosome means a meiosis I error.",vis:{k:"ndj",div:d,n,mode:"pattern"}}}
+  if(v==="syn"){const K=pick([["47,XY,+21",0,"XY",{21:3},[21]],["47,XX,+21",0,"XX",{21:3},[21]],["45,X",1,"X",{},["X","Y"]],["47,XXY",2,"XXY",{},["X","Y"]],["46,XY",3,"XY",{},[]],["46,XX",3,"XX",{},[]]]);
+   const opts=["Down syndrome (trisomy 21)","Turner syndrome","Klinefelter syndrome","A typical karyotype"];
+   return {kind:"ndj",title:"Read the karyotype",html:`A karyotype reads <b>${K[0]}</b> (see the picture). Which condition does it show?`,choices:opts,ans:K[1],unit:"",
+    hints:["Count: 46 is typical; 47 means one extra chromosome; 45 means one missing.","Look at the sex chromosomes (X, Y) and at chromosome 21.",["Three copies of chromosome 21.","One X and nothing else in the sex pair.","Two X chromosomes plus a Y.","22 autosome pairs plus a typical XX or XY."][K[1]]],
+    rows:[{t:`Total: ${K[0].split(",")[0]} chromosomes.`},{t:["Extra chromosome 21: trisomy 21.","Only one sex chromosome, an X: 45,X.","Sex chromosomes XXY: one extra X in a male.","Nothing extra or missing."][K[1]]},{t:opts[K[1]],ans:true}],miss:"assuming any 47-chromosome karyotype is Down syndrome. Check WHICH chromosome is extra.",vis:{k:"kary",sex:K[2],extra:K[3],hl:K[4],kar:K[0]}}}
+  const d=Math.random()<.5?1:2;const ans=d===1?0:2;
+  return {kind:"ndj",title:"How many normal gametes?",html:`One pair fails to separate in <b>meiosis ${d===1?"I":"II"}</b>. How many of the four gametes from that meiosis have the normal chromosome number?`,ans,unit:"gametes",
+   hints:["Ask whether the error happens before or after the cell first splits in two.",d===1?"In meiosis I, the error affects the cell before it splits, so both daughter cells are wrong.":"In meiosis II, only one of the two cells makes the error.",d===1?"Every gamete comes from a wrong cell.":"The other cell gives two normal gametes."],
+   rows:[{t:d===1?"Meiosis I error: both cells from meiosis I have the wrong number.":"Meiosis II error: one cell divides wrongly, the other normally."},{t:d===1?"Their four products are all n + 1 or n − 1.":"The normal cell gives 2 normal gametes."},{t:ans+" normal gametes",ans:true}],miss:"assuming half are always normal.",slips:[[d===1?2:0,"That is the answer for an error in meiosis "+(d===1?"II":"I")+"."],[4,"At least one gamete must be affected."]],vis:{k:"ndj",div:d,n:2,mode:"pattern"}}},
+ stage(){const n2=pick([4,6,8,10,12,16,20]);const n=n2/2;
+  const TS=[[`${n} tetrads (synapsed pairs of replicated homologs) are lined up across the middle of the cell.`,"Metaphase I",2.7,"meio","Pairs at the plate happen only in meiosis I."],
+   [`${n} chromosomes, each made of two sister chromatids, line up singly at the plate. The organism has 2n = ${n2}.`,"Metaphase II",5.85,"meio","Single chromosomes at the plate, but only n of them: the cell is already haploid, so this is meiosis II."],
+   [`${n2} chromosomes, each made of two sister chromatids, line up singly at the plate. The organism has 2n = ${n2}.`,"Metaphase of mitosis",2.8,"mito","Singles at the plate AND the full 2n: no pairing, no halving. This is mitosis."],
+   ["Replicated homologs move to opposite poles; sister chromatids stay joined at their centromeres.","Anaphase I",3.45,"meio","Homologs separating while sisters stay together happens only in anaphase I."],
+   [`Sister chromatids move apart, and each pole receives ${n} single chromatids. The organism has 2n = ${n2}.`,"Anaphase II",6.6,"meio","Sisters separate in anaphase II and in mitosis; each pole getting only n tells you it is meiosis II."],
+   [`Sister chromatids move apart, and each pole receives ${n2} single chromatids. The organism has 2n = ${n2}.`,"Anaphase of mitosis",3.45,"mito","Sisters separate and each pole gets the full 2n: mitosis."],
+   ["Homologs pair along their whole length, and non-sister chromatids exchange segments.","Prophase I",1.85,"meio","Synapsis and crossing over happen only in prophase I."],
+   [`Four new cells have formed, each with ${n} single-chromatid chromosomes.`,"End of telophase II",8.7,"meio","Four haploid cells with single chromatids: meiosis is complete."],
+   [`Two new cells have formed from one, each with ${n} chromosomes that still have two chromatids.`,"Telophase I",4.9,"meio","Two cells with n replicated chromosomes: meiosis I has just finished."]];
+  const k=ri(0,TS.length-1);const t=TS[k];const all=["Prophase I","Metaphase I","Anaphase I","Telophase I","Metaphase II","Anaphase II","End of telophase II","Metaphase of mitosis","Anaphase of mitosis"];
+  const conf={"Metaphase I":["Metaphase II","Metaphase of mitosis"],"Metaphase II":["Metaphase I","Metaphase of mitosis"],"Metaphase of mitosis":["Metaphase I","Metaphase II"],"Anaphase I":["Anaphase II","Anaphase of mitosis"],"Anaphase II":["Anaphase I","Anaphase of mitosis"],"Anaphase of mitosis":["Anaphase I","Anaphase II"],"Prophase I":["Metaphase I","Telophase I"],"End of telophase II":["Telophase I","Anaphase II"],"Telophase I":["End of telophase II","Anaphase I"]}[t[1]];
+  const rest=shuffle(all.filter(x=>x!==t[1]&&conf.indexOf(x)<0));const opts=shuffle([t[1],conf[0],conf[1],rest[0]]);
+  return {kind:"stage",title:"Name the stage, then watch",html:t[0]+" <b>Which stage is it?</b> Predict, then watch the animation.",choices:opts,ans:opts.indexOf(t[1]),unit:"",
+   hints:["First ask: are homologs paired or moving apart (meiosis I), or are single chromosomes or sister chromatids involved?","Compare the chromosome number with 2n: n means the cell has already been through meiosis I.",t[4]],
+   rows:[{t:"Clue: "+t[0].replace(/<[^>]+>/g,"")},{t:t[4]},{t:t[1],ans:true}],miss:"calling every 'line up at the plate' metaphase I. Check whether pairs or single chromosomes line up, and how many.",vis:{k:"stage",s:t[2],mode:t[3],name:t[1]}}}
+};
+/* ---------- judging ---------- */
+function parseNum(str){let s=String(str).trim().toLowerCase().replace(/,/g,"").replace(/\s+/g," ");if(!s)return NaN;s=s.replace(/^1 in /,"");
+  let m=s.match(/^([-+]?\d*\.?\d+)\s*[x×*]\s*10\s*\^?\s*([-+]?\d+)/);if(m)return parseFloat(m[1])*Math.pow(10,+m[2]);
+  m=s.match(/^([-+]?\d*\.?\d+(?:e[-+]?\d+)?)\s*(thousand|million|billion|trillion)?(?:\s*[^0-9]*)$/);if(!m)return NaN;const mult={thousand:1e3,million:1e6,billion:1e9,trillion:1e12}[m[2]]||1;return parseFloat(m[1])*mult}
+function tolOf(q){return q.ans>=1e5?q.ans*.01:Math.max(.05,Math.abs(q.ans)*.002)}
+function judge(q,str){if(q.choices)return {ok:String(q.ans)===String(str)};const v=parseNum(str);if(!isFinite(v))return {ok:false,bad:true};return {ok:Math.abs(v-q.ans)<=tolOf(q),v}}
+function slipMsg(q,v){if(!q.slips)return "";for(const s of q.slips){if(s[1]&&isFinite(s[0])&&Math.abs(v-s[0])<=tolOf(q)&&Math.abs(s[0]-q.ans)>tolOf(q))return s[1]}return ""}
+function genOne(t){if(t==="mix")t=pick(["assort","count","ndj","stage"]);return GEN[t]()}
+/* ---------- UI ---------- */
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:+(store.get("best")||0),count:0,solT:0,pick:null,t0:0};
+function calcInit(){const sel=$("#calcType");CTYPES.forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1];sel.appendChild(o)});sel.onchange=e=>{TR.type=e.target.value;calcNew()};
+  $("#calcNew").onclick=calcNew;$("#calcCheck").onclick=calcCheck;$("#calcHint").onclick=calcHint;$("#calcSol").onclick=()=>{calcShowSol();TR.first=false};
+  $("#calcAns").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();calcCheck()}})}
+function calcNew(){const q=genOne(TR.type);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;TR.t0=performance.now();
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}`;$("#calcUnit").textContent=q.unit||"";$("#calcAns").value="";const m=$("#calcMsg");m.className="msg";m.textContent="";const hb=$("#calcHintBox");hb.hidden=true;hb.textContent="";
+  const ch=$("#calcChoices");if(q.choices){$("#calcNumWrap").hidden=true;ch.hidden=false;ch.innerHTML="";q.choices.forEach((c,i)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=c;b.onclick=()=>{TR.pick=i;ch.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));calcCheck()};ch.appendChild(b)});$("#calcCheck").hidden=true}
+  else{$("#calcNumWrap").hidden=false;ch.hidden=true;ch.innerHTML="";$("#calcCheck").hidden=false}
+  $("#calcCap").textContent=q.title+(q.kind==="stage"?": predict, then watch.":".");a11yKey=""}
+function calcMsg(cls,html){const m=$("#calcMsg");m.className="msg show "+cls;m.innerHTML=html}
+function calcCheck(){const q=TR.p;if(TR.solved)return;let r,v;if(q.choices){if(TR.pick==null){calcMsg("info","Pick an answer first.");return}r=judge(q,String(TR.pick))}else{v=$("#calcAns").value;if(!v.trim()){calcMsg("info","Type a number first.");return}r=judge(q,v)}
+  if(r.bad){calcMsg("warn","That does not look like a number. Type digits only, for example 16 or 8,388,608.");return}
+  if(r.ok){TR.solved=true;TR.count++;if(TR.first){TR.streak++;if(TR.streak>TR.best){TR.best=TR.streak;store.set("best",TR.best)}}else TR.streak=0;
+    if(q.choices){const bs=$("#calcChoices").querySelectorAll(".opt");bs[TR.pick].classList.add("right")}
+    calcMsg("good","✓ Correct. "+(q.kind==="stage"?"Watch it happen in the picture. ":"")+"The worked solution is building in the picture.");calcShowSol(true)}
+  else{TR.first=false;TR.streak=0;if(q.choices){const bs=$("#calcChoices").querySelectorAll(".opt");bs[TR.pick].classList.add("wrong")}
+    const sl=q.choices?"":slipMsg(q,r.v);calcMsg("warn","Not quite. "+(sl||"Try the hint ladder, or check each step against the worked solution."))}
+  updCalcMeter();a11yKey=""}
+function calcHint(){const q=TR.p;if(TR.hint>=3){return}TR.hint++;TR.first=false;const hb=$("#calcHintBox");hb.hidden=false;hb.innerHTML=q.hints.slice(0,TR.hint).map((h,i)=>`<b>Hint ${i+1}:</b> ${h}`).join("<br>")}
+function calcShowSol(keep){TR.sol=true;TR.solT=performance.now();if(!keep)TR.streak=0;updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function ansTxt(q){return q.choices?q.choices[q.ans]:fmtN(q.ans)+" "+(q.unit||"")}
+/* ---------- picture ---------- */
+const VISM={};function visModel(key,o){if(!VISM[key])VISM[key]=meioModel(o);return VISM[key]}
+function iconCell(x,y,r,nCh,rep,o){o=o||{};circ(x,y,r,C.cyto,C.memb,3);const cols=Math.ceil(Math.sqrt(nCh*1.6));const rows=Math.ceil(nCh/cols);const cw=r*1.5/cols,rh=r*1.4/rows;const L=Math.min(rh*.8,28),w=Math.max(2.4,Math.min(6,cw*.22));
+  for(let i=0;i<nCh;i++){const cx_=x-r*.75+cw*(i%cols+.5),cy_=y-r*.7+rh*(Math.floor(i/cols)+.5);const col=i%2?C.pat:C.mat;if(rep)drawChromosome(cx_,cy_,0,L,w,.4,[[0,1,col]],[[0,1,col]],{dS:w*.56,N:5});else drawChromatid(cx_,cy_,0,L,w,.4,[[0,1,col]],{N:5})}}
+function drawCalc(now){use(S2);const q=TR.p;const T=now/1000;const vs=q.vis;const X0=10,W0=780;
+  panelBox(X0,8,W0,290);const reveal=TR.solved||TR.sol;
+  if(vs.k==="assort"){const n=vs.n;const show=Math.min(n,8);title(24,26,vs.mode==="zyg"?"Each parent: 2 choices per pair":"Each pair can face either pole",C.act6);
+    const span=Math.min(70,520/show);for(let p=0;p<show;p++){const x=50+p*span+span/2,y=150;const fl=Math.floor(T*.8+p*.37)%2;const L=70*(1-p*.05);
+      drawChromosome(x-(fl?-1:1)*10,y,0,L,8,.4,[[0,1,C.mat]],[[0,1,C.mat]],{dS:4.5,N:6});drawChromosome(x+(fl?-1:1)*10,y,0,L,8,.4,[[0,1,C.pat]],[[0,1,C.pat]],{dS:4.5,N:6})}
+    if(n>show)txt(50+show*span+10,150,"... "+n+" pairs in all",{size:12.5,weight:700});
+    line(40,150,40+show*span+20,150,hexA(C["ink-soft"],.5),1,[4,4]);
+    const f=vs.mode==="zyg"?`(2${sup(n)}) × (2${sup(n)}) = ?`:vs.mode==="prob"?`(1/2)${sup(n)} = 1 in ?`:vs.mode==="rev"?`2ⁿ = ${fmtN(Math.pow(2,n))}, 2n = ?`:`2 × 2 × ... (${n} times) = 2${sup(n)} = ?`;
+    label(400,240,reveal?f.replace("?",vs.mode==="rev"?String(2*n):fmtN(q.ans)):f,{size:16,weight:700,mono:true,border:reveal?C.good:C.act6});
+    if(vs.mode==="zyg"){person(640,120,80,{sex:"f",skin:1,shirt:2});person(720,120,84,{sex:"m",skin:2,shirt:1,hairC:C.hair2});txt(680,138,"× (multiply)",{size:12,weight:700,align:"center"})}}
+  else if(vs.k==="count"){const st=STG[vs.sti];const M=visModel("cnt",{n:2,seed:7,orient:[0,1],flip2:[[0,1],[1,0]]});
+    meioDraw(M,st.s,[20,30,340,250],{T,labels:false,alleles:false,mw:2.4,gameteLabels:false});label(190,282,"same stage drawn with 2n = 4",{size:11.5,weight:600});
+    title(380,30,cap(st.nm),C.act4);const ch=st.ch*vs.n2/2,ct=st.ct*vs.n2/2;
+    if(reveal){const shown=Math.min(ch,48);iconCell(470,170,100,shown,st.ct/st.ch===2,{});if(ch>48)txt(470,280,"(first 48 of "+ch+" drawn)",{size:11,align:"center",color:C["ink-soft"]});
+      stat(600,70,176,"chromosomes",ch,C.act4,{h:44});stat(600,122,176,"chromatids",ct,C.dna,{h:44});stat(600,174,176,"DNA",st.C+"C",C.dna,{h:44});if(st.tet)stat(600,226,176,"tetrads",vs.n2/2,C.act6,{h:44})}
+    else{txt(570,150,"?",{size:72,weight:700,align:"center",color:C["ink-faint"]});wrapText("Count it yourself first. The real cell for 2n = "+vs.n2+" appears with the solution.",420,236,340,17,{size:12.5,color:C["ink-soft"]})}}
+  else if(vs.k==="ndj"){const key="ndj"+vs.div;const M=visModel(key,{n:2,seed:vs.div*13+3,orient:[0,1],flip2:[[0,1],[1,0]],ndj:vs.div===1?{mi:0}:{mii:0,cell:0}});
+    const s=reveal?Math.min(9,2.3+P(now/1000-(TR.solT/1000),9)*7.4):2.6;meioDraw(M,s,[20,30,420,262],{T,labels:true,alleles:false,hlPair:0,mw:2.4});
+    title(460,30,"Error in meiosis "+(vs.div===1?"I":"II")+" (drawn with 2n = 4)",C.act7);
+    if(vs.mode==="zyg"){const n=vs.n;eggCell(560,170,46,{nuc:false,lab:(vs.plus?n+1:n-1)+""});sperm(700,170,40,Math.PI,T);txt(700,214,String(n),{size:14,weight:700,mono:true,align:"center"});if(reveal)label(630,262,"zygote: "+q.ans+" chromosomes",{size:13,weight:700,border:C.bad})}
+    else{wrapText(reveal?"Watch: the long pair (glowing) goes wrong. Count the chromosomes in each of the four gametes at the end.":"Predict first. The animation plays the whole division once you answer or open the solution.",460,70,310,18,{size:13,color:C.ink})}}
+  else if(vs.k==="kary"){karyotype(20,26,520,268,{sex:vs.sex,extra:vs.extra,hl:reveal?vs.hl:[],T,showEmpty:false,cw:4.5});label(660,120,vs.kar,{size:18,weight:700,mono:true,border:C.act7});wrapText("Count every chromosome, then check pair 21 and the sex chromosomes at the end.",570,170,200,17,{size:12.5,color:C["ink-soft"]})}
+  else if(vs.k==="stage"){if(reveal||TR.pick!=null&&TR.solved){const el=(now-TR.solT)/1000;const s=vs.s-.7+P(el,5)*1.2;const M=visModel(vs.mode,{n:2,seed:19,coF:[.72,null],orient:[0,1],flip2:[[0,1],[1,0]]});if(vs.mode==="mito")mitoDraw(M,clamp(s,0,5),[60,30,460,262],{T,labels:true});else meioDraw(M,clamp(s,0,9),[60,30,460,262],{T,labels:true,mw:2.4});label(660,150,vs.name,{size:15,weight:700,border:C.good})}
+    else{cellShapes([[290,160,200,120]],{mw:3});txt(290,160,"?",{size:80,weight:700,align:"center",color:C["ink-faint"]});wrapText("Predict the stage from the description. Then the cell plays that stage here.",540,130,230,18,{size:13,color:C["ink-soft"]})}}
+  /* worked solution */
+  const WY=306;if(TR.sol){const el=(now-TR.solT)/1000;const lines=q.rows.map(r=>({t:r.t,mono:r.mono,ans:r.ans}));lines.push({t:q.miss,miss:true});workCard(X0,WY,W0,286,"Worked solution",lines,el,{dt:1.1,size:14,missH:44})}
+  else{panelBox(X0,WY,W0,286,{fill:hexA(C.paper,.96)});title(X0+12,WY+18,"Worked solution",C["accent-ink"]);wrapText("The worked solution builds here, line by line, after a correct answer or when you press Show worked solution. It ends with a common-mistake note.",X0+14,WY+50,W0-28,19,{size:14,color:C["ink-soft"]})}}
+function calcA11y(){const q=TR.p;const v=q.choices?(TR.pick==null?"not chosen":q.choices[TR.pick]):($("#calcAns").value.trim()||"not entered");const lab=`Practice problem: ${q.title}. Your answer: ${v}.${TR.solved?" Correct.":""}`;
+  const vk={assort:"homologous pairs in a row, each flipping which side its magenta and blue partners face, with a formula underneath",count:"the named stage drawn with 2n = 4 on the left; after the solution, a cell with the real number of chromosomes and counters for chromosomes, chromatids and DNA",ndj:"a cell with two pairs going through meiosis with the error in the glowing long pair",kary:"a human karyotype in four rows of pairs; the affected slots glow red after the answer",stage:"a cell that plays the named stage after you answer"}[q.vis.k];
+  return [lab,`The picture shows ${vk}. ${TR.sol?"Below it, the worked solution builds line by line and ends with "+ansTxt(q)+" in a green box, then a common-mistake note.":"The worked solution is hidden until you answer correctly or ask for it."}`]}
+/* ================= PART 3: sort and order ================= */
+const SROUNDS=[
+ {name:"Mitosis, meiosis or both?",goal:"Sort each event or feature: does it happen in mitosis only, meiosis only, or both?",bins:[["mito","Mitosis only"],["meio","Meiosis only"],["both","Both"]],cards:[
+  ["Synapsis of homologous chromosomes","meio","Homologs pair only in prophase I of meiosis."],
+  ["Crossing over between non-sister chromatids","meio","Crossing over needs synapsed homologs: prophase I only."],
+  ["Sister chromatids separate","both","Sisters separate in anaphase of mitosis and in anaphase II of meiosis."],
+  ["Homologous chromosomes separate","meio","Homologs separate in anaphase I. In mitosis homologs never pair or separate as pairs."],
+  ["DNA is copied once beforehand","both","Both start after one S phase."],
+  ["Makes two genetically identical cells","mito","Mitosis copies the cell. Meiosis makes four different cells."],
+  ["Makes four haploid cells","meio","Two divisions after one copy give four n cells."],
+  ["Tetrads line up at the metaphase plate","meio","Pairs at the plate happen only in metaphase I."],
+  ["A spindle moves the chromosomes","both","Both use spindle microtubules."],
+  ["Grows and repairs the body","mito","Body (somatic) cells come from mitosis."],
+  ["Makes gametes in animals","meio","Animal gametes come straight from meiosis."],
+  ["Each new cell keeps the parent cell's chromosome number","mito","Mitosis keeps 2n as 2n. Meiosis as a whole halves it."]]},
+ {name:"Meiosis I or meiosis II?",goal:"Sort each event into the division where it happens. A few happen in both.",bins:[["mi","Meiosis I"],["mii","Meiosis II"],["both","Both divisions"]],cards:[
+  ["Homologs separate","mi","Anaphase I separates homologs."],["Sister chromatids separate","mii","Anaphase II separates sisters."],["Chromosome number halves, 2n to n","mi","The reduction happens in meiosis I."],
+  ["Crossing over","mi","It happens in prophase I while homologs are synapsed."],["Chromosomes line up singly at the plate","mii","Metaphase II: single chromosomes, n of them."],["Tetrads line up at the plate","mi","Metaphase I: pairs."],
+  ["Centromere cohesin is finally cut","mii","It is protected in meiosis I and cut in anaphase II."],["Starts with haploid cells","mii","Meiosis II begins with the two n cells from meiosis I."],
+  ["A spindle forms","both","Each division builds a spindle."],["Cytokinesis splits the cell","both","Each division ends with cytokinesis."],["Chiasmata hold pairs together","mi","Chiasmata link homologs until anaphase I."],["Random orientation of homologous pairs","mi","Independent assortment happens at metaphase I."]]},
+ {name:"Haploid or diploid?",goal:"Sort each cell or stage: haploid (n) or diploid (2n)? Human cells unless the card says otherwise.",bins:[["hap","Haploid (n)"],["dip","Diploid (2n)"]],cards:[
+  ["Sperm","hap","Gametes carry one set."],["Zygote","dip","n + n = 2n."],["Skin cell","dip","Body cells are diploid."],["Secondary oocyte","hap","It has finished meiosis I: n chromosomes, each still with 2 chromatids."],
+  ["Primary spermatocyte","dip","It has not finished meiosis I yet."],["First polar body","hap","It is the small product of meiosis I: n."],["Fern gametophyte","hap","The gametophyte generation is haploid."],["Fern sporophyte","dip","The sporophyte generation is diploid."],
+  ["Moss spore","hap","Spores come from meiosis."],["Chlamydomonas adult cell","hap","In this protist the adult is haploid."],["Chlamydomonas zygote","dip","The zygote is its only diploid stage."],["Spermatogonium","dip","A diploid stem cell that feeds spermatogenesis."]]},
+ {name:"Which life cycle?",goal:"Sort each statement into the life cycle it describes. Some fit two cycles.",bins:[["animal","Animal (diploid-dominant)"],["plant","Plant (alternation of generations)"],["fungus","Most fungi, some protists (haploid-dominant)"]],cards:[
+  ["Meiosis makes gametes directly","animal","In animals the products of meiosis are eggs and sperm."],["Gametes are the only haploid cells","animal","Everything else in an animal is 2n."],
+  ["Meiosis makes spores that grow into a multicellular haploid stage","plant","Spores grow into the gametophyte."],["Gametes are made by mitosis",["plant","fungus"],"In plants and haploid-dominant organisms the gamete-makers are already haploid."],
+  ["The zygote is the only diploid cell","fungus","It goes straight into meiosis."],["Meiosis happens in the zygote right after fertilization","fungus","Zygotic meiosis."],
+  ["Both a haploid and a diploid stage are multicellular","plant","Gametophyte and sporophyte."],["Example: a fern","plant","Sporophyte and gametophyte live on their own."],["Example: Chlamydomonas","fungus","A haploid-dominant green alga (a protist)."],["Example: a cat","animal","Diploid body, haploid gametes."],
+  ["The zygote grows by mitosis into a diploid multicellular body",["animal","plant"],"In animals it becomes the adult; in plants, the sporophyte."]]}];
+function svgCell(cx,cy,r,inner){return `<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.8}" fill="var(--cyto)" stroke="var(--memb)" stroke-width="2"/>${inner||""}`}
+function svgBar(x,y,h,c){return `<rect x="${x-1.6}" y="${y-h/2}" width="3.2" height="${h}" rx="1.6" fill="var(--${c})"/>`}
+function binSVG(k){const W='<svg viewBox="0 0 56 46" aria-hidden="true" focusable="false">';let b="";
+  if(k==="mito"){b=svgCell(12,23,9,svgBar(10,23,9,"mat")+svgBar(14,23,9,"pat"))+'<path d="M23 23h7" stroke="var(--ink-soft)" stroke-width="1.6"/>'+svgCell(42,13,8,svgBar(40,13,8,"mat")+svgBar(44,13,8,"pat"))+svgCell(42,33,8,svgBar(40,33,8,"mat")+svgBar(44,33,8,"pat"))}
+  else if(k==="meio"){b=svgCell(10,23,8,svgBar(8,23,8,"mat")+svgBar(12,23,8,"pat"))+'<path d="M20 23h5" stroke="var(--ink-soft)" stroke-width="1.6"/>';[[33,12,"mat"],[48,12,"pat"],[33,34,"pat"],[48,34,"mat"]].forEach(p=>b+=svgCell(p[0],p[1],6,svgBar(p[0],p[1],6,p[2])))}
+  else if(k==="both"){b=svgCell(18,23,13,svgBar(15,23,12,"mat")+svgBar(21,23,12,"pat"))+svgCell(38,23,13,svgBar(35,23,12,"mat")+svgBar(41,23,12,"pat"))+'<text x="28" y="44" font-size="9" text-anchor="middle" fill="var(--ink)" font-family="sans-serif">both</text>'}
+  else if(k==="mi"){b=svgBar(18,23,18,"mat")+svgBar(22,23,18,"mat")+svgBar(34,23,18,"pat")+svgBar(38,23,18,"pat")+'<path d="M14 40l-8 0M42 40l8 0" stroke="var(--ink-soft)" stroke-width="1.6"/><text x="28" y="9" font-size="9" text-anchor="middle" fill="var(--ink)" font-family="sans-serif">pairs split</text>'}
+  else if(k==="mii"){b=svgBar(20,23,18,"mat")+svgBar(36,23,18,"mat")+'<path d="M14 23l-8 0M42 23l8 0" stroke="var(--ink-soft)" stroke-width="1.6"/><text x="28" y="9" font-size="9" text-anchor="middle" fill="var(--ink)" font-family="sans-serif">sisters split</text>'}
+  else if(k==="hap"){b=svgCell(28,23,18,svgBar(20,23,14,"mat")+svgBar(28,23,10,"pat")+svgBar(36,23,7,"mat"))+'<text x="28" y="44" font-size="9" text-anchor="middle" fill="var(--ink)" font-family="sans-serif">n</text>'}
+  else if(k==="dip"){b=svgCell(28,23,18,svgBar(17,23,14,"mat")+svgBar(21,23,14,"pat")+svgBar(28,23,10,"mat")+svgBar(32,23,10,"pat")+svgBar(38,23,7,"mat")+svgBar(42,23,7,"pat"))+'<text x="28" y="44" font-size="9" text-anchor="middle" fill="var(--ink)" font-family="sans-serif">2n</text>'}
+  else if(k==="animal"){b='<circle cx="28" cy="9" r="5" fill="var(--skin1)"/><rect x="22" y="15" width="12" height="16" rx="3" fill="var(--shirt1)"/><rect x="23" y="31" width="4" height="12" fill="var(--hair)"/><rect x="29" y="31" width="4" height="12" fill="var(--hair)"/>'}
+  else if(k==="plant"){b='<path d="M28 44 C 27 30, 20 20, 10 10 M28 44 C 29 28, 30 18, 28 4 M28 44 C 30 30, 38 20, 48 12" stroke="var(--leaf2)" stroke-width="2" fill="none"/>';for(let i=0;i<6;i++)b+=`<ellipse cx="${16+i*1.5}" cy="${16+i*4}" rx="4" ry="1.6" fill="var(--leaf)"/><ellipse cx="${40-i*1.5}" cy="${17+i*4}" rx="4" ry="1.6" fill="var(--leaf)"/>`}
+  else if(k==="fungus"){b='<ellipse cx="22" cy="24" rx="9" ry="11" fill="var(--plant)" stroke="var(--leaf2)" stroke-width="1.5"/><path d="M20 13 q-4 -8 -8 -10 M24 13 q4 -8 8 -10" stroke="var(--leaf2)" stroke-width="1.3" fill="none"/><path d="M38 40 v-12" stroke="var(--fung2)" stroke-width="3"/><path d="M30 29 q8 -10 16 0 z" fill="var(--fung2)"/>'}
+  return W+b+"</svg>"}
+/* ---------- sequencing game ---------- */
+const QROUNDS=[
+ {id:"meio",name:"Meiosis, start to finish",goal:"Put the events of meiosis in order, from DNA copying to four haploid cells.",cards:["DNA is copied in S phase","Homologs pair up (synapsis)","Crossing over at chiasmata","Tetrads line up at the metaphase plate","Homologs move to opposite poles","Two haploid cells form (telophase I)","Chromosomes line up singly (metaphase II)","Sister chromatids separate (anaphase II)","Four haploid cells form"],s:[.8,1.6,1.95,2.7,3.5,4.9,5.85,6.6,8.7]},
+ {id:"oo",name:"Oogenesis",goal:"Put the steps of making a human egg in order, from before birth to fertilization.",cards:["Oogonia divide by mitosis before birth","Primary oocytes start meiosis I and pause in prophase I","At puberty, one oocyte per cycle finishes meiosis I","A secondary oocyte and the first polar body form","The secondary oocyte is ovulated, paused in metaphase II","A sperm enters and meiosis II is completed","Egg and sperm pronuclei combine: a 2n zygote"]},
+ {id:"fern",name:"Fern life cycle",goal:"Follow a fern from the diploid plant to the next diploid plant.",cards:["The diploid sporophyte makes spores by meiosis","A haploid spore lands and divides by mitosis","It grows into a small heart-shaped gametophyte","The gametophyte makes eggs and sperm by mitosis","Sperm swim to an egg: fertilization","The diploid zygote grows into a new sporophyte"]}];
+let qR=0,qChecks=0,qHints=0,qSolved=false,qStart=0,qPlay=null,qTimerI=null;const qRes=(()=>{try{return JSON.parse(store.get("seq")||"{}")}catch(e){return {}}})();
+function setMsg(sel,html,cls){const m=$(sel);m.className="msg"+(html?" show "+cls:"");m.innerHTML=html}
+function qRoundsUI(){const box=$("#qRounds");box.innerHTML="";QROUNDS.forEach((r,i)=>{const b=document.createElement("button");b.type="button";b.className="round";b.setAttribute("aria-pressed",String(i===qR));
+  b.innerHTML=`Round ${i+1}: ${r.name}`+(qRes[r.id]?`<span class="ok" aria-hidden="true">${"★".repeat(qRes[r.id])}</span><span class="gk-sr">, ${qRes[r.id]} stars</span>`:"");b.onclick=()=>{qR=i;qNew()};box.appendChild(b)})}
+function qItem(i){const r=QROUNDS[qR];const li=document.createElement("li");li.className="item";li.dataset.i=i;const ql=$("#qList");
+  li.innerHTML=`<span class="pos"></span><span class="grip" aria-hidden="true">⋮⋮</span><span class="txt">${r.cards[i]}</span><span class="mk qmk"></span><span class="mv"><button type="button" aria-label="Move up: ${r.cards[i]}">▲</button><button type="button" aria-label="Move down: ${r.cards[i]}">▼</button></span>`;
+  const [up,dn]=li.querySelectorAll(".mv button");
+  up.onclick=()=>{const p=li.previousElementSibling;if(p&&!qSolved){ql.insertBefore(li,p);qChanged();up.focus()}};
+  dn.onclick=()=>{const n=li.nextElementSibling;if(n&&!qSolved){ql.insertBefore(n,li);qChanged();dn.focus()}};
+  let dragging=false;
+  li.addEventListener("pointerdown",e=>{if(e.target.closest("button")||qSolved)return;dragging=true;li.classList.add("drag");try{li.setPointerCapture(e.pointerId)}catch(_){}});
+  li.addEventListener("pointermove",e=>{if(!dragging)return;const kids=[...ql.children];const me=kids.indexOf(li);
+    for(let k=0;k<kids.length;k++){const el=kids[k];if(el===li)continue;const rc=el.getBoundingClientRect();if(e.clientY>rc.top&&e.clientY<rc.bottom){const mid=rc.top+rc.height/2;
+      if(k>me&&e.clientY>mid){ql.insertBefore(el,li);qChanged()}else if(k<me&&e.clientY<mid){ql.insertBefore(el,li.nextElementSibling);qChanged()}break}}});
+  const end=()=>{if(!dragging)return;dragging=false;li.classList.remove("drag")};li.addEventListener("pointerup",end);li.addEventListener("pointercancel",end);return li}
+function qRenum(){[...$("#qList").children].forEach((li,i)=>li.querySelector(".pos").textContent=i+1)}
+function qChanged(){qRenum();[...$("#qList").children].forEach(li=>{li.classList.remove("right","off","hinted");li.querySelector(".qmk").innerHTML=""});qPlay=null;a11yKey=""}
+const qOrder=()=>[...$("#qList").children].map(li=>+li.dataset.i);
+function qNew(){const r=QROUNDS[qR];const n=r.cards.length;let o;do{o=shuffle([...Array(n).keys()])}while(o.filter((c,i)=>c===i).length>1);const ql=$("#qList");ql.innerHTML="";o.forEach(i=>ql.appendChild(qItem(i)));
+  qChecks=0;qHints=0;qSolved=false;qStart=Date.now();qPlay=null;$("#qN").textContent=`Round ${qR+1} of ${QROUNDS.length}`;$("#qT").textContent=r.name;$("#qGoal").innerHTML=`<b class="h">Your job</b>${r.goal}`;
+  setMsg("#qMsg","","");qRenum();qRoundsUI();$("#qCap").textContent="Arrange the cards, then press Play my order to watch it happen.";qTimerUI();a11yKey=""}
+function qTimerUI(){const relaxed=$("#qRelaxed").checked;$("#qTimer").hidden=relaxed;clearInterval(qTimerI);if(!relaxed)qTimerI=setInterval(()=>{if(!qSolved)$("#qTimer").textContent=fmt((Date.now()-qStart)/1000)},500)}
+function qCheck(){if(qSolved)return;qChecks++;const o=qOrder();let n=0;[...$("#qList").children].forEach((li,i)=>{const ok=o[i]===i;if(ok)n++;li.classList.toggle("right",ok);li.classList.toggle("off",!ok);li.querySelector(".qmk").innerHTML=ok?`<span aria-hidden="true">✓</span><span class="gk-sr">, in the right spot</span>`:`<span aria-hidden="true">✗</span><span class="gk-sr">, not yet</span>`});
+  if(n===o.length)qWin();else setMsg("#qMsg",`<b>${n} of ${o.length}</b> cards are in the right spot (marked ✓ with a green border; the others are marked ✗). Ask: what has to happen before this step can happen? Press <b>Play my order</b> to see where it gets stuck.`,"warn");a11yKey=""}
+function qHint(){if(qSolved)return;const o=qOrder();const i=o.findIndex((c,k)=>c!==k);if(i<0)return;qHints++;const ql=$("#qList");const li=ql.querySelector(`[data-i="${i}"]`);ql.insertBefore(li,ql.children[i]);qChanged();li.classList.add("hinted");
+  setMsg("#qMsg",`Hint: step ${i+1} is <b>${QROUNDS[qR].cards[i]}</b>. It is now in place, outlined in gold.`,"info")}
+function qShow(){const r=QROUNDS[qR];const ql=$("#qList");ql.innerHTML="";r.cards.forEach((c,i)=>{const li=qItem(i);li.classList.add("right");ql.appendChild(li)});qRenum();qSolved=true;qHints+=9;
+  setMsg("#qMsg","Here is the correct order. Watch it play, then press <b>Shuffle again</b> and try it yourself.","info");qStartPlay()}
+function qWin(){qSolved=true;const r=QROUNDS[qR];const el=(Date.now()-qStart)/1000;const stars=qHints===0&&qChecks<=2?3:qHints<=2?2:1;if(!qRes[r.id]||stars>qRes[r.id])qRes[r.id]=stars;store.set("seq",JSON.stringify(qRes));
+  setMsg("#qMsg",`<span class="stars" aria-hidden="true">${"★".repeat(stars)}${"☆".repeat(3-stars)}</span> <b>In order! ${stars} of 3 stars.</b> ${$("#qRelaxed").checked?"":"Time "+fmt(el)+". "}Checks: ${qChecks}. Hints: ${Math.min(qHints,9)}. Watch it play in the picture.`+(qR<QROUNDS.length-1?` <button class="tbtn" id="qNextR" type="button">Next round &rarr;</button>`:""),"good");
+  const nb=$("#qNextR");if(nb)nb.onclick=()=>{qR++;qNew()};qRoundsUI();qStartPlay()}
+function qStartPlay(){const o=qOrder();const fail=o.findIndex((c,i)=>c!==i);qPlay={o,fail,t0:performance.now()};a11yKey=""}
+const QDUR=1.6;
+const S3=makeStage("cvSeq",640,420);
+const QM=meioModel({n:2,seed:29,coF:[.72,null],orient:[0,1],flip2:[[0,1],[1,0]]});
+function qPic(ri,ci,x,y,w,h,T,small){const r=QROUNDS[ri];GC_NOTAG=!!small;
+  if(ri===0){meioDraw(QM,r.s[ci],[x,y,w,h],{T,labels:false,mw:small?1.6:2.2,gsize:10,lsize:10,alleles:!small,gameteLabels:!small});return}
+  const cx=x+w/2,cy=y+h/2,R=Math.min(w,h)*.42;
+  if(ri===1){const pics=[()=>{gcell(cx-R*.45,cy,R*.3,"2n");gcell(cx+R*.45,cy,R*.3,"2n")},()=>{gcell(cx,cy,R*.62,"2n",C.egg);drawChromosome(cx-6,cy,0,R*.5,5,.4,[[0,1,C.mat]],[[0,1,C.mat]],{dS:2.8});drawChromosome(cx+6,cy,0,R*.5,5,.4,[[0,1,C.pat]],[[0,1,C.pat]],{dS:2.8})},
+      ()=>{gcell(cx,cy,R*.72,"2n",C.egg);drawChromosome(cx-12,cy,0,R*.5,5,.4,[[0,1,C.mat]],[[0,1,C.mat]],{dS:2.8});drawChromosome(cx+12,cy,0,R*.5,5,.4,[[0,1,C.pat]],[[0,1,C.pat]],{dS:2.8})},
+      ()=>{gcell(cx-R*.15,cy,R*.72,"n",C.egg);gcell(cx+R*.8,cy-R*.6,R*.16,"n",null,{tag:false})},()=>{circ(cx,cy,R*.86,hexA(C["egg-edge"],.2),C["egg-edge"],1.5);gcell(cx,cy,R*.72,"n",C.egg);centrosome(cx-R*.3,cy,1);centrosome(cx+R*.3,cy,1)},
+      ()=>{gcell(cx,cy,R*.72,"n",C.egg);sperm(cx+R*.95,cy-R*.2,R*.5,Math.PI,T);gcell(cx-R*.2,cy-R*.86,R*.14,"n",null,{tag:false})},()=>{circ(cx,cy,R*.75,C.egg,C.dip,3);nucEnv(cx-R*.18,cy,R*.2,1);nucEnv(cx+R*.18,cy,R*.2,1);ploidyTag(cx,cy+R*.75+12,"2n")}];if(pics[ci])pics[ci]();return}
+  const pics=[()=>fern(cx,cy+R*.8,R*1.4,T,{sori:true}),()=>{circ(cx-R*.2,cy,R*.22,C.soil,dark(C.soil,.4),1.5);circ(cx+R*.2,cy,R*.22,C.soil,dark(C.soil,.4),1.5)},()=>gametophyte(cx,cy,R*.8),()=>{gametophyte(cx,cy,R*.8);eggCell(cx-R*.3,cy,R*.14,{nuc:false});sperm(cx+R*.35,cy-R*.2,R*.3,Math.PI,T)},
+    ()=>{eggCell(cx-R*.3,cy,R*.3,{nuc:false});sperm(cx+R*.3+Math.sin(T*2)*6,cy,R*.45,Math.PI,T)},()=>{gametophyte(cx,cy+R*.3,R*.7);fern(cx,cy+R*.1,R*.7,T)}];if(pics[ci])pics[ci]()}
+function drawSeq(now){use(S3);const r=QROUNDS[qR];const o=qOrder();if(o.some(i=>i>=r.cards.length)||o.length!==r.cards.length)return;const T=now/1000;const n=o.length;
+  /* film strip */
+  const sw=620/n;o.forEach((ci,i)=>{const x=10+i*sw;let st=null;if(qPlay){const k=Math.floor((now-qPlay.t0)/1000/QDUR);if(i<k&&(qPlay.fail<0||i<qPlay.fail))st="ok";if(qPlay.fail>=0&&i===qPlay.fail&&k>=qPlay.fail)st="bad";if(i===Math.min(k,qPlay.fail<0?n-1:qPlay.fail))st=st||"cur"}
+    rr(x+2,8,sw-4,70,6);ctx.fillStyle=st==="bad"?C["bad-wash"]:st==="ok"?C["good-wash"]:st==="cur"?C["accent-wash"]:hexA(C.panel,.95);ctx.fill();ctx.strokeStyle=st==="bad"?C.bad:st==="ok"?C.good:C.rule;ctx.lineWidth=st?2:1;ctx.stroke();
+    ctx.save();ctx.beginPath();ctx.rect(x+3,9,sw-6,68);ctx.clip();qPic(qR,ci,x+4,20,sw-8,56,T,true);GC_NOTAG=false;ctx.restore();badge(x+14,20,i+1,C.ink,9)});
+  /* big panel */
+  panelBox(10,88,620,324);let cur=0,msg="",bad=false;
+  if(qPlay){const k=Math.floor((now-qPlay.t0)/1000/QDUR);const stop=qPlay.fail<0?n-1:qPlay.fail;cur=Math.min(k,stop);bad=qPlay.fail>=0&&k>=qPlay.fail;
+    const ci=o[cur];if(bad){const exp=r.cards[cur];msg="Stuck at step "+(cur+1)+": \""+r.cards[ci]+"\" cannot happen yet. Step "+(cur+1)+" should be \""+exp+"\"."}else msg="Step "+(cur+1)+": "+r.cards[ci]+(k>=n?" — the sequence works!":"")}
+  else{cur=0;msg="Press Play my order to watch your sequence. The film strip above shows your current order."}
+  const ci=o[Math.max(0,Math.min(cur,n-1))];qPic(qR,ci,40,100,qR===0?560:400,qR===0?250:250,T);if(qR!==0)wrapText(r.cards[ci],460,200,160,18,{size:14,weight:700});
+  rr(20,364,600,40,6);ctx.fillStyle=bad?C["bad-wash"]:C["accent-wash"];ctx.fill();ctx.strokeStyle=bad?C.bad:C.accent;ctx.lineWidth=1.5;ctx.stroke();wrapText(msg,30,377,580,15,{size:12.5,weight:600});
+  $("#qCap").textContent=qPlay?(bad?"Playback stopped at the first card that is out of order.":"Playing your order."):"Your current order, shown as a film strip."}
+function seqA11y(){const r=QROUNDS[qR];const o=qOrder();return [`Ordering round: ${r.name}. Current order: `+o.map((ci,i)=>(i+1)+" "+r.cards[ci]).join("; ")+".",`A film strip across the top shows a small picture for each card in your current order. ${qPlay?(qPlay.fail<0?"Playback runs through every card in order; the sequence works.":"Playback highlights cards in green until card "+(qPlay.fail+1)+", which turns red because it is out of order."):"The large panel shows the first card's picture until you press Play my order."}`]}
+function gameSub(which){$("#gSortBtn").setAttribute("aria-pressed",String(which==="sort"));$("#gSeqBtn").setAttribute("aria-pressed",String(which==="seq"));$("#gSort").hidden=which!=="sort";$("#gSeq").hidden=which!=="seq";GS.sub=which;S3.fit();a11yKey=""}
+const GS={sub:"sort"};
+function gameInit(){$("#gSortBtn").onclick=()=>gameSub("sort");$("#gSeqBtn").onclick=()=>gameSub("seq");$("#qCheck").onclick=qCheck;$("#qHint").onclick=qHint;$("#qShow").onclick=qShow;$("#qShuffle").onclick=qNew;$("#qPlay").onclick=qStartPlay;$("#qRelaxed").onchange=qTimerUI;qNew()}
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{}};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();const R=SROUNDS[i];SG.order=shuffle(R.cards.map((c,k)=>k));
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${binSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sRender();sTimerUI();a11yKey=""}
+function sRender(){const R=SROUNDS[SG.r];const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";items.appendChild(s)}})});
+  const n=Object.keys(SG.placed).length,tot=R.cards.length;$("#sStars").textContent=n===tot?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",n===tot?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";sMsg("good",`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();sRender()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(Object.keys(SG.placed).length<SROUNDS[SG.r].cards.length)$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= PART 4: meiosis in the real world ================= */
+const AGEGRP=[["under 25",23000,.7],["25 to 29",28000,.8],["30 to 34",31000,1.5],["35 to 39",15000,5],["40 and over",3000,20]];
+function histo(x,y,w,h,T){const g=graph({x,y,w,h,x0:0,x1:5,y0:0,y1:100,xt:[1,2,4],xf:v=>v+"C",yt:[0,50,100],xl:"DNA per cell",yl:"number of cells (relative)"});
+  const pk=[[1,92,.11],[2,48,.12],[4,22,.14]];const f=v=>pk.reduce((a,p)=>a+p[1]*Math.exp(-((v-p[0])*(v-p[0]))/(2*p[2]*p[2])),0)+2;
+  ctx.save();ctx.beginPath();ctx.moveTo(g.X(0),g.Y(0));for(let i=0;i<=200;i++){const v=i/200*5;ctx.lineTo(g.X(v),g.Y(Math.min(100,f(v))))}ctx.lineTo(g.X(5),g.Y(0));ctx.closePath();ctx.fillStyle=hexA(C.dna,.3);ctx.fill();ctx.restore();curve(g,v=>Math.min(100,f(v)),0,5,C.dna,2.4);
+  const sx=g.X(P(T,6)*5);line(sx,g.y,sx,g.y+g.h,hexA(C.accent,.6),1.5,[4,3]);return g}
+const LIFE=[
+{name:"Reading the maternal age data",who:"Scenario 1 · a public health report",
+ story:"A health department compares two charts: the risk of trisomy 21 per 1,000 births by the mother's age, and how many of every 100,000 births fall in each age group. A student says: \"Older mothers have higher risk, so almost all babies with Down syndrome must have older mothers.\" Use the numbers to test that claim.",
+ cap:"Risk per 1,000 births climbs with age, but most births happen to younger mothers.",
+ desc:"Left: a line graph of trisomy 21 risk per 1,000 births against mother's age from 20 to 45; the red curve is low and flat until about 30, then climbs steeply, with a dot moving along it. Right: a table with five rows for mother's age groups: under 25 with 23,000 births per 100,000 and a risk of 0.7 per 1,000; 25 to 29 with 28,000 and 0.8; 30 to 34 with 31,000 and 1.5; 35 to 39 with 15,000 and 5; 40 and over with 3,000 and 20. Blue bars show the births and red bars show the expected cases, which are 16, 22, 47, 75 and 60.",
+ draw(T){panelBox(10,10,380,480);levelTag(22,26,"data");const g=graph({x:60,y:70,w:310,h:330,x0:20,x1:46,y0:0,y1:36,xt:[20,25,30,35,40,45],yt:[0,10,20,30],xl:"mother's age",yl:"risk per 1,000 births"});
+   const age=20+P(T,10)*25;curve(g,dsRiskPer1000,20,age,C.risk,3);gdot(g,age,dsRiskPer1000(age),C.risk,null);txt(84,26,"Trisomy 21 risk at birth",{size:12.5,weight:700});
+   panelBox(400,10,390,480);levelTag(412,26,"data");txt(476,26,"Per 100,000 births (illustrative)",{size:12.5,weight:700});
+   ["age group","births","risk /1,000","expected cases"].forEach((h,j)=>txt([412,516,602,688][j],56,h,{size:11,weight:700,mono:true,color:C["ink-soft"]}));
+   AGEGRP.forEach((r,i)=>{const y=86+i*76;txt(412,y,r[0],{size:13,weight:700});txt(516,y,fmtN(r[1]),{size:13,weight:600,mono:true});txt(602,y,String(r[2]),{size:13,weight:600,mono:true});const ex=r[1]*r[2]/1000;txt(688,y,ex.toFixed(0),{size:13,weight:700,mono:true,color:C.bad});
+     rr(412,y+14,r[1]/31000*170,10,3);ctx.fillStyle=hexA(C.births,.9);ctx.fill();rr(600,y+14,ex/75*170,10,3);ctx.fillStyle=hexA(C.risk,.8);ctx.fill()});
+   txt(412,470,"expected cases = births × risk ÷ 1,000",{size:12,weight:600,mono:true})},
+ qs:[{q:"How many times higher is the risk at 45 (about 1 in 30) than at 30 (about 1 in 950)?",opts:[["About 32 times",1,"Right. 950 ÷ 30 ≈ 32. The curve climbs steeply after 35."],["About 3 times",0,"Compare 1/30 with 1/950: divide 950 by 30."],["About 920 times",0,"That subtracted. For 'how many times', divide."],["They are about the same",0,"The graph shows a large rise with age."]]},
+  {q:"Using the table, which age group has the MOST expected births with trisomy 21 per 100,000 births?",opts:[["35 to 39",1,"Right. 15,000 × 5 ÷ 1,000 = 75, the largest. A moderate risk times a fairly large number of births."],["40 and over",0,"Highest risk per birth (20), but only 3,000 births: 3,000 × 20 ÷ 1,000 = 60."],["30 to 34",0,"Most births (31,000), but the risk is only 1.5 per 1,000: about 47 cases."],["under 25",0,"Lowest risk and fewer births than the 30s: about 16 cases."]]},
+  {q:"Is the student's claim right that almost all babies with Down syndrome have mothers 35 or older?",opts:[["No: about 85 of the 220 expected cases (nearly 40%) are to mothers under 35",1,"Right. 16 + 22 + 47 = 85 under 35, versus 75 + 60 = 135 at 35 and over. Risk per birth and number of cases are different questions."],["Yes: only older mothers have affected babies",0,"Every age group has some risk; younger mothers have many more births."],["Yes: the under-35 groups have zero expected cases",0,"Look at the table: they add up to about 85."],["No: almost all are to mothers under 25",0,"Under 25 gives only about 16 of the 220."]]}]},
+{name:"Genetic counselling: reading a karyotype",who:"Scenario 2 · a genetics clinic",
+ story:"A newborn boy has low muscle tone and a heart murmur. The genetic counsellor shows his parents the karyotype made from his white blood cells. DNA marker tests show that his three copies of chromosome 21 include two different maternal copies, one from each of the mother's own parents.",
+ cap:"A male karyotype with three copies of chromosome 21.",
+ desc:"A human karyotype fills most of the picture: 22 numbered pairs of autosomes in four rows, plus the sex chromosomes. Slot 21 holds three chromosomes and pulses with a red outline. The sex slots hold one X and one Y. A label reads 47,XY,+21. On the right, a counsellor and two parents sit at a table.",
+ draw(T){panelBox(10,10,560,480);levelTag(22,26,"chromosome");karyotype(18,40,544,410,{sex:"XY",extra:{21:3},hl:[21],T,cw:5.5});label(290,470,"47,XY,+21",{size:15,weight:700,mono:true,border:C.bad});
+   panelBox(580,10,210,480);levelTag(592,26,"population");person(640,300,120,{sex:"f",skin:2,shirt:4});person(730,300,126,{sex:"m",skin:3,shirt:1});rr(600,300,170,14,4);ctx.fillStyle=C.soil;ctx.fill();person(685,460,120,{sex:"f",skin:1,shirt:3,hairC:C.hair2});txt(685,474,"counsellor",{size:11,align:"center",color:C["ink-soft"]})},
+ qs:[{q:"How should this karyotype be written?",opts:[["47,XY,+21",1,"Right: 47 chromosomes, male (XY), with an extra chromosome 21."],["46,XY",0,"Count again: slot 21 has three chromosomes, so the total is 47."],["47,XXY",0,"The sex chromosomes are one X and one Y. The extra one is chromosome 21."],["45,X",0,"That is Turner syndrome: one sex chromosome and 45 total."]]},
+  {q:"His two maternal 21s are DIFFERENT (one from each of the mother's parents). Which error best explains this?",opts:[["Nondisjunction in the mother's meiosis I",1,"Right. Meiosis I separates homologs. If they fail to separate, the egg gets one maternal grandmother's 21 and one maternal grandfather's 21."],["Nondisjunction in the mother's meiosis II",0,"A meiosis II error puts two SISTER chromatids in the egg: copies of the same homolog, so they would match (at least near the centromere)."],["Nondisjunction in the father's meiosis I",0,"The markers show the extra copy is maternal."],["A mutation inside chromosome 21",0,"A mutation changes a sequence; it does not add a whole chromosome."]]},
+  {q:"How many copies of chromosome 21 are in his skin and heart cells?",opts:[["Three, because the error was in the egg, so the zygote and every cell made from it by mitosis have three",1,"Right. Mitosis copies the zygote's chromosome set into every body cell."],["Two, because body cells correct the error",0,"Cells do not remove extra chromosomes; mitosis copies what the zygote had."],["Only blood cells have three",0,"The error was in the gamete, before the zygote formed, so all cells carry it."],["One, because the extra copy is lost in mitosis",0,"Mitosis copies chromosomes faithfully; the count stays 47."]]}]},
+{name:"Infertility clinic: 47,XXY",who:"Scenario 3 · a fertility clinic",
+ story:"A tall 30-year-old man and his partner have not been able to conceive. His semen has almost no sperm, and his karyotype is 47,XXY. Marker tests show his two X chromosomes carry DIFFERENT alleles: one matches his mother's X, the other matches his father's X. His Y came from his father.",
+ cap:"A 47,XXY karyotype: two X chromosomes and a Y.",
+ desc:"A human karyotype with 22 normal autosome pairs. The sex chromosome slots pulse red: the X slot holds two chromosomes, one magenta (from the mother) and one blue (from the father), and the Y slot holds one blue chromosome. A label reads 47,XXY. On the right, a sperm carrying both an X and a Y is drawn joining an egg carrying an X.",
+ draw(T){panelBox(10,10,560,480);levelTag(22,26,"chromosome");karyotype(18,40,544,410,{sex:"XXY",hl:["X","Y"],T,cw:5.5});label(290,470,"47,XXY",{size:15,weight:700,mono:true,border:C.bad});
+   panelBox(580,10,210,480);levelTag(592,26,"cell");const mv=smooth(seg(P(T,6)*6,0,3));eggCell(685,330,52,{nuc:false});drawChromatid(685,330,0,40,7,.39,[[0,1,C.mat]],{});label(685,400,"egg: X",{size:11.5,weight:700});
+   const sy=lerp(120,250,mv);sperm(685,sy,50,Math.PI/2,T);drawChromatid(678,sy,0,30,6,.39,[[0,1,C.pat]],{});drawChromatid(692,sy,0,14,6,.18,[[0,1,C.pat]],{});label(685,sy-60,"sperm: X and Y",{size:11.5,weight:700,border:C.bad})},
+ qs:[{q:"Which condition does this karyotype show?",opts:[["Klinefelter syndrome",1,"Right. 47,XXY: a male with an extra X, often tall with small testes and very low sperm counts."],["Turner syndrome",0,"Turner is 45,X: one sex chromosome, female."],["Down syndrome",0,"Down syndrome is an extra chromosome 21. Here the extra one is an X."],["A typical male karyotype",0,"A typical male is 46,XY. He has one extra X."]]},
+  {q:"His X from his father and his Y both came from ONE sperm. Where did nondisjunction happen?",opts:[["In his father's meiosis I: the X and Y failed to separate",1,"Right. X and Y pair and separate in meiosis I. If they stay together, a sperm carries both."],["In his father's meiosis II",0,"After a normal meiosis I, a cell has either X or Y. A meiosis II error could give XX or YY sperm, never XY."],["In his mother's meiosis I",0,"Her egg gave only one X; the father's X and Y both arrived in the sperm."],["In the zygote's first mitosis",0,"Then the extra X would be a copy of one he already had, not one from each parent."]]},
+  {q:"Why is he male, even with two X chromosomes?",opts:[["The Y chromosome carries SRY, which starts male development",1,"Right. Having a Y with SRY leads to testes, whatever the number of X chromosomes."],["Because he has 47 chromosomes",0,"The total number does not decide sex; the Y does."],["Because extra X chromosomes are always male",0,"An extra X does not make a person male; 47,XXX individuals are female."],["Because his mother's X was inactivated",0,"X inactivation balances gene dosage; it does not set sex."]]}]},
+{name:"Flow cytometry of testis cells",who:"Scenario 4 · a research lab",
+ story:"Researchers stain the DNA of cells from a mouse testis and measure how much DNA each cell has by flow cytometry. The graph shows three peaks: at 1C, 2C and 4C (1C is the DNA in one haploid set).",
+ cap:"A DNA-content histogram with peaks at 1C, 2C and 4C.",
+ desc:"A histogram fills the left part: number of cells on the vertical axis and DNA per cell on the horizontal axis, marked 1C, 2C and 4C. A tall blue peak sits at 1C, a medium peak at 2C and a small peak at 4C; a dashed teal line sweeps back and forth across it. On the right, small cell drawings are matched to each peak: spermatids at 1C; spermatogonia, body cells and secondary spermatocytes at 2C; primary spermatocytes at 4C.",
+ draw(T){panelBox(10,10,520,480);levelTag(22,26,"data");histo(70,70,430,330,T);txt(270,454,"Mouse testis cells sorted by DNA content",{size:12.5,weight:700,align:"center"});
+   panelBox(540,10,250,480);levelTag(552,26,"cell");[["1C","round spermatids",1,1],["2C","spermatogonia, body cells, secondary spermatocytes",2,1],["4C","primary spermatocytes",2,2]].forEach((r,i)=>{const y=96+i*130;label(570,y,r[0],{size:13,weight:700,mono:true,border:C.dna});
+     gcell(620,y+40,22,r[2]===2?"2n":"n",null,{tag:false});for(let k=0;k<(r[2]===2?2:1);k++){if(r[3]===2)drawChromosome(612+k*16,y+40,0,22,4,.4,[[0,1,k?C.pat:C.mat]],[[0,1,k?C.pat:C.mat]],{dS:2.4,N:5});else drawChromatid(614+k*12,y+40,0,22,4,.4,[[0,1,k?C.pat:C.mat]],{N:5})}
+     wrapText(r[1],652,y+30,130,15,{size:12})})},
+ qs:[{q:"Which peak contains the round spermatids?",opts:[["1C",1,"Right. Spermatids have finished meiosis II: one haploid set, one chromatid per chromosome."],["2C",0,"2C cells are diploid in G1, or haploid with two chromatids per chromosome (secondary spermatocytes)."],["4C",0,"4C cells have copied their DNA and not yet divided: primary spermatocytes."],["All three peaks equally",0,"DNA content tells the stages apart."]]},
+  {q:"Which peak contains the primary spermatocytes (in prophase I)?",opts:[["4C",1,"Right. They have finished S phase (2C to 4C) and not yet divided."],["2C",0,"Primary spermatocytes have already copied their DNA."],["1C",0,"1C cells have finished both divisions."],["None: primary spermatocytes have no DNA",0,"Every nucleated cell has DNA."]]},
+  {q:"In a mutant mouse, spermatocytes get stuck in prophase I and die. Compared with normal, what should happen to the graph?",opts:[["The 1C peak should nearly disappear",1,"Right. Without finishing meiosis, no haploid spermatids form."],["The 4C peak should disappear",0,"The stuck cells are primary spermatocytes, which are 4C, so 4C cells are still made."],["Nothing changes",0,"Blocking meiosis removes the products that come after prophase I."],["A new 8C peak should appear",0,"Stuck cells do not copy their DNA again."]]}]},
+{name:"Why siblings differ",who:"Scenario 5 · a family",
+ story:"Maya has two brothers and a pair of identical twin sisters. All five children have the same two parents, yet only the twins look alike. Maya wonders how likely it is that two siblings receive exactly the same chromosomes from their mother.",
+ cap:"Five siblings: each got a different mix, except the identical twins.",
+ desc:"Five children stand in a row. Beside each, five small chromosome bars show which maternal chromosomes they inherited, in magenta for those from their mother's mother and in pink-grey for those from their mother's father. Three children each have a different pattern; the twin sisters on the right share the same pattern and a label reads one zygote. Above, a calculation reads (1/2) to the 23rd = 1 in about 8.4 million.",
+ draw(T){panelBox(10,10,780,480);levelTag(22,26,"population");label(400,60,"Same set from mother (ignoring crossing over): (1/2)²³ ≈ 1 in 8.4 million",{size:13,weight:700,border:C.act6});
+   const kids=[[90,"f",C.hair,1],[230,"m",C.hair2,2],[370,"m",C.hair,3],[540,"f",C.hair2,9],[660,"f",C.hair2,9]];const loop=Math.floor(T/6);
+   kids.forEach((k,i)=>{person(k[0],380,150,{sex:k[1],skin:1,shirt:i<3?i+1:4,hairC:k[2]});for(let c=0;c<5;c++){const r=rnd(k[3]*7+c*3+(i<3?loop:0));drawChromatid(k[0]-24+c*12,420,0,40*(1-c*.1),6,.4,[[0,1,r<.5?C.mat:mix(C.mat,C.panel,.55)]],{N:6})}});
+   rr(500,140,210,300,10);ctx.setLineDash([6,5]);ctx.strokeStyle=C.act6;ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);label(600,150,"identical twins: one zygote",{size:12,weight:700,border:C.act6});
+   txt(300,470,"magenta: from mother's mother · pale: from mother's father",{size:11.5,align:"center",color:C["ink-soft"]})},
+ qs:[{q:"Ignoring crossing over, what is the chance that two siblings receive exactly the same 23 chromosomes from their mother?",opts:[["(1/2)²³, about 1 in 8.4 million",1,"Right. For each of 23 pairs there is a 1/2 chance the second child gets the same homolog; multiply 23 times."],["1/2",0,"That is the chance for ONE pair. All 23 must match."],["1/23",0,"Chances for independent pairs multiply; they are not 1 divided by the number of pairs."],["1/46",0,"There are 23 pairs to match, each with chance 1/2: multiply."]]},
+  {q:"Why do the identical twins share the same chromosomes?",opts:[["They came from a single zygote that split early in development",1,"Right. One egg, one sperm, one zygote; mitosis then copied it into both embryos."],["Their mother's meiosis made two identical eggs",0,"Meiosis makes genetically different cells, so two eggs would differ."],["They were conceived on the same day",0,"Fraternal twins are also conceived together, but from two eggs and two sperm."],["Identical twins skip meiosis",0,"Both parents still made gametes by meiosis; the twins share ONE such fertilization."]]},
+  {q:"Crossing over is added in. What happens to the chance that two siblings get identical maternal chromosomes?",opts:[["It becomes even smaller, close to zero",1,"Right. Crossovers at different places create new combinations along every chromosome."],["It rises to 1/2",0,"Crossing over adds variety; it does not make siblings more alike."],["It stays exactly 1 in 8.4 million",0,"That number ignores crossing over. Recombination makes it far smaller."],["It becomes certain",0,"Then every sibling would be identical, which is not what we see."]]}]},
+{name:"Seedless watermelons and clone bananas",who:"Scenario 6 · agriculture",
+ story:"Seedless watermelons are triploid (3n). Growers make them by crossing a tetraploid (4n) plant with a normal diploid (2n) plant. Cavendish bananas, the common supermarket banana, are also triploid and are grown only from cuttings, and a soil fungus (Panama disease) now threatens plantations worldwide.",
+ cap:"Three homologs cannot split evenly in meiosis I.",
+ desc:"Left: a watermelon slice with no seeds and a bunch of bananas. Middle: a cell in meiosis I with three homologous chromosomes of each kind (magenta, blue and pale magenta) trying to pair; arrows show two going to one pole and one to the other, giving unbalanced cells labelled unbalanced gametes. Right: a row of identical banana plants labelled clones from cuttings, with a fungus symbol spreading across them.",
+ draw(T){panelBox(10,10,240,480);levelTag(22,26,"organism");ctx.save();ctx.beginPath();ctx.arc(130,150,80,Math.PI,TAU);ctx.closePath();ctx.fillStyle="#3E8A3A";ctx.fill();ctx.beginPath();ctx.arc(130,150,70,Math.PI,TAU);ctx.closePath();ctx.fillStyle="#D9473C";ctx.fill();ctx.restore();for(let i=0;i<6;i++)circ(80+i*20,120+(i%2)*14,2.4,"#F2EEE2");txt(130,170,"seedless (3n)",{size:12,weight:700,align:"center"});
+   for(let i=0;i<5;i++){ctx.save();ctx.translate(100+i*14,300);ctx.rotate(-.5+i*.25);ctx.beginPath();ctx.ellipse(0,40,9,40,0,0,TAU);ctx.fillStyle="#E8CC50";ctx.fill();ctx.strokeStyle="#8A7A2A";ctx.lineWidth=1.2;ctx.stroke();ctx.restore()}txt(130,410,"Cavendish bananas (3n)",{size:12,weight:700,align:"center"});
+   panelBox(260,10,300,480);levelTag(272,26,"cell");const t=P(T,8)*8;const sep=smooth(seg(t,2,5));cellShapes([[410,230,130,150]],{mw:3});
+   const cols=[C.mat,C.pat,mix(C.mat,C.panel,.45)];cols.forEach((c,i)=>{const x0=394+i*16;const x=i<2?lerp(x0,300+i*16,sep):lerp(x0,500,sep);drawChromosome(x,230,0,110,8,.4,[[0,1,c]],[[0,1,c]],{dS:4.5})});
+   if(sep>.5){label(320,340,"2 copies",{size:11.5,weight:700,border:C.bad});label(500,340,"1 copy",{size:11.5,weight:700,border:C.bad});label(410,420,"unbalanced gametes",{size:12,weight:700,border:C.bad})}else label(410,420,"three homologs, no even split",{size:12,weight:700});
+   panelBox(570,10,220,480);levelTag(582,26,"population");for(let i=0;i<4;i++){const x=610+(i%2)*90,y=150+Math.floor(i/2)*170;line(x,y+60,x,y-20,"#8A6A3A",6);for(let k=0;k<4;k++){ctx.save();ctx.translate(x,y-20);ctx.rotate(-1.2+k*.8+Math.sin(T+i)*.05);ctx.beginPath();ctx.ellipse(28,0,30,9,0,0,TAU);ctx.fillStyle=C.leaf;ctx.fill();ctx.restore()}
+     const inf=seg(P(T,8)*8,1+i*1.2,2.5+i*1.2);if(inf>0){ctx.save();ctx.globalAlpha*=inf;circ(x,y+50,12,hexA(C.fung2,.85));txt(x,y+50,"!",{size:13,weight:700,align:"center",color:"#fff"});ctx.restore()}}
+   label(680,450,"clones from cuttings",{size:12,weight:700,border:C.act1})},
+ qs:[{q:"Why are triploid (3n) plants like seedless watermelons mostly sterile?",opts:[["Three homologs cannot pair and split evenly in meiosis I, so most gametes get unbalanced chromosome sets",1,"Right. With three copies, one pole gets two and the other one, for every set, and those gametes rarely work."],["Triploid plants cannot do mitosis",0,"They grow normally by mitosis; mitosis does not need homologs to pair."],["They have no chromosomes in their seeds",0,"The problem is in meiosis, before any seed could form."],["Their DNA cannot be copied in S phase",0,"Replication works; the trouble is separating three homologs evenly."]]},
+  {q:"A tetraploid (4n) plant is crossed with a diploid (2n) plant. What ploidy are their gametes, and the offspring?",opts:[["Gametes 2n and n; offspring 3n",1,"Right. Each gamete has half its parent's sets: 4n gives 2n gametes, 2n gives n gametes, and 2n + n = 3n."],["Gametes 4n and 2n; offspring 6n",0,"Meiosis halves the number of sets in each gamete."],["Gametes 2n and 2n; offspring 4n",0,"The diploid parent's gametes are haploid (n)."],["Gametes n and n; offspring 2n",0,"The tetraploid parent's gametes carry two sets (2n)."]]},
+  {q:"Why is a whole Cavendish banana crop so vulnerable to one fungus?",opts:[["Every plant is a clone from cuttings, so none has alleles that resist it",1,"Right. Asexual propagation copies one genotype; there is no variation for resistance."],["Bananas cannot get fungal diseases",0,"They can; Panama disease is caused by a soil fungus."],["Sexual reproduction makes bananas weaker",0,"Here the problem is the LACK of sexual reproduction and its variation."],["Triploid plants have no genes for immunity",0,"They have all the usual genes; the issue is that every plant has the same ones."]]}]}];
+const LS={i:0,ans:{}};
+function lifeAll(i){return LIFE[i].qs.every((q,qi)=>LS.ans[i+"-"+qi])}
+function lifeUI(){const S=LIFE[LS.i];$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${lifeAll(i)?'<span class="ok" aria-hidden="true">✓</span><span class="gk-sr"> (all answered)</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&lifeAll(i)&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-hidden="true">✓</span><span class="gk-sr"> (all answered)</span>')}
+function drawLife(now){use(S4);LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvBench",800,560),S2=makeStage("cvCalc",800,600),S4=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+function gameA11y(){return GS.sub==="sort"?sortA11y():seqA11y()}
+const A11Y={bench:{cv:()=>"#cvBench",f:benchA11y},calc:{cv:()=>"#cvCalc",f:calcA11y},game:{cv:()=>GS.sub==="sort"?null:"#cvSeq",f:gameA11y},life:{cv:()=>"#cvLife",f:lifeA11y}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const cvs=a.cv();const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(cvs&&lab)$(cvs).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=cvs?$(cvs).closest(".canvas-holder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(cvs)$(cvs).setAttribute("aria-describedby","gk-desc")}}
+/* ---------------- tabs / theme / loop ---------------- */
+let curTab="bench";
+const TABS=["bench","calc","game","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S3,S4].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;DT=dt;
+  try{if(curTab==="bench")drawBench(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="game"&&GS.sub==="seq")drawSeq(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__mz={tab:k=>showTab(k),bench:()=>({n:BN.n,s:BN.s,co:BN.co,nd:BN.nd,tally:bnTotal(),kinds:Object.keys(BN.tally).length,cls:Object.assign({},BN.cls),rec:Object.assign({},BN.rec),zyg:Object.assign({},BN.zyg),done:[...BN.done],gam:BN.M.gam.map(g=>g.length),geno:BN.M.geno.slice()}),
+  benchSet:o=>{if(o.n!=null)BN.n=o.n;if(o.co!=null)BN.co=o.co;if(o.nd!=null)BN.nd=o.nd;if(o.pair!=null)BN.ndPair=o.pair;bnSettingsChanged()},benchS:v=>{BN.s=v;BN.playing=false;$("#benchPlay").textContent="Play"},benchFert:g=>bnFertilize(g),benchFast:k=>bnFast(k),
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,choices:TR.p.choices?TR.p.choices.length:0,fmt:TR.p.choices?String(TR.p.ans):String(TR.p.ans),unit:TR.p.unit,kind:TR.p.kind}),
+  gen:t=>{const q=genOne(t);if(q.choices){const w=(q.ans+1)%q.choices.length;return {choice:true,ans:q.ans,n:q.choices.length,uniq:new Set(q.choices).size===q.choices.length,j1:judge(q,String(q.ans)),j2:judge(q,String(w)),hints:q.hints.length,rows:q.rows.length,miss:!!q.miss}}
+    const good=String(q.ans);const comma=fmtN(q.ans);const bad=String(q.ans*2+3);return {ans:q.ans,j1:judge(q,good),j1c:judge(q,comma),j1u:judge(q,good+" "+(q.unit||"")),j2:judge(q,bad),j3:judge(q,"abc"),hints:q.hints.length,rows:q.rows.length,miss:!!q.miss,int:Number.isInteger(q.ans)||q.unit==="pg"}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards.length}),
+  gameSub:w=>gameSub(w),seqGo:i=>{qR=i;qNew()},seqN:()=>QROUNDS.length,seqSolved:()=>qSolved,
+  lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();bnInit();calcInit();calcNew();updCalcMeter();sLoad(0);gameInit();lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

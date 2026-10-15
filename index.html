@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>General Biology I Study Tools</title>
+<meta name="description" content="Animated walkthroughs, simulators and practice trainers for majors General Biology I: chemistry of life, cells, metabolism, genetics and molecular biology, Modules 1 to 16. Dr. Akash Garg.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{--ground:#E8EFEF;--panel:#FAFDFD;--panel-2:#EEF5F5;--ink:#0F1F20;--ink-soft:#4A5F60;--rule:#C5D9D9;--accent:#0F5E61;--accent-wash:#D6EDED;--shadow:0 1px 2px rgba(15,31,32,.08),0 6px 18px -8px rgba(15,31,32,.18)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#0E1519;--panel:#13201F;--panel-2:#1A2A29;--ink:#E8F2F2;--ink-soft:#A9C2C2;--rule:#2A3F3F;--accent:#6FD6D6;--accent-wash:#0F3536;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6)}}
+:root[data-theme="dark"]{--ground:#0E1519;--panel:#13201F;--panel-2:#1A2A29;--ink:#E8F2F2;--ink-soft:#A9C2C2;--rule:#2A3F3F;--accent:#6FD6D6;--accent-wash:#0F3536}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+header{background:var(--panel);border-bottom:1px solid var(--rule)}
+.in{max-width:1040px;margin:0 auto;padding:22px 16px}
+.k{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:32px;margin:4px 0 6px;line-height:1.15}
+.lead{margin:0;color:var(--ink-soft);font-size:16.5px;max-width:740px}
+h2{font-family:"IBM Plex Serif",Georgia,serif;font-size:22px;margin:30px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;scroll-margin-top:12px}
+h2 i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.sub{margin:0 0 8px;color:var(--ink-soft)}
+.ch{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);font-weight:500}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}.jump a{font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:5px 9px;border:1px solid var(--rule);border-radius:99px;background:var(--panel);color:var(--ink);text-decoration:none}.jump a:hover,.jump a:focus-visible{border-color:var(--accent)}
+.find{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.find label{font-weight:600}
+.find input{font:inherit;padding:8px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--panel);color:var(--ink);min-width:0;flex:1 1 260px;max-width:440px}
+.find input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+#count{color:var(--ink-soft);font-size:14px}
+.dz{list-style:none;padding:0;margin:0 0 12px;display:flex;flex-wrap:wrap;gap:5px}
+.dz li{font-size:13px;padding:2px 9px;border-radius:99px;background:var(--panel-2);border:1px solid var(--rule);color:var(--ink)}
+.dz li.hit{background:var(--accent-wash);border-color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+a.card{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow);color:inherit;text-decoration:none;transition:border-color .15s,transform .15s}
+a.card:hover,a.card:focus-visible{border-color:var(--accent);transform:translateY(-2px)}
+.type{font-family:"IBM Plex Mono",monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.card b{font-size:18px}
+.card span.d{color:var(--ink-soft);font-size:14.5px}
+.tip{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:12px 14px;margin-top:22px;font-size:15px}
+footer{max-width:1040px;margin:0 auto;padding:24px 16px 36px;font-size:13px;color:var(--ink-soft)}
+footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div class="k">General Biology I &middot; Modules 1 to 16</div>
+  <h1>General Biology I Study Tools</h1>
+  <p class="lead">See biology happen at every scale. Each module has an animated walkthrough that links the organism, the cell and the molecule, with worked examples for every calculation, and a Lab with simulators, a practice trainer, a sorting game and real-world data scenarios. Everything runs in your browser on a computer, tablet or phone. No login, nothing graded.</p>
+</div></header>
+<main class="in" id="top" style="padding-top:4px">
+  <div class="find" role="search">
+    <label for="q">Find a topic</label>
+    <input id="q" type="search" placeholder="Try: osmosis, ATP, Punnett, CRISPR, Calvin cycle" autocomplete="off">
+    <span id="count" role="status" aria-live="polite"></span>
+  </div>
+  <nav class="jump" aria-label="Jump to module"><a href="#m1">M1</a><a href="#m2">M2</a><a href="#m3">M3</a><a href="#m4">M4</a><a href="#m5">M5</a><a href="#m6">M6</a><a href="#m7">M7</a><a href="#m8">M8</a><a href="#m9">M9</a><a href="#m10">M10</a><a href="#m11">M11</a><a href="#m12">M12</a><a href="#m13">M13</a><a href="#m14">M14</a><a href="#m15">M15</a><a href="#m16">M16</a></nav>
+  <p class="tip"><b>How to use this:</b> open the walkthrough first and go at your own pace with the arrow keys or Next. Then open the Lab: run the simulator, practice in the trainer with its hints and worked solutions, and try the real-world scenarios. Use the tools bar at the top of each page to pause the animations, slow them down, have the text read aloud, or get a written description of each picture. Nothing here is graded.</p>
+  <section class="mod" id="m1" data-search="chemistry of life chnops isotopes covalent and ionic bonds hydrogen bonds properties of water ph and buffers isomers functional groups elements and isotopes, bonds and interactions, water&#x27;s properties, ph and buffers, carbon and functional groups.">
+  <h2><i style="background:#2F7FC1" aria-hidden="true"></i><span class="ch">Module 1</span> Chemistry of life</h2>
+  <p class="sub">Elements and isotopes, bonds and interactions, water&#x27;s properties, pH and buffers, carbon and functional groups.</p>
+  <ul class="dz" aria-label="Topics in module 1"><li>CHNOPS</li><li>Isotopes</li><li>Covalent and ionic bonds</li><li>Hydrogen bonds</li><li>Properties of water</li><li>pH and buffers</li><li>Isomers</li><li>Functional groups</li></ul>
+  <div class="grid">
+    <a class="card" href="Chemistry-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Chemistry of life Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Chemistry-Lab.html"><span class="type">Simulators + practice</span><b>Module 1 Lab</b><span class="d">Water and pH benches, pH and isotope trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m2" data-search="biological macromolecules dehydration synthesis hydrolysis starch, glycogen, cellulose saturated vs unsaturated phospholipid bilayer protein structure denaturation nucleotides atp dehydration and hydrolysis, carbohydrates, lipids, the four levels of protein structure, and nucleic acids.">
+  <h2><i style="background:#C2410C" aria-hidden="true"></i><span class="ch">Module 2</span> Biological macromolecules</h2>
+  <p class="sub">Dehydration and hydrolysis, carbohydrates, lipids, the four levels of protein structure, and nucleic acids.</p>
+  <ul class="dz" aria-label="Topics in module 2"><li>Dehydration synthesis</li><li>Hydrolysis</li><li>Starch, glycogen, cellulose</li><li>Saturated vs unsaturated</li><li>Phospholipid bilayer</li><li>Protein structure</li><li>Denaturation</li><li>Nucleotides</li><li>ATP</li></ul>
+  <div class="grid">
+    <a class="card" href="Macro-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Biological macromolecules Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Macro-Lab.html"><span class="type">Simulators + practice</span><b>Module 2 Lab</b><span class="d">Polymer builder, protein folding bench, trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m3" data-search="cell structure microscopy surface area to volume prokaryote vs eukaryote endomembrane system secretory pathway endosymbiosis cytoskeleton cell junctions cell fractionation microscopy, surface area to volume, prokaryotic vs eukaryotic cells, the endomembrane system, mitochondria and chloroplasts, the cytoskeleton and cell junctions.">
+  <h2><i style="background:#15803D" aria-hidden="true"></i><span class="ch">Module 3</span> Cell structure</h2>
+  <p class="sub">Microscopy, surface area to volume, prokaryotic vs eukaryotic cells, the endomembrane system, mitochondria and chloroplasts, the cytoskeleton and cell junctions.</p>
+  <ul class="dz" aria-label="Topics in module 3"><li>Microscopy</li><li>Surface area to volume</li><li>Prokaryote vs eukaryote</li><li>Endomembrane system</li><li>Secretory pathway</li><li>Endosymbiosis</li><li>Cytoskeleton</li><li>Cell junctions</li><li>Cell fractionation</li></ul>
+  <div class="grid">
+    <a class="card" href="Cells-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Cell structure Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Cells-Lab.html"><span class="type">Simulators + practice</span><b>Module 3 Lab</b><span class="d">Virtual microscope and protein tracker, size and scale trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m4" data-search="membranes and transport fluid mosaic model diffusion osmosis tonicity water potential aquaporins sodium potassium pump cotransport endocytosis fluid mosaic model, diffusion and osmosis, tonicity and water potential, channels and carriers, the sodium potassium pump, cotransport and bulk transport.">
+  <h2><i style="background:#B8860B" aria-hidden="true"></i><span class="ch">Module 4</span> Membranes and transport</h2>
+  <p class="sub">Fluid mosaic model, diffusion and osmosis, tonicity and water potential, channels and carriers, the sodium potassium pump, cotransport and bulk transport.</p>
+  <ul class="dz" aria-label="Topics in module 4"><li>Fluid mosaic model</li><li>Diffusion</li><li>Osmosis</li><li>Tonicity</li><li>Water potential</li><li>Aquaporins</li><li>Sodium potassium pump</li><li>Cotransport</li><li>Endocytosis</li></ul>
+  <div class="grid">
+    <a class="card" href="Membranes-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Membranes and transport Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Membranes-Lab.html"><span class="type">Simulators + practice</span><b>Module 4 Lab</b><span class="d">Transport bench and osmosis chamber, transport trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m5" data-search="energy, enzymes and metabolism laws of thermodynamics delta g atp coupling activation energy induced fit vmax and km competitive inhibition allosteric regulation feedback inhibition thermodynamics, free energy, atp and energy coupling, activation energy, enzyme kinetics, inhibition and allosteric regulation.">
+  <h2><i style="background:#7C3AED" aria-hidden="true"></i><span class="ch">Module 5</span> Energy, enzymes and metabolism</h2>
+  <p class="sub">Thermodynamics, free energy, ATP and energy coupling, activation energy, enzyme kinetics, inhibition and allosteric regulation.</p>
+  <ul class="dz" aria-label="Topics in module 5"><li>Laws of thermodynamics</li><li>Delta G</li><li>ATP coupling</li><li>Activation energy</li><li>Induced fit</li><li>Vmax and Km</li><li>Competitive inhibition</li><li>Allosteric regulation</li><li>Feedback inhibition</li></ul>
+  <div class="grid">
+    <a class="card" href="Enzymes-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Energy, enzymes and metabolism Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Enzymes-Lab.html"><span class="type">Simulators + practice</span><b>Module 5 Lab</b><span class="d">Enzyme rate bench, energy and kinetics trainer, matching rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m6" data-search="cellular respiration redox and nad+ glycolysis citric acid cycle electron transport chain atp synthase atp yield inhibitors and uncouplers fermentation pfk regulation redox, glycolysis, pyruvate oxidation, the citric acid cycle, the electron transport chain and chemiosmosis, atp yield, fermentation and regulation.">
+  <h2><i style="background:#DC2626" aria-hidden="true"></i><span class="ch">Module 6</span> Cellular respiration</h2>
+  <p class="sub">Redox, glycolysis, pyruvate oxidation, the citric acid cycle, the electron transport chain and chemiosmosis, ATP yield, fermentation and regulation.</p>
+  <ul class="dz" aria-label="Topics in module 6"><li>Redox and NAD+</li><li>Glycolysis</li><li>Citric acid cycle</li><li>Electron transport chain</li><li>ATP synthase</li><li>ATP yield</li><li>Inhibitors and uncouplers</li><li>Fermentation</li><li>PFK regulation</li></ul>
+  <div class="grid">
+    <a class="card" href="Respiration-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Cellular respiration Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Respiration-Lab.html"><span class="type">Simulators + practice</span><b>Module 6 Lab</b><span class="d">Mitochondrion bench, ATP accounting trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m7" data-search="photosynthesis chloroplast structure absorption vs action spectrum photosystems i and ii linear and cyclic flow calvin cycle rubisco photorespiration c4 and cam limiting factors chloroplasts, light and pigments, photosystems and electron flow, the calvin cycle, photorespiration, c4 and cam plants, and limiting factors.">
+  <h2><i style="background:#0E7490" aria-hidden="true"></i><span class="ch">Module 7</span> Photosynthesis</h2>
+  <p class="sub">Chloroplasts, light and pigments, photosystems and electron flow, the Calvin cycle, photorespiration, C4 and CAM plants, and limiting factors.</p>
+  <ul class="dz" aria-label="Topics in module 7"><li>Chloroplast structure</li><li>Absorption vs action spectrum</li><li>Photosystems I and II</li><li>Linear and cyclic flow</li><li>Calvin cycle</li><li>Rubisco</li><li>Photorespiration</li><li>C4 and CAM</li><li>Limiting factors</li></ul>
+  <div class="grid">
+    <a class="card" href="Photosynthesis-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Photosynthesis Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Photosynthesis-Lab.html"><span class="type">Simulators + practice</span><b>Module 7 Lab</b><span class="d">Leaf bench, Calvin accounting trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m8" data-search="cell communication paracrine and endocrine gpcrs receptor tyrosine kinases ion channel receptors camp calcium and ip3 amplification apoptosis ras and cancer local and long-distance signals, reception, g protein coupled receptors, receptor tyrosine kinases, second messengers, amplification, responses and apoptosis.">
+  <h2><i style="background:#9D174D" aria-hidden="true"></i><span class="ch">Module 8</span> Cell communication</h2>
+  <p class="sub">Local and long-distance signals, reception, G protein coupled receptors, receptor tyrosine kinases, second messengers, amplification, responses and apoptosis.</p>
+  <ul class="dz" aria-label="Topics in module 8"><li>Paracrine and endocrine</li><li>GPCRs</li><li>Receptor tyrosine kinases</li><li>Ion channel receptors</li><li>cAMP</li><li>Calcium and IP3</li><li>Amplification</li><li>Apoptosis</li><li>Ras and cancer</li></ul>
+  <div class="grid">
+    <a class="card" href="Signaling-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Cell communication Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Signaling-Lab.html"><span class="type">Simulators + practice</span><b>Module 8 Lab</b><span class="d">Signaling bench, amplification trainer, ordering and matching games, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m9" data-search="the cell cycle and mitosis chromosome counting cell cycle phases stages of mitosis spindle cytokinesis cyclins and cdks checkpoints oncogenes and tumor suppressors mitotic index chromosomes and counting rules, cell cycle phases, the stages of mitosis, cytokinesis, cyclins and checkpoints, and cancer.">
+  <h2><i style="background:#4D7C0F" aria-hidden="true"></i><span class="ch">Module 9</span> The cell cycle and mitosis</h2>
+  <p class="sub">Chromosomes and counting rules, cell cycle phases, the stages of mitosis, cytokinesis, cyclins and checkpoints, and cancer.</p>
+  <ul class="dz" aria-label="Topics in module 9"><li>Chromosome counting</li><li>Cell cycle phases</li><li>Stages of mitosis</li><li>Spindle</li><li>Cytokinesis</li><li>Cyclins and Cdks</li><li>Checkpoints</li><li>Oncogenes and tumor suppressors</li><li>Mitotic index</li></ul>
+  <div class="grid">
+    <a class="card" href="Mitosis-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>The cell cycle and mitosis Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Mitosis-Lab.html"><span class="type">Simulators + practice</span><b>Module 9 Lab</b><span class="d">Cell cycle bench, root tip microscope, counting trainer, stage games, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m10" data-search="meiosis and sexual life cycles homologous chromosomes haploid and diploid life cycles meiosis i and ii crossing over independent assortment nondisjunction mitosis vs meiosis oogenesis homologs and ploidy, three life cycles, meiosis i and ii, crossing over, independent assortment, nondisjunction, and gametogenesis.">
+  <h2><i style="background:#1D4ED8" aria-hidden="true"></i><span class="ch">Module 10</span> Meiosis and sexual life cycles</h2>
+  <p class="sub">Homologs and ploidy, three life cycles, meiosis I and II, crossing over, independent assortment, nondisjunction, and gametogenesis.</p>
+  <ul class="dz" aria-label="Topics in module 10"><li>Homologous chromosomes</li><li>Haploid and diploid</li><li>Life cycles</li><li>Meiosis I and II</li><li>Crossing over</li><li>Independent assortment</li><li>Nondisjunction</li><li>Mitosis vs meiosis</li><li>Oogenesis</li></ul>
+  <div class="grid">
+    <a class="card" href="Meiosis-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Meiosis and sexual life cycles Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Meiosis-Lab.html"><span class="type">Simulators + practice</span><b>Module 10 Lab</b><span class="d">Meiosis bench, counting trainer, sort and order games, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m11" data-search="mendelian genetics law of segregation punnett squares testcross dihybrid crosses probability rules chi square codominance epistasis pedigrees segregation and independent assortment, punnett squares and probability, chi square, dominance patterns, epistasis, polygenic traits and pedigrees.">
+  <h2><i style="background:#A16207" aria-hidden="true"></i><span class="ch">Module 11</span> Mendelian genetics</h2>
+  <p class="sub">Segregation and independent assortment, Punnett squares and probability, chi square, dominance patterns, epistasis, polygenic traits and pedigrees.</p>
+  <ul class="dz" aria-label="Topics in module 11"><li>Law of segregation</li><li>Punnett squares</li><li>Testcross</li><li>Dihybrid crosses</li><li>Probability rules</li><li>Chi square</li><li>Codominance</li><li>Epistasis</li><li>Pedigrees</li></ul>
+  <div class="grid">
+    <a class="card" href="Mendel-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Mendelian genetics Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Mendel-Lab.html"><span class="type">Simulators + practice</span><b>Module 11 Lab</b><span class="d">Cross simulator, genetics problem trainer, pattern matching, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m12" data-search="chromosomes and inheritance patterns chromosome theory sex linkage x inactivation linked genes recombination frequency map units aneuploidy translocations imprinting morgan&#x27;s flies, sex determination and sex linkage, x inactivation, linkage and gene mapping, chromosomal alterations, imprinting and mitochondrial inheritance.">
+  <h2><i style="background:#BE185D" aria-hidden="true"></i><span class="ch">Module 12</span> Chromosomes and inheritance patterns</h2>
+  <p class="sub">Morgan&#x27;s flies, sex determination and sex linkage, X inactivation, linkage and gene mapping, chromosomal alterations, imprinting and mitochondrial inheritance.</p>
+  <ul class="dz" aria-label="Topics in module 12"><li>Chromosome theory</li><li>Sex linkage</li><li>X inactivation</li><li>Linked genes</li><li>Recombination frequency</li><li>Map units</li><li>Aneuploidy</li><li>Translocations</li><li>Imprinting</li></ul>
+  <div class="grid">
+    <a class="card" href="Chromosomes-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Chromosomes and inheritance patterns Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Chromosomes-Lab.html"><span class="type">Simulators + practice</span><b>Module 12 Lab</b><span class="d">Fly cross bench, mapping trainer, alteration and pedigree matching, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m13" data-search="dna structure and replication griffith and avery hershey and chase chargaff&#x27;s rules double helix semiconservative replication leading and lagging strands okazaki fragments dna repair telomerase the search for the genetic material, the double helix, meselson and stahl, the replication fork, proofreading and repair, telomeres and chromatin.">
+  <h2><i style="background:#047857" aria-hidden="true"></i><span class="ch">Module 13</span> DNA structure and replication</h2>
+  <p class="sub">The search for the genetic material, the double helix, Meselson and Stahl, the replication fork, proofreading and repair, telomeres and chromatin.</p>
+  <ul class="dz" aria-label="Topics in module 13"><li>Griffith and Avery</li><li>Hershey and Chase</li><li>Chargaff&#x27;s rules</li><li>Double helix</li><li>Semiconservative replication</li><li>Leading and lagging strands</li><li>Okazaki fragments</li><li>DNA repair</li><li>Telomerase</li></ul>
+  <div class="grid">
+    <a class="card" href="DNA-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>DNA structure and replication Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="DNA-Lab.html"><span class="type">Simulators + practice</span><b>Module 13 Lab</b><span class="d">Replication fork bench, centrifuge bench, problem trainer, matching rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m14" data-search="gene expression central dogma codon table transcription rna processing splicing trna and ribosomes translation signal peptides point and frameshift mutations the genetic code, transcription, rna processing and splicing, translation, protein targeting and mutations.">
+  <h2><i style="background:#6D28D9" aria-hidden="true"></i><span class="ch">Module 14</span> Gene expression</h2>
+  <p class="sub">The genetic code, transcription, RNA processing and splicing, translation, protein targeting and mutations.</p>
+  <ul class="dz" aria-label="Topics in module 14"><li>Central dogma</li><li>Codon table</li><li>Transcription</li><li>RNA processing</li><li>Splicing</li><li>tRNA and ribosomes</li><li>Translation</li><li>Signal peptides</li><li>Point and frameshift mutations</li></ul>
+  <div class="grid">
+    <a class="card" href="Expression-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Gene expression Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Expression-Lab.html"><span class="type">Simulators + practice</span><b>Module 14 Lab</b><span class="d">Gene expression machine, code trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m15" data-search="gene regulation trp operon lac operon cap and camp histone acetylation dna methylation enhancers micrornas morphogens hox genes cancer genes the lac and trp operons, chromatin and epigenetics, eukaryotic transcription control, rna-level control, development and cancer genetics.">
+  <h2><i style="background:#B45309" aria-hidden="true"></i><span class="ch">Module 15</span> Gene regulation</h2>
+  <p class="sub">The lac and trp operons, chromatin and epigenetics, eukaryotic transcription control, RNA-level control, development and cancer genetics.</p>
+  <ul class="dz" aria-label="Topics in module 15"><li>trp operon</li><li>lac operon</li><li>CAP and cAMP</li><li>Histone acetylation</li><li>DNA methylation</li><li>Enhancers</li><li>microRNAs</li><li>Morphogens</li><li>Hox genes</li><li>Cancer genes</li></ul>
+  <div class="grid">
+    <a class="card" href="Regulation-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Gene regulation Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Regulation-Lab.html"><span class="type">Simulators + practice</span><b>Module 15 Lab</b><span class="d">Lac operon bench, eukaryotic dial board, operon trainer, sorting rounds, and real-world scenarios.</span></a>
+  </div>
+  </section>
+  <section class="mod" id="m16" data-search="biotechnology restriction enzymes plasmid cloning pcr gel electrophoresis dna sequencing rt qpcr crispr cas9 gmos stem cells str forensics cloning with plasmids, pcr, gel electrophoresis, sequencing, gene expression tools, crispr, gmos, gene therapy, stem cells and dna forensics.">
+  <h2><i style="background:#0369A1" aria-hidden="true"></i><span class="ch">Module 16</span> Biotechnology</h2>
+  <p class="sub">Cloning with plasmids, PCR, gel electrophoresis, sequencing, gene expression tools, CRISPR, GMOs, gene therapy, stem cells and DNA forensics.</p>
+  <ul class="dz" aria-label="Topics in module 16"><li>Restriction enzymes</li><li>Plasmid cloning</li><li>PCR</li><li>Gel electrophoresis</li><li>DNA sequencing</li><li>RT qPCR</li><li>CRISPR Cas9</li><li>GMOs</li><li>Stem cells</li><li>STR forensics</li></ul>
+  <div class="grid">
+    <a class="card" href="Biotech-Walkthrough.html"><span class="type">Start here · Animated walkthrough</span><b>Biotechnology Walkthrough</b><span class="d">Watch the biology happen step by step, with quick checks and animated worked examples.</span></a>
+    <a class="card" href="Biotech-Lab.html"><span class="type">Simulators + practice</span><b>Module 16 Lab</b><span class="d">Cloning and PCR bench, biotech trainer, toolkit game, and real-world scenarios.</span></a>
+  </div>
+  </section>
+</main>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. Licensed <a href="LICENSE">CC BY-NC-SA 4.0</a>.</footer>
+<script>
+(function(){
+  var q=document.getElementById('q'),count=document.getElementById('count'),mods=[].slice.call(document.querySelectorAll('.mod'));
+  function run(){
+    var v=q.value.trim().toLowerCase(),shown=0;
+    mods.forEach(function(m){
+      var ok=!v||m.getAttribute('data-search').indexOf(v)>=0;
+      m.hidden=!ok; if(ok)shown++;
+      [].forEach.call(m.querySelectorAll('.dz li'),function(li){li.classList.toggle('hit',!!v&&li.textContent.toLowerCase().indexOf(v)>=0);});
+    });
+    count.textContent=v?(shown?shown+(shown===1?' module matches':' modules match'):'No match. Try a shorter word.'):'';
+  }
+  q.addEventListener('input',run);
+})();
+</script>
+</body>
+</html>

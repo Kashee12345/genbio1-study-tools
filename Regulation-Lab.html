@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gene Regulation Lab</title>
+<meta name="description" content="Gene regulation lab for majors biology: a lac operon bench with glucose and lactose levels and lacI, lacIs, operator constitutive and CAP mutations driving an animated repressor, CAP, RNA polymerase and live beta galactosidase output; a eukaryotic dial board for DNA methylation, histone acetylation, activators and microRNA; a randomized trainer predicting lac and trp operon expression including merodiploids; a sorting game on control levels, bacteria versus eukaryotes, oncogenes and development; and real world data on BRCA genes, agouti mice, the bicoid gradient and a gene expression bar graph.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0F5759;--accent-wash:#DCEFEE;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#B8561A;--act2:#2F7FC1;--act3:#B07A10;--act4:#2E8A7A;--act5:#7B5CC9;--act6:#3E9B4F;--act7:#A04E8C;--act8:#5E7183;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF1F6;--grid:#D5DAE6;--paper:#FFFDF7;
+  --dna:#2F6FC1;--dna-ink:#1F4F91;--dna2:#86AEE3;--rna:#D9751F;--rna-ink:#94480C;--prot:#C8577A;--prot-ink:#963A59;
+  --lipid:#C9A227;--carb:#C98A1A;--carb-ink:#7A4E08;--atp:#E0C020;--elec:#1FA7C9;--water:#7EC4E8;--plant:#3E9B4F;
+  --pol:#5E7183;--capp:#7B5CC9;--capp-ink:#5B3FA6;--trp:#2E8A7A;--trp-ink:#1F6357;--camp:#D2A715;
+  --meth:#A04E8C;--meth-ink:#7E3A6D;--acet:#3E9B4F;--acet-ink:#2B6E38;--hist:#C9B48A;--hist-edge:#8A7650;
+  --mirna:#E39A2E;--ubq:#B8961A;--onc:#C8453F;--onc-ink:#9A2E29;--tsg:#2E8A86;--tsg-ink:#1F6662;
+  --cyto:#F3EEE4;--nuc:#E4E9F3;--cellwall:#8F9BA6;--skin1:#E8C2A0;--hair:#3D3029;--fur1:#D9A93A;--fur2:#6B4A2E;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123234;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#6FA8EE;--dna-ink:#9CC4F4;--dna2:#3C5F8E;--rna:#F2A15A;--rna-ink:#F5B97F;--prot:#E88AA6;--prot-ink:#F0A9BF;
+  --lipid:#E0BE48;--carb:#E8B04A;--carb-ink:#F0C470;--atp:#F0D84A;--elec:#5CD0EE;--water:#8FCDEE;--plant:#6CCB7C;
+  --pol:#A9B7C2;--capp:#A98BEF;--capp-ink:#C4AEF5;--trp:#5CC4B0;--trp-ink:#86D8C8;--camp:#F0D04A;
+  --meth:#D186C0;--meth-ink:#E2A6D5;--acet:#6CCB7C;--acet-ink:#8FDB9C;--hist:#8F7F5E;--hist-edge:#D8C79F;
+  --mirna:#F5B451;--ubq:#E0C24A;--onc:#E8706A;--onc-ink:#F2948F;--tsg:#5CC4BE;--tsg-ink:#86D8D3;
+  --cyto:#1E2420;--nuc:#18202C;--cellwall:#7F8E98;--skin1:#C99A78;--hair:#1E1814;--fur1:#C99A3A;--fur2:#8A6646;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#123234;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#F0985A;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#6CCB7C;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#6FA8EE;--dna-ink:#9CC4F4;--dna2:#3C5F8E;--rna:#F2A15A;--rna-ink:#F5B97F;--prot:#E88AA6;--prot-ink:#F0A9BF;
+  --lipid:#E0BE48;--carb:#E8B04A;--carb-ink:#F0C470;--atp:#F0D84A;--elec:#5CD0EE;--water:#8FCDEE;--plant:#6CCB7C;
+  --pol:#A9B7C2;--capp:#A98BEF;--capp-ink:#C4AEF5;--trp:#5CC4B0;--trp-ink:#86D8C8;--camp:#F0D04A;
+  --meth:#D186C0;--meth-ink:#E2A6D5;--acet:#6CCB7C;--acet-ink:#8FDB9C;--hist:#8F7F5E;--hist-edge:#D8C79F;
+  --mirna:#F5B451;--ubq:#E0C24A;--onc:#E8706A;--onc-ink:#F2948F;--tsg:#5CC4BE;--tsg-ink:#86D8D3;
+  --cyto:#1E2420;--nuc:#18202C;--cellwall:#7F8E98;--skin1:#C99A78;--hair:#1E1814;--fur1:#C99A3A;--fur2:#8A6646;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ctl input[type=range]:disabled{opacity:.45}
+.modes3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes3 .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.modes3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.modes3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.gsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gsel .tbtn{font-size:13.5px;padding:7px 4px;line-height:1.25}
+.gsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.gsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.lifeq .opts{margin-top:6px}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.hgrid{grid-template-columns:1fr}}
+.target{border:2px solid var(--act6);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-bottom:10px}
+.target .k{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block}
+.eqn{font-family:var(--mono);font-size:15.5px;font-weight:600;overflow-wrap:anywhere}
+.hzone{border:2px dashed var(--rule);border-radius:var(--r);padding:8px;min-height:90px;display:flex;flex-direction:column;gap:8px}
+.hzone.over{border-color:var(--accent);background:var(--accent-wash)}
+.hzone h3{margin:0;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.hzone .empty{font-size:13.5px;color:var(--ink-soft);margin:0}
+.hcard{background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--exo);border-radius:var(--r);padding:8px 10px;touch-action:none}
+.hcard.pos{border-left-color:var(--endo)}
+.hcard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.hcard.drag{opacity:.9;box-shadow:var(--shadow);position:relative;z-index:20}
+.hcard .top{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.hcard .grip{cursor:grab;font-family:var(--mono);font-size:13px;color:var(--ink-soft);border:1px dashed var(--rule);border-radius:4px;padding:2px 6px;background:var(--panel-2)}
+.hcard .dh{font-family:var(--mono);font-weight:700;font-size:14.5px}
+.hcard .dh.neg{color:var(--bad)}.hcard .dh.posv{color:var(--endo-ink)}
+.hcard .ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.hcard .ctrls .tbtn{padding:5px 9px;font-size:13.5px}
+.hcard .mult{font-family:var(--mono);font-weight:700;min-width:44px;text-align:center}
+.sumbox{border:1.5px solid var(--rule);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-top:10px}
+.sumbox .eqn s{color:var(--bad)}
+.sumbox .tot{font-family:var(--mono);font-weight:700;font-size:16px;margin-top:4px}
+.dhpos{color:var(--endo-ink)}.dhneg{color:var(--bad)}
+.hintline{font-size:14.5px;margin:4px 0}
+.seg2 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.seg2 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:8px 0}
+.chk input{accent-color:var(--accent);width:18px;height:18px;flex:0 0 auto;margin-top:2px}
+.runbar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}
+.runbar .btn,.runbar .tbtn{width:100%}
+.readouts td.l{font-family:var(--sans)}
+.resbig{font-family:var(--mono);font-size:20px;font-weight:700;margin:4px 0}
+.ctl output{white-space:nowrap}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg2 .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.seg3 .tbtn small,.seg2 .tbtn small{display:block;font-size:11.5px;color:var(--ink-soft);font-weight:500}
+.seg3 .tbtn[aria-pressed="true"] small,.seg2 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.presets .tbtn{font-size:13.5px;padding:7px 8px;text-align:left;line-height:1.25}
+.side h3.ctlh{margin-top:12px}
+.choice{display:block;width:100%;text-align:left}
+.choice[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.geno{font-family:var(--mono);font-weight:600;font-size:15px;display:block;margin:6px 0;overflow-wrap:anywhere}
+.cond{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.cond span{font-size:13px;border:1.5px solid var(--rule);border-radius:99px;padding:2px 10px;background:var(--panel)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.side{padding:14px 16px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 15 &middot; Gene regulation</div>
+    <h1>Gene Regulation Lab</h1>
+    <p class="sub">Run the lac operon with any sugar mix and mutation, turn the dials on a eukaryotic gene, predict operon expression for mutants and merodiploids, sort control mechanisms, and read real data. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-lac" data-tab="lac" id="tabbtn-lac" type="button">Part 1 &middot; Lac Operon Bench</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-euk" data-tab="euk" id="tabbtn-euk" type="button" tabindex="-1">Part 2 &middot; Eukaryotic Dial Board</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 3 &middot; Operon Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sort" data-tab="sort" id="tabbtn-sort" type="button" tabindex="-1">Part 4 &middot; Regulation Sort</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 5 &middot; In the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-lac" role="tabpanel" aria-labelledby="tabbtn-lac">
+    <h2 class="gk-sr">Part 1: Lac Operon Bench</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLac" role="img" aria-label="Lac operon bench."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lacCap"></span></div>
+        <div class="legend">
+          <span><i style="background:var(--prot)"></i>Repressor and beta galactosidase</span><span><i style="background:var(--capp)"></i>CAP</span><span><i style="background:var(--camp)"></i>cAMP</span>
+          <span><i style="background:var(--pol)"></i>RNA polymerase</span><span><i class="s" style="background:var(--carb)"></i>Glucose, lactose, allolactose</span><span><i style="background:var(--rna)"></i>mRNA</span>
+        </div>
+        <table class="readouts" id="lacRead"><caption class="gk-sr">Lac operon readouts</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">Simplified model for learning, with time sped up. cAMP = 1 minus the glucose level. CAP occupancy rises with cAMP. The share of time the operator is free rises with lactose (allolactose) for a normal repressor. Transcription = operator free × (5% without CAP, up to 100% with CAP). Beta galactosidase activity heads toward 1000 × transcription units. Left out: inducer exclusion (glucose also limits lactose entry), the permease feedback loop, the need for some beta galactosidase to make allolactose, and the three extra operators of the real lac region.</p>
+      </div>
+      <aside class="card side" aria-label="Lac bench controls">
+        <div class="ctl"><label for="slGlu">Glucose in the medium <output id="oGlu" for="slGlu"></output></label><input type="range" id="slGlu" min="0" max="100" step="5" value="0"></div>
+        <div class="ctl"><label for="slLac">Lactose in the medium <output id="oLac" for="slLac"></output></label><input type="range" id="slLac" min="0" max="100" step="5" value="0"></div>
+        <h3 class="ctlh" id="hI">lacI gene (repressor)</h3>
+        <div class="seg3" id="segI" role="group" aria-labelledby="hI"></div>
+        <h3 class="ctlh" id="hO">Operator</h3>
+        <div class="seg2" id="segO" role="group" aria-labelledby="hO"></div>
+        <h3 class="ctlh" id="hC">CAP (crp gene)</h3>
+        <div class="seg2" id="segC" role="group" aria-labelledby="hC"></div>
+        <h3 class="ctlh" id="hP">Quick set ups (wild type)</h3>
+        <div class="presets" id="lacPre" role="group" aria-labelledby="hP"></div>
+        <div class="runbar"><button class="tbtn" id="lacReset" type="button">Reset everything</button><button class="tbtn" id="lacZero" type="button">Clear the graph</button></div>
+        <div class="status" id="lacStatus" role="status"></div>
+        <h3>Try these</h3>
+        <ul class="chal" id="lacChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-euk" role="tabpanel" aria-labelledby="tabbtn-euk" hidden>
+    <h2 class="gk-sr">Part 2: Eukaryotic Dial Board</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvEuk" role="img" aria-label="Eukaryotic gene dial board."></canvas></div>
+        <div class="stagebar"><span class="caption" id="eukCap"></span></div>
+        <div class="legend">
+          <span><i style="background:var(--meth)"></i>Methyl group on DNA</span><span><i style="background:var(--acet)"></i>Acetyl group on histones</span><span><i style="background:var(--hist)"></i>Nucleosome</span>
+          <span><i style="background:var(--capp)"></i>Activators and RISC</span><span><i style="background:var(--rna)"></i>mRNA and miRNA</span><span><i style="background:var(--prot)"></i>Protein</span>
+        </div>
+        <table class="readouts" id="eukRead"><caption class="gk-sr">Eukaryotic gene readouts</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">Simplified model for learning. Chromatin access = (0.15 + 0.85 × acetylation) × (1 − 0.9 × methylation). Activator effect = activators ÷ 4 × (1 − 0.7 × methylation), since methyl groups block binding. Transcription = access × (0.05 + 0.95 × activator effect). mRNA level = transcription × (1 − 0.5 × miRNA). Translation = 1 − 0.85 × miRNA. Protein = mRNA × translation. Real genes differ in how strongly each dial matters.</p>
+      </div>
+      <aside class="card side" aria-label="Dial board controls">
+        <div class="ctl"><label for="slMe">Promoter DNA methylation <output id="oMe" for="slMe"></output></label><input type="range" id="slMe" min="0" max="100" step="5" value="10"></div>
+        <div class="ctl"><label for="slAc">Histone acetylation <output id="oAc" for="slAc"></output></label><input type="range" id="slAc" min="0" max="100" step="5" value="60"></div>
+        <div class="ctl"><label for="slAct">Activators bound at the enhancer <output id="oAct" for="slAct"></output></label><input type="range" id="slAct" min="0" max="4" step="1" value="2"></div>
+        <div class="ctl"><label for="slMi">microRNA level <output id="oMi" for="slMi"></output></label><input type="range" id="slMi" min="0" max="100" step="5" value="0"></div>
+        <h3 class="ctlh" id="hEP">Example settings</h3>
+        <div class="presets" id="eukPre" role="group" aria-labelledby="hEP"></div>
+        <div class="runbar"><button class="tbtn" id="eukReset" type="button">Reset dials</button></div>
+        <div class="status" id="eukStatus" role="status"></div>
+        <h3>Try these</h3>
+        <ul class="chal" id="eukChal"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 3: Operon Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Strains and conditions are randomly generated. Predict first, then watch: after you answer, the picture plays out what the repressor, CAP and RNA polymerase do. Merodiploid problems assume no glucose and that the inducer reaches the repressor.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices"></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">Pick an answer, then press Check. The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-sort" role="tabpanel" aria-labelledby="tabbtn-sort" hidden>
+    <h2 class="gk-sr">Part 4: Regulation Sort</h2>
+    <div class="rounds" id="sRounds" role="group" aria-label="Rounds"></div>
+    <div class="card">
+      <div class="sorthead">
+        <div><div class="lvl-n" id="sN"></div><h2 class="sec" id="sTitle"></h2></div>
+        <div class="sortbar">
+          <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+          <span class="timer" id="sTimer" hidden>0:00</span>
+          <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+        </div>
+      </div>
+      <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+      <p class="small">Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.</p>
+      <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+      <div class="bins" id="sBins"></div>
+      <div class="bar">
+        <button class="tbtn" id="sHint" type="button">Hint</button>
+        <button class="tbtn" id="sShow" type="button">Show answer</button>
+        <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+        <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <p class="small" id="sBest"></p>
+    </div>
+  </section>
+
+  <!-- PART 5 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 5: In the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note" id="lifeNote"></p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h2 class="sc-title" id="lifeTitle"></h2>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Regulation-Walkthrough.html">Gene Regulation Walkthrough</a>. People and families in the scenarios are made up for teaching; data sets are simplified or made up and say so.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "dna", "dna-ink", "dna2", "rna", "rna-ink", "prot", "prot-ink", "lipid", "carb", "carb-ink", "atp", "elec", "water", "plant", "pol", "capp", "capp-ink", "trp", "trp-ink", "camp", "meth", "meth-ink", "acet", "acet-ink", "hist", "hist-edge", "mirna", "ubq", "onc", "onc-ink", "tsg", "tsg-ink", "cyto", "nuc", "cellwall", "skin1", "hair", "fur1", "fur2"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=(!fg||fg==="#fff")?inkOn(col):fg;ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= gene regulation drawing kit (shared by both pages) ================= */
+let SC={};let SYS={};
+function levelTag(x,y,k){const m={org:["ORGANISM",C.act6],cell:["CELL",C.act2],mol:["MOLECULE",C.prot],data:["THE DATA",C.act5],math:["THE MATH",C.accent],time:["OVER TIME",C.act4],tissue:["TISSUE",C.act1]}[k];
+  ctx.save();ctx.font=`700 10.5px ${MONO}`;const w=ctx.measureText(m[0]).width+12;rr(x,y-8,w,16,8);ctx.fillStyle=hexA(m[1],.16);ctx.fill();ctx.strokeStyle=m[1];ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle=C.ink;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(m[0],x+6,y+.5);ctx.restore();return w}
+/* ---------- DNA ---------- */
+function dnaH(x1,x2,y,o){o=o||{};const h=o.h||6;const col=o.col||C.dna;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  const ph=o.ph||0;const k=o.k||.16;
+  for(let x=x1+3;x<x2-1;x+=7){const s=Math.sin(x*k+ph);line(x,y-h*s,x,y+h*s,hexA(col,.45),1.3)}
+  [1,-1].forEach(sg=>{ctx.beginPath();for(let x=x1;x<=x2;x+=3){const Y=y+sg*h*Math.sin(x*k+ph);x===x1?ctx.moveTo(x,Y):ctx.lineTo(x,Y)}ctx.strokeStyle=sg>0?col:mix(col,C.ink,.25);ctx.lineWidth=2.4;ctx.stroke()});ctx.restore()}
+/* DNA drawn along any path: pathFn() must build the path */
+function dnaTube(pathFn,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=o.a;ctx.lineCap="round";ctx.lineJoin="round";
+  pathFn();ctx.strokeStyle=o.col||C.dna;ctx.lineWidth=o.w||12;ctx.stroke();
+  pathFn();ctx.strokeStyle=mix(o.col||C.dna,C.ecf,.78);ctx.lineWidth=(o.w||12)-5;ctx.stroke();
+  pathFn();ctx.strokeStyle=hexA(o.col||C.dna,.7);ctx.lineWidth=(o.w||12)-5;ctx.setLineDash([1.6,5]);ctx.lineCap="butt";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+/* a region (gene, promoter, operator) sitting on the DNA */
+function region(x1,x2,y,col,lab,o){o=o||{};const h=o.h||10;rr(x1,y-h,x2-x1,2*h,4);ctx.fillStyle=o.fill||col;ctx.fill();ctx.strokeStyle=o.stroke||mix(col,C.ink,.35);ctx.lineWidth=1.3;ctx.stroke();
+  if(o.pat==="stripe"){ctx.save();rr(x1,y-h,x2-x1,2*h,4);ctx.clip();for(let x=x1-20;x<x2+20;x+=7)line(x,y+h,x+12,y-h,hexA(C.ink,.25),1.4);ctx.restore()}
+  if(lab){const inside=o.inside!==false&&(x2-x1)>ctx.measureText(lab).width+8;const fs=o.size||11.5;ctx.font=`600 ${fs}px ${o.mono===false?FONT:MONO}`;
+    if(o.below)txt((x1+x2)/2,y+h+12,lab,{size:fs,weight:600,align:"center",mono:o.mono!==false,color:o.lc||C.ink});
+    else if(o.above)txt((x1+x2)/2,y-h-11,lab,{size:fs,weight:600,align:"center",mono:o.mono!==false,color:o.lc||C.ink});
+    else txt((x1+x2)/2,y+.5,lab,{size:fs,weight:700,align:"center",mono:o.mono!==false,color:(!o.tc||o.tc==="#fff")?inkOn(o.fill||col):o.tc})}}
+/* ---------- RNA ---------- */
+function mrna(x1,y,len,T,o){o=o||{};const col=o.col||C.rna;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);ctx.beginPath();const amp=o.amp==null?3:o.amp;const dir=o.dir||1;
+  for(let i=0;i<=len;i+=3){const X=x1+i*dir,Y=y+amp*Math.sin(i/7+(T||0)*3);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=col;ctx.lineWidth=o.lw||3;ctx.lineCap="round";ctx.stroke();
+  if(o.cap){circ(x1,y,4.5,mix(col,C.ink,.3),C.panel,1.2)}
+  if(o.tail){const tl=o.tail===true?1:o.tail;for(let i=0;i<Math.round(5*tl);i++)txt(x1+(len+5+i*7)*dir,y+amp*Math.sin((len+i*7)/7+(T||0)*3),"A",{size:9.5,weight:700,mono:true,align:"center",color:o.tc||C["rna-ink"]})}
+  ctx.restore()}
+function mrnaPath(pts,o){o=o||{};poly(pts,o.col||C.rna,o.lw||3)}
+function ribo(x,y,s,o){o=o||{};const c1=o.col||mix(C.pol,C.rna,.25);ell(x,y-s*.42,s*.75,s*.5,0,c1,mix(c1,C.ink,.35),1.2);ell(x,y+s*.38,s*.55,s*.32,0,mix(c1,C.panel,.25),mix(c1,C.ink,.35),1.2)}
+/* growing polypeptide: n beads trailing from (x,y) upward */
+function chainBeads(x,y,n,T,col){for(let i=0;i<n;i++){const X=x+Math.sin(i*.9+T*2)*5+i*1.5,Y=y-i*6;circ(X,Y,3,col||C.prot,hexA(C.ink,.3),.8)}}
+/* ---------- proteins ---------- */
+function rnap(x,y,s,o){o=o||{};const col=o.col||C.pol;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  blobPath(x,y-s*.15,s,3.3,o.T||0,.05);ctx.fillStyle=hexA(col,.92);ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.6;ctx.stroke();
+  ell(x-s*.25,y-s*.42,s*.35,s*.22,-.3,hexA("#ffffff",.18));
+  if(o.lab!=="")txt(x,y-s*.12,o.lab==null?"RNA pol":o.lab,{size:o.fs||Math.max(10,Math.min(12,s*.36)),weight:700,align:"center",mono:true,color:inkOn(col)});ctx.restore()}
+/* repressor: active = reading heads together (fits operator); inactive = splayed */
+function repressor(x,y,s,o){o=o||{};const col=o.col||C.prot;const act=o.active==null?1:o.active;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  const ang=lerp(.75,.12,act);const dx=lerp(s*.62,s*.42,act);
+  [-1,1].forEach(sg=>{ctx.save();ctx.translate(x+sg*dx,y);ctx.rotate(sg*ang);
+    ctx.beginPath();ctx.moveTo(-s*.42,-s*.55);ctx.quadraticCurveTo(0,-s*.95,s*.42,-s*.55);ctx.lineTo(s*.42,s*.18);
+    if(act>.5){ctx.lineTo(s*.12,s*.18);ctx.lineTo(s*.12,s*.5);ctx.lineTo(-s*.12,s*.5);ctx.lineTo(-s*.12,s*.18)}ctx.lineTo(-s*.42,s*.18);ctx.closePath();
+    ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.5;ctx.stroke();ctx.restore()});
+  if(o.lig==="allo"){[-1,1].forEach(sg=>sugar(x+sg*dx*1.05,y-s*.35,s*.22,C.carb,true))}
+  if(o.lig==="trp"){[-1,1].forEach(sg=>trpMol(x+sg*dx*1.05,y-s*.35,s*.2))}
+  if(o.lab!==false)txt(x+(o.labDx||0),y-s*1.05,o.lab||"repressor",{size:11,weight:700,align:"center",mono:true,color:C["prot-ink"]});
+  ctx.restore()}
+function sugar(x,y,r,col,small){ctx.beginPath();for(let i=0;i<6;i++){const a=i/6*TAU+Math.PI/6;const X=x+Math.cos(a)*r,Y=y+Math.sin(a)*r;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=small?1:1.4;ctx.stroke()}
+function lactose(x,y,r,o){o=o||{};sugar(x-r*.95,y,r,o.c1||C.carb);sugar(x+r*.95,y,r,o.c2||mix(C.carb,C.panel,.35))}
+function trpMol(x,y,r){ctx.beginPath();for(let i=0;i<6;i++){const a=i/6*TAU;const X=x-r*.55+Math.cos(a)*r*.8,Y=y+Math.sin(a)*r*.8;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.fillStyle=C.trp;ctx.fill();ctx.strokeStyle=mix(C.trp,C.ink,.45);ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();for(let i=0;i<5;i++){const a=i/5*TAU+Math.PI;const X=x+r*.7+Math.cos(a)*r*.7,Y=y+Math.sin(a)*r*.7;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();ctx.fillStyle=mix(C.trp,C.panel,.25);ctx.fill();ctx.stroke()}
+function campMol(x,y,r){circ(x,y,r,C.camp,mix(C.camp,C.ink,.5),1.2);circ(x,y,r*.45,null,mix(C.camp,C.ink,.5),1)}
+function capProt(x,y,s,o){o=o||{};const col=C.capp;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);const sh=o.bound?1:0;
+  [-1,1].forEach(sg=>{ell(x+sg*s*.42,y,s*.5,s*.42,sg*(.2+.25*(1-sh)),col,mix(col,C.ink,.45),1.5)});
+  if(o.camp){[-1,1].forEach(sg=>campMol(x+sg*s*.42,y-s*.12,s*.16))}
+  if(o.lab!==false)txt(x,y-s*.75,"CAP",{size:11,weight:700,align:"center",mono:true,color:C["capp-ink"]});ctx.restore()}
+function activator(x,y,s,o){o=o||{};const col=o.col||C.capp;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  blobPath(x,y,s,o.seed||1,o.T||0,.07);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.45);ctx.lineWidth=1.4;ctx.stroke();
+  if(o.lab)txt(x,y+.5,o.lab,{size:o.fs||10.5,weight:700,align:"center",mono:true,color:inkOn(col)});ctx.restore()}
+function enzyme(x,y,s,o){o=o||{};const col=o.col||C.prot;[[-1,-1],[1,-1],[-1,1],[1,1]].forEach((d,i)=>{blobPath(x+d[0]*s*.42,y+d[1]*s*.42,s*.5,i*1.7,o.T||0,.06);ctx.fillStyle=mix(col,C.panel,i%2?.15:0);ctx.fill();ctx.strokeStyle=mix(col,C.ink,.4);ctx.lineWidth=1.1;ctx.stroke()})}
+function protBlob(x,y,r,col,o){o=o||{};blobPath(x,y,r,o.seed||2,o.T||0,o.amp==null?.07:o.amp);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.4);ctx.lineWidth=1.3;ctx.stroke();if(o.lab)txt(x,y+.5,o.lab,{size:o.fs||10.5,weight:700,align:"center",mono:true,color:inkOn(col)})}
+/* ---------- chromatin ---------- */
+function nucleo(x,y,r,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  const tails=o.tails||4;for(let i=0;i<tails;i++){const a=-Math.PI/2+(i-(tails-1)/2)*.55+(o.rot||0);const L=r*.95;const x2=x+Math.cos(a)*(r+L),y2=y+Math.sin(a)*(r+L);
+    line(x+Math.cos(a)*r*.8,y+Math.sin(a)*r*.8,x2,y2,C["hist-edge"],1.6);
+    if(o.ac&&i<Math.round(o.ac*tails)){circ(x2,y2,r*.3,C.acet,mix(C.acet,C.ink,.4),1)}
+    if(o.hm&&i>=tails-Math.round(o.hm*tails)){circ(x2,y2,r*.28,C.meth,mix(C.meth,C.ink,.4),1)}}
+  circ(x,y,r,C.hist,C["hist-edge"],1.5);circ(x,y,r*.55,null,hexA(C["hist-edge"],.6),1);
+  ctx.beginPath();ctx.ellipse(x,y,r*1.12,r*1.12,0,Math.PI*.15,Math.PI*1.85);ctx.strokeStyle=C.dna;ctx.lineWidth=3;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(x,y,r*1.28,r*1.28,0,Math.PI*1.1,Math.PI*2.75);ctx.strokeStyle=mix(C.dna,C.ink,.2);ctx.lineWidth=2.2;ctx.stroke();ctx.restore()}
+/* chromatin fiber: nucleosomes along a line, spacing grows with openness 0..1; returns positions */
+function fiber(x1,x2,y,open,r,o){o=o||{};const sp=lerp(r*1.9,r*4.2,open);const n=Math.max(1,Math.floor((x2-x1)/sp));const pos=[];
+  ctx.save();ctx.beginPath();for(let i=0;i<=n;i++){const X=x1+i*sp;const Y=y+(1-open)*Math.sin(i*1.3)*r*.7;pos.push([X,Y]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=C.dna;ctx.lineWidth=2.6;ctx.stroke();ctx.restore();
+  pos.forEach((p,i)=>{if(i<n||o.last)nucleo(p[0]+sp*.0,p[1],r,{ac:o.ac,hm:o.hm,rot:(i%2?.25:-.25)})});return pos}
+function methylTag(x,y,up,s){s=s||1;line(x,y,x,y+(up?-10:10)*s,C.meth,2);circ(x,y+(up?-13:13)*s,4.5*s,C.meth,mix(C.meth,C.ink,.4),1)}
+function acetylTag(x,y,s){circ(x,y,4.5*(s||1),C.acet,mix(C.acet,C.ink,.4),1)}
+/* ---------- cells and organisms ---------- */
+function bacterium(x,y,w,h,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);ctx.translate(x,y);ctx.rotate(o.rot||0);
+  if(o.flag){for(let i=0;i<3;i++){ctx.beginPath();for(let k=0;k<=30;k++){const X=-w/2-k*2.2,Y=(i-1)*h*.22+Math.sin(k*.5+(o.T||0)*8+i)*4;k?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=C.cellwall;ctx.lineWidth=1.3;ctx.stroke()}}
+  rr(-w/2,-h/2,w,h,h/2);ctx.fillStyle=o.fill||C.cyto;ctx.fill();ctx.strokeStyle=C.cellwall;ctx.lineWidth=4;ctx.stroke();rr(-w/2+3,-h/2+3,w-6,h-6,h/2-3);ctx.strokeStyle=C.lipid;ctx.lineWidth=1.4;ctx.stroke();
+  if(o.nucleoid!==false){ctx.beginPath();for(let k=0;k<=60;k++){const a=k/60*TAU*3;const X=Math.cos(a*1.3)*w*.22+Math.sin(a*.7)*w*.06,Y=Math.sin(a*1.1)*h*.22;k?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.strokeStyle=hexA(C.dna,.75);ctx.lineWidth=1.4;ctx.stroke()}
+  ctx.restore()}
+function euCell(x,y,rx,ry,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  ctx.beginPath();const N=48;for(let i=0;i<=N;i++){const a=i/N*TAU;const k=1+.04*Math.sin(a*3+(o.seed||1))+.03*Math.sin(a*5+(o.seed||1)*2);const X=x+Math.cos(a)*rx*k,Y=y+Math.sin(a)*ry*k;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath();
+  ctx.fillStyle=o.fill||C.cyto;ctx.fill();ctx.strokeStyle=C.lipid;ctx.lineWidth=3;ctx.stroke();
+  if(o.nuc!==false){const nx=x+(o.nx||0),ny=y+(o.ny||0),nr=o.nr||Math.min(rx,ry)*.45;circ(nx,ny,nr,C.nuc,mix(C.dna,C.ink,.2),2.2);circ(nx,ny,nr-4,null,hexA(C.dna,.4),1)}
+  ctx.restore()}
+function person(x,y,s,o){o=o||{};const sk=C.skin1,sh=o.col||C.act2;ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);
+  rr(x-s*.42,y-s*1.2,s*.84,s*1.25,s*.32);fillStroke(sh,hexA(C.ink,.4),1.2);
+  rr(x-s*.3,y-s*.02,s*.24,s*.9,s*.1);fillStroke(mix(sh,C.ink,.35),null);rr(x+s*.06,y-s*.02,s*.24,s*.9,s*.1);fillStroke(mix(sh,C.ink,.35),null);
+  circ(x,y-s*1.55,s*.36,sk,hexA(C.ink,.4),1.2);ctx.beginPath();ctx.arc(x,y-s*1.6,s*.37,Math.PI*1.05,Math.PI*1.95);ctx.fillStyle=C.hair;ctx.fill();
+  if(o.hairLong){rr(x-s*.4,y-s*1.65,s*.14,s*.55,s*.06);ctx.fillStyle=C.hair;ctx.fill();rr(x+s*.26,y-s*1.65,s*.14,s*.55,s*.06);ctx.fill()}
+  ctx.restore()}
+function mouse(x,y,s,col,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);const fat=o.fat||1;
+  ctx.beginPath();ctx.moveTo(x-s*1.05,y+s*.1);ctx.bezierCurveTo(x-s*1.6,y+s*.2,x-s*1.7,y-s*.5,x-s*2.05,y-s*.25);ctx.strokeStyle=mix(col,C.ink,.3);ctx.lineWidth=2;ctx.stroke();
+  ell(x,y,s*1.1*fat,s*.62*fat,0,col,mix(col,C.ink,.4),1.5);ell(x+s*1.05,y-s*.18,s*.48,s*.4,-.2,col,mix(col,C.ink,.4),1.5);
+  circ(x+s*.92,y-s*.62,s*.22,mix(col,"#E8A0A8",.45),mix(col,C.ink,.4),1.2);circ(x+s*1.22,y-s*.24,2.2,C.ink);circ(x+s*1.52,y-s*.12,2.4,"#D27A8A");
+  [-.55,.45].forEach(d=>{rr(x+d*s,y+s*.5*fat,s*.18,s*.22,2);ctx.fillStyle=mix(col,C.ink,.3);ctx.fill()});ctx.restore()}
+function flyAdult(x,y,s,o){o=o||{};ctx.save();if(o.a!=null)ctx.globalAlpha*=clamp(o.a,0,1);const bc=C.carb,dk=mix(C.carb,C.ink,.55);
+  ell(x-s*.15,y-s*.55,s*.95,s*.34,-.35,hexA(C.water,.45),hexA(C.ink,.35),1);ell(x+s*.05,y-s*.6,s*.9,s*.3,-.6,hexA(C.water,.35),hexA(C.ink,.3),1);
+  for(let i=0;i<3;i++){const lx=x-s*.35+i*s*.32;poly([[lx,y+s*.1],[lx-s*.12,y+s*.45],[lx-s*.2,y+s*.7]],dk,1.6)}
+  ell(x-s*.75,y,s*.5,s*.28,0,bc,dk,1.3);for(let i=0;i<3;i++)line(x-s*1.05+i*s*.22,y-s*.24,x-s*1.0+i*s*.22,y+s*.24,hexA(dk,.6),1.4);
+  ell(x,y,s*.33,s*.27,0,mix(bc,C.ink,.15),dk,1.3);
+  circ(x+s*.48,y-s*.02,s*.2,mix(bc,C.ink,.1),dk,1.2);circ(x+s*.55,y-s*.06,s*.11,"#B8352E");
+  if(o.legsHead){for(let k=0;k<2;k++){const ax=x+s*.6+k*s*.04;poly([[ax,y-s*.15],[ax+s*.25,y-s*.42],[ax+s*.42,y-s*.3],[ax+s*.55,y-s*.52]],dk,2.2)}}
+  else{line(x+s*.62,y-s*.14,x+s*.72,y-s*.3,dk,1.6);circ(x+s*.74,y-s*.33,2,dk)}
+  ctx.restore()}
+function embryo(x,y,rx,ry,o){o=o||{};ctx.save();ell(x,y,rx,ry,0,o.fill||C.cyto,o.stroke||C.lipid,2.5);ctx.restore()}
+function cat(x,y,s,o){o=o||{};ctx.save();const base=C.panel;const outline=hexA(C.ink,.55);
+  const body=()=>{ctx.beginPath();ctx.ellipse(x,y,s*1.2,s*.62,0,0,TAU);ctx.moveTo(x+s*1.55+s*.5,y-s*.7);ctx.arc(x+s*1.55,y-s*.7,s*.5,0,TAU)};
+  ctx.beginPath();ctx.moveTo(x-s*1.1,y-s*.1);ctx.bezierCurveTo(x-s*1.8,y-s*.3,x-s*1.7,y-s*1.2,x-s*1.35,y-s*1.4);ctx.strokeStyle=C.fur1;ctx.lineWidth=s*.22;ctx.lineCap="round";ctx.stroke();ctx.lineCap="butt";
+  [[1.25,-1.05],[1.75,-1.1]].forEach(e=>{ctx.beginPath();ctx.moveTo(x+s*e[0]-s*.18,y+s*e[1]+s*.15);ctx.lineTo(x+s*e[0],y+s*e[1]-s*.3);ctx.lineTo(x+s*e[0]+s*.18,y+s*e[1]+s*.15);ctx.closePath();ctx.fillStyle=C.fur2;ctx.fill();ctx.strokeStyle=outline;ctx.lineWidth=1.2;ctx.stroke()});
+  [-.7,-.3,.4,.8].forEach(d=>{rr(x+d*s,y+s*.35,s*.22,s*.6,s*.08);ctx.fillStyle=base;ctx.fill();ctx.strokeStyle=outline;ctx.lineWidth=1.2;ctx.stroke()});
+  body();ctx.fillStyle=base;ctx.fill();ctx.save();body();ctx.clip();(o.patches||[]).forEach(p=>{ctx.beginPath();ctx.ellipse(x+p[0]*s,y+p[1]*s,p[2]*s,p[3]*s,p[4]||0,0,TAU);ctx.fillStyle=p[5];ctx.fill()});ctx.restore();
+  body();ctx.strokeStyle=outline;ctx.lineWidth=1.5;ctx.stroke();circ(x+s*1.4,y-s*.78,2.4,C.ink);circ(x+s*1.72,y-s*.78,2.4,C.ink);ctx.restore()}
+/* ---------- misc molecular machines ---------- */
+function proteasome(x,y,w,h,o){o=o||{};const col=mix(C.pol,C.capp,.25);for(let i=0;i<4;i++){rr(x-w/2,y-h/2+i*h/4,w,h/4-1,5);ctx.fillStyle=mix(col,C.panel,i%2?.25:0);ctx.fill();ctx.strokeStyle=mix(col,C.ink,.4);ctx.lineWidth=1.2;ctx.stroke()}
+  rr(x-w*.2,y-h/2-2,w*.4,h+4,3);ctx.fillStyle=hexA(C.sunk,.9);ctx.fill();ell(x,y-h/2-6,w*.55,7,0,mix(col,C.ink,.15),mix(col,C.ink,.4),1.2)}
+function ubq(x,y,r){circ(x,y,r,C.ubq,mix(C.ubq,C.ink,.45),1.2);txt(x,y+.5,"U",{size:Math.max(9,r*1.2),weight:700,mono:true,align:"center",color:inkOn(C.ubq)})}
+function scissors(x,y,s,ang,open){ctx.save();ctx.translate(x,y);ctx.rotate(ang||0);const o=open==null?.35:open;[-1,1].forEach(sg=>{ctx.save();ctx.rotate(sg*o);line(0,0,s,0,C.ink,2.2);ctx.restore();circ(-s*.35*Math.cos(sg*o),-s*.35*Math.sin(sg*o)*-1,s*.18,null,C.ink,2)});ctx.restore()}
+function stopX(x,y,s,col){ctx.save();circ(x,y,s,hexA(col||C.bad,.15),col||C.bad,2);line(x-s*.5,y-s*.5,x+s*.5,y+s*.5,col||C.bad,2.6);line(x+s*.5,y-s*.5,x-s*.5,y+s*.5,col||C.bad,2.6);ctx.restore()}
+function meterV(x,y,w,h,f,col,lab){rr(x,y,w,h,4);ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();const hh=h*clamp(f,0,1);if(hh>0){rr(x,y+h-hh,w,hh,4);ctx.fillStyle=col;ctx.fill()}ctx.strokeStyle=C.rule;ctx.lineWidth=1;rr(x,y,w,h,4);ctx.stroke();if(lab)txt(x+w/2,y+h+12,lab,{size:11,weight:600,align:"center",color:C["ink-soft"]})}
+function meterH(x,y,w,h,f,col){rr(x,y,w,h,Math.min(4,h/2));ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){rr(x,y,Math.max(h,w*clamp(f,0,1)),h,Math.min(4,h/2));ctx.fillStyle=col;ctx.fill()}}
+/* answer/state chip with word, so colour is never the only signal */
+function stateChip(x,y,on,tOn,tOff){return chipText(x,y,on?(tOn||"ON"):(tOff||"OFF"),on?C.good:C.bad,"#fff")}
+/* ---------- operon engine ----------
+   operon(x,y,w,S,T) draws a lac or trp operon.
+   S: {kind:"lac"|"trp", rep:0..1 (1 = repressor on operator), repAct:0..1, lig:"allo"|"trp"|null, cap:0..1 (lac only), tx:0..1 (transcription rate),
+       showRepGene, oc (operator mutant), noRep (no repressor), capMut, zMut, labels, scale, blockShow, polyMax} */
+function operonLayout(x,w,kind){const L={};if(kind==="lac"){const u=w/100;L.I=[x,x+u*12];L.cap=[x+u*19,x+u*25];L.pro=[x+u*25,x+u*34];L.op=[x+u*34,x+u*40];L.g=[["lacZ",x+u*40,x+u*68],["lacY",x+u*68,x+u*86],["lacA",x+u*86,x+u*100]]}
+  else{const u=w/100;L.I=[x,x+u*11];L.pro=[x+u*20,x+u*30];L.op=[x+u*26,x+u*32];L.g=[["E",x+u*32,x+u*50],["D",x+u*50,x+u*64],["C",x+u*64,x+u*76],["B",x+u*76,x+u*89],["A",x+u*89,x+u*100]]}return L}
+function operon(x,y,w,S,T){const kind=S.kind||"lac";const L=operonLayout(x,w,kind);const sc=S.scale||1;
+  dnaH(x-6,x+w+6,y,{h:5.5*sc,ph:0});
+  /* regulatory gene */
+  if(S.showRepGene!==false){region(L.I[0],L.I[1],y,(S.noRep||S.noRepGene)?mix(C.prot,C.pol,.6):C.prot,kind==="lac"?(S.repLab||"lacI"):(S.repLab||"trpR"),{pat:(S.noRep||S.noRepGene)?"stripe":null,tc:"#fff"});
+    if(S.labels!==false)txt((L.I[0]+L.I[1])/2,y+22*sc,"regulatory gene",{size:10.5,weight:600,align:"center",color:C["ink-soft"]})}
+  if(kind==="lac"){region(L.cap[0],L.cap[1],y,mix(C.capp,C.panel,.45),"",{});if(S.labels!==false)txt((L.cap[0]+L.cap[1])/2,y+22*sc,"CAP site",{size:10.5,weight:600,align:"center",color:C["capp-ink"]})}
+  region(L.pro[0],L.pro[1],y,mix(C.pol,C.panel,.35),"",{});
+  region(L.op[0],L.op[1],y,S.oc?C.bad:mix(C.prot,C.panel,.55),"",{pat:S.oc?"stripe":null});
+  if(S.labels!==false){txt((L.pro[0]+L.pro[1])/2,y+35*sc,"promoter",{size:10.5,weight:600,align:"center",color:C["ink-soft"]});txt((L.op[0]+L.op[1])/2+4,y+22*sc,S.oc?"operator (Oc)":"operator",{size:10.5,weight:600,align:"center",color:S.oc?C.bad:C["prot-ink"]})}
+  L.g.forEach((g,i)=>{const isZ=i===0&&!!(S.zMut||S.g0Mut);region(g[1]+1,g[2]-1,y,isZ?mix(C.dna,C.panel,.6):mix(C.dna,C.ink,i%2?.15:0),g[0]+(isZ?"−":""),{tc:isZ?C.ink:"#fff",pat:isZ?"stripe":null})});
+  if(S.labels!==false)txt((L.g[0][1]+L.g[L.g.length-1][2])/2,y+22*sc,kind==="lac"?"genes for lactose use":"genes for tryptophan synthesis",{size:10.5,weight:600,align:"center",color:C["dna-ink"]});
+  /* CAP */
+  if(kind==="lac"&&!S.capMut){const cb=clamp(S.cap||0,0,1);const cx=(L.cap[0]+L.cap[1])/2;capProt(cx,lerp(y-62*sc,y-16*sc,cb),15*sc,{camp:cb>.05||S.campFree,bound:cb>.9,a:S.cap==null?0:lerp(.6,1,cb)})}
+  if(kind==="lac"&&S.capMut){const cx=(L.cap[0]+L.cap[1])/2;capProt(cx,y-62*sc,15*sc,{camp:true,bound:false,a:.8});stopX(cx+22*sc,y-62*sc,7*sc)}
+  /* repressor */
+  if(!S.noRep){const rb=clamp(S.rep||0,0,1);const ox=(L.op[0]+L.op[1])/2;const fx=ox+(kind==="lac"?32:40)*sc,fy=y-70*sc;const rx=lerp(fx,ox,rb),ry=lerp(fy,y-12*sc,rb);
+    repressor(rx+Math.sin((T||0)*2)*(1-rb)*3,ry+Math.cos((T||0)*1.7)*(1-rb)*3,15*sc,{active:S.repAct==null?1:S.repAct,lig:S.lig,lab:S.repTxt||"repressor",labDx:rb*44*sc})}
+  /* RNA polymerases and transcripts */
+  const tx=clamp(S.tx||0,0,1);const gx0=L.op[1],gx1=L.g[L.g.length-1][2];const pr=(L.pro[0]+L.pro[1])/2;const per=S.per||5;const slots=S.polyMax||3;
+  const out={blocked:false,moving:0};
+  for(let k=0;k<slots;k++){const tt=(T||0)/per+k/slots;const cyc=Math.floor(tt),ph=tt-cyc;const on=rnd(cyc*7.3+k*3.1+(kind==="lac"?0:50))<Math.sqrt(tx);
+    if(!on)continue;
+    const blocked=(S.rep||0)>.6&&!S.noRep;
+    if(blocked){if(k===0){const bx=pr-6*sc;rnap(bx+Math.sin((T||0)*9)*1.5,y-4*sc,17*sc,{T,lab:sc<.75?"":"RNA pol"});out.blocked=true;if(S.blockShow!==false)stopX(bx,y-36*sc,7*sc)}continue}
+    const enter=seg(ph,0,.12);const X=ph<.12?pr:lerp(gx0,gx1+10,seg(ph,.12,.85));if(ph>.92)continue;
+    if(ph>.12&&ph<.85){const len=X-gx0;mrna(gx0,y-24*sc,len,T,{cap:true,amp:2.5,a:.95});
+      const nr=Math.floor(len/45);for(let r=0;r<nr;r++){const rx_=gx0+20+r*45;ribo(rx_,y-30*sc,7*sc);chainBeads(rx_+4,y-38*sc,3+r%3,T,C.prot)}}
+    if(ph>=.85){const f=seg(ph,.85,.92);mrna(gx0,y-24*sc-f*30,gx1-gx0,T,{cap:true,amp:2.5,a:1-f})}
+    rnap(X,y-4*sc,17*sc,{T,a:ph<.12?enter:1,lab:sc<.75?"":"RNA pol"});out.moving++}
+  return Object.assign(L,out)}
+
+/* ---------- scene helpers ---------- */
+const OFFG=()=>mix(C.pol,C.panel,.55);
+function phaseCards(x,y,w,h,items,k){const n=items.length;const cw=(w-(n-1)*8)/n;items.forEach((it,i)=>{const X=x+i*(cw+8);cardBox(X,y,cw,h,C[it[2]||"accent"],i===k);badge(X+18,y+20,i+1,C[it[2]||"accent"],11);
+  txt(X+34,y+20,it[0],{size:12.5,weight:700});wrapText(it[1],X+12,y+44,cw-22,15,{size:11.5,color:C["ink-soft"]})})}
+function cardBox(x,y,w,h,col,on){rr(x,y,w,h,8);ctx.fillStyle=on?hexA(col,.16):hexA(C.panel,.88);ctx.fill();ctx.strokeStyle=on?col:C.rule;ctx.lineWidth=on?2.4:1.2;ctx.stroke()}
+function drift(i,T,x,y,w,h,sp){const a=rnd(i*3.7)*TAU+T*(sp||.4)*(rnd(i*5.1)>.5?1:-1);return [x+w*(.5+.42*Math.sin(a+i)*Math.cos(a*.7+i*1.3)),y+h*(.5+.4*Math.sin(a*1.3+i*2.1))]}
+
+/* ---------- from the shared kit: worked example, text fitting ---------- */
+function bar(x,y,w,h,f,col,o){o=o||{};rr(x,y,w,h,Math.min(4,h/2));ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){rr(x,y,w*clamp(f,0,1),h,Math.min(4,h/2));ctx.fillStyle=col;ctx.fill()}if(o.over&&f>1){txt(x+w+4,y+h/2,"+",{size:12,weight:700,color:C.bad})}}
+function vbar(x,y,w,h,f,col){rr(x,y,w,h,3);ctx.fillStyle=hexA(C.sunk,.85);ctx.fill();if(f>0){const hh=h*clamp(f,0,1);rr(x,y+h-hh,w,hh,3);ctx.fillStyle=col;ctx.fill()}}
+function bubble(x,y,w,h,t,o){o=o||{};rr(x,y,w,h,10);fillStroke(o.fill||C.panel,o.stroke||C.rule,1.6);ctx.beginPath();const tx=o.tx==null?x+24:o.tx;ctx.moveTo(tx,y+h);ctx.lineTo(tx+10,y+h);ctx.lineTo(tx-4,y+h+14);ctx.closePath();ctx.fillStyle=o.fill||C.panel;ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.stroke();
+  rr(tx-1,y+h-3,13,5,0);ctx.fillStyle=o.fill||C.panel;ctx.fill();wrapText(t,x+10,y+16,w-20,o.lh||16,{size:o.size||12.5,weight:o.weight||500})}
+function wrapCount(t,w,size,weight){ctx.font=`${weight||500} ${size}px ${FONT}`;let n=1,ln="";t.split(" ").forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){n++;ln=wd}else ln=test});return n}
+function fitTxt(x,y,t,maxW,o){o=o||{};let sz=o.size||13;ctx.font=`${o.weight||600} ${sz}px ${o.mono?MONO:FONT}`;const w=ctx.measureText(t).width;if(w>maxW)sz=Math.max(9.5,sz*maxW/w);txt(x,y,t,Object.assign({},o,{size:sz}))}
+function wk(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);
+  const sw=o.split||0;const sz=o.size||12.5;
+  if(sw){let ly=wrapText(W_.q,x+12,y+38,sw-22,sz+4,{size:sz,weight:600})+sz+8;(W_.given||[]).forEach((g,i)=>{const a=seg(t,.6+i*.4,1+i*.4);if(a>0)withA(a,()=>wrapText(g,x+14,ly,sw-26,sz+3,{size:sz-.5,mono:true,weight:500}));ly+=wrapCount(g,sw-26,sz-.5)*(sz+3)+6});line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2)}
+  const rx=x+sw+14,rw=w-sw-28;let cy=y+(o.cy||30);const fs=o.cfs||14;const t0=o.t0||1.2;const dt=o.dt||1.8;
+  W_.rows.forEach((r,i)=>{const p_=clamp((t-t0-i*dt)/(dt*.85),0,1);
+    if(r.c){cy+=fs+6;if(p_>0){const cw=chainWidth(r.c[0],r.c[1],{size:fs});const sc=Math.min(1,rw/cw);ctx.save();ctx.translate(rx,cy);ctx.scale(sc,sc);chain(0,0,r.c[0],r.c[1],p_,{size:fs});ctx.restore()}cy+=fs+(o.rowGap||16)}
+    else if(r.l){cy+=12;if(p_>0)withA(p_,()=>fitTxt(rx,cy,r.l,rw,{size:o.lfs||13.5,weight:600,mono:true}));cy+=(o.lh||16)}
+    else if(r.ans){cy+=16;if(p_>0)withA(p_,()=>{ctx.font=`700 15px ${MONO}`;const tw=Math.min(rw,ctx.measureText(r.ans).width);rr(rx-4,cy-14,tw+14,28,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(rx+3,cy,r.ans,rw-6,{size:15,weight:700,mono:true})});cy+=18}});
+  if(W_.miss){const tm=t0+W_.rows.length*dt+.4;const a=seg(t,tm,tm+.6);if(a>0){const mw=o.missFull?w-24:rw+8;const mx=o.missFull?x+12:rx-4;const n=wrapCount("Common mistake: "+W_.miss,mw-16,sz-1);const mh=n*(sz+2)+10;
+    withA(a,()=>{rr(mx,y+h-mh-8,mw,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,mx+8,y+h-mh-8+5+(sz)/2+1,mw-16,sz+2,{size:sz-1})})}}
+  return t}
+
+
+function shapeGlyph(k,x,y,s,col){ctx.beginPath();if(k==="sq")ctx.rect(x-s,y-s,2*s,2*s);else if(k==="tri"){ctx.moveTo(x,y-s*1.15);ctx.lineTo(x+s*1.1,y+s*.85);ctx.lineTo(x-s*1.1,y+s*.85);ctx.closePath()}
+  else if(k==="ci")ctx.arc(x,y,s,0,TAU);else if(k==="dia"){ctx.moveTo(x,y-s*1.2);ctx.lineTo(x+s,y);ctx.lineTo(x,y+s*1.2);ctx.lineTo(x-s,y);ctx.closePath()}
+  else if(k==="star"){for(let i=0;i<10;i++){const r=i%2?s*.5:s*1.2;const a=-Math.PI/2+i*Math.PI/5;i?ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r):ctx.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}ctx.closePath()}
+  else{for(let i=0;i<6;i++){const a=i/6*TAU;i?ctx.lineTo(x+Math.cos(a)*s*1.1,y+Math.sin(a)*s*1.1):ctx.moveTo(x+Math.cos(a)*s*1.1,y+Math.sin(a)*s*1.1)}ctx.closePath()}
+  ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=mix(col,C.ink,.5);ctx.lineWidth=1.2;ctx.stroke()}
+
+function steroid(x,y,s){ctx.save();ctx.translate(x,y);for(let i=0;i<4;i++){const cx=i*s*1.5-s*2.2,cy=i===3?-s*.2:(i%2?s*.4:0);ctx.beginPath();const n=i===3?5:6;for(let k=0;k<n;k++){const a=k/n*TAU;k?ctx.lineTo(cx+Math.cos(a)*s,cy+Math.sin(a)*s):ctx.moveTo(cx+Math.cos(a)*s,cy+Math.sin(a)*s)}ctx.closePath();ctx.fillStyle=C.lipid;ctx.fill();ctx.strokeStyle=mix(C.lipid,C.ink,.45);ctx.lineWidth=1;ctx.stroke()}ctx.restore()}
+function pedShape(x,y,sq,fill,lab){ctx.beginPath();if(sq)ctx.rect(x-12,y-12,24,24);else ctx.arc(x,y,12,0,TAU);ctx.fillStyle=C.panel;ctx.fill();
+  if(fill==="half"){ctx.save();ctx.clip();ctx.fillStyle=C.onc;ctx.fillRect(x-12,y-12,12,24);ctx.restore()}else if(fill==="full"){ctx.fillStyle=mix(C.onc,C.ink,.3);ctx.fill()}
+  ctx.beginPath();if(sq)ctx.rect(x-12,y-12,24,24);else ctx.arc(x,y,12,0,TAU);ctx.strokeStyle=C.ink;ctx.lineWidth=1.6;ctx.stroke();if(lab)txt(x,y+24,lab,{size:10,weight:600,align:"center",color:C["ink-soft"]})}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("bio1-regulation-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("bio1-regulation-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+let DT=0;
+/* ================= PART 1: lac operon bench ================= */
+const LB={glu:0,lac:0,I:"+",O:"+",cap:"+",B:9,hist:[],clock:0,histT:0,rv:1,cv:.9,last:null,chal:new Set()};
+function lacModel(s){const camp=1-s.glu;const capB=s.cap==="+"?camp*camp/(camp*camp+.35*.35):0;const ind=s.lac*s.lac/(s.lac*s.lac+.2*.2);
+  let free;if(s.O==="c"||s.I==="-")free=1;else if(s.I==="s")free=.01;else free=.01+.99*ind;
+  const tx=free*(.05+.95*capB);return {camp,capB,ind,free,tx,ss:1000*tx}}
+const LCHAL=["Wild type: push beta galactosidase above 800 units.","Wild type: find conditions where the repressor is off the operator but expression stays low.","With no lactose at all, get above 500 units using one mutation.","Show that a lacIˢ cell cannot be induced, even with lots of lactose and no glucose.","Show that a CAP⁻ cell stays low even with lactose and no glucose."];
+function lacWT(){return LB.I==="+"&&LB.O==="+"&&LB.cap==="+"}
+function lacChalCheck(m){const add=i=>{if(!LB.chal.has(i)){LB.chal.add(i);chalUI($("#lacChal"),LCHAL,LB.chal);lacStatus("good","Challenge "+(i+1)+" done: "+LCHAL[i])}};
+  if(lacWT()&&LB.B>800)add(0);
+  if(lacWT()&&m.free>.9&&m.capB<.2&&LB.lac>.5)add(1);
+  if(LB.lac===0&&LB.B>500&&(LB.I==="-"||LB.O==="c"))add(2);
+  if(LB.I==="s"&&LB.O==="+"&&LB.lac>=.8&&LB.glu<=.1&&LB.clock>6&&LB.B<30)add(3);
+  if(LB.cap==="-"&&LB.lac>=.8&&LB.glu<=.1&&LB.clock>6&&LB.B<120&&LB.I!=="s")add(4)}
+function lacStatus(cls,t){const s=$("#lacStatus");s.className="status "+cls;s.textContent=t}
+function lacSummary(m){const rep=LB.I==="-"?"no repressor (lacI⁻)":LB.O==="c"?"repressor cannot grip the Oᶜ operator":m.free>.5?"repressor pulled off by allolactose":"repressor on the operator";
+  const cap=LB.cap==="-"?"CAP cannot help (CAP⁻)":m.capB>.5?"cAMP and CAP bound":"CAP not bound (cAMP low)";
+  const lev=m.tx>.6?"high":m.tx>.03?"low":"basal";return {rep,cap,lev}}
+function lacUI(){$("#oGlu").textContent=Math.round(LB.glu*100)+"%";$("#oLac").textContent=Math.round(LB.lac*100)+"%";const m=lacModel(LB);const sm=lacSummary(m);
+  $("#lacCap").textContent=`Glucose ${Math.round(LB.glu*100)}%, lactose ${Math.round(LB.lac*100)}%: ${sm.rep}; ${sm.cap}; expression heads to ${sm.lev}.`;
+  if(!$("#lacStatus").classList.contains("good")||!LB.keep)lacStatus("",`Repressor: ${sm.rep}. CAP: ${sm.cap}. Expression: ${sm.lev}.`);LB.keep=false;a11yKey=""}
+function lacRead(m){const rows=[["cAMP level",Math.round(m.camp*100)+"%"],["CAP site occupied",Math.round(m.capB*100)+"%"],["Operator free",Math.round(m.free*100)+"%"],["Transcription (% of max)",Math.round(m.tx*100)+"%"],["Beta galactosidase now",Math.round(LB.B)+" units"],["Heading toward",Math.round(m.ss)+" units"]];
+  const tb=$("#lacRead tbody");const html=rows.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join("");if(tb.dataset.h!==html){tb.innerHTML=html;tb.dataset.h=html}}
+function lacInit(){
+  const I=[["+","lacI⁺<small>normal</small>"],["-","lacI⁻<small>no repressor</small>"],["s","lacIˢ<small>super repressor</small>"]],O=[["+","O⁺<small>normal</small>"],["c","Oᶜ<small>constitutive</small>"]],Cp=[["+","CAP⁺<small>normal</small>"],["-","CAP⁻<small>cannot bind DNA</small>"]];
+  segBtns($("#segI"),I,()=>LB.I,v=>{LB.I=v;lacUI()});segBtns($("#segO"),O,()=>LB.O,v=>{LB.O=v;lacUI()});segBtns($("#segC"),Cp,()=>LB.cap,v=>{LB.cap=v;lacUI()});
+  const sl=(id,k)=>{const e=$(id);e.value=Math.round(LB[k]*100);e.oninput=()=>{LB[k]=+e.value/100;lacUI()}};sl("#slGlu","glu");sl("#slLac","lac");
+  const pre=[["Glucose only",1,0],["Glucose and lactose",1,1],["Lactose only",0,1],["Neither sugar",0,0]];const pb=$("#lacPre");pb.innerHTML="";
+  pre.forEach(p=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.textContent=p[0];b.onclick=()=>{LB.glu=p[1];LB.lac=p[2];LB.I="+";LB.O="+";LB.cap="+";lacSync()};pb.appendChild(b)});
+  $("#lacReset").onclick=()=>{LB.glu=0;LB.lac=0;LB.I="+";LB.O="+";LB.cap="+";LB.B=9;LB.hist=[];lacSync()};$("#lacZero").onclick=()=>{LB.hist=[];LB.histT=0};
+  chalUI($("#lacChal"),LCHAL,LB.chal);lacUI()}
+function lacSync(){$("#slGlu").value=Math.round(LB.glu*100);$("#slLac").value=Math.round(LB.lac*100);
+  [["#segI",["+","-","s"],"I"],["#segO",["+","c"],"O"],["#segC",["+","-"],"cap"]].forEach(z=>$(z[0]).querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",String(z[1][i]===LB[z[2]]))));lacUI()}
+function drawLac(now){use(S1);const T=now/1000;const dt=LB.last==null?0:Math.min(.1,Math.max(0,(now-LB.last)/1000));LB.last=now;LB.clock+=dt;
+  const m=lacModel(LB);LB.B+=(m.ss-LB.B)*(1-Math.exp(-dt/6));LB.histT+=dt;if(LB.histT>=.25||!LB.hist.length){LB.histT=0;LB.hist.push([LB.clock,LB.B,m.tx]);while(LB.hist.length&&LB.clock-LB.hist[0][0]>60)LB.hist.shift()}
+  const tgtR=LB.I==="-"?0:LB.O==="c"?.24:1-m.free;LB.rv+=(tgtR-LB.rv)*(1-Math.exp(-dt*3));LB.cv+=(m.capB-LB.cv)*(1-Math.exp(-dt*3));
+  /* cell panel */
+  panelBox(14,14,250,190);levelTag(26,32,"cell");title(90,32,"E. coli in its medium",C.ink);
+  bacterium(139,124,170,80,{flag:true,T,nucleoid:false});
+  const ng=Math.round(LB.glu*9),nl=Math.round(LB.lac*7);for(let i=0;i<ng;i++){const p=drift(i,T,24,46,230,150,.35);sugar(p[0],p[1],6,C.carb)}
+  for(let i=0;i<nl;i++){const p=drift(i+30,T,24,46,230,150,.3);lactose(p[0],p[1],6,{})}
+  for(let i=0;i<Math.round(m.camp*6);i++){const p=drift(i+60,T,90,104,100,40,.6);campMol(p[0],p[1],4)}
+  txt(139,192,"cAMP rings inside: "+(m.camp>.6?"many":m.camp>.25?"some":"few"),{size:11,weight:600,align:"center",color:C["ink-soft"]});
+  /* graph */
+  panelBox(276,14,510,190);const g=graph({x:340,y:52,w:420,h:114,x0:0,x1:60,y0:0,y1:1000,xt:[0,20,40,60],yt:[0,500,1000],xl:"last 60 s (sped up)",yl:"beta gal units",ylx:56});
+  const t0=LB.clock-60;ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w,g.h+4);ctx.clip();
+  [[1,C.prot,[]],[2,C.pol,[6,4]]].forEach(sr=>{ctx.beginPath();LB.hist.forEach((h,i)=>{const X=g.X(h[0]-t0),Y=g.Y(sr[0]===1?h[1]:h[2]*1000);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.strokeStyle=sr[1];ctx.lineWidth=3;ctx.setLineDash(sr[2]);ctx.stroke();ctx.setLineDash([])});ctx.restore();
+  line(560,26,584,26,C.prot,3);txt(590,26,"beta galactosidase",{size:11,weight:700,color:C["prot-ink"]});line(700,26,724,26,C.pol,3,[6,4]);txt(730,26,"rate",{size:11,weight:700,color:C["ink-soft"]});
+  label(Math.min(g.X(60)-36,g.X(LB.hist.length?LB.hist[LB.hist.length-1][0]-t0:0)),g.Y(LB.B)-14,Math.round(LB.B)+"",{size:11.5,weight:700,mono:true,border:C.prot});
+  /* operon */
+  panelBox(14,214,772,236);levelTag(26,232,"mol");title(100,232,"lac operon",C.ink);
+  const lig=LB.I==="s"?null:(m.ind>.5?"allo":null);const act=LB.I==="s"?1:1-m.ind;
+  operon(44,360,712,{kind:"lac",rep:LB.rv+(LB.O==="c"?.06*Math.sin(T*3):0),repAct:act,lig,cap:LB.cv,tx:LB.rv>.6&&LB.I!=="-"?1:m.tx,per:4.2,polyMax:3,noRep:LB.I==="-",oc:LB.O==="c",capMut:LB.cap==="-",repLab:LB.I==="s"?"lacIs":LB.I==="-"?"lacI−":"lacI",repTxt:LB.I==="s"?"super repressor":act>.5?"active repressor":"inactive repressor"},T);
+  if(LB.I==="s"&&LB.lac>.3){for(let j=0;j<2;j++){const p=P(T*.8+j*.5,1);sugar(250+j*30+Math.sin(p*TAU)*10,282-Math.abs(Math.sin(p*Math.PI))*16,5,C.carb,true)}label(640,250,"allolactose cannot bind the lacIs repressor",{size:11.5,weight:700,border:C.carb})}
+  if(LB.O==="c"&&LB.I!=="-")label(640,250,"repressor cannot grip the Oc operator",{size:11.5,weight:700,border:C.bad});
+  /* inside the cell */
+  panelBox(14,462,772,164);title(28,482,"beta galactosidase in the cell",C["prot-ink"]);
+  const ne=Math.round(clamp(LB.B/1000,0,1)*20);for(let i=0;i<ne;i++)enzyme(44+(i%10)*40,514+Math.floor(i/10)*36,10,{T});if(!ne)txt(44,520,"almost none",{size:12.5,color:C["ink-soft"]});
+  const sm=lacSummary(m);[["Repressor",sm.rep,m.free>.5?C.good:C.bad],["CAP",sm.cap,m.capB>.5?C.good:C.warn],["Expression",sm.lev+" ("+Math.round(m.tx*100)+"% of max)",m.tx>.6?C.good:C.warn]].forEach((r,i)=>{txt(460,512+i*36,r[0],{size:12,weight:700});label(540,512+i*36,r[1],{size:11.5,weight:600,align:"left",border:r[2]})});
+  if(Math.floor(LB.clock*4)%2===0){lacRead(m);lacChalCheck(m)}}
+function lacA11y(){const m=lacModel(LB);const sm=lacSummary(m);const lev=Math.round(LB.B/50)*50;
+  return [`Lac operon bench. Glucose ${Math.round(LB.glu*100)}%, lactose ${Math.round(LB.lac*100)}%, ${LB.I==="+"?"lacI plus":LB.I==="-"?"lacI minus":"lacI super repressor"}, ${LB.O==="c"?"operator constitutive":"normal operator"}, ${LB.cap==="+"?"CAP normal":"CAP minus"}. Beta galactosidase about ${lev} units.`,
+   `Top left, an E. coli cell floats among amber glucose hexagons and lactose pairs, with ${m.camp>.6?"many":m.camp>.25?"some":"few"} yellow cAMP rings inside. Top right, a graph of the last 60 seconds shows beta galactosidase activity as a rose line, now about ${lev} units, and the transcription rate as a dashed grey line. In the middle, the lac operon: ${sm.rep}; ${sm.cap}; grey RNA polymerases ${m.tx>.6?"stream across lacZ, lacY and lacA making orange mRNA":m.tx>.03?"pass only now and then":"wait at the promoter and are blocked"}. At the bottom, ${Math.round(clamp(LB.B/1000,0,1)*20)} rose enzyme icons stand for the beta galactosidase in the cell.`]}
+/* ================= PART 2: eukaryotic dial board ================= */
+const EK={me:.1,ac:.6,act:2,mi:0,chal:new Set(),vis:null};
+function eukModel(s){const access=(.15+.85*s.ac)*(1-.9*s.me);const actEff=s.act/4*(1-.7*s.me);const tx=access*(.05+.95*actEff);const mrnaL=tx*(1-.5*s.mi);const tl=1-.85*s.mi;return {access,actEff,tx,mrna:mrnaL,tl,prot:mrnaL*tl}}
+const ECHAL=["Silence the gene (protein under 5%) with promoter methylation of 80% or more.","Get protein output above 90%.","Keep transcription above 70% but cut protein below 30%.","With methylation at 90% or more and all 4 activators bound, see protein stay under 15%."];
+function eukStatus(cls,t){const s=$("#eukStatus");s.className="status "+cls;s.textContent=t}
+function pct(v){return Math.round(v*100)+"%"}
+function eukUI(){const m=eukModel(EK);$("#oMe").textContent=pct(EK.me);$("#oAc").textContent=pct(EK.ac);$("#oAct").textContent=EK.act+" of 4";$("#oMi").textContent=pct(EK.mi);
+  const rows=[["Chromatin access",pct(m.access)],["Activator effect",pct(m.actEff)],["Transcription",pct(m.tx)],["mRNA level",pct(m.mrna)],["Translation per mRNA",pct(m.tl)],["Protein output",pct(m.prot)]];
+  $("#eukRead tbody").innerHTML=rows.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join("");
+  const lim=m.access<.3?"packed, methylated chromatin":m.actEff<.3?"too few activators":EK.mi>.5?"the microRNA":"nothing much";
+  $("#eukCap").textContent=`Protein output ${pct(m.prot)} of maximum. Main limit: ${lim}.`;
+  const add=i=>{if(!EK.chal.has(i)){EK.chal.add(i);chalUI($("#eukChal"),ECHAL,EK.chal);eukStatus("good","Challenge "+(i+1)+" done: "+ECHAL[i]);return true}return false};let got=false;
+  if(m.prot<.05&&EK.me>=.8)got=add(0)||got;if(m.prot>.9)got=add(1)||got;if(m.tx>.7&&m.prot<.3)got=add(2)||got;if(EK.me>=.9&&EK.act===4&&m.prot<.15)got=add(3)||got;
+  if(!got)eukStatus("",`Output ${pct(m.prot)}. Limited mostly by ${lim}.`);a11yKey=""}
+function eukInit(){const sl=(id,k,sc)=>{const e=$(id);e.value=Math.round(EK[k]*sc);e.oninput=()=>{EK[k]=+e.value/sc;eukUI()}};sl("#slMe","me",100);sl("#slAc","ac",100);sl("#slAct","act",1);sl("#slMi","mi",100);
+  const pre=[["Silenced copy (imprinted)",.9,.1,0,0],["Active liver gene",0,.9,4,0],["Housekeeping gene",.05,.6,2,.1],["Targeted by a miRNA",0,.9,4,.9]];const pb=$("#eukPre");pb.innerHTML="";
+  pre.forEach(p=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.textContent=p[0];b.onclick=()=>{EK.me=p[1];EK.ac=p[2];EK.act=p[3];EK.mi=p[4];eukSync()};pb.appendChild(b)});
+  $("#eukReset").onclick=()=>{EK.me=.1;EK.ac=.6;EK.act=2;EK.mi=0;eukSync()};chalUI($("#eukChal"),ECHAL,EK.chal);eukUI()}
+function eukSync(){$("#slMe").value=Math.round(EK.me*100);$("#slAc").value=Math.round(EK.ac*100);$("#slAct").value=EK.act;$("#slMi").value=Math.round(EK.mi*100);eukUI()}
+function drawEuk(now){use(S2);const T=now/1000;const m=eukModel(EK);
+  if(!EK.vis)EK.vis={a:m.access,p:m.prot};EK.vis.a+=(m.access-EK.vis.a)*.08;EK.vis.p+=(m.prot-EK.vis.p)*.06;
+  /* nucleus */
+  rr(14,14,772,330,18);ctx.fillStyle=C.nuc;ctx.fill();ctx.strokeStyle=mix(C.dna,C.ink,.2);ctx.lineWidth=3;ctx.stroke();rr(19,19,762,320,14);ctx.strokeStyle=hexA(C.dna,.35);ctx.lineWidth=1.2;ctx.stroke();
+  levelTag(30,38,"mol");title(110,38,"inside the nucleus",C["dna-ink"]);rr(772,248,16,28,4);ctx.fillStyle=C.ground;ctx.fill();txt(762,290,"nuclear pore",{size:10.5,weight:600,align:"right",color:C["ink-soft"]});
+  const y=200;dnaH(30,770,y,{h:5});
+  /* enhancer + activators */
+  const ecol=[C.act5,C.act2,C.act4,C.act1];for(let i=0;i<4;i++){const x=56+i*36;rr(x-14,y-9,28,18,3);ctx.fillStyle=ecol[i];ctx.fill();ctx.strokeStyle=mix(ecol[i],C.ink,.4);ctx.lineWidth=1.2;ctx.stroke();
+    if(i<EK.act)activator(x,y-28+Math.sin(T*2+i)*1.5,13,{T,seed:i+1,lab:"A",fs:10})}
+  txt(110,y+28,"enhancer: "+EK.act+" of 4 activators",{size:11,weight:600,align:"center",color:C["capp-ink"]});
+  /* promoter with CpG and methyl */
+  region(250,370,y,mix(C.pol,C.panel,.35),"",{});const nmeth=Math.round(EK.me*6);for(let i=0;i<6;i++){const x=262+i*20;line(x,y-9,x,y+9,C.ink,1.2);if(i<nmeth)methylTag(x,y+9,false,.8)}
+  txt(310,y+46,"promoter CG sites",{size:11,weight:600,align:"center",color:C["ink-soft"]});region(380,760,y,C.dna,"gene",{tc:"#fff"});
+  ell(320,y-58,44,24,0,mix(C.pol,C.capp,.3),mix(C.pol,C.ink,.4),1.4);txt(320,y-58,"mediator",{size:10.5,weight:700,align:"center",color:inkOn(mix(C.pol,C.capp,.3))});
+  if(EK.act>0)for(let i=0;i<EK.act;i++){ctx.beginPath();ctx.moveTo(56+i*36,y-40);ctx.quadraticCurveTo(200,y-110,280,y-64);ctx.strokeStyle=hexA(C.capp,.35);ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([])}
+  /* nucleosomes over promoter and gene */
+  const a=EK.vis.a;const sp=lerp(36,92,clamp(a,0,1));for(let x=240+(T*4%sp)*0;x<760;x+=sp){nucleo(x+sp*.3,y,13,{ac:EK.ac,tails:4})}
+  /* polymerases */
+  const tx=m.tx;for(let k=0;k<4;k++){const tt=T/4.5+k/4;const cyc=Math.floor(tt),ph=tt-cyc;if(rnd(cyc*5.1+k*2.7)>=Math.sqrt(tx))continue;const X=lerp(380,770,ph);if(ph>.92)continue;mrna(380,y-26,X-380,T,{amp:2});rnap(X,y-4,15,{T,lab:"pol II",fs:9.5})}
+  label(560,64,"transcription "+pct(tx),{size:12.5,weight:700,mono:true,border:tx>.6?C.good:tx>.2?C.warn:C.bad});label(560,96,"chromatin access "+pct(m.access),{size:12,weight:600,mono:true,border:C.acet});
+  /* cytoplasm */
+  rr(14,356,772,250,14);ctx.fillStyle=hexA(C.cyto,.9);ctx.fill();ctx.strokeStyle=C.lipid;ctx.lineWidth=2;ctx.stroke();levelTag(30,376,"cell");title(90,376,"cytoplasm",C.ink);
+  const nm=Math.round(m.mrna*8),nb=Math.round(nm*EK.mi*.9+(EK.mi>.3&&nm>0?1:0));
+  for(let i=0;i<nm;i++){const x=40+(i%4)*130,yy=426+Math.floor(i/4)*76+Math.sin(T+i)*3;mrna(x,yy,110,T+i,{amp:2,cap:true,tail:.5});
+    if(i<nb){ell(x+88,yy-10,22,12,0,C.capp,mix(C.capp,C.ink,.4),1.2);line(x+70,yy-2,x+106,yy-2,C.mirna,2.5);stopX(x+10,yy-22,7)}else{const f=P(T*.4+i*.3,1);ribo(x+f*100,yy-6,8);chainBeads(x+f*100+3,yy-16,2+Math.floor(f*5),T,C.prot)}}
+  if(!nm)txt(40,450,"almost no mRNA reaches the cytoplasm",{size:12.5,color:C["ink-soft"]});
+  /* meters */
+  const ms=[["access",m.access,C.acet],["transcription",m.tx,C.pol],["mRNA",m.mrna,C.rna],["protein",EK.vis.p,C.prot]];
+  ms.forEach((q,i)=>{const x=566+i*56;meterV(x,404,26,150,q[1],q[2]);txt(x+13,i%2?588:572,q[0],{size:10.5,weight:600,align:"center",color:C.ink});txt(x+13,392,pct(q[1]),{size:10.5,weight:700,mono:true,align:"center"})});
+  const np=Math.round(EK.vis.p*12);txt(40,582,"protein made:",{size:11.5,weight:600,color:C["ink-soft"]});for(let i=0;i<np;i++)protBlob(140+i*26,582,8,C.prot,{T,seed:i});if(!np)txt(140,582,"almost none",{size:11.5,color:C["ink-soft"]});
+}
+function eukA11y(){const m=eukModel(EK);return [`Eukaryotic dial board. Methylation ${pct(EK.me)}, acetylation ${pct(EK.ac)}, ${EK.act} activators, microRNA ${pct(EK.mi)}. Protein output ${pct(m.prot)}.`,
+  `The top panel is the nucleus. Blue DNA runs across it with an enhancer of four coloured boxes on the left, ${EK.act} violet activators sitting on them, a grey promoter with ${Math.round(EK.me*6)} of 6 magenta methyl marks, and beige nucleosomes along the gene that are ${m.access>.6?"spread apart":m.access>.3?"moderately spaced":"packed close together"}, with ${EK.ac>.5?"many":"few"} green acetyl tags. RNA polymerase II ${m.tx>.5?"runs along the gene often":m.tx>.15?"runs along the gene now and then":"rarely starts"}. The bottom panel is the cytoplasm, with ${Math.round(m.mrna*8)} orange mRNAs; ${EK.mi>.3?"many are held by violet RISC complexes with a stop mark":"ribosomes read them, making rose protein chains"}. Four meters show access ${pct(m.access)}, transcription ${pct(m.tx)}, mRNA ${pct(m.mrna)} and protein ${pct(m.prot)}.`]}
+/* ================= PART 3: operon trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const wpick=(items,w)=>{let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<items.length;i++){r-=w[i];if(r<=0)return items[i]}return items[items.length-1]};
+const CTYPES=[["mix","All types, mixed"],["lac","lac operon, one copy"],["trp","trp operon"],["mero","Challenge: lac merodiploids"]];
+const LACOPTS=[["none","None: no working beta galactosidase"],["basal","Basal: repressed, only a trickle"],["low","Low: transcribed, but no CAP boost"],["high","High: fully on"]];
+const TRPOPTS=[["on","On: working trp enzymes are made"],["off","Off: repressed"],["onbroken","Transcribed, but TrpE does not work"]];
+const MEROPTS=[["ind","Inducible: made only with lactose"],["con","Constitutive: made with or without lactose"],["uni","Uninducible: never induced, basal trickle only"],["none","None: no working beta galactosidase at all"]];
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:0,count:0,solT:0,pick:null};
+const SUP={I:{"+":"lacI⁺","-":"lacI⁻","s":"lacIˢ"},O:{"+":"O⁺","c":"Oᶜ"},Z:{"+":"lacZ⁺","-":"lacZ⁻"}};
+/* ---- solvers ---- */
+function solveLac(g,glu,lac){if(g.Z==="-")return "none";const free=g.O==="c"||g.I==="-"||(g.I==="+"&&lac);if(!free)return "basal";return g.cap==="+"&&!glu?"high":"low"}
+function solveTrp(g,trp){let act;if(g.R==="-")act=false;else if(g.R==="nb")act=false;else if(g.R==="sup")act=true;else act=trp;const blocked=act&&g.O!=="c";if(blocked)return "off";return g.E==="-"?"onbroken":"on"}
+function copyMode(c,cell){/* cell: any Is, any I+ */if(c.O==="c")return "con";if(cell.s)return "uni";if(cell.plus)return "ind";return "con"}
+function solveMero(a,b){const cell={s:a.I==="s"||b.I==="s",plus:a.I==="+"||b.I==="+"};const ma=copyMode(a,cell),mb=copyMode(b,cell);const zs=[[a,ma],[b,mb]].filter(x=>x[0].Z==="+").map(x=>x[1]);
+  if(!zs.length)return "none";if(zs.includes("con"))return "con";if(zs.includes("ind"))return "ind";return "uni"}
+/* ---- generators ---- */
+const GEN={
+ lac(){const muts=pick([[],[],["I-"],["Is"],["Oc"],["CAP-"],["Z-"],["I-","CAP-"],["Oc","CAP-"],["Is","Oc"],["I-","Z-"],["Is","CAP-"],["Oc","Z-"],["I-"],["Oc"],["CAP-"]]);
+  const g={I:muts.includes("I-")?"-":muts.includes("Is")?"s":"+",O:muts.includes("Oc")?"c":"+",cap:muts.includes("CAP-")?"-":"+",Z:muts.includes("Z-")?"-":"+"};const glu=Math.random()<.5,lac=Math.random()<.55;
+  const ans=solveLac(g,glu,lac);const free=g.O==="c"||g.I==="-"||(g.I==="+"&&lac);
+  const geno=`${SUP.I[g.I]} ${SUP.O[g.O]} ${SUP.Z[g.Z]}, ${g.cap==="+"?"CAP⁺":"CAP⁻"}`;
+  const repLine=g.I==="-"?"lacI⁻: no working repressor is made.":g.I==="s"?"lacIˢ: the repressor cannot bind allolactose, so it never lets go of a normal operator.":lac?"Normal repressor, and lactose is present: allolactose pulls it off.":"Normal repressor and no lactose: it sits on the operator.";
+  const opLine=g.O==="c"?"Oᶜ: the repressor cannot bind this operator, so it is always free.":free?"The operator is free.":"The operator is blocked: only a basal trickle.";
+  const capLine=g.cap==="-"?"CAP⁻: no CAP boost, whatever the glucose.":glu?"Glucose present: cAMP is low, so CAP is not bound.":"No glucose: cAMP is high, CAP binds and boosts transcription.";
+  const zLine=g.Z==="-"?"lacZ⁻: any lacZ made is broken, so no working enzyme.":"lacZ⁺: a working enzyme is made if the genes are transcribed.";
+  return {kind:"lac",title:"lac operon, one copy",html:`<span class="geno">${geno}</span><span class="cond"><span>glucose: ${glu?"present":"absent"}</span><span>lactose: ${lac?"present":"absent"}</span></span>What level of <b>working beta galactosidase</b> does this cell make?`,
+   opts:LACOPTS,ans,hints:["Work in order: 1, is there a repressor that can grip the operator? 2, is the operator free? 3, does CAP boost transcription? 4, is lacZ working?",repLine+" "+opLine,capLine+" "+zLine],
+   rows:[{l:"1  "+repLine},{l:"2  "+opLine},{l:"3  "+capLine},{l:"4  "+zLine},{ans:"Answer: "+LACOPTS.find(o=>o[0]===ans)[1]}],
+   vis:{k:"lac",g,glu,lac,free,ans}}},
+ trp(){const R=wpick(["+","-","nb","sup"],[5,2,2,1.5]);const O=Math.random()<.2?"c":"+";const E=Math.random()<.25?"-":"+";const trp=Math.random()<.5;const g={R,O,E};const ans=solveTrp(g,trp);
+  const rn={"+":"trpR⁺","-":"trpR⁻ (no repressor)","nb":"trpR mutant: repressor cannot bind tryptophan","sup":"trpR mutant: repressor active even without tryptophan"}[R];
+  const geno=`${rn}; ${O==="c"?"trpOᶜ (repressor cannot bind)":"trpO⁺"}; ${E==="-"?"trpE⁻":"trpE⁺"}`;
+  const act=R==="sup"||(R==="+"&&trp);
+  const repLine=R==="-"?"No repressor protein is made.":R==="nb"?"The repressor cannot bind tryptophan, so it stays inactive.":R==="sup"?"This repressor is active on its own.":trp?"Tryptophan is high: it binds the repressor (corepressor) and activates it.":"Tryptophan is low: the repressor stays inactive.";
+  const opLine=O==="c"?"trpOᶜ: even an active repressor cannot bind, so the genes are transcribed.":act?"The active repressor binds the operator: transcription stops.":"Nothing blocks the operator: the genes are transcribed.";
+  const eLine=E==="-"?"trpE⁻: TrpE made from this operon does not work.":"trpE⁺: all five enzymes work if made.";
+  return {kind:"trp",title:"trp operon",html:`<span class="geno">${geno}</span><span class="cond"><span>tryptophan: ${trp?"plentiful":"scarce"}</span></span>What happens to the trp operon?`,
+   opts:TRPOPTS,ans,hints:["The trp repressor is made inactive. It needs tryptophan (the corepressor) to bind the operator, unless a mutation changes that.",repLine,opLine+" "+eLine],
+   rows:[{l:"1  "+repLine},{l:"2  "+opLine},{l:"3  "+eLine},{ans:"Answer: "+TRPOPTS.find(o=>o[0]===ans)[1]}],vis:{k:"trp",g,trp,act,ans}}},
+ mero(){const rc=()=>({I:wpick(["+","-","s"],[5,3,2]),O:wpick(["+","c"],[7,3]),Z:wpick(["+","-"],[6.5,3.5])});let a=rc(),b=rc();
+  const ans=solveMero(a,b);const cell={s:a.I==="s"||b.I==="s",plus:a.I==="+"||b.I==="+"};const ma=copyMode(a,cell),mb=copyMode(b,cell);
+  const gs=c=>`${SUP.I[c.I]} ${SUP.O[c.O]} ${SUP.Z[c.Z]}`;const mn={con:"constitutive",ind:"inducible",uni:"uninducible"};
+  const repLine=cell.s?"A lacIˢ super repressor is in the cell. It acts in trans and blocks every O⁺ operator, even with lactose.":cell.plus?"A normal lacI⁺ repressor is in the cell. It acts in trans on both O⁺ operators, so they respond to lactose.":"Both copies are lacI⁻: no repressor at all, so nothing blocks either operator.";
+  const cl=(c,m,n)=>`${n}: ${SUP.O[c.O]}${c.O==="c"?" (cis, always free)":""}, so this copy is ${mn[m]}; it carries ${SUP.Z[c.Z]}${c.Z==="-"?" (broken enzyme)":""}.`;
+  return {kind:"mero",title:"Challenge: merodiploid",html:`<span class="geno">${gs(a)} / F′ ${gs(b)}</span><span class="cond"><span>no glucose</span><span>compare with and without lactose</span></span>Is <b>working beta galactosidase</b> made, and how is it controlled?`,
+   opts:MEROPTS,ans,hints:["Repressors are proteins that diffuse: they act in trans on both copies. Operators act only in cis, on the genes on their own DNA.",repLine,"Now look only at copies that carry lacZ⁺. "+cl(a,ma,"Chromosome")+" "+cl(b,mb,"F′ copy")],
+   rows:[{l:"1  "+repLine},{l:"2  "+cl(a,ma,"Chromosome copy")},{l:"3  "+cl(b,mb,"F′ copy")},{l:"4  Only lacZ⁺ copies make working enzyme; any constitutive lacZ⁺ copy wins."},{ans:"Answer: "+MEROPTS.find(o=>o[0]===ans)[1]}],vis:{k:"mero",a,b,ma,mb,ans}}}
+};
+const GKEYS=Object.keys(GEN);
+function genOne(k){const q=GEN[k]();q.kind=k;return q}
+function judge(p,key){if(!key)return {ok:false,kind:"empty"};if(key===p.ans)return {ok:true};return {ok:false,kind:"wrong",msg:wrongMsg(p,key)}}
+function wrongMsg(p,key){const v=p.vis;
+  if(p.kind==="lac"){if(v.g.Z==="-")return "Check lacZ first: a lacZ⁻ cell cannot make working enzyme at all.";if(key==="none")return "lacZ is working here, so some enzyme can be made.";
+    if(!v.free)return key==="basal"?"":"Is the operator really free? "+(v.g.I==="s"?"A super repressor never lets go of a normal operator.":"With a normal repressor and no lactose, the repressor sits on the operator.");
+    if(key==="basal")return "The operator is free here"+(v.g.O==="c"?" (Oᶜ cannot be bound)":v.g.I==="-"?" (no repressor)":" (allolactose removed the repressor)")+", so it is more than basal.";
+    return key==="high"?"CAP cannot boost here: "+(v.g.cap==="-"?"the cell is CAP⁻.":"glucose keeps cAMP low."):"With no glucose and normal CAP, cAMP CAP boosts transcription to high."}
+  if(p.kind==="trp"){if(key==="off")return "Is there an active repressor that can bind this operator? Check the repressor allele, the tryptophan level and the operator.";if(p.ans==="off")return "Here an active repressor binds a normal operator, so the operon is off.";return key==="on"?"Look at trpE: this strain has a broken TrpE.":"This strain's trpE is normal."}
+  const mn={con:"constitutive",ind:"inducible",uni:"uninducible",none:"none"};return `Not ${mn[key]}. Remember: repressors act in trans, operators in cis, and only lacZ⁺ copies count.`}
+function calcMsg(cls,t){const m=$("#calcMsg");m.className="msg show "+cls;m.textContent=t}
+function optLabel(p,k){return p.opts.find(o=>o[0]===k)[1]}
+function calcNew(){const k=TR.type==="mix"?pick(GKEYS):TR.type;const q=genOne(k);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}`;const box=$("#calcChoices");box.innerHTML="";
+  q.opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt choice";b.textContent=o[1];b.dataset.k=o[0];b.setAttribute("aria-pressed","false");b.onclick=()=>{TR.pick=o[0];box.querySelectorAll("button").forEach(x=>{x.setAttribute("aria-pressed",String(x.dataset.k===o[0]));x.classList.remove("wrong")})};box.appendChild(b)});
+  $("#calcMsg").className="msg";$("#calcHintBox").hidden=true;$("#calcCap").textContent=q.title+": predict first; after you check, the picture plays out what happens.";a11yKey=""}
+function calcCheck(){const p=TR.p;const j=judge(p,TR.pick);
+  if(j.kind==="empty"){calcMsg("info","Pick one of the answers first.");return}
+  const btn=$("#calcChoices").querySelector(`[data-k="${TR.pick}"]`);
+  if(j.ok){const wasFirst=TR.first&&!TR.sol;if(!TR.solved){TR.count++;if(wasFirst){TR.streak++;if(TR.streak>TR.best){TR.best=TR.streak;store.set("best",TR.best)}}}TR.solved=true;btn.classList.add("right");calcMsg("good","✓ Correct: "+optLabel(p,p.ans)+". Watch the picture play it out and the reasoning build.");showSol(false)}
+  else{TR.first=false;TR.streak=0;btn.classList.add("wrong");calcMsg("warn","Not quite. "+(j.msg||p.hints[0]))}
+  updCalcMeter();a11yKey=""}
+function showSol(byBtn){if(byBtn&&!TR.solved){TR.streak=0;TR.first=false}TR.sol=true;TR.solT=performance.now();updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function calcInit(){const sel=$("#calcType");sel.innerHTML=CTYPES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");sel.onchange=()=>{TR.type=sel.value;calcNew()};
+  $("#calcCheck").onclick=calcCheck;
+  $("#calcHint").onclick=()=>{const p=TR.p;const b=$("#calcHintBox");if(TR.hint<p.hints.length)TR.hint++;b.hidden=false;b.innerHTML=p.hints.slice(0,TR.hint).map((h,i)=>`<div><b>Hint ${i+1}:</b> ${h}</div>`).join("")+(TR.hint>=p.hints.length?`<div class="small">That is the whole ladder. Try it, or press Show worked solution.</div>`:"")};
+  $("#calcSol").onclick=()=>{showSol(true);calcMsg("info","Worked solution: "+optLabel(TR.p,TR.p.ans)+". Watch the picture and each step, then try a new problem.")};$("#calcNew").onclick=calcNew;
+  TR.best=+(store.get("best")||0)}
+/* ---------- trainer drawing ---------- */
+function condIcons(x,y,v,T){panelBox(x,y,170,196);title(x+12,y+18,"conditions",C.ink);
+  if(v.k==="lac"){txt(x+12,y+50,"glucose",{size:12,weight:700});if(v.glu){for(let i=0;i<4;i++)sugar(x+100+i*16,y+50,6,C.carb)}else txt(x+100,y+50,"none",{size:12,color:C["ink-soft"]});
+    txt(x+12,y+90,"lactose",{size:12,weight:700});if(v.lac){for(let i=0;i<3;i++)lactose(x+104+i*22,y+90,5,{})}else txt(x+100,y+90,"none",{size:12,color:C["ink-soft"]});
+    txt(x+12,y+130,"cAMP",{size:12,weight:700});if(!v.glu)for(let i=0;i<4;i++)campMol(x+100+i*16,y+130,5);else txt(x+100,y+130,"low",{size:12,color:C["ink-soft"]});}
+  else if(v.k==="trp"){txt(x+12,y+56,"tryptophan",{size:12,weight:700});if(v.trp){for(let i=0;i<6;i++)trpMol(x+30+(i%3)*40,y+90+Math.floor(i/3)*30,7)}else txt(x+12,y+90,"scarce",{size:12,color:C["ink-soft"]})}
+  else{txt(x+12,y+50,"glucose: none",{size:12,weight:700});const on=P(T,6)>.5;txt(x+12,y+90,"lactose:",{size:12,weight:700});label(x+110,y+90,on?"present":"absent",{size:12,weight:700,border:on?C.carb:C.rule});if(on)for(let i=0;i<3;i++)lactose(x+40+i*40,y+128,6,{});
+    wrapText("Lactose switches on and off so you can compare.",x+12,y+160,150,14,{size:10.5,color:C["ink-soft"]})}}
+function lacCopyState(c,cell,lacOn){/* returns S for operon() */const mode=copyMode(c,cell);const free=mode==="con"||(mode==="ind"&&lacOn);const repPresent=cell.s||cell.plus;
+  return {kind:"lac",labels:false,scale:.74,noRep:!repPresent,repLab:c.I==="s"?"lacIs":c.I==="-"?"lacI−":"lacI",oc:c.O==="c",zMut:c.Z==="-",rep:!repPresent?0:c.O==="c"?.24:free?0:1,repAct:free&&c.O!=="c"?0:1,lig:repPresent&&lacOn&&!cell.s?"allo":null,cap:1,tx:free?1:1,per:4,polyMax:2,repTxt:cell.s?"super repressor":" "}}
+function drawCalc(now){use(S3);const T=now/1000;const p=TR.p;const v=p.vis;const show=TR.solved||TR.sol;const el=show?(now-TR.solT)/1000:0;const play=show?seg(el,0,1.2):0;
+  condIcons(14,14,v,T);panelBox(196,14,590,284);title(210,34,show?"what happens":"predict, then check",show?C.good:C["accent-ink"]);
+  if(v.k==="lac"){const g=v.g;const free=v.free;
+    operon(220,200,550,{kind:"lac",scale:.86,noRep:g.I==="-",repLab:g.I==="s"?"lacIs":g.I==="-"?"lacI−":"lacI",oc:g.O==="c",zMut:g.Z==="-",capMut:g.cap==="-",
+      rep:!show?.3:g.O==="c"?.24:free?0:1,repAct:!show?.5:(free&&g.O!=="c"?0:1),lig:show&&g.I==="+"&&v.lac?"allo":null,cap:!show?0:(g.cap==="+"&&!v.glu?1:0),tx:!show?0:(free?(g.cap==="+"&&!v.glu?1:.12):1),per:4,polyMax:3,repTxt:!show?"repressor ?":g.I==="s"?"super repressor":" "},T);
+    if(show)label(490,270,LACOPTS.find(o=>o[0]===v.ans)[1],{size:12.5,weight:700,border:v.ans==="high"?C.good:v.ans==="none"?C.bad:C.warn});}
+  else if(v.k==="trp"){const g=v.g;const act=v.act;
+    operon(220,200,550,{kind:"trp",scale:.86,noRep:g.R==="-",repLab:{"+":"trpR","-":"trpR−","nb":"trpR*","sup":"trpR*"}[g.R],oc:g.O==="c",g0Mut:g.E==="-",rep:!show?.3:g.O==="c"?(act?.24:0):act?1:0,repAct:!show?.5:act?1:0,lig:show&&act&&g.R!=="sup"?"trp":null,tx:!show?0:1,per:4,polyMax:3,repTxt:!show?"repressor ?":act?"active repressor":"inactive repressor"},T);
+    if(show)label(490,270,TRPOPTS.find(o=>o[0]===v.ans)[1],{size:12.5,weight:700,border:v.ans==="on"?C.good:C.warn})}
+  else{const lacOn=P(T,6)>.5;const cell={s:v.a.I==="s"||v.b.I==="s",plus:v.a.I==="+"||v.b.I==="+"};
+    [[v.a,"chromosome",110],[v.b,"F′ plasmid",210]].forEach(r=>{txt(210,r[2]-48,r[1],{size:12,weight:700,color:C["ink-soft"]});
+      const S=show?lacCopyState(r[0],cell,lacOn):{kind:"lac",labels:false,scale:.74,repLab:r[0].I==="s"?"lacIs":r[0].I==="-"?"lacI−":"lacI",oc:r[0].O==="c",zMut:r[0].Z==="-",rep:.3,repAct:.5,cap:1,tx:0,repTxt:" "};
+      if(r[0].I==="-")S.noRepGene=true;operon(230,r[2],540,S,T)});
+    if(show)label(490,276,MEROPTS.find(o=>o[0]===v.ans)[1],{size:12.5,weight:700,border:v.ans==="con"?C.good:v.ans==="ind"?C.accent:C.warn})}
+  if(!show)withA(.9,()=>label(490,276,"choose an answer, then press Check",{size:12,weight:600,border:C.rule}));
+  const WY=308;if(show)solPanel(14,WY,772,284,p.rows,el);
+  else{panelBox(14,WY,772,284,{fill:hexA(C.paper,.96)});title(26,WY+18,"Worked solution",C["accent-ink"]);wrapText("The reasoning builds here line by line after a correct answer, or when you press Show worked solution. Use the hint ladder if you get stuck.",28,WY+50,740,18,{size:13,color:C["ink-soft"]})}}
+function solPanel(x,y,w,h,rows,el){panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});title(x+12,y+18,"Worked solution",C["accent-ink"]);let yy=y+44;
+  rows.forEach((r,i)=>{const a=seg(el,.4+i*1.3,1.1+i*1.3);if(a<=0){yy+=r.ans?40:wrapCount(r.l,w-36,13.5,500)*18+8;return}
+    withA(a,()=>{if(r.ans){ctx.font=`700 14px ${FONT}`;const tw=Math.min(w-40,ctx.measureText(r.ans).width);rr(x+14,yy-4,tw+20,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(x+24,yy+11,r.ans,w-48,{size:14,weight:700})}
+      else wrapText(r.l,x+18,yy+6,w-36,18,{size:13.5,weight:500})});
+    yy+=r.ans?40:wrapCount(r.l,w-36,13.5,500)*18+8})}
+function calcA11y(){const p=TR.p;const v=p.vis;const show=TR.solved||TR.sol;const pk=TR.pick?optLabel(p,TR.pick):"none chosen";
+  const what=v.k==="lac"?`a lac operon with ${p.html.match(/geno">([^<]*)/)[1]}, glucose ${v.glu?"present":"absent"}, lactose ${v.lac?"present":"absent"}`:v.k==="trp"?`a trp operon with ${p.html.match(/geno">([^<]*)/)[1]}, tryptophan ${v.trp?"plentiful":"scarce"}`:`two lac operon copies, chromosome and F prime plasmid, ${p.html.match(/geno">([^<]*)/)[1]}, with lactose switching on and off`;
+  return [`Practice problem, ${p.title}. Your choice: ${pk}.${TR.solved?" Correct.":""}`,`The picture shows ${what}. ${show?"The animation now plays out the answer: "+optLabel(p,p.ans)+". Below, the worked solution builds line by line.":"The repressor is drawn floating with a question mark until you check an answer."}`]}
+/* ================= PART 4: regulation sort ================= */
+function binSVG(k){const sv=s=>`<svg viewBox="0 0 56 46" aria-hidden="true">${s}</svg>`;
+  const dna=(y)=>`<path d="M4 ${y}H52" stroke="var(--dna)" stroke-width="3"/><path d="M4 ${y+6}H52" stroke="var(--dna)" stroke-width="3"/>`;
+  switch(k){
+  case "chrom":return sv('<circle cx="18" cy="23" r="10" fill="var(--hist)" stroke="var(--hist-edge)" stroke-width="2"/><circle cx="38" cy="23" r="10" fill="var(--hist)" stroke="var(--hist-edge)" stroke-width="2"/><path d="M4 30C10 36 26 36 28 30C30 36 46 36 52 30" fill="none" stroke="var(--dna)" stroke-width="2.4"/><circle cx="18" cy="8" r="3.5" fill="var(--acet)"/><circle cx="38" cy="8" r="3.5" fill="var(--meth)"/>');
+  case "tx":return sv(dna(28)+'<ellipse cx="26" cy="22" rx="12" ry="10" fill="var(--pol)"/><path d="M8 14C14 10 18 18 22 12" stroke="var(--rna)" stroke-width="2.4" fill="none"/>');
+  case "proc":return sv('<rect x="4" y="18" width="14" height="10" rx="2" fill="var(--dna)"/><rect x="38" y="18" width="14" height="10" rx="2" fill="var(--dna)"/><path d="M18 23C22 36 34 36 38 23" stroke="var(--pol)" stroke-width="2.4" fill="none"/><path d="M24 6L32 16M32 6L24 16" stroke="var(--ink)" stroke-width="2"/>');
+  case "transl":return sv('<path d="M4 32C12 28 20 36 28 32S44 28 52 32" stroke="var(--rna)" stroke-width="3" fill="none"/><ellipse cx="28" cy="20" rx="11" ry="7" fill="var(--pol)"/><ellipse cx="28" cy="30" rx="8" ry="4" fill="var(--pol)" opacity=".75"/><circle cx="36" cy="10" r="3" fill="var(--prot)"/><circle cx="41" cy="6" r="3" fill="var(--prot)"/>');
+  case "prot":return sv('<rect x="30" y="6" width="20" height="34" rx="5" fill="var(--pol)"/><circle cx="16" cy="26" r="10" fill="var(--prot)"/><circle cx="10" cy="11" r="4.5" fill="var(--ubq)"/><circle cx="19" cy="9" r="4.5" fill="var(--ubq)"/>');
+  case "bact":return sv('<rect x="6" y="12" width="44" height="22" rx="11" fill="var(--cyto)" stroke="var(--cellwall)" stroke-width="3"/><path d="M16 23C20 18 26 28 30 22S38 20 40 24" stroke="var(--dna)" stroke-width="1.6" fill="none"/>');
+  case "euk":return sv('<ellipse cx="28" cy="23" rx="24" ry="19" fill="var(--cyto)" stroke="var(--lipid)" stroke-width="2.5"/><circle cx="28" cy="23" r="9" fill="var(--nuc)" stroke="var(--dna)" stroke-width="2"/>');
+  case "both":return sv('<rect x="2" y="14" width="26" height="18" rx="9" fill="var(--cyto)" stroke="var(--cellwall)" stroke-width="2.5"/><ellipse cx="38" cy="23" rx="16" ry="14" fill="var(--cyto)" stroke="var(--lipid)" stroke-width="2.2"/><circle cx="38" cy="23" r="5" fill="var(--nuc)" stroke="var(--dna)" stroke-width="1.6"/>');
+  case "onc":return sv('<path d="M10 38L28 8L46 38Z" fill="var(--onc)" opacity=".85"/><path d="M28 16V30" stroke="#fff" stroke-width="3"/><path d="M22 22L28 14L34 22" stroke="#fff" stroke-width="3" fill="none"/>');
+  case "tsg":return sv('<circle cx="28" cy="23" r="17" fill="var(--tsg)"/><rect x="17" y="19" width="22" height="8" fill="#fff"/>');
+  case "det":return sv('<ellipse cx="28" cy="23" rx="22" ry="18" fill="var(--cyto)" stroke="var(--lipid)" stroke-width="2.4"/><circle cx="18" cy="14" r="3" fill="var(--rna)"/><circle cx="26" cy="11" r="3" fill="var(--prot)"/><circle cx="34" cy="13" r="3" fill="var(--rna)"/><circle cx="22" cy="20" r="3" fill="var(--prot)"/>');
+  case "ind":return sv('<circle cx="13" cy="23" r="11" fill="var(--cyto)" stroke="var(--lipid)" stroke-width="2.2"/><circle cx="43" cy="23" r="11" fill="var(--good-wash)" stroke="var(--lipid)" stroke-width="2.2"/><circle cx="26" cy="18" r="2.6" fill="var(--capp)"/><circle cx="29" cy="26" r="2.6" fill="var(--capp)"/>');
+  case "morph":return sv('<defs><linearGradient id="gm" x1="0" x2="1"><stop offset="0" stop-color="var(--prot)"/><stop offset="1" stop-color="var(--prot)" stop-opacity="0"/></linearGradient></defs><ellipse cx="28" cy="23" rx="25" ry="13" fill="url(#gm)" stroke="var(--lipid)" stroke-width="2"/>');
+  case "hox":return sv('<rect x="2" y="16" width="12" height="14" rx="2" fill="var(--act4)"/><rect x="15" y="16" width="12" height="14" rx="2" fill="var(--act2)"/><rect x="28" y="16" width="12" height="14" rx="2" fill="var(--act5)"/><rect x="41" y="16" width="12" height="14" rx="2" fill="var(--act3)"/>');
+  default:return ""}}
+const SROUNDS=[
+ {name:"Where is the control?",goal:"Sort each example by the stage of gene expression it controls.",bins:[["chrom","Chromatin"],["tx","Transcription"],["proc","RNA processing"],["transl","mRNA life and translation"],["prot","Protein"]],
+  cards:[["Histone acetylation loosens packing","chrom","Chromatin: acetyl groups open chromatin so genes can be read."],["Promoter DNA methylation","chrom","Chromatin: methyl tags on DNA keep a gene silent."],["Xist RNA coats one X chromosome","chrom","Chromatin: Xist packs one X into a Barr body."],
+   ["Activators bind an enhancer","tx","Transcription: activators help start transcription at the promoter."],["Steroid receptor binds a response element","tx","Transcription: the hormone receptor complex is an activator."],["Mediator links activators to RNA polymerase II","tx","Transcription: the mediator helps assemble the machinery at the promoter."],
+   ["Exon 3 kept in muscle, skipped in liver","proc","RNA processing: that is alternative splicing."],["Poly A tail shortened, then the cap removed","transl","mRNA life: these steps start mRNA breakdown."],["A miRNA binds the 3′ UTR of an mRNA","transl","mRNA life and translation: miRNAs block translation or speed decay."],
+   ["IRP blocks ribosomes on ferritin mRNA","transl","Translation: control at initiation by a 5′ UTR binding protein."],["Proinsulin is cut into insulin","prot","Protein: processing after translation activates insulin."],["Ubiquitin tags a cyclin for the proteasome","prot","Protein: tagged proteins are destroyed by the proteasome."]]},
+ {name:"Bacteria, eukaryotes or both",goal:"Decide where each feature of gene regulation is found.",bins:[["bact","Bacteria"],["euk","Eukaryotes"],["both","Both"]],
+  cards:[["Several genes under one promoter in an operon","bact","Bacteria: operons are a bacterial specialty; eukaryotes rarely have them."],["A repressor binds an operator next to the genes","bact","Bacteria: operator and repressor switches, as in lac and trp."],["CAP with cAMP boosts transcription","bact","Bacteria: CAP is the E. coli activator for the lac operon."],
+   ["Ribosomes start on an mRNA still being made","bact","Bacteria: with no nucleus, transcription and translation overlap."],["Histone acetylation and deacetylation","euk","Eukaryotes: histones and nucleosomes are eukaryotic."],["Enhancers thousands of bases away, reached by looping","euk","Eukaryotes: distant enhancers and the mediator are typical of eukaryotes."],
+   ["Alternative splicing of introns","euk","Eukaryotes: most bacterial genes have no introns."],["microRNAs cut from hairpins by Dicer","euk","Eukaryotes: miRNAs and Dicer are eukaryotic."],["mRNA processed in the nucleus before export","euk","Eukaryotes: capping, tail and splicing happen in the nucleus."],
+   ["Most control happens at the start of transcription","both","Both: starting transcription is the most common control point."],["Activator proteins that bind DNA and help RNA polymerase","both","Both: CAP in bacteria, many activators in eukaryotes."],["A small molecule changes a regulatory protein's shape","both","Both: allolactose and tryptophan in bacteria, steroid hormones in eukaryotes."]]},
+ {name:"Oncogene or tumor suppressor",goal:"Is each change an oncogene (accelerator stuck on) or loss of a tumor suppressor (brakes gone)?",bins:[["onc","Oncogene"],["tsg","Tumor suppressor lost"]],
+  cards:[["Ras locked in its active form","onc","Oncogene: Ras keeps signalling with no growth factor."],["Many extra copies of a growth factor receptor gene","onc","Oncogene: gene amplification makes too much receptor."],["MYC gene moved next to a strong promoter","onc","Oncogene: a translocation raises expression."],["Receptor that signals with no growth factor","onc","Oncogene: a gain of function in the signalling pathway."],["One mutant copy is enough","onc","Oncogene: gain of function changes act even with a normal copy."],
+   ["Both copies of p53 lost","tsg","Tumor suppressor: without p53, damaged cells are not stopped."],["Inherited BRCA1 mutation plus a second hit","tsg","Tumor suppressor: BRCA1 helps repair DNA; both copies lost."],["APC lost in colon cells","tsg","Tumor suppressor: APC loss starts the colorectal sequence."],["The cell can no longer make p21","tsg","Tumor suppressor: p21 halts the cell cycle after damage."],["Usually both copies must be lost","tsg","Tumor suppressor: one working copy usually still makes enough protein."]]},
+ {name:"Development toolkit",goal:"Match each observation to the developmental mechanism it shows.",bins:[["det","Cytoplasmic determinant"],["ind","Induction"],["morph","Morphogen gradient"],["hox","Homeotic (Hox) gene"]],
+  cards:[["Maternal mRNAs packed into one half of the egg","det","Cytoplasmic determinants: uneven egg contents."],["Daughter cells of the zygote inherit different cytoplasm","det","Cytoplasmic determinants: each cell gets a different share."],["A cell's fate changes when it is moved next to new neighbours","ind","Induction: signals from nearby cells."],["A signal from one tissue binds receptors on another","ind","Induction: cell to cell signalling changes gene expression."],
+   ["Bicoid protein high at the head end, low at the tail","morph","Morphogen gradient: concentration gives position."],["Threshold levels switch on different genes along the axis","morph","Morphogen gradient: thresholds make sharp bands."],["Nuclei read their position from how much protein they see","morph","Morphogen gradient: positional information."],
+   ["Legs grow where antennae belong","hox","Homeotic gene: the Antennapedia mutation."],["Genes lie on the chromosome in head to tail order","hox","Hox genes: colinearity."],["Homeodomain transcription factors set segment identity","hox","Homeotic genes encode homeodomain proteins."]]}
+];
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{}};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();const R=SROUNDS[i];SG.order=shuffle(R.cards.map((c,k)=>k));
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${binSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sRender();sTimerUI();a11yKey=""}
+function sRender(){const R=SROUNDS[SG.r];const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";items.appendChild(s)}})});
+  const n=Object.keys(SG.placed).length,tot=R.cards.length;$("#sStars").textContent=n===tot?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",n===tot?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";sMsg("good",`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();sRender()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(Object.keys(SG.placed).length<SROUNDS[SG.r].cards.length)$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= PART 5: regulation in the real world ================= */
+const LS={i:0,ans:{},t0:0,tr:0};
+function barsGraph(g,data,T,o){o=o||{};const n=data.length;const bw=g.w/n*.55;const grow=smooth(seg(LS.tr,.3,2.5));
+  data.forEach((d,i)=>{const cx=g.x+g.w*(i+.5)/n;const v=d.v*grow;rr(cx-bw/2,g.Y(v),bw,g.Y(0)-g.Y(v),3);ctx.fillStyle=d.c;ctx.fill();
+    if(d.e!=null&&grow>.95){line(cx,g.Y(d.v-d.e),cx,g.Y(d.v+d.e),C.ink,1.6);line(cx-7,g.Y(d.v+d.e),cx+7,g.Y(d.v+d.e),C.ink,1.6);line(cx-7,g.Y(d.v-d.e),cx+7,g.Y(d.v-d.e),C.ink,1.6)}
+    if(grow>.95)label(cx,g.Y(d.v+(d.e||0))-14,o.fmt?o.fmt(d.v):String(d.v),{size:11.5,weight:700,mono:true});wrapText(d.n,cx-g.w/n/2+6,g.y+g.h+16,g.w/n-12,14,{size:11,weight:600,align:"left"})})}
+const LIFE=[
+{name:"A family and BRCA1",who:"Scenario 1 · genetic counselling",
+ story:"Maya is 32. Her mother was diagnosed with breast cancer at 41, and testing found a harmful BRCA1 mutation. Her grandmother on her mother's side also had breast cancer. Maya and her brother Leo meet a genetic counsellor to talk about testing.",
+ cap:"A pedigree with question marks over Maya and Leo, a cross showing a one in two chance, and cells with one hit each.",
+ note:"Fictional family. Risk figures are rounded from published estimates; real counselling uses personal and family details.",
+ desc:"On the left, a three generation pedigree: the grandmother's circle is filled for breast cancer; the mother's circle is filled and marked BRCA1; Maya's circle and Leo's square each carry a question mark. In the middle, a cross between the mother, one mutant allele marked in red and one normal allele, and the father with two normal alleles produces four boxes, two of which carry the red allele, with the label 1 in 2. On the right, a row of body cells each shows one red mutant copy; a lightning flash strikes one cell and its second copy turns red.",
+ draw(T){const t=P(T,10)*10;panelBox(14,14,250,472);levelTag(26,32,"org");title(110,32,"pedigree",C.ink);
+   line(70,86,150,86,C.ink,1.4);pedShape(70,86,false,"full","grandmother");pedShape(150,86,true,null,"");line(110,86,110,140,C.ink,1.4);line(70,140,110,140,C.ink,1.4);line(70,140,70,158,C.ink,1.4);
+   pedShape(70,170,false,"full","mother (BRCA1)");line(82,170,190,170,C.ink,1.4);pedShape(200,170,true,null,"father");
+   line(136,170,136,240,C.ink,1.4);line(90,240,180,240,C.ink,1.4);line(90,240,90,262,C.ink,1.4);line(180,240,180,262,C.ink,1.4);pedShape(90,274,false,null,"Maya, 32");pedShape(180,274,true,null,"Leo");
+   [[90,274],[180,274]].forEach(p=>txt(p[0],p[1],"?",{size:14,weight:700,mono:true,align:"center",color:C["accent-ink"]}));
+   wrapText("filled = had breast cancer",26,340,220,15,{size:11,color:C["ink-soft"]});
+   panelBox(276,14,250,472);levelTag(288,32,"math");title(352,32,"each child",C.ink);
+   txt(400,80,"mother",{size:11.5,weight:700,align:"center"});chipText(372,104,"B*",C.onc,"#fff");chipText(428,104,"b",C.dna,"#fff");txt(318,170,"father",{size:11.5,weight:700,align:"center"});
+   const cells=[["B* b",1],["b b",0],["B* b",1],["b b",0]];cells.forEach((c,i)=>{const x=350+(i%2)*80,y=140+Math.floor(i/2)*70;const on=seg(t,.5+i*.5,1)>0;rr(x,y,70,60,6);fillStroke(on&&c[1]?hexA(C.onc,.18):C.panel,C.rule,1.4);if(on)txt(x+35,y+30,c[0],{size:14,weight:700,mono:true,align:"center",color:c[1]?C["onc-ink"]:C.ink})});
+   chipText(318,170+30,"b",C.dna,"#fff");chipText(318,240,"b",C.dna,"#fff");
+   if(t>2.5)label(400,312,"1 in 2 children carry it",{size:13,weight:700,border:C.onc});wrapText("B* = mutant BRCA1 allele, b = working allele. Inheritance of the risk is dominant.",290,360,224,15,{size:11,color:C["ink-soft"]});
+   panelBox(538,14,248,472);levelTag(550,32,"cell");title(614,32,"in a carrier",C.ink);
+   for(let i=0;i<4;i++){const x=600+(i%2)*90,y=110+Math.floor(i/2)*110;const me=i===3&&t>5;circ(x,y,34,C.cyto,C.lipid,2);rr(x-14,y-18,8,36,4);ctx.fillStyle=C.onc;ctx.fill();rr(x+6,y-18,8,36,4);ctx.fillStyle=me?C.onc:C.dna;ctx.fill();
+     if(i===3&&t>4.4&&t<5.4)poly([[x+20,y-60],[x+8,y-40],[x+22,y-40],[x+10,y-22]],C.atp,3)}
+   wrapText(t>5?"A second hit in one cell removes its last working copy.":"Every cell has one mutant copy and one working copy.",552,360,222,16,{size:12,weight:600})},
+ qs:[{q:"Before testing, what is the chance that Maya inherited her mother's BRCA1 mutation?",opts:[["1 in 2 (50%)",1,"Yes. Her mother has one mutant and one working copy, so each child has a 1 in 2 chance."],["1 in 4 (25%)",0,"That would fit two carrier parents and a recessive trait. Here only one parent carries it, and one copy is enough to pass on the risk."],["Certain (100%)",0,"Her mother passes on only one of her two copies, chosen at random."],["About 13%",0,"That is roughly the general population's lifetime breast cancer risk, not the chance of inheriting a mutation."]]},
+  {q:"Maya tests positive. Which statement is accurate?",opts:[["Her lifetime risk is much higher, but cancer is not certain, because a cell still needs a second hit",1,"Right. Every cell starts with one working copy, so a further mutation is needed in a cell."],["She will definitely develop breast cancer",0,"Carriers have a high risk, often quoted around 45 to 70%, but not 100%."],["All her cells are already cancer cells",0,"Her cells work normally; they have one working BRCA1 copy."],["Her risk is the same as anyone else's",0,"Carriers have a much higher risk than the general population."]]},
+  {q:"Leo asks whether this matters for him as a man. What is the best answer?",opts:[["Yes. He has a 1 in 2 chance of carrying it, could pass it to each child with a 1 in 2 chance, and carriers have higher risk of some cancers",1,"Right. BRCA1 is on an autosome (chromosome 17), so men inherit and pass it on equally."],["No. BRCA1 is on the X chromosome, so men cannot carry it",0,"BRCA1 is on chromosome 17, an autosome, not the X."],["Men can carry it but never pass it on",0,"Fathers pass on autosomal alleles just like mothers."],["Only daughters can inherit BRCA1 mutations",0,"Sons and daughters inherit it with the same 1 in 2 chance."]]}]},
+{name:"Diet, methylation and agouti mice",who:"Scenario 2 · research lab data",
+ story:"Mice with the viable yellow agouti allele have a jumping gene sequence just upstream of the agouti gene. When that region is unmethylated, agouti is expressed everywhere and the mice are yellow, obese and prone to diabetes. When it is methylated, they are brown (called pseudoagouti) and lean. In a well known experiment, pregnant mothers ate a normal diet or a diet with extra methyl donors such as folic acid, vitamin B12, choline and betaine. The graph shows the coat colours of their genetically identical pups.",
+ cap:"A yellow, heavy mouse and a brown, lean mouse with the same DNA; bars compare pup coat colours for two maternal diets.",
+ note:"Percentages are simplified for teaching but follow the direction of the published results.",
+ desc:"On the left, two mice with the same DNA: a large yellow mouse above a short DNA strip with no methyl marks and the agouti gene glowing, and a smaller brown mouse above a DNA strip with magenta methyl marks and the gene grey. On the right, a bar graph with two groups of four bars, normal diet and methyl donor diet, for yellow, slightly mottled, heavily mottled and brown pups. For the normal diet the bars read 40, 30, 20 and 10 percent; for the methyl donor diet 15, 25, 30 and 30 percent, so the brown bar is three times taller.",
+ draw(T){panelBox(14,14,270,472);levelTag(26,32,"org");title(110,32,"same DNA",C.ink);
+   mouse(150,130,40,C.fur1,{fat:1.3});dnaH(50,240,200,{h:4});region(150,236,200,C.dna,"agouti",{tc:"#fff",h:8,size:10});glow(193,200,30,C.atp,.3+.2*Math.sin(T*3));txt(150,226,"unmethylated: gene ON",{size:11.5,weight:700,align:"center",color:C["onc-ink"]});
+   mouse(150,320,32,C.fur2,{});dnaH(50,240,390,{h:4});for(let i=0;i<5;i++)methylTag(70+i*16,390,true,.8);region(150,236,390,OFFG(),"agouti",{tc:C.ink,h:8,size:10});txt(150,418,"methylated: gene quiet",{size:11.5,weight:700,align:"center",color:C["meth-ink"]});
+   panelBox(296,14,490,472);levelTag(308,32,"data");title(380,32,"pup coat colours by maternal diet",C.ink);
+   const g=graph({x:350,y:70,w:420,h:300,x0:0,x1:1,y0:0,y1:50,yt:[0,10,20,30,40,50],yf:v=>v+"%",yl:"share of pups",ylx:40});
+   const cls=[["yellow",C.fur1],["slightly mottled",mix(C.fur1,C.fur2,.33)],["heavily mottled",mix(C.fur1,C.fur2,.66)],["brown",C.fur2]];const ctl=[40,30,20,10],sup=[15,25,30,30];const grow=smooth(seg(LS.tr,.3,2.5));
+   [[ctl,"normal diet",0],[sup,"methyl donor diet",1]].forEach(gr=>{gr[0].forEach((v,i)=>{const x=g.x+20+gr[2]*215+i*46;const vv=v*grow;rr(x,g.Y(vv),38,g.Y(0)-g.Y(vv),3);ctx.fillStyle=cls[i][1];ctx.fill();ctx.strokeStyle=hexA(C.ink,.4);ctx.lineWidth=1;ctx.stroke();if(grow>.95)txt(x+19,g.Y(v)-10,v+"%",{size:11,weight:700,mono:true,align:"center"})});
+     txt(g.x+20+gr[2]*215+92,g.y+g.h+18,gr[1],{size:12,weight:700,align:"center"})});
+   cls.forEach((c,i)=>{const x=320+i*118;rr(x,446,14,14,3);ctx.fillStyle=c[1];ctx.fill();txt(x+20,453,c[0],{size:11,weight:600})})},
+ qs:[{q:"These pups have the same DNA sequence. What best explains their different coat colours?",opts:[["Different amounts of methylation near the agouti gene change how much it is expressed",1,"Yes. Methylation silences the upstream sequence that drives agouti everywhere."],["They carry different agouti alleles",0,"The pups are genetically identical at this gene; the difference is epigenetic."],["The diet changed the DNA sequence",0,"Methyl donors change methylation, not the base sequence."],["Yellow mice are missing the agouti gene",0,"Yellow mice over express agouti; they certainly have the gene."]]},
+  {q:"According to the graph, what happened in the methyl donor group?",opts:[["A larger share of pups were brown: 30% versus 10%",1,"Right. The brown bar is three times taller, and yellow pups fell from 40% to 15%."],["Fewer pups were brown",0,"Compare the brown bars: 10% on the normal diet, 30% with methyl donors."],["Every pup was yellow",0,"All four colour classes appear in both groups."],["The share of yellow pups went up",0,"Yellow fell from 40% to 15%."]]},
+  {q:"Which conclusion does this experiment support?",opts:[["A mother's diet during pregnancy can shift her offspring's gene expression by changing DNA methylation",1,"Right. Same genes, different epigenetic marks, different traits."],["Folic acid causes mutations in the agouti gene",0,"No sequence change is needed to explain the results."],["Coat colour is not affected by genes at all",0,"The agouti gene controls colour; methylation changes how much it is expressed."],["Methylation patterns are fixed and never change",0,"The experiment shows they can be shifted by the environment."]]}]},
+{name:"Bicoid dose and the head boundary",who:"Scenario 3 · read the experiment",
+ story:"Researchers changed how many copies of the bicoid gene mother flies carried: 1 copy, the normal 2, or 4. They measured bicoid protein along the embryo and noted where the boundary between head and thorax formed. Assume head genes switch on wherever bicoid is above one fixed threshold.",
+ cap:"Three bicoid gradients of different heights cross the same threshold at different places, moving the head boundary.",
+ note:"Simplified from classic gene dosage experiments. Curves are drawn from a simple model, not real measurements.",
+ desc:"At the top, a graph of bicoid protein against position from head to tail shows three falling curves: a low one for 1 copy, a middle one for 2 copies and a high one for 4 copies. A dashed horizontal threshold line crosses each curve at a different point, marked by a dot and a vertical line: closest to the head for 1 copy and farthest toward the tail for 4 copies. Below, three oval embryos are shaded teal from the head end up to their boundary, so the teal head region gets longer as the number of copies rises.",
+ draw(T){panelBox(14,14,772,472);levelTag(26,32,"data");title(110,32,"bicoid protein along the embryo",C.ink);
+   const lam=.2,th=.192;const doses=[[.5,"1 copy",C.act8],[1,"2 copies",C.accent],[2,"4 copies",C.prot]];const g=graph({x:90,y:70,w:640,h:200,x0:0,x1:1,y0:0,y1:2.1,xt:[0,.5,1],xf:v=>v===0?"head":v===1?"tail":"middle",yt:[0,1,2],yl:"bicoid (relative)",ylx:60});
+   const pr=smooth(seg(LS.tr,.3,3.5));line(g.x,g.Y(th),g.x+g.w,g.Y(th),C.warn,1.8,[6,4]);txt(g.x+g.w-4,g.Y(th)-10,"threshold for head genes",{size:11,weight:700,align:"right",color:C["warn-ink"]});
+   doses.forEach((d,i)=>{curve(g,x=>d[0]*Math.exp(-x/lam),0,pr,d[2],3);const xb=lam*Math.log(d[0]/th);if(pr>xb){gdot(g,xb,th,d[2],"",{});line(g.X(xb),g.Y(th),g.X(xb),g.y+g.h,hexA(d[2],.7),1.4,[3,3])}label(g.X(.04)+40,g.Y(d[0]*Math.exp(-.04/lam)),d[1],{size:11,weight:700,border:d[2]})});
+   doses.forEach((d,i)=>{const y=330+i*52;const xb=lam*Math.log(d[0]/th);ell(410,y,320,20,0,C.cyto,C.lipid,2);ctx.save();ctx.beginPath();ctx.ellipse(410,y,318,18,0,0,TAU);ctx.clip();ctx.fillStyle=hexA(C.act4,.55);if(pr>xb)ctx.fillRect(90,y-20,640*xb,40);ctx.restore();
+     txt(60,y,d[1],{size:11.5,weight:700,align:"center"});if(pr>xb)txt(90+640*xb+8,y,"boundary",{size:10.5,weight:600,color:C["ink-soft"]})});},
+ qs:[{q:"With 4 copies of bicoid, where does the head to thorax boundary form compared with normal?",opts:[["Farther toward the tail, because the threshold is reached farther back",1,"Yes. More bicoid means the high level stretches farther, so head fates extend farther back."],["Closer to the head end",0,"That is the 1 copy result. With 4 copies, the curve is higher everywhere."],["In exactly the same place",0,"If the boundary did not move, concentration would not matter. The model and the experiments show it moves."],["No head forms at all",0,"No head forms when bicoid is missing, not when there is extra."]]},
+  {q:"Which observation best supports the idea that bicoid works by concentration, not just presence?",opts:[["The boundary moves when the bicoid dose changes",1,"Right. If only presence mattered, the boundary would not shift with dose."],["Bicoid mRNA is anchored at the head end",0,"True, but that shows where it starts, not that the amount matters."],["Bicoid protein is a transcription factor",0,"True, but it does not test the concentration idea."],["Flies have heads",0,"That is not evidence for any particular model."]]},
+  {q:"Embryos from a mother with no working bicoid copies, fertilized by a normal father, would develop:",opts:[["No head or thorax, with tail structures at both ends",1,"Right. Bicoid is a maternal effect gene: the embryo uses the mother's mRNA, so the father's copy cannot help in time."],["Normally, because the father's bicoid gene works",0,"The pattern is set before the embryo's own genes switch on, using the mother's bicoid mRNA."],["Two heads",0,"Two heads come from adding bicoid to the tail end, not removing it."],["A normal head but no tail",0,"Without bicoid, head structures are missing."]]}]},
+{name:"Reading a gene expression bar graph",who:"Scenario 4 · research lab data",
+ story:"A lab grows liver cells and measures mRNA from gene G by qPCR, a method that counts mRNA copies. Values are fold change compared with untreated cells, as the mean of 3 dishes with error bars showing the spread. Groups: no treatment, a steroid hormone, the hormone plus a drug that blocks its receptor, and the drug alone.",
+ cap:"Bars show gene G mRNA: about 1 for control, 8 for hormone, 1.4 for hormone plus blocker and 0.9 for the blocker alone.",
+ note:"Made up data for practice.",
+ desc:"On the left, a liver cell with a nucleus: gold steroid hormone molecules enter, bind violet receptors and land on a gene with a gold response element, which makes orange mRNA. On the right, a bar graph of gene G mRNA, fold change, with four bars and error bars: no treatment about 1.0, hormone about 8.0, hormone plus blocker about 1.4, and blocker alone about 0.9. The hormone bar is by far the tallest.",
+ draw(T){panelBox(14,14,250,472);levelTag(26,32,"cell");title(110,32,"liver cell",C.ink);euCell(139,220,104,150,{nr:46,seed:2});
+   dnaH(110,190,236,{h:3.5});rr(104,228,16,16,3);ctx.fillStyle=C.gold;ctx.fill();region(124,186,236,C.dna,"G",{tc:"#fff",h:7,size:10});
+   for(let i=0;i<3;i++){const p=P(T*.5+i/3,1);const X=lerp(30,112,smooth(p)),Y=lerp(110+i*60,222,smooth(p));steroid(X,Y,4.5);if(p>.4)activator(X+4,Y+10,9,{T,seed:i+1})}
+   if(P(T,3)<.9)mrna(130,212,50*P(T,3)/.9,T,{amp:1.5});wrapText("Hormone and receptor bind the response element (gold) and switch gene G on.",26,400,226,15,{size:11.5,color:C["ink-soft"]});
+   panelBox(276,14,510,472);levelTag(288,32,"data");title(370,32,"gene G mRNA (fold change)",C.ink);
+   const g=graph({x:330,y:70,w:430,h:320,x0:0,x1:1,y0:0,y1:10,yt:[0,2,4,6,8,10],yl:"fold change vs untreated",ylx:40});
+   barsGraph(g,[{n:"no treatment",v:1.0,e:.2,c:C.act8},{n:"hormone",v:8.0,e:1.1,c:C.lipid},{n:"hormone + blocker",v:1.4,e:.3,c:C.capp},{n:"blocker alone",v:.9,e:.2,c:mix(C.capp,C.panel,.4)}],T,{fmt:v=>v.toFixed(1)});
+   line(g.x,g.Y(1),g.x+g.w,g.Y(1),hexA(C.ink,.4),1.2,[4,4]);txt(g.x+g.w-4,g.y+10,"dashed line: 1 = no change",{size:10.5,align:"right",color:C["ink-soft"]})},
+ qs:[{q:"By how much did the hormone change gene G mRNA, compared with no treatment?",opts:[["About 8 fold higher",1,"Right. 8.0 ÷ 1.0 = 8 fold. Fold change divides; it does not subtract."],["7 fold higher (8 minus 1)",0,"Subtracting gives the difference, not the fold change. 8.0 ÷ 1.0 = 8."],["0.125 fold",0,"That divides the wrong way. Put the treated value on top."],["80 fold higher",0,"The bar reads 8, not 80. Check the axis."]]},
+  {q:"What does the hormone + blocker bar suggest?",opts:[["The hormone works through its receptor; blocking the receptor removes most of the increase",1,"Right. 1.4 is close to 1, so little induction happens without a working receptor."],["The blocker raises gene G by itself",0,"The blocker alone bar is about 0.9, close to 1."],["The hormone has no effect on gene G",0,"The hormone alone raised gene G about 8 fold."],["Gene G is not expressed in liver cells",0,"Untreated cells have gene G mRNA; the value is the baseline of 1."]]},
+  {q:"Why did the researchers include a blocker alone group?",opts:[["To check that the drug does not change gene G expression on its own",1,"Right. This control shows the blocker's effect in the hormone group is not just a side effect."],["To have more dishes for the average",0,"Each group already has 3 dishes. This group tests a different question."],["To measure how much hormone the cells made",0,"No hormone is added to that group."],["Because qPCR always needs four groups",0,"The number of groups depends on the question, not on the method."]]}]}
+];
+function lifeUI(){const S=LIFE[LS.i];LS.t0=performance.now();$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;$("#lifeNote").textContent=S.note;
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]?'<span class="ok" aria-label="all answered">✓</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-label="all answered">✓</span>')}
+function drawLife(now){use(S5);LS.tr=(now-LS.t0)/1000;LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvLac",800,640),S2=makeStage("cvEuk",800,620),S3=makeStage("cvCalc",800,600),S5=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+const A11Y={lac:{cv:"#cvLac",f:lacA11y},euk:{cv:"#cvEuk",f:eukA11y},calc:{cv:"#cvCalc",f:calcA11y},sort:{cv:null,f:sortA11y},life:{cv:"#cvLife",f:lifeA11y}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(a.cv&&lab)$(a.cv).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=a.cv?$(a.cv).closest(".canvas-holder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(a.cv)$(a.cv).setAttribute("aria-describedby","gk-desc")}}
+/* ---------------- tabs / theme / loop ---------------- */
+let curTab="lac";
+const TABS=["lac","euk","calc","sort","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S3,S5].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+function frame(now){
+  try{if(curTab==="lac")drawLac(now);else LB.last=null;if(curTab==="euk")drawEuk(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__ev={tab:k=>showTab(k),lacSet:o=>{Object.assign(LB,o);lacSync()},lac:()=>({B:LB.B,m:lacModel(LB),chal:[...LB.chal]}),lacModel:s=>lacModel(s),eukSet:o=>{Object.assign(EK,o);eukSync()},euk:()=>({m:eukModel(EK),chal:[...EK.chal]}),
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,kind:TR.p.kind,vis:TR.p.vis,opts:TR.p.opts.map(o=>o[0])}),
+  gen:t=>{const q=genOne(t);const good=judge(q,q.ans);const bads=q.opts.filter(o=>o[0]!==q.ans).map(o=>judge(q,o[0]));return {ans:q.ans,vis:q.vis,ok:good.ok,badsRejected:bads.every(b=>!b.ok),msgs:bads.map(b=>b.msg),empty:judge(q,null).ok,hints:q.hints.length,rows:q.rows.length,html:q.html,hintsTxt:q.hints.join(" "),rowsTxt:q.rows.map(r=>r.l||r.ans).join(" ")}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards.length}),lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();lacInit();eukInit();calcInit();calcNew();updCalcMeter();sLoad(0);lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

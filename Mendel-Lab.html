@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mendelian Genetics Lab</title>
+<meta name="description" content="Mendelian genetics lab: a cross simulator for one to three genes with chosen dominance patterns, animated gametes, live observed versus expected bars and a chi-square readout; a randomized Punnett, probability, chi-square and pedigree trainer with animated worked solutions; an inheritance pattern matching game; and real-world genetics scenarios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="bio1-kit.js"></script>
+<style>
+:root{
+  --ground:#E3E7EA;--panel:#F7F9FA;--panel-2:#EDF1F3;--sunk:#D5DBDF;
+  --ink:#10161A;--ink-soft:#57666F;--ink-faint:#566570;--rule:#C4CDD3;--rule-soft:#D9E0E4;
+  --accent:#136B6E;--accent-ink:#0F5759;--accent-wash:#DCEFEE;
+  --warn:#A36A10;--warn-wash:#F6ECD6;--bad:#A9372F;--bad-wash:#F7DFDC;--good:#2F6F4F;--good-wash:#DEEDE4;--on-accent:#fff;--warn-ink:#7A4E08;
+  --act1:#3E9B4F;--act2:#2F7FC1;--act3:#B07A10;--act4:#2E8A7A;--act5:#7B5CC9;--act6:#B8561A;--act7:#A04E8C;--act8:#5E7183;
+  --gold:#C9A227;--gold-wash:#F6EFD3;--gold-ink:#7A6000;
+  --ecf:#EEF1F6;--grid:#D5DAE6;--paper:#FFFDF7;
+  --dna:#2F6FC1;--rna:#E07A1F;--prot:#C0455A;--lipid:#D9A520;--carb:#E08A1E;--atp:#E3B505;--elec:#1FA7C4;--water:#5FA8DC;--plant:#3E9B4F;
+  --dna-ink:#1D4F92;--rna-ink:#9A4A00;--prot-ink:#9B2C40;--lipid-ink:#6E5800;--plant-ink:#2A6B37;
+  --purp:#7B4FB0;--purp-ink:#5B3490;--wfl:#FBFAFD;--wfl-edge:#8C84A0;--red-fl:#C8323A;--pink-fl:#EE9AB8;--blue-fl:#4F7FD0;
+  --seedY:#E6C229;--seedG:#5E9E3A;--pod:#5E9E3A;--stem:#4E8A3A;--leaf:#5FA845;--soil:#8A6A4A;--sky:#DDEBF5;
+  --mat:#C0457E;--mat-ink:#9A2A60;--pat:#2F7FC1;--pat-ink:#1D4F92;--cent:#3A4550;
+  --obs:#136B6E;--exp:#B07A10;--exp-ink:#7A5200;--tail:#C8452B;
+  --aff:#2E3A44;--unaff:#FFFFFF;--carr:#8A97A2;
+  --rbc:#C8453F;--rbc-in:#E07A70;--hbs:#7B2A2A;--agA:#2F6FC1;--agB:#E07A1F;--mosq:#4A4F55;--malaria:#E8B04A;
+  --dogBlk:#26221F;--dogChoc:#7A4A2A;--dogYel:#E3BE78;--melan:#3A2A20;
+  --skin1:#E8C2A0;--skin2:#B98462;--skin3:#7A5038;--hair:#3D3029;--shirt1:#4F7FA8;--shirt2:#A0577A;--shirt3:#5E8A4A;--shirt4:#8C6BB0;
+  --cell:#F3E9DA;--cell-edge:#B98A6A;--nuc:#E2DCEF;--nuc-edge:#7B6AA8;--cyto:#F6EEE4;--mem:#D9A520;
+  --enz:#C0455A;--enz-2:#E48A9A;--pig:#6A3FA0;--pre:#B9B2C4;--cl:#2E9A7A;--mucus:#B8C77A;
+  --shadow:0 1px 2px rgba(16,22,26,.08),0 6px 18px -8px rgba(16,22,26,.18);
+  --r:6px;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#11302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#6CCB7C;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#F0985A;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#5E9BEB;--rna:#F2A25A;--prot:#EE7A8C;--lipid:#EBC452;--carb:#F2A24A;--atp:#F2D44A;--elec:#4FD0EA;--water:#7FC0EE;--plant:#6CCB7C;
+  --dna-ink:#8CB8F2;--rna-ink:#F5B87A;--prot-ink:#F49AA8;--lipid-ink:#F0D27A;--plant-ink:#8AD898;
+  --purp:#A98BEF;--purp-ink:#C4AEF6;--wfl:#E8E4F0;--wfl-edge:#8C84A0;--red-fl:#E8606A;--pink-fl:#F2A8C6;--blue-fl:#7FA6EC;
+  --seedY:#EBCF4A;--seedG:#7FBF5A;--pod:#6FAE4A;--stem:#6FAE4A;--leaf:#6EB85A;--soil:#7A5C40;--sky:#16252F;
+  --mat:#E07AAE;--mat-ink:#F0A2C8;--pat:#5AA9E6;--pat-ink:#8CC6F2;--cent:#C8D3DA;
+  --obs:#6FD6D6;--exp:#E8BE5A;--exp-ink:#E8BE5A;--tail:#F07A5E;
+  --aff:#C8D3DA;--unaff:#172026;--carr:#6F7E89;
+  --rbc:#E0605A;--rbc-in:#B84A44;--hbs:#F0A0A0;--agA:#5E9BEB;--agB:#F2A25A;--mosq:#A9B3BA;--malaria:#C8963A;
+  --dogBlk:#3A3532;--dogChoc:#9A6A4A;--dogYel:#E0B870;--melan:#C8A890;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--hair:#1E1814;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --cell:#2E2A24;--cell-edge:#C9A07E;--nuc:#2A2638;--nuc-edge:#A99BD8;--cyto:#26221E;--mem:#EBC452;
+  --enz:#EE7A8C;--enz-2:#B85A6A;--pig:#B89AF2;--pre:#6F6A7A;--cl:#5CC4B0;--mucus:#8A9A50;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1519;--panel:#172026;--panel-2:#1D282F;--sunk:#0A1014;
+  --ink:#E8EEF1;--ink-soft:#A3B2BA;--ink-faint:#8D9EA7;--rule:#2C3A42;--rule-soft:#24313A;
+  --accent:#6FD6D6;--accent-ink:#8FE3E3;--accent-wash:#11302F;
+  --warn:#E0B04E;--warn-wash:#352A12;--bad:#E07067;--bad-wash:#3B1E1B;--good:#6BC293;--good-wash:#17301F;--on-accent:#0B1A20;--warn-ink:#E8BE62;
+  --act1:#6CCB7C;--act2:#5AA9E6;--act3:#E8BE5A;--act4:#5CC4B0;--act5:#A98BEF;--act6:#F0985A;--act7:#D186C0;--act8:#A9B7C2;
+  --gold:#E0BE48;--gold-wash:#352E14;--gold-ink:#E0BE48;
+  --ecf:#131A22;--grid:#26303D;--paper:#1E262B;
+  --dna:#5E9BEB;--rna:#F2A25A;--prot:#EE7A8C;--lipid:#EBC452;--carb:#F2A24A;--atp:#F2D44A;--elec:#4FD0EA;--water:#7FC0EE;--plant:#6CCB7C;
+  --dna-ink:#8CB8F2;--rna-ink:#F5B87A;--prot-ink:#F49AA8;--lipid-ink:#F0D27A;--plant-ink:#8AD898;
+  --purp:#A98BEF;--purp-ink:#C4AEF6;--wfl:#E8E4F0;--wfl-edge:#8C84A0;--red-fl:#E8606A;--pink-fl:#F2A8C6;--blue-fl:#7FA6EC;
+  --seedY:#EBCF4A;--seedG:#7FBF5A;--pod:#6FAE4A;--stem:#6FAE4A;--leaf:#6EB85A;--soil:#7A5C40;--sky:#16252F;
+  --mat:#E07AAE;--mat-ink:#F0A2C8;--pat:#5AA9E6;--pat-ink:#8CC6F2;--cent:#C8D3DA;
+  --obs:#6FD6D6;--exp:#E8BE5A;--exp-ink:#E8BE5A;--tail:#F07A5E;
+  --aff:#C8D3DA;--unaff:#172026;--carr:#6F7E89;
+  --rbc:#E0605A;--rbc-in:#B84A44;--hbs:#F0A0A0;--agA:#5E9BEB;--agB:#F2A25A;--mosq:#A9B3BA;--malaria:#C8963A;
+  --dogBlk:#3A3532;--dogChoc:#9A6A4A;--dogYel:#E0B870;--melan:#C8A890;
+  --skin1:#C99A78;--skin2:#9A6A4C;--skin3:#6A4632;--hair:#1E1814;--shirt1:#5A8FBF;--shirt2:#B9698F;--shirt3:#6E9E58;--shirt4:#9C7FC4;
+  --cell:#2E2A24;--cell-edge:#C9A07E;--nuc:#2A2638;--nuc-edge:#A99BD8;--cyto:#26221E;--mem:#EBC452;
+  --enz:#EE7A8C;--enz-2:#B85A6A;--pig:#B89AF2;--pre:#6F6A7A;--cl:#5CC4B0;--mucus:#8A9A50;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.topbar{background:var(--panel);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+h1{font-family:var(--serif);font-weight:600;font-size:26px;margin:2px 0 0;line-height:1.2}
+.sub{margin:2px 0 0;color:var(--ink-soft);font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:9px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tbtn{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:8px 13px;cursor:pointer;font-size:14.5px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn:disabled{opacity:.45;cursor:default}
+.tbtn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r);padding:10px 18px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.45;cursor:default}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.stage{padding:10px}
+.canvas-holder{width:100%;border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft);background:var(--ecf)}
+canvas{display:block;width:100%;touch-action:manipulation}
+.stagebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:14px;color:var(--ink-soft)}
+.caption{flex:1 1 220px;font-size:14px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 4px 2px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.legend i.s{border-radius:2px}
+.legend i.ln{width:20px;height:0;border-radius:0;border:0;border-top:3px solid}
+.legend i.t{width:0;height:0;border-radius:0;border:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid;background:none!important}
+.rounds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.round{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:14px}
+.round[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.round .ok{color:var(--gold-ink);margin-left:4px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.mode input{accent-color:var(--accent);width:18px;height:18px}
+.lvl-n{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.lvl-t{font-family:var(--serif);font-size:22px;font-weight:600;margin:4px 0 8px;line-height:1.25}
+.goal{background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px;margin:0 0 10px;font-size:15px}
+.goal b.h{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);margin-bottom:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.msg{margin:10px 0 0;padding:10px 12px;border-radius:var(--r);font-size:15px;display:none}
+.msg.show{display:block}
+.msg.good{background:var(--good-wash);color:var(--ink);border:1px solid var(--good)}
+.msg.warn{background:var(--warn-wash);color:var(--ink);border:1px solid var(--warn)}
+.msg.info{background:var(--panel-2);color:var(--ink);border:1px solid var(--rule)}
+.stars{font-size:22px;letter-spacing:2px;color:var(--gold-ink)}
+.side h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px}
+.side p,.side li{font-size:14.5px}
+.side ul{padding-left:18px;margin:6px 0}
+.small{font-size:13px;color:var(--ink-soft)}
+.typebtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.typebtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 0;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:15px}
+.typebtn:hover{border-color:var(--accent)}
+.typebtn.right{border-color:var(--good);background:var(--good-wash)}
+.typebtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.typebtn:disabled{cursor:default}
+.prog{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.timer{font-family:var(--mono);font-size:18px;font-weight:600}
+/* bags */
+.bags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.bag{position:relative;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:6px 4px 4px;cursor:grab;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-weight:700;font-size:14px}
+.bag svg{width:34px;height:44px;display:block}
+.bag.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.bag.ok{border-color:var(--good);background:var(--good-wash)}
+.bag.no{border-color:var(--warn);background:var(--warn-wash)}
+.bag .mk{position:absolute;top:3px;right:5px;font-size:13px}
+.bag.ghost{position:fixed;z-index:50;pointer-events:none;opacity:.9;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.droptarget{outline:3px dashed var(--accent);outline-offset:-3px}
+.abbox{background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;font-size:14.5px;margin-top:10px}
+/* sim */
+.ctl{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ctl label{font-size:14.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--mono);font-weight:600;color:var(--accent-ink)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+.readouts{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.readouts th{text-align:left;font-weight:500;color:var(--ink-soft);padding:5px 6px 5px 0;border-top:1px solid var(--rule-soft)}
+.srhead th,.srhead td,.readouts caption.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;border:0}
+.readouts td{padding:5px 0;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.chal{list-style:none;padding:0;margin:6px 0}
+.chal li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:14px}
+.chal .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;font-family:var(--mono)}
+.chal li.done .ck{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.status{font-size:14.5px;padding:8px 10px;border-radius:var(--r);margin-top:8px;border:1px solid var(--rule);background:var(--panel-2)}
+.status.warn{background:var(--warn-wash);border-color:var(--warn)}
+.status.bad{background:var(--bad-wash);border-color:var(--bad)}
+.status.good{background:var(--good-wash);border-color:var(--good)}
+/* sequencer */
+ol.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.item{display:flex;align-items:center;gap:10px;background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--act4);border-radius:var(--r);padding:7px 8px 7px 10px;touch-action:none;user-select:none;cursor:grab;transition:background .15s,border-color .15s}
+.item.drag{box-shadow:0 10px 24px -8px rgba(0,0,0,.4);cursor:grabbing;border-color:var(--accent);z-index:2;position:relative}
+.item .pos{font-family:var(--mono);font-size:13px;color:var(--ink-faint);width:20px;text-align:right;flex:0 0 auto}
+.item .grip{color:var(--ink-faint);font-size:18px;line-height:1;flex:0 0 auto}
+.item .txt{flex:1;font-size:15px;line-height:1.35}
+.item .mv{display:flex;flex-direction:column;gap:2px}
+.mv button{width:30px;height:24px;border:1px solid var(--rule);background:var(--panel-2);border-radius:4px;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.mv button:hover{border-color:var(--accent)}
+.item.right{background:var(--good-wash);border-color:var(--good)}
+.item.off{background:var(--warn-wash);border-color:var(--warn)}
+.item.hinted{box-shadow:0 0 0 3px var(--gold)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sc-n{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:var(--serif);font-size:22px;font-weight:600;margin:2px 0 6px}
+.qlab{font-weight:600;margin:12px 0 8px}
+.opts{display:grid;grid-template-columns:1fr;gap:7px}
+.opt{text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-wash)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.fb{margin:8px 0 0;font-size:14.5px;padding:8px 10px;border-radius:4px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-wash);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-wash);border-left:4px solid var(--warn)}
+.explain{margin-top:14px;padding:12px 14px;background:var(--accent-wash);border-left:4px solid var(--accent);border-radius:4px;display:none}
+.explain.show{display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;background:var(--panel-2);cursor:pointer;padding:0}
+.chip.cur{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.chip.done{border-color:var(--good);background:var(--good-wash);color:var(--good)}
+.chip.done.cur{background:var(--accent);color:var(--on-accent)}
+.calm{font-size:13px;color:var(--ink-faint);margin:8px 0 0}
+.subtabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+footer{max-width:1180px;margin:0 auto;padding:6px 16px 28px;font-size:13px;color:var(--ink-faint)}
+footer a{color:var(--ink-soft)}
+kbd{font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+sub,sup{line-height:0}
+[hidden]{display:none!important}
+/* heart lab */
+.sbank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.sbtn{background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:7px 9px;cursor:pointer;font-size:14px;text-align:left;line-height:1.25}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.done{border-color:var(--good);background:var(--good-wash)}
+.sbtn.no{border-color:var(--warn);background:var(--warn-wash)}
+.sbtn.hint{box-shadow:0 0 0 3px var(--gold)}
+.paint{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.paint button{display:inline-flex;align-items:center;gap:8px}
+.paint i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.rhythms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.rhythms .tbtn{text-align:left;font-size:14px;line-height:1.25}
+.mopts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.slwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 4px 0}
+.slwrap input[type=range]{flex:1 1 260px;accent-color:var(--accent)}
+.slwrap output{font-family:var(--mono);font-weight:600;min-width:72px}
+.qcard{margin-top:12px;border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;background:var(--panel-2)}
+.qcard h3{margin-top:0}
+.scen{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.big{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:4px 6px}
+/* genetics case lab */
+.gtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gtgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gbtn{font-family:var(--mono);font-weight:600;font-size:15px;padding:8px 4px;text-align:center}
+.gbtn sup{font-size:10.5px;line-height:0}
+.modes{display:grid;grid-template-columns:1fr;gap:6px}
+.modes .tbtn{text-align:left;line-height:1.3}
+.modes .tbtn small{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.modes .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.kidbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+.kidbtns .btn{padding:10px 6px;font-size:14.5px}
+.readouts td.l{font-family:var(--sans);text-align:left;white-space:normal}
+.readouts thead th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-top:0}
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.casechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.casechip{border:1.5px solid var(--rule);background:var(--panel-2);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px}
+.casechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.casechip .ok{color:var(--good);margin-left:4px;font-weight:700}
+.story{font-size:15.5px;margin:0 0 8px}
+.qblock{border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:10px}
+.hintbox{margin:8px 0 0;padding:8px 10px;border-radius:4px;background:var(--gold-wash);border-left:4px solid var(--gold);font-size:14.5px}
+.meter{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
+.meter b{color:var(--ink);font-family:var(--mono)}
+/* sort game */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border:1.5px dashed var(--rule);border-radius:var(--r);background:var(--panel-2);margin:8px 0 12px}
+.scard{background:var(--panel);border:1.5px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);padding:8px 10px;cursor:grab;font-size:14.5px;line-height:1.3;text-align:left;touch-action:none;user-select:none;max-width:100%}
+.scard:hover{border-color:var(--accent)}
+.scard[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent);border-color:var(--accent)}
+.scard.ghost{position:fixed;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.scard.placed{cursor:default;border-left-color:var(--good);background:var(--good-wash);font-size:13.5px;padding:6px 8px}
+.scard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.bin{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:8px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bin.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.bin.hintbin{box-shadow:0 0 0 3px var(--gold)}
+.binhead{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel-2);border:1px solid var(--rule);border-radius:var(--r);padding:6px;cursor:pointer;font-weight:600;font-size:14.5px;text-align:left;line-height:1.25}
+.binhead:hover{border-color:var(--accent)}
+.binhead svg{width:56px;height:46px;flex:0 0 auto}
+.binitems{display:flex;flex-direction:column;gap:5px}
+.sortbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.sorthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec{font-family:var(--serif);font-size:21px;margin:2px 0 6px;font-weight:600}
+.sim-note{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.readouts td{padding-left:10px}
+.diskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.diskgrid .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.diskgrid .tbtn b{font-family:var(--mono);display:inline-block;min-width:34px}
+.readouts.chart td{text-align:center;padding-left:4px}
+.readouts.chart th,.readouts.chart td{font-size:13px}
+.readouts thead th{color:var(--ink-soft)}
+.scen .tbtn{font-family:var(--mono);font-size:13.5px}
+.seg3 .tbtn.right,.scen .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.seg3 .tbtn.wrong,.scen .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.ok-ic{color:var(--good);font-weight:700}
+.no-ic{color:var(--warn-ink);font-weight:700}
+.methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.methods .tbtn{text-align:left;line-height:1.25;font-size:14px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 .tbtn,.seg4 .tbtn{font-size:13.5px;line-height:1.2;padding:8px 6px}
+.seg4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.verdict{font-weight:700}
+.drugbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drugbtns .tbtn{font-size:13.5px;line-height:1.25;padding:7px 8px;text-align:left}
+.drugbtns .tbtn small{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:500}
+.drugbtns .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.alerts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:var(--r);border:1px solid var(--rule);border-left-width:5px;background:var(--panel-2);font-size:14.5px}
+.alert b{white-space:nowrap}
+.alert .ic{flex:0 0 auto;font-family:var(--mono);font-weight:700;font-size:12px;padding:1px 6px;border-radius:4px;border:1.5px solid currentColor}
+.alert.bad{border-color:var(--bad);background:var(--bad-wash)}.alert.bad .ic{color:var(--bad)}
+.alert.warn{border-color:var(--warn);background:var(--warn-wash)}.alert.warn .ic{color:var(--warn-ink)}
+.alert.good{border-color:var(--good);background:var(--good-wash)}.alert.good .ic{color:var(--good)}
+.alert.info{border-color:var(--accent);background:var(--accent-wash)}.alert.info .ic{color:var(--accent-ink)}
+.readouts td.hi{color:var(--bad);font-weight:700}.readouts td.lo{color:var(--accent-ink);font-weight:700}.readouts td.ok{color:var(--good);font-weight:600}
+.bins{grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}.binhead span{min-width:0;overflow-wrap:break-word}
+.practice-banner{background:var(--gold-wash);border-left:4px solid var(--gold);border-radius:4px;padding:8px 12px;margin:0 0 12px;font-size:14.5px;color:var(--ink)}
+.practice-tag{display:inline-block;background:var(--gold-wash);border:1.5px solid var(--gold);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;line-height:1.3}
+.lab-sel{display:block;font-weight:600;font-size:14.5px;margin:12px 0 4px}
+#calcType{width:100%;padding:7px 8px;font-size:15px}
+.probcard{margin:12px 0 8px;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:var(--r);background:var(--panel-2);font-size:15.5px;line-height:1.5}
+.probcard .pt{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.probcard .rd{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.ansrow{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.ans-l{font-weight:600;font-size:14.5px}
+.ansbox{display:flex;align-items:center;gap:8px}
+.ansbox input{font:600 18px var(--mono);width:150px;padding:7px 9px;border:1.5px solid var(--rule);border-radius:var(--r);background:var(--panel);color:var(--ink)}
+.ansbox input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.unit{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--ink-soft)}
+.streak{margin-top:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg4b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg2 .tbtn,.seg4b .tbtn{font-size:13.5px;line-height:1.25;padding:8px 6px}
+.marfields{display:grid;grid-template-columns:1fr;gap:6px}
+.mf{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;text-align:left;background:var(--panel);border:1.5px solid var(--rule);border-radius:var(--r);padding:8px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.mf:hover{border-color:var(--accent)}
+.mf .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.mf.right{border-color:var(--good);background:var(--good-wash)}
+.mf.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.mf.hinted{box-shadow:0 0 0 3px var(--gold)}
+.antis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.antis .tbtn{text-align:left;font-size:14px;line-height:1.25;padding:8px 9px}
+.antis .tbtn.right{border-color:var(--good);background:var(--good-wash)}
+.antis .tbtn.wrong{border-color:var(--warn);background:var(--warn-wash)}
+.antis .tbtn.hinted{box-shadow:0 0 0 3px var(--gold)}
+@media (max-width:420px){.mf{grid-template-columns:1fr;gap:2px}.antis{grid-template-columns:1fr}}
+.case.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:900px){.case.wide{grid-template-columns:1fr}}
+.ctl input[type=range]:disabled{opacity:.45}
+.modes3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes3 .tbtn{text-align:left;font-size:13.5px;line-height:1.25;padding:7px 8px}
+.modes3 .tbtn small{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
+.modes3 .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.gsel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gsel .tbtn{font-size:13.5px;padding:7px 4px;line-height:1.25}
+.gsel .tbtn small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.gsel .tbtn[aria-pressed="true"] small{color:var(--accent-ink)}
+.lifeq .opts{margin-top:6px}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.hgrid{grid-template-columns:1fr}}
+.target{border:2px solid var(--act6);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-bottom:10px}
+.target .k{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);display:block}
+.eqn{font-family:var(--mono);font-size:15.5px;font-weight:600;overflow-wrap:anywhere}
+.hzone{border:2px dashed var(--rule);border-radius:var(--r);padding:8px;min-height:90px;display:flex;flex-direction:column;gap:8px}
+.hzone.over{border-color:var(--accent);background:var(--accent-wash)}
+.hzone h3{margin:0;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.hzone .empty{font-size:13.5px;color:var(--ink-soft);margin:0}
+.hcard{background:var(--panel);border:1.5px solid var(--rule);border-left:6px solid var(--exo);border-radius:var(--r);padding:8px 10px;touch-action:none}
+.hcard.pos{border-left-color:var(--endo)}
+.hcard.hinted{box-shadow:0 0 0 3px var(--gold)}
+.hcard.drag{opacity:.9;box-shadow:var(--shadow);position:relative;z-index:20}
+.hcard .top{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.hcard .grip{cursor:grab;font-family:var(--mono);font-size:13px;color:var(--ink-soft);border:1px dashed var(--rule);border-radius:4px;padding:2px 6px;background:var(--panel-2)}
+.hcard .dh{font-family:var(--mono);font-weight:700;font-size:14.5px}
+.hcard .dh.neg{color:var(--bad)}.hcard .dh.posv{color:var(--endo-ink)}
+.hcard .ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.hcard .ctrls .tbtn{padding:5px 9px;font-size:13.5px}
+.hcard .mult{font-family:var(--mono);font-weight:700;min-width:44px;text-align:center}
+.sumbox{border:1.5px solid var(--rule);border-radius:var(--r);padding:10px 12px;background:var(--panel-2);margin-top:10px}
+.sumbox .eqn s{color:var(--bad)}
+.sumbox .tot{font-family:var(--mono);font-weight:700;font-size:16px;margin-top:4px}
+.dhpos{color:var(--endo-ink)}.dhneg{color:var(--bad)}
+.hintline{font-size:14.5px;margin:4px 0}
+.genebox{border-top:1px solid var(--rule-soft);margin-top:10px;padding-top:2px}
+.gtrow{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}
+.gtl{font-size:13.5px;font-weight:600}
+.genebox .seg3 .tbtn,#xBreed .tbtn{font-family:var(--mono);font-weight:600;font-size:14px}
+.side select{width:100%;padding:6px 8px;font-size:14.5px}
+#xPresets .tbtn{text-align:left;font-size:13px;line-height:1.25;padding:7px 8px}
+#xClasses td.l{font-size:13.5px}
+#xClasses td,#xClasses th{padding-right:6px}
+.probcard sup{font-size:11px}
+.mopts .opt{font-size:14.5px}
+#xClasses td.l{text-align:left;padding-left:0}
+#xRead td{white-space:normal;overflow-wrap:anywhere}#xClasses td{white-space:normal}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div>
+    <div class="kicker">General Biology I &middot; Module 11 &middot; Mendelian genetics</div>
+    <h1>Mendelian Genetics Lab</h1>
+    <p class="sub">Breed pea plants for one to three genes and watch observed ratios close in on expected ones, with a live chi-square test; practise Punnett, probability, chi-square and pedigree problems with animated worked solutions; match inheritance patterns to examples; and use genetics in real situations. Nothing here is graded.</p>
+  </div>
+  <button class="tbtn" id="themeBtn" type="button">Light / dark</button>
+</div></header>
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Lab parts">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab-cross" data-tab="cross" id="tabbtn-cross" type="button">Part 1 &middot; Cross Simulator</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-calc" data-tab="calc" id="tabbtn-calc" type="button" tabindex="-1">Part 2 &middot; Problem Trainer</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sort" data-tab="sort" id="tabbtn-sort" type="button" tabindex="-1">Part 3 &middot; Pattern Match</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life" id="tabbtn-life" type="button" tabindex="-1">Part 4 &middot; Genetics in the Real World</button>
+  </div>
+
+  <!-- PART 1 -->
+  <section id="tab-cross" role="tabpanel" aria-labelledby="tabbtn-cross">
+    <h2 class="gk-sr">Part 1: Cross Simulator</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCross" role="img" aria-label="Cross simulator."></canvas></div>
+        <div class="stagebar"><span class="caption" id="xCap"></span></div>
+        <div class="legend">
+          <span><i class="s" style="background:var(--obs)"></i>Observed share</span><span><i class="ln" style="border-top-color:var(--exp)"></i>Expected share (dashed)</span>
+          <span><i style="background:var(--mat)"></i>Gamete from parent 1</span><span><i style="background:var(--pat)"></i>Gamete from parent 2</span><span><i class="s" style="background:var(--tail)"></i>Critical value line</span>
+        </div>
+        <table class="readouts" id="xRead"><caption class="gk-sr">Cross totals and chi-square test</caption><thead class="srhead"><tr><th scope="col">Measure</th><th scope="col">Value</th></tr></thead><tbody></tbody></table>
+        <table class="readouts chart" id="xClasses"><caption class="gk-sr">Phenotype classes: observed and expected</caption><thead><tr><th scope="col">Phenotype class</th><th scope="col">Ratio</th><th scope="col">Observed</th><th scope="col">Expected</th></tr></thead><tbody></tbody></table>
+        <p class="sim-note">Simplifications: genes assort independently (no linkage), every zygote survives, and each offspring is drawn by chance from the parents' gametes. Gene A is flower colour, gene B is seed colour, gene C is seed shape. In epistasis mode, gene A sets the pigment (purple, or pink if aa) and bb blocks all pigment, giving white flowers. The chi-square critical values use p = 0.05; the test needs an expected count of at least 5 in every class.</p>
+      </div>
+      <aside class="card side" aria-label="Cross simulator controls">
+        <h3 id="ng-h">Number of genes</h3>
+        <div class="seg3" id="xGenes" role="group" aria-labelledby="ng-h"></div>
+        <div id="xGeneCtl"></div>
+        <h3 id="br-h">Breed offspring</h3>
+        <div class="seg4b" id="xBreed" role="group" aria-labelledby="br-h">
+          <button class="tbtn" type="button" data-n="1">+1</button><button class="tbtn" type="button" data-n="10">+10</button><button class="tbtn" type="button" data-n="100">+100</button><button class="tbtn" type="button" data-n="1000">+1,000</button>
+        </div>
+        <div class="bar"><button class="tbtn" type="button" id="xAuto" aria-pressed="true">Auto-breed</button><button class="tbtn" type="button" id="xReset">Reset counts</button></div>
+        <label class="lab-sel" for="xHyp">Test the data against</label>
+        <select id="xHyp"><option value="model">The ratio expected from these parents</option><option value="equal">Equal classes (1 : 1 : ...)</option></select>
+        <h3 id="pre-h">Presets</h3>
+        <div class="seg4" id="xPresets" role="group" aria-labelledby="pre-h"></div>
+        <div class="status" id="xStatus" role="status"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="tab-calc" role="tabpanel" aria-labelledby="tabbtn-calc" hidden>
+    <h2 class="gk-sr">Part 2: Problem Trainer</h2>
+    <div class="grid">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvCalc" role="img" aria-label="Practice problem picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="calcCap"></span></div>
+        <p class="sim-note">Problems are randomly generated. Probabilities can be typed as a fraction (3/16), a decimal (0.1875) or a percent (18.75%). Chi-square answers are accepted within about 0.05. Pedigrees assume full penetrance and no new mutations.</p>
+      </div>
+      <aside class="card side" aria-label="Trainer controls">
+        <label class="lab-sel" for="calcType">Problem type</label>
+        <select id="calcType"></select>
+        <div class="probcard" id="calcProb" aria-live="polite"></div>
+        <div id="calcNumWrap" class="ansrow">
+          <label for="calcAns" class="ans-l">Your answer</label>
+          <div class="ansbox"><input type="text" id="calcAns" inputmode="text" autocomplete="off" spellcheck="false"><span id="calcUnit" class="unit"></span></div>
+        </div>
+        <div id="calcChoices" class="mopts" role="group" aria-label="Answer choices" hidden></div>
+        <div class="bar">
+          <button class="btn" id="calcCheck" type="button">Check</button>
+          <button class="tbtn" id="calcHint" type="button">Hint</button>
+          <button class="tbtn" id="calcSol" type="button">Show worked solution</button>
+          <button class="tbtn" id="calcNew" type="button">New problem</button>
+        </div>
+        <div class="msg" id="calcMsg" role="status"></div>
+        <div class="hintbox" id="calcHintBox" role="status" hidden></div>
+        <div class="meter streak"><span>Streak <b id="calcStreak">0</b></span><span>Best <b id="calcBest">0</b></span><span>Solved <b id="calcSolved">0</b></span></div>
+        <p class="small">The hint ladder has three steps. The streak counts answers right on the first check without opening the solution.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="tab-sort" role="tabpanel" aria-labelledby="tabbtn-sort" hidden>
+    <h2 class="gk-sr">Part 3: Pattern Match</h2>
+    <div class="rounds" id="sRounds" role="group" aria-label="Rounds"></div>
+    <div class="card">
+      <div class="sorthead">
+        <div><div class="lvl-n" id="sN"></div><h2 class="sec" id="sTitle"></h2></div>
+        <div class="sortbar">
+          <label class="mode"><input type="checkbox" id="sRelaxed" checked> Relaxed mode (no timer)</label>
+          <span class="timer" id="sTimer" hidden>0:00</span>
+          <span class="stars" id="sStars" role="img" aria-label="Stars appear when the round is done"></span>
+        </div>
+      </div>
+      <p class="goal"><b class="h">Your job</b><span id="sGoal"></span></p>
+      <p class="small">Drag a card onto a box, or tap a card and then tap the box's name. Cards are buttons, so Tab and Enter work too.</p>
+      <div class="pool" id="sPool" aria-label="Cards to sort"></div>
+      <div class="bins" id="sBins"></div>
+      <div class="bar">
+        <button class="tbtn" id="sHint" type="button">Hint</button>
+        <button class="tbtn" id="sShow" type="button">Show answer</button>
+        <button class="tbtn" id="sShuffle" type="button">Start round over</button>
+        <button class="btn" id="sNext" type="button">Next round &rarr;</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <p class="small" id="sBest"></p>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="tab-life" role="tabpanel" aria-labelledby="tabbtn-life" hidden>
+    <h2 class="gk-sr">Part 4: Genetics in the Real World</h2>
+    <div class="casechips" id="lifeChips" role="group" aria-label="Choose a scenario"></div>
+    <div class="case wide">
+      <div class="card stage">
+        <div class="canvas-holder"><canvas id="cvLife" role="img" aria-label="Scenario picture."></canvas></div>
+        <div class="stagebar"><span class="caption" id="lifeCap"></span></div>
+        <p class="sim-note">Fictional people, animals and data. Teaching examples, not medical or legal advice. Real genetic testing and counselling consider much more information.</p>
+      </div>
+      <div class="card">
+        <div class="sc-n" id="lifeN"></div>
+        <h2 class="sc-title" id="lifeTitle"></h2>
+        <p class="story" id="lifeStory"></p>
+        <div id="lifeQs"></div>
+        <div class="bar" style="margin-top:12px">
+          <button class="tbtn" id="lifePrev" type="button">&larr; Previous</button>
+          <button class="btn" id="lifeNext" type="button">Next scenario &rarr;</button>
+        </div>
+        <p class="calm">Wrong picks are fine here. Each one tells you why.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Dr. Akash Garg &middot; General Biology I Study Tools &middot; Drawings are simplified and not to scale. CC BY-NC-SA 4.0<br>Learn the ideas first in the <a href="Mendel-Walkthrough.html">Mendelian Genetics Walkthrough</a>.</footer>
+<script>
+(function(){
+"use strict";
+const KEYS=["ground", "panel", "panel-2", "sunk", "ink", "ink-soft", "ink-faint", "rule", "rule-soft", "accent", "accent-ink", "accent-wash", "warn", "warn-wash", "bad", "bad-wash", "good", "good-wash", "on-accent", "warn-ink", "act1", "act2", "act3", "act4", "act5", "act6", "act7", "act8", "gold", "gold-wash", "gold-ink", "ecf", "grid", "paper", "dna", "rna", "prot", "lipid", "carb", "atp", "elec", "water", "plant", "dna-ink", "rna-ink", "prot-ink", "lipid-ink", "plant-ink", "purp", "purp-ink", "wfl", "wfl-edge", "red-fl", "pink-fl", "blue-fl", "seedY", "seedG", "pod", "stem", "leaf", "soil", "sky", "mat", "mat-ink", "pat", "pat-ink", "cent", "obs", "exp", "exp-ink", "tail", "aff", "unaff", "carr", "rbc", "rbc-in", "hbs", "agA", "agB", "mosq", "malaria", "dogBlk", "dogChoc", "dogYel", "melan", "skin1", "skin2", "skin3", "hair", "shirt1", "shirt2", "shirt3", "shirt4", "cell", "cell-edge", "nuc", "nuc-edge", "cyto", "mem", "enz", "enz-2", "pig", "pre", "cl", "mucus"];
+/* ================= drawing kit (shared by both pages) ================= */
+let ctx=null;
+const C={};
+function readColors(){const s=getComputedStyle(document.documentElement);KEYS.forEach(k=>C[k]=s.getPropertyValue("--"+k).trim())}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TAU=Math.PI*2;
+const gauss=(t,m,s)=>Math.exp(-((t-m)*(t-m))/(2*s*s));
+const FONT='"IBM Plex Sans",system-ui,sans-serif',MONO='"IBM Plex Mono",ui-monospace,monospace';
+function hx(c){let h=(c||"#888").trim();if(h[0]!=="#"){const m=h.match(/\d+/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:[136,136,136]}h=h.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function isDark(){return hx(C.ground)[0]<60}
+function onFill(){return isDark()?"#0E1519":"#fff"}
+function P(T,L){return ((T%L)+L)%L/L}
+function mix(a,b,t){const A=hx(a),B=hx(b);t=clamp(t,0,1);return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"}
+function hexA(c,a){const A=hx(c);return `rgba(${A[0]},${A[1]},${A[2]},${clamp(a,0,1)})`}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function circ(x,y,r,fill,stroke,lw){ctx.beginPath();ctx.arc(x,y,Math.max(0,r),0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(0,rx),Math.max(0,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke()}}
+function glow(x,y,r,col,a){if(r<=0)return;const A=hx(col);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${A},${clamp(a==null?1:a,0,1)})`);g.addColorStop(1,`rgba(${A},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function label(x,y,t,o){o=o||{};if(o.a!=null){if(o.a<=0)return 0;ctx.save();ctx.globalAlpha*=clamp(o.a,0,1);const w=label(x,y,t,Object.assign({},o,{a:null}));ctx.restore();return w}const size=o.size||13;ctx.font=`${o.weight||500} ${size}px ${o.mono?MONO:FONT}`;
+  ctx.textAlign=o.align||"center";ctx.textBaseline="middle";
+  const w=ctx.measureText(t).width;let x0=x;if(ctx.textAlign==="center")x0=x-w/2;if(ctx.textAlign==="right")x0=x-w;
+  const a0=ctx.globalAlpha;
+  if(o.pill!==false){ctx.globalAlpha=a0*(o.bga==null?.9:o.bga);ctx.fillStyle=o.bg||C.panel;rr(x0-5,y-size*.75,w+10,size*1.5,4);ctx.fill();ctx.globalAlpha=a0;
+    if(o.border){ctx.strokeStyle=o.border;ctx.lineWidth=1.5;ctx.stroke()}}
+  ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y+.5);return w}
+function txt(x,y,t,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;ctx.fillText(t,x,y)}
+function line(x1,y1,x2,y2,col,lw,dash){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||1.2;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function arrow(x1,y1,x2,y2,col,lw,dash){line(x1,y1,x2,y2,col,lw||2,dash);const a=Math.atan2(y2-y1,x2-x1),h=7+(lw||2);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+function chipText(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";const w=ctx.measureText(t).width;
+  ctx.fillStyle=col;rr(x-w/2-6,y-9.5,w+12,19,9.5);ctx.fill();ctx.fillStyle=fg||onFill();ctx.fillText(t,x,y+.5);return w+12}
+function chipL(x,y,t,col,fg){ctx.font=`600 11.5px ${MONO}`;const w=ctx.measureText(t).width;return chipText(x+w/2+6,y,t,col,fg)}
+function badge(x,y,n,col,r){r=r||10;circ(x,y,r,col||C.ink,C.panel,1.5);ctx.font=`700 ${r>10?13:11.5}px ${MONO}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=onFill();ctx.fillText(String(n),x,y+.5)}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function along(P_,p){let L=0;const ls=[];for(let i=0;i<P_.length-1;i++){const l=Math.hypot(P_[i+1][0]-P_[i][0],P_[i+1][1]-P_[i][1]);ls.push(l);L+=l}
+  let d=clamp(p,0,1)*L;for(let i=0;i<ls.length;i++){if(d<=ls[i]||i===ls.length-1){const f=ls[i]?Math.min(1,d/ls[i]):0;return [lerp(P_[i][0],P_[i+1][0],f),lerp(P_[i][1],P_[i+1][1],f)]}d-=ls[i]}return P_[P_.length-1]}
+function poly(pts,col,lw,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=lw||1.5;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();ctx.setLineDash([]);ctx.lineCap="butt"}
+function panelBox(x,y,w,h,o){o=o||{};rr(x,y,w,h,o.r||8);ctx.fillStyle=o.fill||hexA(C.panel,.85);ctx.fill();ctx.strokeStyle=o.stroke||C.rule;ctx.lineWidth=o.lw||1.2;ctx.stroke()}
+function wrapText(t,x,y,w,lh,o){o=o||{};ctx.font=`${o.weight||500} ${o.size||12}px ${o.mono?MONO:FONT}`;ctx.textAlign=o.align||"left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;
+  const words=t.split(" ");let ln="";let yy=y;words.forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){ctx.fillText(ln,x,yy);ln=wd;yy+=lh}else ln=test});if(ln)ctx.fillText(ln,x,yy);return yy}
+function blobPath(x,y,r,seed,t,amp){amp=amp==null?.06:amp;ctx.beginPath();const N=44;for(let i=0;i<=N;i++){const a=i/N*TAU;const rad=r*(1+amp*Math.sin(a*3+seed+(t||0)*1.7)+amp*.7*Math.sin(a*5+seed*2.3-(t||0)*1.1));const X=x+Math.cos(a)*rad,Y=y+Math.sin(a)*rad;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}ctx.closePath()}
+function withA(a,fn){ctx.save();ctx.globalAlpha*=clamp(a==null?1:a,0,1);fn();ctx.restore()}
+function title(x,y,t,col,align){txt(x,y,t.toUpperCase().replace(/Μ/g,"µ").replace(/µM/g,"µm"),{size:12,mono:true,weight:700,color:col||C["ink-soft"],align:align||"left"})}
+function lead(px,py,lx,ly,t,o){o=o||{};const a=o.a==null?1:o.a;if(a<=0)return;ctx.save();ctx.globalAlpha*=a;line(px,py,lx,ly,o.lc||C["ink-soft"],1.2);circ(px,py,2.6,o.lc||C["ink-soft"]);
+  label(lx,ly,t,{size:o.size||12.5,weight:o.weight||600,align:o.align||(lx<px?"right":"left"),border:o.border,color:o.color});ctx.restore()}
+function pulseRing(x,y,r,col,p){ctx.save();ctx.globalAlpha*=(1-p);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r*(.4+p),0,TAU);ctx.stroke();ctx.restore()}
+function plotFn(fn,t0,t1,x,y,w,h,v0,v1,col,lw,dash,upto){ctx.beginPath();const N=Math.max(40,Math.round(w));let started=false;for(let i=0;i<=N;i++){const t=lerp(t0,t1,i/N);if(upto!=null&&t>upto)break;const v=fn(t);const X=x+w*i/N,Y=y+h-(clamp(v,v0,v1)-v0)/(v1-v0)*h;started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([])}
+function bg(col){ctx.fillStyle=col||C.ecf;ctx.fillRect(0,0,4000,4000)}
+/* ================= core helpers (from the shared kit) ================= */
+function lumOf(c){const A=hx(c).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*A[0]+.7152*A[1]+.0722*A[2]}
+function inkOn(c){return lumOf(c)>.3?"#10161A":"#fff"}
+function fillStroke(f,s,lw){if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.strokeStyle=s;ctx.lineWidth=lw||1.4;ctx.stroke()}}
+function checkMark(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,3)}
+function crossMark(x,y,s,col){line(x-s,y-s,x+s,y+s,col||C.bad,3);line(x+s,y-s,x-s,y+s,col||C.bad,3)}
+function fmtNum(v,dp){if(dp==null)dp=2;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);let s=String(r);if(Math.abs(r)>=1000){const p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");s=p.join(".")}return s}
+/* format with n significant figures, never in e-notation for normal sizes */
+function sig(v,n){if(!isFinite(v))return "?";if(v===0)return (0).toFixed(Math.max(0,n-1));const e=Math.floor(Math.log10(Math.abs(v)));const dp=n-1-e;
+  if(dp>=0){return (Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp)}
+  const f=Math.pow(10,-dp);const r=Math.round(v/f)*f;return String(r)}
+/* count significant figures in a typed string; returns {n, amb} (amb = trailing zeros without a decimal point) */
+function sigCount(str){let s=String(str).trim().replace(/^[+-]/,"").replace(/,/g,"");let ex="";const m=s.match(/^([0-9.]+)[eE]([+-]?\d+)$/);if(m)s=m[1];
+  if(!/^\d*\.?\d*$/.test(s)||s===""||s===".")return {n:0,amb:false};
+  const hasDot=s.indexOf(".")>=0;let d=s.replace(".","");d=d.replace(/^0+/,"");if(d==="")return {n:1,amb:false};
+  if(hasDot)return {n:d.length,amb:false};
+  const t=d.replace(/0+$/,"");return {n:t.length,amb:t.length!==d.length,max:d.length}}
+function graph(g){const X=v=>g.x+(v-g.x0)/(g.x1-g.x0)*g.w,Y=v=>g.y+g.h-(v-g.y0)/(g.y1-g.y0)*g.h;g.X=X;g.Y=Y;
+  rr(g.x,g.y,g.w,g.h,2);ctx.fillStyle=hexA(C.panel,.7);ctx.fill();
+  if(g.xt)g.xt.forEach(t=>{if(g.grid!==false)line(X(t),g.y,X(t),g.y+g.h,C.grid,1);txt(X(t),g.y+g.h+11,g.xf?g.xf(t):String(t),{size:10.5,align:"center",mono:true,color:C["ink-soft"]})});
+  if(g.yt)g.yt.forEach(t=>{if(g.grid!==false)line(g.x,Y(t),g.x+g.w,Y(t),C.grid,1);txt(g.x-5,Y(t),g.yf?g.yf(t):String(t),{size:10.5,align:"right",mono:true,color:C["ink-soft"]})});
+  line(g.x,g.y,g.x,g.y+g.h,C["ink-soft"],1.6);line(g.x,g.y+g.h,g.x+g.w,g.y+g.h,C["ink-soft"],1.6);
+  if(g.xl)txt(g.x+g.w,g.y+g.h+(g.xt?26:12),g.xl,{size:11.5,weight:600,align:"right",color:C["ink-soft"]});
+  if(g.yl)txt(g.x-(g.ylx||0),g.y-10,g.yl,{size:11.5,weight:600,align:"left",color:C["ink-soft"]});
+  if(g.title)title(g.x,g.y-24,g.title,g.tcol);return g}
+function curve(g,fn,a,b,col,lw,dash,o){o=o||{};ctx.save();ctx.beginPath();ctx.rect(g.x,g.y-2,g.w+2,g.h+4);ctx.clip();ctx.beginPath();const N=120;let st=false;
+  for(let i=0;i<=N;i++){const v=lerp(a,b,i/N);const w=fn(v);if(!isFinite(w)){st=false;continue}const X=g.X(v),Y=g.Y(w);st?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),st=true)}
+  ctx.strokeStyle=col;ctx.lineWidth=lw||2.4;ctx.setLineDash(dash||[]);ctx.lineJoin="round";ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+function gdot(g,a,b,col,lab,o){o=o||{};const X=g.X(a),Y=g.Y(b);if(X<g.x-1||X>g.x+g.w+1||Y<g.y-1||Y>g.y+g.h+1)return;if(o.guides){line(X,Y,X,g.y+g.h,hexA(col,.6),1.2,[3,3]);line(g.x,Y,X,Y,hexA(col,.6),1.2,[3,3])}
+  circ(X,Y,o.r||6,col,C.panel,2);if(lab)label(X+(o.dx||0),Y+(o.dy==null?-16:o.dy),lab,{size:o.size||11.5,weight:700,mono:true,border:col,align:o.align})}
+/* ---------- equation / dimensional analysis chain ----------
+   items: [{n:[str,[units]], d:[str,[units]]|null}], res:[str,[units]], p: 0..1 progress */
+function F(n,nu,d,du){return {n:[String(n),nu==null?[]:Array.isArray(nu)?nu:[nu]],d:d==null?null:[String(d),du==null?[]:Array.isArray(du)?du:[du]]}}
+function chainLayout(items,fs){ctx.font=`600 ${fs}px ${MONO}`;return items.map(it=>{const nt=(it.n[0]+" "+it.n[1].join("·")).trim();const dt=it.d?(it.d[0]+" "+it.d[1].join("·")).trim():"";return Math.max(ctx.measureText(nt).width,ctx.measureText(dt).width)+8})}
+function chainWidth(items,res,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);let X=ws.reduce((a,b)=>a+b,0)+gap*(items.length-1);if(res){ctx.font=`700 ${fs+2}px ${MONO}`;X+=gap+12+ctx.measureText(res[0]+" "+res[1].join("·")).width}return X}
+function chain(x,y,items,res,p,o){o=o||{};const fs=o.size||15;const gap=o.gap||20;const ws=chainLayout(items,fs);
+  const ns=[],ds=[];items.forEach((it,i)=>{it.n[1].forEach((u,k)=>ns.push({i,k,u,used:false}));if(it.d)it.d[1].forEach((u,k)=>ds.push({i,k,u,used:false}))});
+  const pairs=[];ds.forEach(d=>{const m=ns.find(n=>!n.used&&n.u.replace(/s$/,"")===d.u.replace(/s$/,""));if(m){m.used=true;d.used=true;pairs.push([m,d])}});
+  const pos={};let X=x;const nI=items.length;const pIn=o.pIn||.42,pSt=o.pSt||.78;
+  items.forEach((it,i)=>{const a=clamp((p*nI/pIn)-i,0,1);if(a<=0){X+=ws[i]+gap;return}ctx.save();ctx.globalAlpha*=a;const w=ws[i];const cx=X+w/2;const dy=(1-a)*-10;
+    const part=(val,units,yy,isN)=>{ctx.font=`600 ${fs}px ${MONO}`;const full=(val+" "+units.join("·")).trim();let px=cx-ctx.measureText(full).width/2;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.ncol||C.ink;ctx.fillText(val,px,yy+dy);px+=ctx.measureText(val+" ").width;
+      units.forEach((u,k)=>{const uw=ctx.measureText(u).width;pos[(isN?"n":"d")+i+"_"+k]=[px,yy,uw];ctx.fillStyle=o.ucol||C["accent-ink"];ctx.fillText(u,px,yy+dy);px+=uw;if(k<units.length-1){ctx.fillStyle=C.ink;ctx.fillText("·",px,yy+dy);px+=ctx.measureText("·").width}})};
+    if(it.d){part(it.n[0],it.n[1],y-fs*.95,true);line(X,y,X+w,y,C.ink,1.6);part(it.d[0],it.d[1],y+fs*1.0,false)}else part(it.n[0],it.n[1],y,true);
+    if(i<nI-1)txt(X+w+gap/2,y,"×",{size:fs+2,weight:700,align:"center",color:C["ink-soft"]});ctx.restore();X+=w+gap});
+  X-=gap;const sp=clamp((p-pIn)/(pSt-pIn),0,1);
+  pairs.forEach((pr,j)=>{const f=clamp(sp*pairs.length-j,0,1);if(f<=0)return;[pr[0],pr[1]].forEach((q,qi)=>{const ps=pos[(qi===0?"n":"d")+q.i+"_"+q.k];if(!ps)return;line(ps[0]-2,ps[1]+6,ps[0]-2+(ps[2]+4)*f,ps[1]-6,C.bad,2.4)})});
+  const rf=clamp((p-pSt-.04)/.1,0,1);
+  if(res){txt(X+gap/2,y,"=",{size:fs+3,weight:700,align:"center",color:C["ink-soft"]});X+=gap+4;
+    if(rf>0)withA(rf,()=>{const t=res[0]+" "+res[1].join("·");ctx.font=`700 ${fs+2}px ${MONO}`;const w=ctx.measureText(t).width;rr(X-4,y-15,w+12,30,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();txt(X+2,y,t,{size:fs+2,weight:700,mono:true})});}
+  return pairs.length}
+/* worked example card that animates over a loop of `per` seconds
+   w = {q:"problem", given:[...], conv:[...] (K reminders etc), items, res, ans:"...", sf:"note", miss:"mistake note"} */
+function worked(x,y,w,h,W_,T,o){o=o||{};const per=o.per||16;const t=P(T,per)*per;panelBox(x,y,w,h,{fill:hexA(C.paper,.96)});
+  title(x+12,y+16,o.title||"Worked example",C["accent-ink"]);let yy=y+38;
+  const sz=o.size||12.5;
+  if(o.split){const sw=o.split;let ly=wrapText(W_.q,x+12,yy,sw-20,sz+4,{size:sz,weight:600})+sz+6;
+    (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,ly,g,{size:sz-.5,mono:true,color:C.ink}));ly+=sz+6});
+    const t0=1.2+(W_.given||[]).length*.5;
+    (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>label(x+14,ly+2,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]}));ly+=sz+13});
+    line(x+sw,y+28,x+sw,y+h-10,C["rule-soft"],1.2);
+    const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);const fs=o.cfs||14;const rx=x+sw+14,rw=w-sw-24;
+    let cy=y+(o.cy||52)+fs;(W_.rows||[[W_.items,W_.res]]).forEach((rw_,ri,arr)=>{const p_=clamp(cp*arr.length-ri,0,1);if(p_>0)chain(rx,cy,rw_[0],rw_[1],p_,{size:fs});cy+=fs*2+(o.rowGap||22)});
+    let yy2=cy-fs+4;const t2=t1+per*.45+.3;
+    if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,rx,yy2,rw,sz+3,{size:sz-.5,color:C.good,weight:600}));yy2+=(o.sfH||sz+10)}
+    if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(rx-4,yy2-10,rw+8,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,rx+4,yy2+3,rw-8,sz+3,{size:sz-1,color:C.ink})})}
+    return t}
+  yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+6;
+  (W_.given||[]).forEach((g,i)=>{const a=seg(t,.8+i*.5,1.2+i*.5);if(a>0)withA(a,()=>txt(x+14,yy,g,{size:sz-.5,mono:true,color:C.ink}));yy+=sz+6});
+  const t0=1.2+(W_.given||[]).length*.5;
+  (W_.conv||[]).forEach((g,i)=>{const a=seg(t,t0+i*.8,t0+.5+i*.8);if(a>0)withA(a,()=>{const ww=label(x+14,yy,g,{size:sz-.5,weight:700,mono:true,align:"left",border:C.gold,bg:C["gold-wash"]})});yy+=sz+12});
+  const t1=t0+(W_.conv||[]).length*.8+.4;const cp=clamp((t-t1)/(per*.45),0,1);
+  const fs=o.cfs||14;const cw=chainWidth(W_.items,W_.res,{size:fs});let cy=yy+fs+12;if(W_.items&&cp>0){const cx=o.center?x+Math.max(12,(w-cw)/2):x+14;chain(cx,cy,W_.items,W_.res,cp,{size:fs})}
+  yy=cy+fs*2+8;const t2=t1+per*.45+.3;
+  if(W_.sf){const a=seg(t,t2,t2+.6);if(a>0)withA(a,()=>wrapText(W_.sf,x+14,yy,w-28,sz+4,{size:sz-.5,color:C.good,weight:600}));yy+=sz+10}
+  if(W_.miss){const a=seg(t,t2+1.2,t2+1.8);if(a>0)withA(a,()=>{rr(x+10,yy-10,w-20,o.missH||38,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy+3,w-36,sz+3,{size:sz-1,color:C.ink})})}
+  return t}
+/* curved arrow */
+function carrow(x1,y1,cx,cy,x2,y2,col,lw){ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw||2;ctx.stroke();const a=Math.atan2(y2-cy,x2-cx),h=8;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.45),y2-h*Math.sin(a-.45));ctx.lineTo(x2-h*Math.cos(a+.45),y2-h*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=col;ctx.fill()}
+/* ================= genetics drawing library (shared by both pages) ================= */
+let SYS={},SC={};
+function wrapCount(t,w,size,weight){ctx.font=`${weight||500} ${size}px ${FONT}`;let n=1,ln="";t.split(" ").forEach(wd=>{const test=ln?ln+" "+wd:wd;if(ctx.measureText(test).width>w&&ln){n++;ln=wd}else ln=test});return n}
+function fitTxt(x,y,t,maxW,o){o=o||{};let sz=o.size||13;ctx.font=`${o.weight||600} ${sz}px ${o.mono?MONO:FONT}`;const w=ctx.measureText(t).width;if(w>maxW)sz=Math.max(9.5,sz*maxW/w);txt(x,y,t,Object.assign({},o,{size:sz}))}
+function levelTag(x,y,t,col){return chipL(x,y,t.toUpperCase(),col||C["ink-soft"])}
+function pane(x,y,w,h,tag,col,o){panelBox(x,y,w,h,o);if(tag)levelTag(x+10,y+16,tag,col)}
+/* genotype text with ^ superscripts, e.g. "I^AI^B" */
+function gParse(s){const out=[];s=String(s);for(let i=0;i<s.length;i++){if(s[i]==="^"&&i+1<s.length){out.push([s[i+1],1]);i++}else out.push([s[i],0])}return out}
+function gWidth(s,size,wt,font){let w=0;gParse(s).forEach(p=>{ctx.font=`${wt} ${p[1]?size*.66:size}px ${font}`;w+=ctx.measureText(p[0]).width});return w}
+function gtxt(x,y,s,o){o=o||{};const size=o.size||14,wt=o.weight||700,font=o.sans?FONT:MONO;const w=gWidth(s,size,wt,font);let xx=x;const al=o.align||"center";if(al==="center")xx=x-w/2;else if(al==="right")xx=x-w;
+  ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle=o.color||C.ink;gParse(s).forEach(p=>{ctx.font=`${wt} ${p[1]?size*.66:size}px ${font}`;ctx.fillText(p[0],xx,p[1]?y-size*.36:y+.5);xx+=ctx.measureText(p[0]).width});return w}
+function glabel(x,y,s,o){o=o||{};const size=o.size||14,wt=o.weight||700,font=o.sans?FONT:MONO;const w=gWidth(s,size,wt,font);let x0=x-w/2;if(o.align==="left")x0=x;if(o.align==="right")x0=x-w;
+  rr(x0-6,y-size*.8,w+12,size*1.6,5);ctx.fillStyle=o.bg||hexA(C.panel,.94);ctx.fill();ctx.strokeStyle=o.border||C.rule;ctx.lineWidth=o.border?1.8:1;ctx.stroke();gtxt(x0,y,s,Object.assign({},o,{align:"left"}));return w}
+/* flower colours */
+function flCol(k){return {purp:C.purp,white:C.wfl,red:C["red-fl"],pink:C["pink-fl"],blue:C["blue-fl"]}[k]||k}
+function flEdge(k){return k==="white"?C["wfl-edge"]:mix(flCol(k),"#10161A",.35)}
+/* one pea flower: banner petal, two wings, keel */
+function flower(x,y,r,k,o){o=o||{};const col=flCol(k),ed=flEdge(k);
+  ell(x,y+r*.78,r*.42,r*.26,0,C.stem);
+  ell(x,y-r*.18,r,r*.86,0,col,ed,1.3);
+  ell(x-r*.48,y+r*.36,r*.5,r*.36,-.45,mix(col,"#ffffff",k==="white"?0:.12),ed,1.1);
+  ell(x+r*.48,y+r*.36,r*.5,r*.36,.45,mix(col,"#ffffff",k==="white"?0:.12),ed,1.1);
+  ell(x,y+r*.5,r*.28,r*.24,0,mix(col,"#10161A",k==="white"?.06:.18),ed,1);
+  if(o.anthers)for(let i=-1;i<=1;i++)circ(x+i*r*.18,y+r*.18,r*.1,C.gold);
+}
+/* pea plant standing on soil at (x,y). o.fl flower colour key, o.T time, o.pods number, o.seedCol */
+function peaPlant(x,y,s,o){o=o||{};const T=o.T||0;const sw=Math.sin(T*1.2+(o.seed||0))*3*s;const top=[x+sw,y-112*s];
+  ell(x,y,32*s,7*s,0,C.soil);
+  ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x-10*s,y-58*s,top[0],top[1]);ctx.strokeStyle=C.stem;ctx.lineWidth=Math.max(2,4*s);ctx.lineCap="round";ctx.stroke();ctx.lineCap="butt";
+  [[.22,1],[.42,-1],[.62,1],[.8,-1]].forEach((L,i)=>{const f=L[0],d=L[1];const lx=lerp(x-5*s,top[0],f),ly=lerp(y,top[1],f);
+    ell(lx+d*12*s,ly,12*s,5.5*s,d*-.45,C.leaf,hexA(C.stem,.9),1);ell(lx+d*26*s,ly-3*s,10*s,4.5*s,d*-.3,C.leaf,hexA(C.stem,.9),1);
+    if(i===2){ctx.beginPath();ctx.moveTo(lx+d*34*s,ly-5*s);for(let a=0;a<9;a++){const rr_=7*s*(1-a/10);ctx.lineTo(lx+d*(36*s+Math.cos(a*.9)*rr_),ly-8*s-Math.sin(a*.9)*rr_)}ctx.strokeStyle=C.stem;ctx.lineWidth=1.2;ctx.stroke()}});
+  if(o.fl){flower(top[0],top[1]-2*s,11*s,o.fl,o);flower(top[0]+18*s,top[1]+22*s,8.5*s,o.fl);flower(top[0]-17*s,top[1]+38*s,7.5*s,o.fl)}
+  if(o.pods){for(let i=0;i<o.pods;i++){const px=x+(i%2?16:-20)*s,py=y-(45+i*18)*s;podDraw(px,py,24*s,o.seedCol||"seedY",o.wr)}}
+  return top}
+function podDraw(x,y,L,seedKey,wr){ctx.save();ctx.translate(x,y);ctx.rotate(-.5);ell(0,0,L*.62,L*.22,0,C.pod,hexA(C.stem,1),1.2);for(let i=0;i<3;i++)pea(-L*.32+i*L*.32,0,L*.13,seedKey,wr);ctx.restore()}
+/* a pea seed: yellow/green, round/wrinkled */
+function pea(x,y,r,k,wrinkled){const col=C[k]||k;const ed=mix(col,"#10161A",.4);if(wrinkled){blobPath(x,y,r*.92,x*.37+y*.11,0,.13);fillStroke(col,ed,1.2);ctx.beginPath();ctx.arc(x-r*.2,y-r*.1,r*.45,.3,2.2);ctx.strokeStyle=hexA(ed,.7);ctx.lineWidth=1;ctx.stroke()}
+  else{circ(x,y,r,col,ed,1.2);circ(x-r*.33,y-r*.33,r*.28,hexA("#ffffff",.45))}}
+/* chromosome: vertical rod centred at (x,y), rotated by o.rot. o.sis draws two sister chromatids.
+   o.bands: [[f (-.5..+.5 along length), label, colour]] */
+function chromo(x,y,len,col,o){o=o||{};const w=o.w||9;const rot=o.rot||0;ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+  const arms=o.sis?[-w*.56,w*.56]:[0];const cen=(o.cen||0)*len;
+  arms.forEach(dx=>{rr(dx-w/2,-len/2,w,len,w/2);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=hexA("#10161A",.45);ctx.lineWidth=1;ctx.stroke();
+    (o.bands||[]).forEach(b=>{const by=b[0]*len;ctx.fillStyle=b[2]||C.gold;ctx.fillRect(dx-w/2+.5,by-3.2,w-1,6.4);ctx.strokeStyle=hexA("#10161A",.5);ctx.lineWidth=.8;ctx.strokeRect(dx-w/2+.5,by-3.2,w-1,6.4)})});
+  if(o.sis)circ(0,cen,w*.42,C.cent);else{ctx.fillStyle=hexA("#10161A",.35);ctx.fillRect(-w/2,cen-1.5,w,3)}
+  ctx.restore();
+  (o.bands||[]).forEach(b=>{if(!b[1])return;const by=b[0]*len;const px=x-Math.sin(rot)*by,py=y+Math.cos(rot)*by;const side=o.side||1;const off=(o.sis?w*1.15:w*.6)+7;const ca=Math.cos(rot),sa=Math.sin(rot);
+    if(Math.abs(sa)>.7)gtxt(px,py+side*(off+4),b[1],{size:o.ls||13,align:"center",color:o.lc||C.ink});
+    else gtxt(px+side*off*ca,py+side*off*sa,b[1],{size:o.ls||13,align:side>0?"left":"right",color:o.lc||C.ink})})}
+/* a cell (ellipse) with a membrane and optional nucleus */
+function cellBody(x,y,rx,ry,o){o=o||{};ell(x,y,rx,ry,0,C.cyto);ell(x,y,rx,ry,0,null,C.mem,4);ell(x,y,rx-3.5,ry-3.5,0,null,hexA(C["lipid-ink"],.35),1);
+  if(o.nuc){ctx.save();if(o.nucBreak){ctx.setLineDash([6,5])}ell(x+(o.nx||0),y+(o.ny||0),rx*o.nuc,ry*o.nuc,0,hexA(C.nuc,o.nucBreak?.4:.85),C["nuc-edge"],1.6);ctx.restore()}}
+/* gamete: a small cell carrying allele text */
+function gam(x,y,r,s,o){o=o||{};const ed=o.kind==="egg"?C.mat:o.kind==="pollen"?C.pat:(o.edge||C.accent);
+  if(o.kind==="pollen"){for(let i=0;i<10;i++){const a=i/10*TAU;line(x+Math.cos(a)*r,y+Math.sin(a)*r,x+Math.cos(a)*(r+3),y+Math.sin(a)*(r+3),ed,1.4)}}
+  circ(x,y,r,o.fill||C.paper,ed,2.2);if(s)gtxt(x,y,s,{size:o.size||Math.max(11,r*.8),color:o.color||C.ink})}
+/* enzyme (protein blob) with an active-site notch; o.dead = nonfunctional */
+function enzyme(x,y,r,o){o=o||{};const col=o.dead?mix(C.enz,C["ink-soft"],.65):C.enz;blobPath(x,y,r,o.seed||1.3,o.T||0,.07);fillStroke(col,hexA("#10161A",.4),1.2);
+  if(!o.dead){ctx.beginPath();ctx.arc(x+r*.95,y,r*.38,0,TAU);ctx.fillStyle=C.ecf;ctx.fill()}else{poly([[x-r*.4,y-r*.5],[x-r*.05,y-r*.05],[x-r*.35,y+r*.2],[x+r*.1,y+r*.6]],hexA(C.ink,.6),1.6)}}
+function hexMol(x,y,r,col){ctx.beginPath();for(let i=0;i<6;i++){const a=i/6*TAU+Math.PI/6;i?ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r):ctx.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}ctx.closePath();fillStroke(col,hexA("#10161A",.4),1)}
+/* DNA ladder strip, horizontal, with base colours; o.hl=[i0,i1] highlighted range; o.alt index whose base differs */
+function dnaStrip(x,y,w,n,T,o){o=o||{};const step=w/n;const amp=o.amp||14;for(let i=0;i<n;i++){const px=x+i*step+step/2;const ph=i*.55+T*1.5;const y1=y-Math.sin(ph)*amp,y2=y+Math.sin(ph)*amp;
+    const hl=o.hl&&i>=o.hl[0]&&i<=o.hl[1];line(px,y1,px,y2,hl?(i===o.alt?C.bad:C.gold):hexA(C["ink-soft"],.6),hl?3:2)}
+  for(const sgn of [1,-1]){ctx.beginPath();for(let i=0;i<=n*4;i++){const px=x+i*step/4;const ph=(i/4-.5)*.55+T*1.5+.275;const yy=y-sgn*Math.sin(ph)*amp;i?ctx.lineTo(px,yy):ctx.moveTo(px,yy)}ctx.strokeStyle=C.dna;ctx.lineWidth=3;ctx.stroke()}}
+/* Punnett square. rows/cols = gamete labels. cellF(i,j) -> {g, col, icon(cx,cy,sz)}; rev(i,j)->0..1 */
+function punnett(x,y,cs,rows,cols,cellF,rev,o){o=o||{};const hh=o.hh||Math.min(cs*.72,36);
+  const hdrA=o.hdr==null?1:o.hdr;
+  withA(hdrA,()=>{cols.forEach((c,j)=>gam(x+hh+cs*j+cs/2,y+hh/2,Math.min(hh*.42,15),c,{kind:o.colKind||"pollen",size:o.gsz||12}));
+    rows.forEach((c,i)=>gam(x+hh/2,y+hh+cs*i+cs/2,Math.min(hh*.42,15),c,{kind:o.rowKind||"egg",size:o.gsz||12}))});
+  for(let i=0;i<rows.length;i++)for(let j=0;j<cols.length;j++){const X=x+hh+cs*j,Y=y+hh+cs*i;rr(X+1,Y+1,cs-2,cs-2,3);ctx.fillStyle=hexA(C.panel,.9);ctx.fill();ctx.strokeStyle=C.rule;ctx.lineWidth=1;ctx.stroke();
+    const a=rev?rev(i,j):1;if(a<=0)continue;const cf=cellF(i,j);withA(a,()=>{if(cf.col){rr(X+2,Y+2,cs-4,cs-4,3);ctx.fillStyle=hexA(cf.col,.3);ctx.fill()}
+      if(o.hl&&o.hl(i,j)){rr(X+2,Y+2,cs-4,cs-4,3);ctx.strokeStyle=o.hlCol||C.accent;ctx.lineWidth=3;ctx.stroke()}
+      if(cf.icon)cf.icon(X+cs/2,Y+cs*.36,cs);gtxt(X+cs/2,Y+(cf.icon?cs*.76:cs/2),cf.g,{size:o.fs||Math.min(16,cs*.3)})})}
+  return {x0:x+hh,y0:y+hh,cs,hh}}
+/* bars: observed (solid) vs expected (dashed outline). cls=[{lab,obs,exp,col}] proportions */
+function obsExp(x,y,w,h,cls,o){o=o||{};const n=cls.length;const gw=w/n;const mx=o.max||Math.max(.0001,...cls.map(c=>Math.max(c.obs,c.exp)))*1.15;
+  line(x,y+h,x+w,y+h,C["ink-soft"],1.5);
+  cls.forEach((c,i)=>{const bx=x+i*gw+gw*.18,bw=gw*.64;const ho=h*clamp(c.obs/mx,0,1),he=h*clamp(c.exp/mx,0,1);
+    rr(bx,y+h-ho,bw,ho,2);ctx.fillStyle=hexA(c.col||C.obs,.85);ctx.fill();ctx.strokeStyle=hexA("#10161A",.35);ctx.lineWidth=1;ctx.stroke();
+    ctx.setLineDash([5,3]);ctx.strokeStyle=C.exp;ctx.lineWidth=2.4;ctx.strokeRect(bx-3,y+h-he,bw+6,he);ctx.setLineDash([]);line(bx-8,y+h-he,bx+bw+8,y+h-he,C.exp,2.4);
+    if(o.num)txt(bx+bw/2,y+h-Math.max(ho,he)-10,o.num(c,i),{size:11.5,weight:700,mono:true,align:"center"});
+    fitTxt(bx+bw/2,y+h+12,c.lab,gw-4,{size:o.ls||12,weight:600,align:"center"})})}
+/* chi-square distribution */
+function gHalf(k){/* Gamma(k/2) */if(k===1)return Math.sqrt(Math.PI);if(k===2)return 1;return (k/2-1)*gHalf(k-2)}
+function chiPdf(x,k){if(x<=0)return k===1?10:(k===2?.5:0);return Math.pow(x,k/2-1)*Math.exp(-x/2)/(Math.pow(2,k/2)*gHalf(k))}
+const CRIT={1:3.84,2:5.99,3:7.81,4:9.49,5:11.07,6:12.59,7:14.07};
+/* pedigree symbol. sex "m"|"f"; st 0 unaffected, 1 affected, 2 carrier (half shaded) */
+function pedInd(x,y,s,sex,st,o){o=o||{};const r=s/2;const path=()=>{if(sex==="m")rr(x-r,y-r,s,s,1.5);else{ctx.beginPath();ctx.arc(x,y,r,0,TAU)}};
+  if(o.hl){glow(x,y,s*1.1,o.hlCol||C.accent,.5)}
+  path();ctx.fillStyle=st===1?C.aff:C.unaff;ctx.fill();
+  if(st===2){ctx.save();path();ctx.clip();ctx.fillStyle=C.carr;ctx.fillRect(x-r-1,y-r-1,r+1,s+2);ctx.restore()}
+  path();ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.stroke();
+  if(o.q)txt(x,y,"?",{size:s*.55,weight:700,align:"center",color:st===1?C.panel:C.ink});
+  if(o.lab)txt(x,y+r+11,o.lab,{size:11.5,weight:600,align:"center",mono:true,color:C["ink-soft"]});
+  if(o.g)gtxt(x,y+r+(o.lab?25:12),o.g,{size:12,color:o.gc||C["accent-ink"]})}
+function pedMate(x1,x2,y,col){line(x1,y,x2,y,col||C.ink,2)}
+function pedKids(mx,my,kx,ky,s,col){const sy=ky-s*.95;line(mx,my,mx,sy,col||C.ink,2);if(kx.length>1)line(Math.min(...kx),sy,Math.max(...kx),sy,col||C.ink,2);kx.forEach(x=>line(x,sy,x,ky-s/2,col||C.ink,2));if(kx.length===1)line(mx,sy,kx[0],sy,col||C.ink,2)}
+/* a person silhouette standing with feet at (x,y), height h */
+function person(x,y,h,o){o=o||{};const hr=h*.11;const sk=o.skin||C.skin1;const sh=o.shirt||C.shirt1;
+  if(o.hl)glow(x,y-h*.5,h*.6,o.hlCol||C.accent,.45);
+  rr(x-h*.17,y-h*.78,h*.34,h*.42,h*.1);ctx.fillStyle=sh;ctx.fill();
+  rr(x-h*.15,y-h*.4,h*.13,h*.4,h*.05);ctx.fillStyle=mix(sh,"#10161A",.45);ctx.fill();rr(x+h*.02,y-h*.4,h*.13,h*.4,h*.05);ctx.fill();
+  circ(x,y-h*.88,hr,sk,hexA("#10161A",.3),1);ctx.beginPath();ctx.arc(x,y-h*.9,hr*1.02,Math.PI*1.05,Math.PI*1.95);ctx.fillStyle=o.hair||C.hair;ctx.fill()}
+/* Labrador silhouette, facing right, feet at y */
+function dog(x,y,s,col,o){o=o||{};const ed=hexA(isDark()?"#E8EEF1":"#10161A",.5);ctx.lineJoin="round";
+  ctx.beginPath();ctx.moveTo(x-34*s,y-38*s);ctx.quadraticCurveTo(x-52*s,y-52*s,x-56*s,y-34*s);ctx.strokeStyle=col;ctx.lineWidth=5*s;ctx.lineCap="round";ctx.stroke();ctx.lineCap="butt";
+  [[-26,0],[-14,0],[16,0],[28,0]].forEach(l=>{rr(x+l[0]*s-4*s,y-30*s,8*s,30*s,3*s);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=ed;ctx.lineWidth=1;ctx.stroke()});
+  ell(x,y-38*s,40*s,17*s,0,col,ed,1.2);
+  ell(x+36*s,y-54*s,13*s,12*s,0,col,ed,1.2);rr(x+40*s,y-58*s,22*s,12*s,5*s);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=ed;ctx.stroke();
+  ell(x+30*s,y-50*s,5*s,10*s,.25,mix(col,"#10161A",.25),ed,1);circ(x+60*s,y-56*s,2.6*s,"#10161A");circ(x+40*s,y-59*s,1.8*s,isDark()?"#E8EEF1":"#10161A")}
+/* red blood cell; o.sickle crescent; o.ag "A","B","AB","O" draws surface antigens */
+function rbc(x,y,r,o){o=o||{};if(o.sickle){ctx.save();ctx.translate(x,y);ctx.rotate(o.rot||0);ctx.beginPath();ctx.arc(0,r*.35,r*1.05,Math.PI*1.12,Math.PI*1.88);ctx.arc(0,-r*.55,r*.95,Math.PI*1.84,Math.PI*1.16,true);ctx.closePath();fillStroke(C.rbc,mix(C.rbc,"#10161A",.4),1.4);ctx.restore();return}
+  ell(x,y,r,r*(o.flat||1),0,C.rbc,mix(C.rbc,"#10161A",.4),1.4);ell(x,y,r*.5,r*.5*(o.flat||1),0,hexA(C["rbc-in"],.9));
+  if(o.ag&&o.ag!=="O"){const n=o.n||10;for(let i=0;i<n;i++){const a=i/n*TAU+(o.rot||0);const px=x+Math.cos(a)*(r+5),py=y+Math.sin(a)*(r+5);const isA=o.ag==="A"||(o.ag==="AB"&&i%2===0);
+      line(x+Math.cos(a)*r,y+Math.sin(a)*r,px,py,hexA(C.ink,.5),1.2);if(isA){ctx.beginPath();ctx.moveTo(px+Math.cos(a)*6,py+Math.sin(a)*6);ctx.lineTo(px+Math.cos(a+2.1)*4.5,py+Math.sin(a+2.1)*4.5);ctx.lineTo(px+Math.cos(a-2.1)*4.5,py+Math.sin(a-2.1)*4.5);ctx.closePath();fillStroke(C.agA,hexA("#10161A",.4),1)}
+      else{ctx.save();ctx.translate(px+Math.cos(a)*3,py+Math.sin(a)*3);ctx.rotate(a);ctx.fillStyle=C.agB;ctx.fillRect(-3.5,-3.5,7,7);ctx.strokeStyle=hexA("#10161A",.4);ctx.lineWidth=1;ctx.strokeRect(-3.5,-3.5,7,7);ctx.restore()}}}}
+function mosq(x,y,s,T){const f=Math.sin(T*40)*.5+.5;ell(x-6*s,y-6*s,7*s,2.5*s*(0.4+f),-.6,hexA(C.sky,.8),hexA(C.mosq,.6),1);ell(x+4*s,y-7*s,7*s,2.5*s*(0.4+f),.6,hexA(C.sky,.8),hexA(C.mosq,.6),1);
+  ell(x,y,9*s,2.6*s,0,C.mosq);circ(x+10*s,y,2.6*s,C.mosq);line(x+12*s,y,x+19*s,y+3*s,C.mosq,1.2);for(let i=-1;i<=1;i++){line(x+i*4*s,y,x+i*6*s-2*s,y+8*s,C.mosq,1);}}
+/* histogram */
+function hist(x,y,w,h,vals,o){o=o||{};const n=vals.length;const mx=o.max||Math.max(...vals)*1.1;const bw=w/n;line(x,y+h,x+w,y+h,C["ink-soft"],1.5);
+  vals.forEach((v,i)=>{const hh=h*clamp(v/mx,0,1);rr(x+i*bw+2,y+h-hh,bw-4,hh,2);ctx.fillStyle=o.colF?o.colF(i):hexA(C.accent,.7);ctx.fill();ctx.strokeStyle=hexA("#10161A",.3);ctx.lineWidth=1;ctx.stroke();if(o.lab)txt(x+i*bw+bw/2,y+h+11,o.lab(i),{size:11,mono:true,align:"center",color:C["ink-soft"]})})}
+/* worked example card: rows appear one by one. W={title,q,rows:[str|{t,ans}],miss,now} */
+function wkc(x,y,w,h,W_,t,o){o=o||{};panelBox(x,y,w,h,{fill:hexA(C.paper,.97)});title(x+12,y+16,W_.title||"Worked example",C["accent-ink"]);
+  let yy=y+36;const sz=o.size||12.5;if(W_.q){yy=wrapText(W_.q,x+12,yy,w-24,sz+4,{size:sz,weight:600})+sz+8}
+  const dt=o.dt||1.3,t0=o.t0||.6;let k=0;
+  W_.rows.forEach((r,i)=>{const a=seg(t,t0+i*dt,t0+i*dt+.5);const R=typeof r==="string"?{t:r}:r;if(a>0)withA(a,()=>{
+      if(R.ans){ctx.font=`700 ${o.afs||14}px ${MONO}`;const tw=Math.min(w-30,ctx.measureText(R.t).width);rr(x+10,yy-12,tw+14,24,6);ctx.fillStyle=C["good-wash"];ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.8;ctx.stroke();fitTxt(x+17,yy,R.t,w-34,{size:o.afs||14,weight:700,mono:true})}
+      else fitTxt(x+14,yy,R.t,w-28,{size:o.rfs||13,weight:600,mono:!R.sans,color:R.col||C.ink})});yy+=R.ans?(o.alh||30):(o.rlh||22);k=i});
+  const tm=t0+W_.rows.length*dt+.3;
+  if(W_.miss){const a=seg(t,tm,tm+.6);const n=wrapCount("Common mistake: "+W_.miss,w-36,sz-1);const mh=n*(sz+2)+10;if(a>0)withA(a,()=>{rr(x+10,yy-6,w-20,mh,5);ctx.fillStyle=C["warn-wash"];ctx.fill();ctx.strokeStyle=C.warn;ctx.lineWidth=1.2;ctx.stroke();wrapText("Common mistake: "+W_.miss,x+18,yy-6+5+sz/2+1,w-36,sz+2,{size:sz-1})});yy+=mh+8}
+  if(W_.now){const a=seg(t,tm+1.2,tm+1.8);const n=wrapCount("Now you try: "+W_.now,w-36,sz-1);const mh=n*(sz+2)+10;if(a>0)withA(a,()=>{rr(x+10,yy-6,w-20,mh,5);ctx.fillStyle=C["gold-wash"];ctx.fill();ctx.strokeStyle=C.gold;ctx.lineWidth=1.2;ctx.stroke();wrapText("Now you try: "+W_.now,x+18,yy-6+5+sz/2+1,w-36,sz+2,{size:sz-1})})}
+  return tm+2}
+/* a dashed zoom link between two boxes */
+function zoomLink(x1,y1,x2,y2,x3,y3,x4,y4,col){line(x1,y1,x3,y3,hexA(col||C["ink-soft"],.6),1.2,[4,3]);line(x2,y2,x4,y4,hexA(col||C["ink-soft"],.6),1.2,[4,3])}
+function tick(x,y,s,col){poly([[x-s,y],[x-s*.3,y+s*.7],[x+s,y-s*.7]],col||C.good,2.6)}
+/* Mendel's seven traits icons (small) */
+function traitIcon(k,x,y,s,dom){if(k==="flower")flower(x,y,s*.8,dom?"purp":"white");else if(k==="seedC")pea(x,y,s*.7,dom?"seedY":"seedG");else if(k==="seedS")pea(x,y,s*.7,"seedY",!dom);
+  else if(k==="pod"){ctx.save();ctx.translate(x,y);ctx.rotate(-.4);ell(0,0,s,s*.32,0,dom?C.pod:C.seedY,hexA("#10161A",.4),1);ctx.restore()}
+  else if(k==="podS"){ctx.save();ctx.translate(x,y);ctx.rotate(-.4);if(dom)ell(0,0,s,s*.32,0,C.pod,hexA("#10161A",.4),1);else{ctx.beginPath();for(let i=0;i<=3;i++){ctx.ellipse(-s*.66+i*s*.44,0,s*.24,s*.3,0,0,TAU)}ctx.fillStyle=C.pod;ctx.fill();ctx.strokeStyle=hexA("#10161A",.4);ctx.stroke()}ctx.restore()}
+  else if(k==="pos"){line(x,y+s,x,y-s,C.stem,2.5);if(dom){flower(x-s*.5,y,s*.35,"purp");flower(x+s*.5,y-s*.4,s*.35,"purp")}else flower(x,y-s,s*.4,"purp")}
+  else if(k==="height"){line(x,y+s,x,y+s-(dom?2*s:s*.8),C.stem,3);ell(x+3,y+s-(dom?1.4*s:s*.5),4,2,0,C.leaf)}}
+/* ---------------- lab helpers ---------------- */
+const $=s=>document.querySelector(s);
+function makeStage(id,W,H){const cv=document.getElementById(id);const st={cv,ctx:cv.getContext("2d"),W,H,K:1};
+  st.fit=()=>{const w=cv.parentElement.clientWidth;if(!w)return;const dpr=window.devicePixelRatio||1;cv.style.height=(w*H/W)+"px";cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);st.K=cv.width/W};return st}
+function use(st){ctx=st.ctx;ctx.setTransform(st.K,0,0,st.K,0,0);ctx.clearRect(0,0,st.W,st.H);ctx.globalAlpha=1;bg(C.ecf)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+const store={get:k=>{try{return localStorage.getItem("b1-mendel-lab-"+k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem("b1-mendel-lab-"+k,v)}catch(e){}}};
+function segBtns(el,items,cur,onPick){el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.innerHTML=it[1];b.setAttribute("aria-pressed",String(it[0]===cur()));b.onclick=()=>{onPick(it[0]);el.querySelectorAll("button").forEach((x,i)=>x.setAttribute("aria-pressed",String(items[i][0]===cur())))};el.appendChild(b)})}
+function chalUI(el,list,done){el.innerHTML=list.map((c,i)=>`<li class="${done.has(i)?"done":""}"><span class="ck" aria-hidden="true">${done.has(i)?"✓":i+1}</span><span>${c}${done.has(i)?'<span class="gk-sr"> (done)</span>':""}</span></li>`).join("")}
+let DT=0;
+/* ================= Part 1: cross simulator ================= */
+const GENES=[{L:"A",name:"flower colour"},{L:"B",name:"seed colour"},{L:"C",name:"seed shape"}];
+const CRITT=[0,3.8415,5.9915,7.8147,9.4877,11.0705,12.5916,14.0671,15.5073,16.9190,18.3070,19.6751,21.0261,22.3620,23.6848,24.9958,26.2962,27.5871,28.8693,30.1435,31.4104,32.6706,33.9244,35.1725,36.4150,37.6525,38.8851];
+const XS={n:1,pat:["complete","complete","complete"],p1:[1,1,1],p2:[1,1,1],counts:{},N:0,auto:true,nextAuto:0,flying:[],burst:[],last:null,hist:[],hyp:"model",now:0,lastLand:0};
+function gStr(i,k){const L=GENES[i].L,l=L.toLowerCase();return k===2?L+L:k===1?L+l:l+l}
+function genoStr(ks){return ks.slice(0,XS.n).map((k,i)=>gStr(i,k)).join("")}
+function epi(){return XS.n>=2&&XS.pat[1]==="epistatic"}
+function genePh(i,k){const p=XS.pat[i];if(p==="complete"||p==="epistatic")return k>0?"D":"r";return k===2?"D":k===1?"H":"r"}
+function phenKey(ks){if(epi()&&ks[1]===0)return "bb";const parts=[];for(let i=0;i<XS.n;i++){if(i===1&&epi())continue;parts.push(GENES[i].L+genePh(i,ks[i]))}return parts.join(" ")}
+const PHN={A:{D:"purple",H:{incomplete:"lavender",codominant:"purple-and-white"},r:"white"},B:{D:"yellow seeds",H:{incomplete:"yellow-green seeds",codominant:"yellow seeds with green flecks"},r:"green seeds"},C:{D:"round",H:{incomplete:"slightly wrinkled",codominant:"round with wrinkled patches"},r:"wrinkled"}};
+function phenName(key){if(key==="bb")return "white (bb blocks pigment)";return key.split(" ").map(s=>{const L=s[0],c=s[1];const i="ABC".indexOf(L);if(L==="A"&&epi()){return c==="D"?"purple":c==="r"?"pink":(XS.pat[0]==="incomplete"?"light purple":"purple-and-pink")}const v=PHN[L][c];return typeof v==="string"?v:v[XS.pat[i]]}).join(", ")}
+function offDist(g1,g2){const a=g1/2,b=g2/2;return [(1-a)*(1-b),a*(1-b)+(1-a)*b,a*b]}
+function expDist(){const d=[];for(let i=0;i<XS.n;i++)d.push(offDist(XS.p1[i],XS.p2[i]));const out={};
+  const rec=(i,ks,p)=>{if(p===0)return;if(i===XS.n){const k=phenKey(ks);out[k]=(out[k]||0)+p;return}for(let k=0;k<3;k++)rec(i+1,ks.concat([k]),p*d[i][k])};rec(0,[],1);return out}
+function classOrder(keys){const rank=k=>{if(k==="bb")return 999;return k.split(" ").reduce((a,s)=>a*3+"DHr".indexOf(s[1]),0)};return keys.slice().sort((a,b)=>rank(a)-rank(b))}
+function gcd(a,b){a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b){const t=a%b;a=b;b=t}return a||1}
+function ratioStr(props){const m=props.map(p=>Math.round(p*Math.pow(4,XS.n)));const g=m.reduce((a,b)=>gcd(a,b));return m.map(v=>v/g).join(" : ")}
+/* chi-square p value */
+function lgam(z){const c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(z<.5)return Math.log(Math.PI/Math.sin(Math.PI*z))-lgam(1-z);z-=1;let x=c[0];for(let i=1;i<9;i++)x+=c[i]/(z+i);const t=z+7.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x)}
+function gamP(a,x){if(x<=0)return 0;if(x<a+1){let sum=1/a,del=sum,ap=a;for(let n=0;n<400;n++){ap++;del*=x/ap;sum+=del;if(Math.abs(del)<Math.abs(sum)*1e-12)break}return sum*Math.exp(-x+a*Math.log(x)-lgam(a))}
+  let b=x+1-a,c=1e300,d=1/b,h=d;for(let i=1;i<400;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<1e-300)d=1e-300;c=b+an/c;if(Math.abs(c)<1e-300)c=1e-300;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<1e-12)break}return 1-Math.exp(-x+a*Math.log(x)-lgam(a))*h}
+function pChi(x,df){return clamp(1-gamP(df/2,x/2),0,1)}
+function chiNow(){const E=expDist();const keys=classOrder(Object.keys(E));const model=keys.map(k=>E[k]);const props=XS.hyp==="equal"?keys.map(()=>1/keys.length):model;
+  let chi=0,minE=Infinity;keys.forEach((k,i)=>{const e=props[i]*XS.N;const o=XS.counts[k]||0;if(e>0)chi+=(o-e)*(o-e)/e;minE=Math.min(minE,e)});const df=keys.length-1;
+  return {keys,props,model,chi,df,minE,crit:CRITT[df]||0,p:df>0&&XS.N>0?pChi(chi,df):1}}
+/* ---------- drawing an offspring ---------- */
+function flowerPh(x,y,r,ks){let col;const k=ks[0],p=XS.pat[0];
+  if(epi()&&ks[1]===0){flower(x,y,r,"white");return}
+  const dom="purp",rec=epi()?"pink":"white";
+  if(k===2||(k===1&&p==="complete"))col=dom;else if(k===0)col=rec;else if(p==="incomplete")col=mix(flCol(dom),flCol(rec),.5);
+  else{flower(x,y,r,dom);ctx.save();ctx.beginPath();ctx.rect(x,y-r*2,r*2,r*4);ctx.clip();flower(x,y,r,rec);ctx.restore();return}
+  flower(x,y,r,col)}
+function seedPh(x,y,r,kb,kc){let col="seedY",wr=false,amp=0;
+  if(kb!=null){const p=XS.pat[1];if(p==="epistatic")col="seedY";else if(kb===2||(kb===1&&p==="complete"))col="seedY";else if(kb===0)col="seedG";else if(p==="incomplete")col=mix(C.seedY,C.seedG,.5);else col="cod"}
+  if(kc!=null){const p=XS.pat[2];if(kc===0)wr=true;else if(kc===1&&p==="incomplete")amp=.06;else if(kc===1&&p==="codominant")amp=-1}
+  const fill=col==="cod"?"seedY":col;
+  if(amp>0){blobPath(x,y,r*.95,x*.3,0,amp);fillStroke(C[fill]||fill,mix(C[fill]||fill,"#10161A",.4),1.2)}else pea(x,y,r,fill,wr);
+  if(col==="cod")for(let i=0;i<4;i++)circ(x-r*.4+(i%2)*r*.7,y-r*.35+Math.floor(i/2)*r*.6,r*.17,C.seedG);
+  if(amp===-1){blobPath(x+r*.35,y+r*.25,r*.45,2,0,.2);fillStroke(hexA(C.ink,.12),hexA(C.ink,.4),1)}}
+function orgIcon(x,y,s,ks){line(x,y,x,y-40*s,C.stem,3*s);ell(x+8*s,y-14*s,8*s,3.5*s,-.4,C.leaf);flowerPh(x,y-48*s,13*s,ks);
+  if(XS.n>=2&&!epi())seedPh(x+22*s,y-10*s,8*s,ks[1],XS.n>=3?ks[2]:null);else if(XS.n>=3)seedPh(x+22*s,y-10*s,8*s,null,ks[2])}
+function keyToKs(key){/* a representative genotype for drawing a phenotype class */const ks=[2,2,2];if(key==="bb"){ks[1]=0;return ks}
+  key.split(" ").forEach(s=>{const i="ABC".indexOf(s[0]);ks[i]=s[1]==="D"?2:s[1]==="H"?1:0});return ks}
+/* ---------- breeding ---------- */
+function gamete(gs){const a=[];for(let i=0;i<XS.n;i++){const g=gs[i];a.push(g===2?1:g===0?0:(Math.random()<.5?1:0))}return a}
+function gamStr(a){return a.map((v,i)=>v?GENES[i].L:GENES[i].L.toLowerCase()).join("")}
+function land(ks){const key=phenKey(ks);XS.counts[key]=(XS.counts[key]||0)+1;XS.N++;XS.last=ks;pushHist()}
+function pushHist(){const c=chiNow();if(c.df>0)XS.hist.push([XS.N,c.chi]);if(XS.hist.length>400)XS.hist=XS.hist.filter((h,i)=>i%2===0||i===XS.hist.length-1)}
+function breed(n){if(n<=10){for(let i=0;i<n;i++){const g1=gamete(XS.p1),g2=gamete(XS.p2);XS.flying.push({g1,g2,ks:g1.map((v,k)=>v+g2[k]),t0:XS.now+i*.12})}}
+  else{for(let i=0;i<n;i++){const g1=gamete(XS.p1),g2=gamete(XS.p2);const ks=g1.map((v,k)=>v+g2[k]);const key=phenKey(ks);XS.counts[key]=(XS.counts[key]||0)+1;XS.N++;XS.last=ks;if(i%Math.max(1,Math.floor(n/25))===0)pushHist()}pushHist();
+    for(let i=0;i<8;i++){const g1=gamete(XS.p1),g2=gamete(XS.p2);XS.burst.push({g1,g2,t0:XS.now+i*.05})}}
+  xUI()}
+function xReset(msg){XS.counts={};XS.N=0;XS.flying=[];XS.burst=[];XS.last=null;XS.hist=[];XS.nextAuto=XS.now+.3;xUI();if(msg)xStatus(msg)}
+function xStatus(t,cls){const s=$("#xStatus");s.className="status"+(cls?" "+cls:"");s.textContent=t}
+/* ---------- controls ---------- */
+const PRESETS=[["Monohybrid Aa × Aa",{n:1,pat:["complete"],p1:[1],p2:[1]}],["Testcross Aa × aa",{n:1,pat:["complete"],p1:[1],p2:[0]}],["Incomplete Aa × Aa",{n:1,pat:["incomplete"],p1:[1],p2:[1]}],
+  ["Dihybrid AaBb × AaBb",{n:2,pat:["complete","complete"],p1:[1,1],p2:[1,1]}],["Epistasis 9 : 3 : 4",{n:2,pat:["complete","epistatic"],p1:[1,1],p2:[1,1]}],["Trihybrid AaBbCc × AaBbCc",{n:3,pat:["complete","complete","complete"],p1:[1,1,1],p2:[1,1,1]}]];
+function xBuildGenes(){const box=$("#xGeneCtl");box.innerHTML="";
+  for(let i=0;i<XS.n;i++){const L=GENES[i].L;const d=document.createElement("div");d.className="genebox";
+    const opts=[["complete","Complete dominance"],["incomplete","Incomplete dominance"],["codominant","Codominance"]].concat(i===1?[["epistatic","Recessive epistasis: bb blocks pigment"]]:[]);
+    d.innerHTML=`<h3>Gene ${L} &middot; ${GENES[i].name}</h3><label class="lab-sel" for="xPat${i}">Dominance pattern</label><select id="xPat${i}">${opts.map(o=>`<option value="${o[0]}"${XS.pat[i]===o[0]?" selected":""}>${o[1]}</option>`).join("")}</select>
+      <div class="gtrow"><span class="gtl" id="gp1-${i}">Parent 1</span><div class="seg3" role="group" aria-labelledby="gp1-${i}" id="xP1-${i}"></div></div>
+      <div class="gtrow"><span class="gtl" id="gp2-${i}">Parent 2</span><div class="seg3" role="group" aria-labelledby="gp2-${i}" id="xP2-${i}"></div></div>`;
+    box.appendChild(d);
+    d.querySelector("select").onchange=e=>{XS.pat[i]=e.target.value;xReset("Dominance pattern changed. Counts reset.")};
+    [["p1","xP1-"],["p2","xP2-"]].forEach(q=>segBtns(d.querySelector("#"+q[1]+i),[[2,gStr(i,2)],[1,gStr(i,1)],[0,gStr(i,0)]],()=>XS[q[0]][i],v=>{XS[q[0]][i]=v;xReset("Parents changed. Counts reset.")}))}}
+function xInit(){segBtns($("#xGenes"),[[1,"1 gene"],[2,"2 genes"],[3,"3 genes"]],()=>XS.n,v=>{XS.n=v;if(v<2&&XS.pat[1]==="epistatic")XS.pat[1]="complete";xBuildGenes();xReset("Number of genes changed. Counts reset.")});
+  xBuildGenes();
+  $("#xBreed").querySelectorAll("button").forEach(b=>b.onclick=()=>breed(+b.dataset.n));
+  $("#xAuto").onclick=()=>{XS.auto=!XS.auto;$("#xAuto").setAttribute("aria-pressed",String(XS.auto));xStatus(XS.auto?"Auto-breed on: one offspring at a time.":"Auto-breed paused.")};
+  $("#xReset").onclick=()=>xReset("Counts reset.");$("#xHyp").onchange=e=>{XS.hyp=e.target.value;XS.hist=[];pushHist();xUI()};
+  const pr=$("#xPresets");PRESETS.forEach(p=>{const b=document.createElement("button");b.type="button";b.className="tbtn";b.textContent=p[0];b.onclick=()=>xPreset(p[1],p[0]);pr.appendChild(b)});xStatus("Auto-breed is on. Change the parents or press a preset to start a new cross.")}
+function xPreset(o,name){XS.n=o.n;for(let i=0;i<3;i++){XS.pat[i]=o.pat[i]||"complete";XS.p1[i]=o.p1[i]!=null?o.p1[i]:1;XS.p2[i]=o.p2[i]!=null?o.p2[i]:1}
+  $("#xGenes").querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",String(i+1===XS.n)));xBuildGenes();xReset("Preset loaded: "+name+".")}
+function xParents(){return [genoStr(XS.p1),genoStr(XS.p2)]}
+function xUI(){const c=chiNow();const P=xParents();const rs=ratioStr(c.model);
+  let dec;if(c.df<1)dec="Only one phenotype class: nothing to test.";else if(XS.N===0)dec="Breed some offspring.";else if(c.minE<5)dec="Need more offspring (every expected count should be at least 5).";else dec=c.chi>=c.crit?"Reject H₀ at p = 0.05":"Fail to reject H₀ at p = 0.05";
+  const rows=[["Cross",P[0]+" × "+P[1]],["Offspring",XS.N.toLocaleString("en-US")],["Expected phenotype ratio",rs],["Testing against",XS.hyp==="equal"?"equal classes":rs],["χ²",c.df>0&&XS.N?c.chi.toFixed(2):"–"],["Degrees of freedom",c.df>0?String(c.df):"–"],["Critical value (p = 0.05)",c.df>0?c.crit.toFixed(2):"–"],["p value (approx.)",c.df>0&&XS.N?(c.p<.001?"< 0.001":c.p.toFixed(3)):"–"],["Decision",dec]];
+  $("#xRead tbody").innerHTML=rows.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join("");
+  const parts=rs.split(" : ");$("#xClasses tbody").innerHTML=c.keys.map((k,i)=>`<tr><td class="l">${phenName(k)}</td><td>${parts[i]}</td><td>${XS.counts[k]||0}</td><td>${(c.props[i]*XS.N).toFixed(1)}</td></tr>`).join("");
+  $("#xCap").textContent=`${P[0]} × ${P[1]}: ${XS.N.toLocaleString("en-US")} offspring. Expected ${rs}. ${c.df>0&&XS.N?"χ² = "+c.chi.toFixed(2)+", df = "+c.df+". ":""}${dec}`}
+/* ---------- canvas ---------- */
+function drawCross(now){use(S1);const T=now/1000;XS.now=T;
+  if(XS.auto&&XS.N<5000&&T>=XS.nextAuto&&XS.flying.length<5){breed(1);XS.nextAuto=T+(XS.N<40?.3:.18)}
+  const P=xParents();const cx=400;
+  /* parents */
+  [[0,XS.p1,P[0],C.mat],[1,XS.p2,P[1],C.pat]].forEach(q=>{const x=q[0]?606:14;pane(x,14,180,186,"parent "+(q[0]+1),q[3]);const ks=[0,1,2].map(i=>q[1][i]);
+    ctx.save();ctx.translate(x+90,150);const sw=Math.sin(T*1.3+q[0])*.03;ctx.rotate(sw);orgIcon(0,0,1.7,ks);ctx.restore();gtxt(x+90,178,q[2],{size:15});
+    for(let i=0;i<3;i++){const a=T*1.4+i*2.1+q[0];gam(x+90+Math.cos(a)*68,96+Math.sin(a)*30,7,"",{kind:q[0]?"pollen":"egg"})}});
+  /* meeting point */
+  circ(cx,100,30,hexA(C.accent,.08),hexA(C.accent,.5),1.4);txt(cx,46,"fertilization",{size:12,weight:700,align:"center",color:C["ink-soft"]});
+  const keep=[];XS.flying.forEach(f=>{const e=(T-f.t0)/1.1;if(e<0){keep.push(f);return}if(e>=1){land(f.ks);XS.lastLand=T;return}keep.push(f);
+    const a=ease(seg(e,0,.5));const s1=gamStr(f.g1),s2=gamStr(f.g2);
+    if(e<.55){gam(lerp(190,cx-18,a),lerp(100,100,a)+Math.sin(a*Math.PI)*-30,15,s1,{kind:"egg",size:11});gam(lerp(610,cx+18,a),100+Math.sin(a*Math.PI)*-30,15,s2,{kind:"pollen",size:11})}
+    else{const z=seg(e,.55,1);glow(cx,100,40*(1-z)+10,C.gold,.6*(1-z));gam(cx,lerp(100,176,z*z),18,genoStr(f.ks),{edge:C.accent,size:XS.n>2?9.5:11})}});
+  XS.flying=keep;
+  XS.burst=XS.burst.filter(b=>{const e=(T-b.t0)/.7;if(e>=1)return false;if(e<0)return true;const a=ease(e);gam(lerp(190,cx,a),100+Math.sin(a*Math.PI)*-40,10,"",{kind:"egg"});gam(lerp(610,cx,a),100+Math.sin(a*Math.PI)*40,10,"",{kind:"pollen"});return true});
+  if(XS.last){const ks=XS.last;const fresh=clamp(1-(T-XS.lastLand)*1.5,0,1);if(fresh>0)glow(cx,170,46,C.accent,.4*fresh);orgIcon(cx-10,206,.9,ks);gtxt(cx+44,178,genoStr(ks),{size:13,align:"left"});txt(cx+44,196,"latest",{size:11.5,weight:600,color:C["ink-soft"]})}
+  /* bars */
+  const c=chiNow();const n=c.keys.length;pane(14,214,520,250,"observed vs expected share",C["ink-soft"]);
+  const cls=c.keys.map((k,i)=>({lab:"",obs:XS.N?(XS.counts[k]||0)/XS.N:0,exp:c.props[i],col:C.obs}));
+  const bx=34,bw=480,by=262,bh=136;obsExp(bx,by,bw,bh,cls,{max:Math.max(.3,...cls.map(q=>Math.max(q.obs,q.exp)))*1.08,num:n<=8?(q=>XS.N?Math.round(q.obs*100)+"%":""):null});
+  const gw=bw/n;const isz=clamp(gw/34,.32,.8);c.keys.forEach((k,i)=>{const x=bx+i*gw+gw/2;ctx.save();orgIcon(x-6*isz,by+bh+48*isz+12,isz,keyToKs(k));ctx.restore()});
+  if(n<=4)c.keys.forEach((k,i)=>fitTxt(bx+i*gw+gw/2,by+bh+64,phenName(k),gw-6,{size:11.5,weight:600,align:"center",color:C["ink-soft"]}));
+  /* chi history */
+  pane(544,214,242,250,"χ² as the sample grows",C["ink-soft"]);
+  if(c.df>0){const maxN=Math.max(50,XS.N);const ymax=Math.max(c.crit*1.6,...XS.hist.slice(-200).map(h=>Math.min(h[1],c.crit*4)));const g={x:580,y:250,w:190,h:160,x0:0,x1:maxN,y0:0,y1:ymax,xt:[0,maxN],xf:v=>v>=1000?Math.round(v/100)/10+"k":String(Math.round(v)),yt:[0,Math.round(c.crit*10)/10],grid:false};
+    graph(g);ctx.save();ctx.beginPath();ctx.rect(g.x,g.y,g.w,g.h);ctx.clip();rr(g.x,g.y,g.w,Math.max(0,g.Y(Math.min(ymax,c.crit))-g.y),0);ctx.fillStyle=hexA(C.tail,.12);ctx.fill();
+    line(g.x,g.Y(c.crit),g.x+g.w,g.Y(c.crit),C.tail,2,[5,3]);if(XS.hist.length>1)poly(XS.hist.map(h=>[g.X(h[0]),g.Y(Math.min(h[1],ymax))]),C.obs,2);ctx.restore();
+    txt(g.x+g.w,g.Y(c.crit)-9,"critical "+c.crit.toFixed(2),{size:11.5,weight:700,mono:true,align:"right",color:C.tail});
+    txt(560,442,XS.N?"χ² = "+c.chi.toFixed(2)+"   df = "+c.df:"breed to start",{size:13,weight:700,mono:true})}
+  else wrapText("Only one phenotype class is possible, so there is nothing to compare.",560,300,210,17,{size:12.5,weight:600});
+  /* summary strip */
+  pane(14,474,772,132,"",C["ink-soft"]);const rs=ratioStr(c.model);
+  txt(30,496,"Expected phenotype ratio",{size:12,weight:700,color:C["ink-soft"]});fitTxt(30,522,rs,220,{size:16,weight:700,mono:true});
+  txt(30,552,"Offspring bred",{size:12,weight:700,color:C["ink-soft"]});txt(30,578,XS.N.toLocaleString("en-US"),{size:18,weight:700,mono:true});
+  let dec,col;if(c.df<1){dec="One class only";col=C["ink-soft"]}else if(!XS.N){dec="Breed some offspring";col=C["ink-soft"]}else if(c.minE<5){dec="Need more data (expected counts under 5)";col=C.warn}else if(c.chi>=c.crit){dec="χ² ≥ "+c.crit.toFixed(2)+": reject H₀";col=C.bad}else{dec="χ² < "+c.crit.toFixed(2)+": fail to reject H₀";col=C.good}
+  label(510,500,dec,{size:13,weight:700,border:col});
+  wrapText(XS.hyp==="equal"?"Testing against equal classes: a wrong hypothesis, so χ² should climb past the line as the sample grows.":"Testing against the true expected ratio: χ² usually stays under the line, crossing it only about 1 time in 20 by chance.",270,530,500,17,{size:12.5,weight:600});
+  if(XS.N!==XS.uiN&&T-XS.uiT>.25){XS.uiT=T;XS.uiN=XS.N;xUI()}}
+XS.uiT=0;XS.uiN=-1;
+function crossA11y(){const c=chiNow();const P=xParents();const Nb=XS.N<10?XS.N:XS.N<100?Math.floor(XS.N/10)*10:Math.floor(XS.N/100)*100;const rs=ratioStr(c.model);
+  const lab=`Cross simulator, ${P[0]} × ${P[1]}, about ${Nb} offspring, expected ratio ${rs}.`;
+  const obs=c.keys.map(k=>phenName(k)+" "+(XS.N?Math.round((XS.counts[k]||0)/XS.N*100):0)+"%").join(", ");
+  return [lab,`Two parent plants sit at the top left and right, with genotypes ${P[0]} and ${P[1]}. Gametes fly from each parent to the middle, fuse, and drop as a new offspring. Below, teal bars show the observed share of each phenotype class (${obs}) against dashed gold lines for the expected ratio ${rs}. A small graph on the right tracks chi-square as the sample grows, with a red dashed critical value line.`]}
+/* ================= Part 2: problem trainer ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+function fr(n,d){const g=gcd(n,d);return [n/g,d/g]}
+function frs(f){return f[0]===0?"0":f[1]===1?String(f[0]):f[0]+"/"+f[1]}
+function fmul(a,b){return fr(a[0]*b[0],a[1]*b[1])}
+function fval(f){return f[0]/f[1]}
+function gS(L,k){const l=L.toLowerCase();return k===2?L+L:k===1?L+l:l+l}
+function distF(k1,k2){return [fr((2-k1)*(2-k2),4),fr(k1*(2-k2)+(2-k1)*k2,4),fr(k1*k2,4)]}
+function nfmt(v,dp){return String(+v.toFixed(dp==null?2:dp))}
+const CTYPES=[["mix","All types, mixed"],["punnett","Punnett square probabilities"],["product","Product rule: several genes"],["chisq","Chi-square: calculate χ²"],["chidec","Chi-square: df and decision"],["pedigree","Pedigree: which pattern fits?"],["carrier","Pedigree risk and carriers"]];
+const TR={type:"mix",p:null,hint:0,first:true,sol:false,solved:false,streak:0,best:0,count:0,solT:0,pick:null};
+const TRAITS=[{L:"P",ph:["purple","white"],org:"pea flowers"},{L:"Y",ph:["yellow","green"],org:"pea seeds"},{L:"R",ph:["round","wrinkled"],org:"pea seeds"},{L:"T",ph:["tall","short"],org:"pea plants"},{L:"G",ph:["green","yellow"],org:"pea pods"}];
+const HYP=[{nm:"3 : 1",r:[3,1],cls:["dominant","recessive"],ctx:"An F2 from Aa × Aa"},{nm:"1 : 1",r:[1,1],cls:["dominant","recessive"],ctx:"A testcross, Aa × aa"},{nm:"1 : 2 : 1",r:[1,2,1],cls:["red","pink","white"],ctx:"Snapdragons from pink × pink (incomplete dominance)"},
+  {nm:"9 : 3 : 3 : 1",r:[9,3,3,1],cls:["yellow round","yellow wrinkled","green round","green wrinkled"],ctx:"A dihybrid F2, YyRr × YyRr"},{nm:"9 : 3 : 4",r:[9,3,4],cls:["black","chocolate","yellow"],ctx:"Labrador pups from BbEe × BbEe"},{nm:"1 : 1 : 1 : 1",r:[1,1,1,1],cls:["AB","Ab","aB","ab"],ctx:"A dihybrid testcross, AaBb × aabb"}];
+const DIS=["cystic fibrosis","phenylketonuria (PKU)","Tay-Sachs disease","sickle cell disease"];
+const NAMES=[["Ana","Ben"],["Maya","Leo"],["Priya","Sam"],["Lena","Omar"],["Zoe","Kai"],["Rosa","Theo"]];
+function chiData(bias){for(let tries=0;tries<200;tries++){const h=pick(HYP);const sum=h.r.reduce((a,b)=>a+b);const N=pick([80,96,120,160,200,240,320,400,480,640,800]);const E=h.r.map(v=>v*N/sum);if(Math.min(...E)<5)continue;
+    let O=E.map(e=>Math.round(e+(Math.random()*2-1)*Math.sqrt(e)*1.1));if(bias){const i=ri(0,h.r.length-1),j=(i+1)%h.r.length;const sh=Math.round(Math.sqrt(E[i])*pick([2.6,3,3.6]));O[i]+=sh;O[j]-=sh}
+    const im=E.indexOf(Math.max(...E));O[im]+=N-O.reduce((a,b)=>a+b);if(O.some(o=>o<0))continue;const chi=O.reduce((a,o,i)=>a+(o-E[i])*(o-E[i])/E[i],0);return {h,N,E,O,chi,df:h.r.length-1}}}
+/* ---------- pedigree generator ---------- */
+function makePed(target){for(let tries=0;tries<600;tries++){const mode=target==="both"?pick(["AD","AR"]):target;const fw=mode==="AR"?[.35,.5,.15]:[.55,.45,0];
+    const fg=()=>{const r=Math.random();return r<fw[0]?0:r<fw[0]+fw[1]?1:2};const kid=(a,b)=>(Math.random()<a.g/2?1:0)+(Math.random()<b.g/2?1:0);
+    const inds=[];const add=(o)=>{o.aff=mode==="AR"?o.g===2:o.g>=1;inds.push(o);return o};
+    const nII=ri(2,4);const sp=72;const xs0=400-((nII+1)*sp)/2;
+    const I1=add({sex:"m",g:fg(),gen:0}),I2=add({sex:"f",g:fg(),gen:0});
+    const spL=add({sex:pick(["m","f"]),g:fg(),gen:1,x:xs0});const kidsII=[];for(let i=0;i<nII;i++){const c=add({sex:"m",g:kid(I1,I2),gen:1,x:xs0+sp*(i+1),par:[I1,I2]});kidsII.push(c)}
+    const c1=kidsII[0],cN=kidsII[nII-1];c1.sex=spL.sex==="m"?"f":"m";const spR=add({sex:"m",g:fg(),gen:1,x:cN.x+sp});cN.sex=pick(["m","f"]);spR.sex=cN.sex==="m"?"f":"m";
+    kidsII.forEach((c,i)=>{if(i>0&&i<nII-1)c.sex=pick(["m","f"])});
+    const midII=(kidsII[0].x+cN.x)/2;I1.x=midII-40;I2.x=midII+40;
+    const famL=[],famR=[];const nL=ri(2,3),nR=ri(2,3);const mL=(spL.x+c1.x)/2,mR=(cN.x+spR.x)/2;
+    for(let i=0;i<nL;i++)famL.push(add({sex:pick(["m","f"]),g:kid(spL,c1),gen:2,x:mL+(i-(nL-1)/2)*54,par:[spL,c1]}));
+    for(let i=0;i<nR;i++)famR.push(add({sex:pick(["m","f"]),g:kid(cN,spR),gen:2,x:mR+(i-(nR-1)/2)*54,par:[cN,spR]}));
+    const nAff=inds.filter(o=>o.aff).length;if(nAff<2||nAff>inds.length-3)continue;
+    let adBad=null,arBad=null;inds.forEach(o=>{if(!o.par)return;const[a,b]=o.par;if(o.aff&&!a.aff&&!b.aff&&!adBad)adBad=[a,b,o];if(!o.aff&&a.aff&&b.aff&&!arBad)arBad=[a,b,o]});
+    const cat=adBad&&!arBad?"AR":arBad&&!adBad?"AD":(!adBad&&!arBad?"both":"none");if(cat!==target)continue;
+    const gens=[[],[],[]];inds.forEach(o=>gens[o.gen].push(o));gens.forEach((g,gi)=>{g.sort((a,b)=>a.x-b.x);g.forEach((o,k)=>{o.lab=["I","II","III"][gi]+"-"+(k+1);o.y=50+gi*100})});
+    const mates=[[I1,I2],[spL,c1],[cN,spR]];const fams=[[I1,I2,kidsII],[spL,c1,famL],[cN,spR,famR]];
+    return {mode,cat,inds,mates,fams,adBad,arBad}}
+  return null}
+const GEN={
+ punnett(){const inc=Math.random()<.25;const tr=inc?{L:"R",ph:["red","pink","white"],org:"snapdragon flowers"}:pick(TRAITS);const L=tr.L,l=L.toLowerCase();
+   const [k1,k2]=pick([[1,1],[1,1],[1,0],[2,1],[1,2],[0,1],[2,0],[1,1]]);const gs=k=>k===2?[L,L]:k===1?[L,l]:[l,l];const G1=gs(k1),G2=gs(k2);
+   const boxes=[];for(let i=0;i<2;i++)for(let j=0;j<2;j++){const c=(G1[i]===L?1:0)+(G2[j]===L?1:0);boxes.push(c)}
+   const opts=[];[2,1,0].forEach(k=>{if(boxes.includes(k))opts.push(["geno",k])});if(!inc){if(boxes.some(c=>c>0)&&boxes.some(c=>c===0)){opts.push(["dom"]);opts.push(["rec"])}if(k1===1&&k2===1)opts.push(["hetDom"],["hetDom"])}
+   const q=pick(opts);let match,ans,tdesc;
+   if(q[0]==="geno"){match=boxes.map(c=>c===q[1]);tdesc=inc?`${tr.ph[2-q[1]]} (genotype ${gS(L,q[1])})`:`genotype ${gS(L,q[1])}`}
+   else if(q[0]==="dom"){match=boxes.map(c=>c>0);tdesc=`${tr.ph[0]} (the dominant phenotype)`}else if(q[0]==="rec"){match=boxes.map(c=>c===0);tdesc=`${tr.ph[1]} (the recessive phenotype)`}
+   else{match=boxes.map(c=>c===1);tdesc=`heterozygous, given that it shows the dominant phenotype (${tr.ph[0]})`}
+   const m=match.filter(Boolean).length;ans=q[0]==="hetDom"?fr(2,3):fr(m,4);
+   const intro=inc?`In ${tr.org}, red (RR) and white (rr) show incomplete dominance: Rr is pink.`:`In ${tr.org}, ${tr.ph[0]} (${L}) is dominant to ${tr.ph[1]} (${l}).`;
+   const uniq=a=>[...new Set(a)].join(" and ");const bs=boxes.map(c=>gS(L,c));
+   const rows=[`Gametes: ${gS(L,k1)} → ${uniq(G1)};  ${gS(L,k2)} → ${uniq(G2)}`,`Four equally likely boxes: ${bs.join(", ")}`];
+   if(q[0]==="hetDom"){rows.push(`Dominant-phenotype boxes: 3 (${bs.filter((b,i)=>boxes[i]>0).join(", ")})`,`Heterozygous among those 3: 2`,{t:"P = 2/3",ans:true})}
+   else{rows.push(`Matching boxes: ${m} of 4`,{t:`P = ${m}/4${frs(ans)!==m+"/4"?" = "+frs(ans):""}`,ans:true})}
+   return {title:"Punnett square",html:`${intro} Cross: <b>${gS(L,k1)} × ${gS(L,k2)}</b>. What is the probability that one offspring is <b>${tdesc}</b>?`,ans:fval(ans),fmt:frs(ans),kind:"prob",unit:"",
+     hints:["Write each parent's gametes. A heterozygote makes two kinds; a homozygote makes only one kind.","Fill the 2 × 2 Punnett square. Each box has probability 1/4.",q[0]==="hetDom"?"Count only the boxes with the dominant phenotype, then ask how many of those are heterozygous.":"Count the boxes that match, then divide by 4 and simplify."],
+     rows,miss:q[0]==="hetDom"?"answering 1/2. Once the offspring is known to show the dominant trait, the recessive box is impossible, so divide by 3.":inc?"using 3 : 1. With incomplete dominance each genotype has its own phenotype (1 : 2 : 1).":"forgetting that the heterozygote can form two ways (dominant allele from either parent).",
+     vis:{k:"pun",L,G1,G2,boxes,match,inc,tr}}},
+ product(){for(let tries=0;tries<100;tries++){const n=ri(2,4);const Ls=["A","B","C","D"].slice(0,n);const pairs=[[1,1],[1,1],[1,0],[0,1],[2,1],[1,2],[2,0],[1,1],[0,2]];
+   const genes=Ls.map(L=>{const pr=pick(pairs);const d=distF(pr[0],pr[1]);const choices=[];[0,1,2].forEach(k=>{if(d[k][0]>0)choices.push(["g",k])});const dom=fr(d[1][0]*d[2][1]+d[2][0]*d[1][1],d[1][1]*d[2][1]);if(dom[0]>0)choices.push(["D"]);
+     const c=pick(choices);const f=c[0]==="g"?d[c[1]]:dom;const t=c[0]==="g"?gS(L,c[1]):L+"_";return {L,k1:pr[0],k2:pr[1],t,f}});
+   if(genes.every(g=>g.f[0]===g.f[1]))continue;let tot=[1,1];genes.forEach(g=>tot=fmul(tot,g.f));if(tot[1]>4096)continue;
+   const p1=genes.map(g=>gS(g.L,g.k1)).join(""),p2=genes.map(g=>gS(g.L,g.k2)).join("");const ts=genes.map(g=>g.t).join(" ");const hasU=ts.indexOf("_")>=0;
+   const rows=genes.map(g=>`${g.L}:  ${gS(g.L,g.k1)} × ${gS(g.L,g.k2)}  →  P(${g.t}) = ${frs(g.f)}`);rows.push(`Multiply: ${genes.map(g=>frs(g.f)).join(" × ")}`);rows.push({t:`P = ${frs(tot)}`,ans:true});
+   const tc=genes.find(g=>(g.k1===1&&g.k2===0)||(g.k1===0&&g.k2===1));
+   return {title:"Product rule",html:`Cross <b>${p1} × ${p2}</b>. The genes assort independently and show complete dominance. What is the probability of an offspring that is <b>${ts}</b>?${hasU?" (A_ means AA or Aa: at least one dominant allele.)":""}`,ans:fval(tot),fmt:frs(tot),kind:"prob",unit:"",
+     hints:[`Split the cross into one gene at a time: ${genes.map(g=>gS(g.L,g.k1)+" × "+gS(g.L,g.k2)).join(", ")}.`,`Find each gene's probability with a small Punnett square. For example, ${rows[0].replace(/\s+/g," ")}.`,"The offspring needs every listed trait at once (AND), so multiply the gene probabilities."],
+     rows,miss:tc?`treating ${gS(tc.L,tc.k1)} × ${gS(tc.L,tc.k2)} like a monohybrid cross. A testcross gives each genotype with probability 1/2, not 1/4.`:"adding the gene probabilities. The offspring must have all the listed traits, so multiply.",vis:{k:"prod",genes,tot}}}},
+ chisq(){let d;for(let k=0;k<50;k++){d=chiData(Math.random()<.3);if(d.chi>=.05)break}const h=d.h;const ef=v=>nfmt(v,2);const sum=h.r.reduce((a,b)=>a+b);
+   const rows=[`Expected: ${h.r.map((v,i)=>`${v}/${sum} × ${d.N} = ${ef(d.E[i])}`).join(";  ")}`];h.cls.forEach((c,i)=>rows.push(`${c}: (${d.O[i]} − ${ef(d.E[i])})² / ${ef(d.E[i])} = ${((d.O[i]-d.E[i])**2/d.E[i]).toFixed(3)}`));
+   rows.push({t:`χ² = ${d.chi.toFixed(2)}`,ans:true});
+   return {title:"Calculate χ²",html:`${h.ctx}. Hypothesis: <b>${h.nm}</b>. Observed (total ${d.N}): ${h.cls.map((c,i)=>`${c} <b>${d.O[i]}</b>`).join(", ")}. Calculate χ² (two decimal places).`,ans:+d.chi.toFixed(2),fmt:d.chi.toFixed(2),kind:"chi",unit:"",
+     hints:[`Find each expected count: (its share of ${h.nm}) × ${d.N}. They must add up to ${d.N}.`,"For each class, compute (O − E)² ÷ E. Use counts, not percentages.","Add up the class values: χ² = Σ (O − E)² / E."],rows,miss:"dividing by O instead of E, or forgetting to square before adding (positive and negative deviations would cancel).",vis:{k:"chi",d,show:"bars"}}},
+ chidec(){let d;for(let k=0;k<200;k++){d=chiData(Math.random()<.5);if(Math.abs(d.chi-CRIT[d.df])>.5)break}const h=d.h;const df=d.df,cr=CRIT[df];const rej=d.chi>=cr;
+   const choices=[`Fail to reject H₀ (df = ${df})`,`Reject H₀ (df = ${df})`,`Fail to reject H₀ (df = ${df+1})`,`Reject H₀ (df = ${df+1})`];
+   const rows=[`Classes: ${h.r.length}  →  df = ${h.r.length} − 1 = ${df}`,`Critical value (df = ${df}, p = 0.05) = ${cr.toFixed(2)}`,`χ² = ${d.chi.toFixed(2)}  ${rej?"≥":"<"}  ${cr.toFixed(2)}`,rej?"The deviation is too large to blame on chance alone.":"The deviation is small enough to be due to chance.",{t:choices[rej?1:0],ans:true}];
+   return {title:"Chi-square decision",html:`${h.ctx}. Hypothesis: <b>${h.nm}</b>. Observed (total ${d.N}): ${h.cls.map((c,i)=>`${c} ${d.O[i]}`).join(", ")}. This gives <b>χ² = ${d.chi.toFixed(2)}</b>. What do you conclude at p = 0.05?`,choices,ans:rej?1:0,kind:"choice",
+     hints:["df = number of phenotype classes − 1.","Critical values at p = 0.05: df 1 = 3.84, df 2 = 5.99, df 3 = 7.81.","If χ² is at least the critical value, reject H₀. If it is smaller, fail to reject H₀."],rows,miss:"using the number of classes as df. df is the number of classes minus 1.",vis:{k:"chi",d,show:"curve"}}},
+ pedigree(){const target=pick(["AD","AR","AD","AR","both"]);const P_=makePed(target)||makePed("AR");const choices=["Autosomal dominant only","Autosomal recessive only","Either pattern could fit"];const ans=P_.cat==="AD"?0:P_.cat==="AR"?1:2;
+   const rows=[];if(P_.adBad){const[a,b,c]=P_.adBad;rows.push(`${a.lab} and ${b.lab} are unaffected but their child ${c.lab} is affected.`,"So the trait cannot be dominant: it must be recessive.")}
+   if(P_.arBad){const[a,b,c]=P_.arBad;rows.push(`${a.lab} and ${b.lab} are both affected but their child ${c.lab} is unaffected.`,"So the trait cannot be recessive (aa × aa gives only aa): it must be dominant.")}
+   if(P_.cat==="both")rows.push("No unaffected couple has an affected child.","No affected couple has an unaffected child.","Neither rule-out applies, so both patterns fit this family.");
+   rows.push({t:choices[ans],ans:true});
+   return {title:"Pedigree pattern",html:"Study the pedigree (filled = affected). Assume the trait is rare, fully penetrant, autosomal, and there are no new mutations. Which inheritance pattern fits?",choices,ans,kind:"choice",
+     hints:["Look for two unaffected parents with an affected child. That rules out dominant inheritance.","Look for two affected parents with an unaffected child. That rules out recessive inheritance.","If neither clue appears anywhere, both patterns can fit; you would need more families."],rows,miss:"deciding from how many people are affected. Use the parent-child clues instead.",vis:{k:"ped",P:P_}}},
+ carrier(){const dz=pick(DIS),nm=pick(NAMES);const t=ri(1,6);let html,ans,rows,hints,miss,ped;
+   const sib=(x,lab,sexP,qMark,stP)=>({par:[x-40,x+40],kids:[[x-24,"m",1,"sibling"],[x+24,sexP,stP||0,lab,qMark]]});
+   if(t===1){html=`${nm[0]} is unaffected. Her parents are unaffected, and her brother has ${dz} (autosomal recessive). What is the probability that ${nm[0]} is a carrier?`;ans=fr(2,3);
+     rows=["Her parents must both be carriers (Ff × Ff).","Possible children: FF, Ff, fF, ff","She is unaffected, so ff is ruled out.",{t:"P(carrier) = 2/3",ans:true}];miss="answering 1/2. Knowing she is unaffected leaves 3 boxes, 2 of them carriers.";ped={fams:[{x:240,lab:nm[0],sex:"f"}]}}
+   else if(t===2){html=`${nm[0]} and ${nm[1]} are both unaffected. Each has unaffected parents and a brother with ${dz}. What is the probability that their first child will have ${dz}?`;ans=fr(1,9);
+     rows=[`P(${nm[0]} is a carrier) = 2/3`,`P(${nm[1]} is a carrier) = 2/3`,"P(two carriers have an affected child) = 1/4","Multiply: 2/3 × 2/3 × 1/4",{t:"P = 4/36 = 1/9",ans:true}];miss="using 1/2 for each carrier chance, or forgetting the final 1/4.";ped={fams:[{x:180,lab:nm[0],sex:"f"},{x:520,lab:nm[1],sex:"m"}],couple:true}}
+   else if(t===3){html=`${nm[0]} is unaffected, with unaffected parents and a brother with ${dz}. Her partner ${nm[1]} has tested as a carrier. What is the probability that their child will have ${dz}?`;ans=fr(1,6);
+     rows=[`P(${nm[0]} is a carrier) = 2/3`,`P(${nm[1]} is a carrier) = 1 (tested)`,"Two carriers → affected child: 1/4","Multiply: 2/3 × 1 × 1/4",{t:"P = 2/12 = 1/6",ans:true}];miss="using 1/2 for the untested partner. An unaffected sibling of an affected person has a 2/3 carrier chance.";ped={fams:[{x:180,lab:nm[0],sex:"f"}],partner:{lab:nm[1],st:2},couple:true}}
+   else if(t===4){const s=pick(["two","carrierKid","oneOf2"]);if(s==="two"){html=`Two carriers of ${dz} plan to have two children. What is the probability that BOTH children will be affected?`;ans=fr(1,16);rows=["Each child: P(affected) = 1/4, independently","Both (AND): 1/4 × 1/4",{t:"P = 1/16",ans:true}];miss="adding 1/4 + 1/4. Both children affected means AND, so multiply."}
+     else if(s==="carrierKid"){html=`Two carriers of ${dz} have a child. What is the probability that the child is an unaffected carrier?`;ans=fr(1,2);rows=["Boxes: FF, Ff, fF, ff","Carriers: Ff and fF = 2 of 4",{t:"P = 2/4 = 1/2",ans:true}];miss="answering 2/3. That only applies once you already know the child is unaffected."}
+     else{html=`Two carriers of ${dz} plan to have two children. What is the probability that at least one child will be affected?`;ans=fr(7,16);rows=["P(one child unaffected) = 3/4","P(both unaffected) = 3/4 × 3/4 = 9/16","At least one affected = 1 − 9/16",{t:"P = 7/16",ans:true}];miss="adding 1/4 + 1/4 = 1/2. The two ways overlap (both could be affected); use the complement instead."}
+     ped={carriers:true}}
+   else if(t===5){const N=pick([20,25,30,40,50]);html=`${nm[0]} is a known carrier of ${dz}. Her partner has no family history; in their population about 1 in ${N} people is a carrier. What is the probability that their child will have ${dz}?`;ans=fr(1,4*N);
+     rows=[`P(${nm[0]} is a carrier) = 1`,`P(partner is a carrier) = 1/${N}`,"Two carriers → affected child: 1/4",`Multiply: 1 × 1/${N} × 1/4`,{t:`P = 1/${4*N}`,ans:true}];miss="forgetting the 1/4. Even two carriers have an affected child only 1 time in 4.";ped={known:true,N}}
+   else{html=`${nm[0]} has ${dz} (ff). Her partner is a carrier (Ff). What is the probability that their child will have ${dz}?`;ans=fr(1,2);rows=["Her gametes: all f","Partner's gametes: F or f, each 1/2","Child is ff when partner gives f",{t:"P = 1/2",ans:true}];miss="answering 1/4. That is for two carriers; an affected parent always passes on f.";ped={affParent:true}}
+   return {title:"Pedigree risk",html,ans:fval(ans),fmt:frs(ans),kind:"prob",unit:"",hints:["Work out who must be a carrier and who only might be. An unaffected child of two carriers has a 2/3 chance of being a carrier.","Write each person's chance of being a carrier, then the chance that the child is affected if both pass on f (1/4 for two carriers).","Multiply the independent chances together (AND). Use 1 − P(not) for \"at least one\"."],rows,miss,vis:{k:"car",ped,t,nm}}}
+};
+const GKEYS=Object.keys(GEN);
+function genOne(k){let q=null;for(let i=0;i<40&&!q;i++){try{q=GEN[k]()}catch(e){console.error(e);q=null}}q.type=k;return q}
+function parseAns(s){s=String(s).trim().replace(/,/g,"").replace(/[−–]/g,"-").replace(/\s+/g,"").replace(/^p=|^χ²=|^x2=/i,"");let pct=false;if(/%$/.test(s)){pct=true;s=s.slice(0,-1)}
+  let v=null;const m=s.match(/^(\d+)\/(\d+)$/);if(m){if(+m[2]===0)return null;v=+m[1]/+m[2]}else if(/^[-+]?(\d+\.?\d*|\.\d+)$/.test(s))v=parseFloat(s);else return null;if(pct)v/=100;return v}
+function judge(p,str){if(p.choices){const v=+str;if(str===""||!(v>=0))return {ok:false,kind:"empty"};return v===p.ans?{ok:true}:{ok:false,kind:"choice"}}
+  const v=parseAns(str);if(v==null)return {ok:false,kind:"format"};if(p.kind==="prob"&&v>1)return {ok:false,kind:"range"};
+  const tol=p.kind==="chi"?Math.max(.05,.015*p.ans):Math.max(.001,.01*p.ans);return Math.abs(v-p.ans)<=tol?{ok:true}:{ok:false,kind:"value"}}
+function calcMsg(cls,t){const m=$("#calcMsg");m.className="msg show "+cls;m.textContent=t}
+function ansTxt(p){return p.choices?p.choices[p.ans]:p.fmt}
+function calcNew(){const k=TR.type==="mix"?pick(GKEYS):TR.type;const q=genOne(k);TR.p=q;TR.hint=0;TR.first=true;TR.sol=false;TR.solved=false;TR.pick=null;
+  $("#calcProb").innerHTML=`<span class="pt">${q.title}</span>${q.html}`;$("#calcMsg").className="msg";$("#calcHintBox").hidden=true;$("#calcHintBox").innerHTML="";
+  const ch=$("#calcChoices");if(q.choices){$("#calcNumWrap").hidden=true;ch.hidden=false;ch.innerHTML="";q.choices.forEach((c,i)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=c;b.setAttribute("aria-pressed","false");b.onclick=()=>{TR.pick=i;ch.querySelectorAll(".opt").forEach((x,j)=>{x.setAttribute("aria-pressed",String(j===i));x.classList.remove("wrong")});calcCheck()};ch.appendChild(b)})}
+  else{$("#calcNumWrap").hidden=false;ch.hidden=true;$("#calcAns").value="";$("#calcUnit").textContent=q.kind==="chi"?"(χ²)":"(probability)"}
+  $("#calcCap").textContent=q.title+": "+(q.kind==="choice"?"choose an answer.":"type your answer.");a11yKey=""}
+function calcCheck(){const p=TR.p;const str=p.choices?(TR.pick==null?"":String(TR.pick)):$("#calcAns").value;const j=judge(p,str);
+  if(j.kind==="empty"||j.kind==="format"){calcMsg("info",p.choices?"Pick one of the answers.":"Type a number: a fraction like 3/16, a decimal like 0.1875, or a percent like 18.75%.");return}
+  if(j.kind==="range"){calcMsg("warn","Not quite. A probability is between 0 and 1. Type it as a fraction (1/4), a decimal (0.25) or a percent (25%).");TR.first=false;TR.streak=0;updCalcMeter();return}
+  if(j.ok){if(!TR.solved){TR.count++;if(TR.first&&!TR.sol){TR.streak++;TR.best=Math.max(TR.best,TR.streak);store.set("best",TR.best)}}TR.solved=true;calcMsg("good","✓ Correct: "+ansTxt(p)+". The worked solution is building in the picture.");if(p.choices)$("#calcChoices").querySelectorAll(".opt")[p.ans].classList.add("right");showSol(false)}
+  else{TR.first=false;TR.streak=0;if(p.choices)$("#calcChoices").querySelectorAll(".opt")[TR.pick].classList.add("wrong");calcMsg("warn","Not quite. "+(TR.hint<p.hints.length?"Try the next hint: ":"Check: ")+p.hints[Math.min(TR.hint,p.hints.length-1)])}
+  updCalcMeter();a11yKey=""}
+function showSol(byBtn){if(byBtn&&!TR.solved){TR.streak=0;TR.first=false}TR.sol=true;TR.solT=performance.now();updCalcMeter();a11yKey=""}
+function updCalcMeter(){$("#calcStreak").textContent=TR.streak;$("#calcBest").textContent=TR.best;$("#calcSolved").textContent=TR.count}
+function calcInit(){const sel=$("#calcType");sel.innerHTML=CTYPES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");sel.onchange=()=>{TR.type=sel.value;calcNew()};
+  $("#calcCheck").onclick=calcCheck;$("#calcAns").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();calcCheck()}});
+  $("#calcHint").onclick=()=>{const p=TR.p;const b=$("#calcHintBox");if(TR.hint<p.hints.length)TR.hint++;b.hidden=false;b.innerHTML=p.hints.slice(0,TR.hint).map((h,i)=>`<div><b>Hint ${i+1}:</b> ${h}</div>`).join("")+(TR.hint>=p.hints.length?`<div class="small">That is the whole ladder. Try it, or press Show worked solution.</div>`:"")};
+  $("#calcSol").onclick=()=>{showSol(true);calcMsg("info",`Worked solution: ${ansTxt(TR.p)}. Watch each step, then try a new problem.`)};$("#calcNew").onclick=calcNew;
+  TR.best=+(store.get("best")||0)}
+/* ---------- trainer drawing ---------- */
+function drawPed(P_,o){o=o||{};const s=o.s||26;P_.fams.forEach(f=>{const[a,b,kids]=f;pedMate(a.x,b.x,a.y);pedKids((a.x+b.x)/2,a.y,kids.map(k=>k.x),kids[0].y,s)});
+  P_.inds.forEach(d=>pedInd(d.x,d.y,s,d.sex,d.aff?1:0,{lab:d.lab,hl:o.hl&&o.hl.indexOf(d)>=0}));["I","II","III"].forEach((r,i)=>txt(24,50+i*100,r,{size:13,weight:700,mono:true}))}
+function drawCalc(now){use(S2);const T=now/1000;const p=TR.p;const vs=p.vis;const ok=TR.solved;const el=(now-TR.solT)/1000;
+  pane(10,10,780,300,"",C["ink-soft"]);if(ok){circ(766,32,13,C.good);tick(766,32,7,"#ffffff")}
+  if(vs.k==="pun"){const L=vs.L;const colOf=c=>vs.inc?[C.wfl,C["pink-fl"],C["red-fl"]][c]:(c>0?C.accent:C.wfl);
+    const shown=TR.sol;punnett(40,40,100,vs.G1,vs.G2,(i,j)=>{const c=vs.boxes[i*2+j];return {g:gS(L,c),col:colOf(c)}},(i,j)=>shown?seg(el,.3+(i*2+j)*.35,.7+(i*2+j)*.35):0,{hh:36,hl:(i,j)=>shown&&vs.match[i*2+j]&&el>2,hlCol:C.gold});
+    txt(300,60,"parent 1 gametes (rows): "+[...new Set(vs.G1)].join(", "),{size:13,weight:600});txt(300,86,"parent 2 gametes (columns): "+[...new Set(vs.G2)].join(", "),{size:13,weight:600});
+    wrapText(shown?"Gold outlines mark the boxes that match the question.":"The boxes fill in with the worked solution. Try it yourself first.",300,130,460,18,{size:13,color:C["ink-soft"]});
+    const tv=parseAns($("#calcAns").value);label(520,250,"your answer: "+(tv==null?"?":String(+tv.toFixed(4))),{size:14,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="prod"){const n=vs.genes.length;const bw=Math.min(170,(740-(n)*30)/(n+1));vs.genes.forEach((g,i)=>{const x=30+i*(bw+30);rr(x,70,bw,150,8);ctx.fillStyle=hexA(C.act5,.12);ctx.fill();ctx.strokeStyle=C.act5;ctx.lineWidth=1.6;ctx.stroke();
+      gtxt(x+bw/2,96,"gene "+g.L,{size:13,sans:true});gtxt(x+bw/2,126,gS(g.L,g.k1)+" × "+gS(g.L,g.k2),{size:15});gtxt(x+bw/2,160,"P("+g.t+")",{size:14});
+      const a=TR.sol?seg(el,.5+i*1.2,1.2+i*1.2):0;txt(x+bw/2,192,a>0?frs(g.f):"?",{size:17,weight:700,mono:true,align:"center",color:a>0?C.good:C["ink-soft"]});txt(x+bw+15,145,"×",{size:20,weight:700,align:"center"})});
+    const x=30+n*(bw+30);rr(x,70,bw,150,8);ctx.fillStyle=hexA(C.good,.12);ctx.fill();ctx.strokeStyle=C.good;ctx.lineWidth=1.6;ctx.stroke();txt(x+bw/2,110,"all together",{size:13,weight:700,align:"center"});
+    txt(x+bw/2,160,TR.sol&&el>n*1.2+.8?frs(vs.tot):"?",{size:18,weight:700,mono:true,align:"center",color:C.good});txt(30,40,"Split the cross: one gene per box, then multiply across.",{size:13,weight:600});
+    const tv=parseAns($("#calcAns").value);label(400,270,"your answer: "+(tv==null?"?":String(+tv.toFixed(5))),{size:14,weight:700,mono:true,border:ok?C.good:C.accent})}
+  else if(vs.k==="chi"){const d=vs.d;const showE=TR.sol||vs.show==="curve";const cls=d.h.cls.map((c,i)=>({lab:c,obs:d.O[i]/d.N,exp:showE?d.E[i]/d.N:0,col:C.obs}));
+    obsExp(40,60,340,180,cls,{max:Math.max(...d.h.r)/d.h.r.reduce((a,b)=>a+b)*1.35,num:(c,i)=>"O "+d.O[i]});txt(40,40,showE?"observed (teal) vs expected (dashed)":"observed counts; expected lines appear with the solution",{size:12.5,weight:600});
+    if(vs.show==="curve"){const df=d.df,cr=CRIT[df];const g={x:450,y:60,w:300,h:180,x0:0,x1:Math.max(12,d.chi*1.15),y0:0,y1:df===1?.6:.35,xt:[0,4,8,12],yt:[],xl:"χ²"};graph(g);
+      ctx.save();ctx.beginPath();ctx.rect(g.x,g.y,g.w,g.h);ctx.clip();curve(g,v=>chiPdf(Math.max(v,.03),df),.03,g.x1,C.accent,2.2);ctx.restore();
+      if(TR.sol){line(g.X(cr),g.y,g.X(cr),g.y+g.h,C.tail,2.2,[5,3]);txt(g.X(cr)+4,g.y+12,"critical "+cr,{size:11.5,weight:700,mono:true,color:C.tail})}
+      const mx=g.X(d.chi);line(mx,g.y,mx,g.y+g.h,C.obs,3);txt(mx+4,g.y+40,"χ² = "+d.chi.toFixed(2),{size:12,weight:700,mono:true});txt(450,40,"chi-square curve"+(TR.sol?", df = "+df:""),{size:12.5,weight:600})}
+    else{const tv=parseAns($("#calcAns").value);label(590,150,"your χ²: "+(tv==null?"?":String(+tv.toFixed(3))),{size:14,weight:700,mono:true,border:ok?C.good:C.accent})}}
+  else if(vs.k==="ped"){drawPed(vs.P,{hl:TR.sol?(vs.P.adBad||vs.P.arBad||[]):null});const key=[["m",0,"male"],["f",0,"female"],["m",1,"affected"]];key.forEach((k,i)=>{pedInd(640,40+i*30,16,k[0],k[1]);txt(656,40+i*30,k[2],{size:12})})}
+  else if(vs.k==="car"){drawCarrier(vs,T)}
+  const WY=318;if(TR.sol){const per=1.2+p.rows.length*1.25+3.5;wkc(10,WY,780,272,{title:"Worked solution",rows:p.rows,miss:p.miss},Math.min(el,per),{dt:1.25,rfs:14,rlh:24,size:13})}
+  else{pane(10,WY,780,272,"",C["ink-soft"],{fill:hexA(C.paper,.96)});title(22,WY+18,"Worked solution",C["accent-ink"]);wrapText("The worked solution builds here, line by line, after a correct answer or when you press Show worked solution. A common mistake is flagged at the end.",24,WY+50,750,18,{size:13,color:C["ink-soft"]})}}
+function drawCarrier(vs,T){const ped=vs.ped,s=26;const nm=vs.nm;
+  const fam=(x,lab,sex)=>{pedMate(x-40,x+40,60);pedInd(x-40,60,s,"m",0,{lab:"parent"});pedInd(x+40,60,s,"f",0,{lab:"parent"});pedKids(x,60,[x-30,x+30],170,s);pedInd(sex==="f"?x+30:x-30,170,s,sex,0,{q:true,lab,hl:true});pedInd(sex==="f"?x-30:x+30,170,s,"m",1,{lab:"brother"})};
+  if(ped.fams){ped.fams.forEach(f=>fam(f.x,f.lab,f.sex));if(ped.couple){const xa=ped.fams[0].x+30;const xb=ped.fams[1]?ped.fams[1].x-30:xa+200;if(!ped.fams[1])pedInd(xb,170,s,"m",ped.partner?2:0,{lab:ped.partner.lab+" (carrier)"});pedMate(xa,xb,170);pedKids((xa+xb)/2,170,[(xa+xb)/2],268,s);pedInd((xa+xb)/2,268,s,"m",0,{q:true,lab:"child?"})}}
+  else if(ped.carriers){pedMate(330,470,70);pedInd(330,70,s,"m",2,{lab:"carrier"});pedInd(470,70,s,"f",2,{lab:"carrier"});pedKids(400,70,[350,450],190,s);pedInd(350,190,s,"m",0,{q:true,lab:"child 1"});pedInd(450,190,s,"f",0,{q:true,lab:"child 2"})}
+  else if(ped.known){pedMate(330,470,90);pedInd(330,90,s,"f",2,{lab:nm[0]+" (carrier)"});pedInd(470,90,s,"m",0,{q:true,lab:"partner: 1 in "+ped.N});pedKids(400,90,[400],210,s);pedInd(400,210,s,"m",0,{q:true,lab:"child?"});for(let i=0;i<ped.N&&i<50;i++){const x=600+(i%10)*16,y=60+Math.floor(i/10)*20;circ(x,y,5,i===0?C.carr:hexA(C["ink-soft"],.35))}txt(600,180,"1 carrier in "+ped.N,{size:12,weight:700})}
+  else{pedMate(330,470,90);pedInd(330,90,s,"f",1,{lab:nm[0]+" (ff)"});pedInd(470,90,s,"m",2,{lab:"partner (Ff)"});pedKids(400,90,[400],210,s);pedInd(400,210,s,"m",0,{q:true,lab:"child?"})}
+  [["m",1,"affected"],["f",2,"carrier"],["m",0,"unaffected"]].forEach((k,i)=>{pedInd(690,40+i*30,16,k[0],k[1]);txt(706,40+i*30,k[2],{size:12})})}
+function calcA11y(){const p=TR.p;const v=p.choices?(TR.pick==null?"not chosen":p.choices[TR.pick]):($("#calcAns").value.trim()||"not entered");const lab=`Practice problem, ${p.title}. Your answer ${v}.${TR.solved?" Correct.":""}`;
+  const vk={pun:"a 2 by 2 Punnett square with the parents' gametes on the edges; the boxes fill in and the matching ones get gold outlines in the solution",prod:"one box per gene showing that gene's cross, with its probability revealed in the solution, and a final box for the product",chi:p.vis.show==="curve"?"teal bars for the observed counts, and a chi-square curve with a marker at the given chi-square value; the solution adds the red critical value line":"teal bars for the observed counts; dashed expected lines appear with the solution",ped:"a three-generation pedigree with squares for males and circles for females, affected people filled in, labelled I-1 and so on; the solution highlights the key family",car:"a small family pedigree with question marks on the people whose carrier status or risk is asked about"}[p.vis.k];
+  return [lab,`The picture shows ${vk}. ${TR.sol?"Below it, the worked solution builds line by line, ending with "+ansTxt(p)+" in a green box.":"The worked solution is hidden until you check a correct answer or ask for it."}`]}
+/* ================= Part 3: pattern match game ================= */
+const SROUNDS=[
+ {name:"Pattern to ratio",goal:"Match each cross to the phenotype ratio you expect among its offspring.",
+  bins:[["r31","3 : 1"],["r121","1 : 2 : 1"],["r11","1 : 1"],["r9331","9 : 3 : 3 : 1"],["r934","9 : 3 : 4"],["rbell","Continuous bell curve"]],
+  cards:[["Pp × Pp, purple dominant","r31","Complete dominance in a monohybrid cross: 3 purple to 1 white."],["Tt × Tt, tall dominant","r31","Two heterozygotes with complete dominance give 3 : 1."],
+   ["Red × white snapdragon F1 (Rr) selfed","r121","Incomplete dominance: every genotype looks different, so 1 red : 2 pink : 1 white."],["Roan cattle F1 (red-white codominant) crossed together","r121","Codominance also shows each genotype: 1 red : 2 roan : 1 white."],
+   ["Pp × pp testcross","r11","A heterozygote crossed with the recessive gives half dominant, half recessive."],["Yy × yy","r11","Another testcross: 1 yellow : 1 green."],
+   ["YyRr × YyRr, genes on different chromosomes","r9331","Two independent genes with complete dominance: (3 : 1) × (3 : 1) = 9 : 3 : 3 : 1."],
+   ["BbEe × BbEe Labradors","r934","Recessive epistasis: ee hides gene B, so the 3 + 1 classes merge into 4 yellow."],
+   ["Human height (many genes plus environment)","rbell","Polygenic traits with environmental effects vary continuously, forming a bell shape."],["Skin colour (several additive genes)","rbell","Additive effects of several genes give many classes that blur into a continuous range."]]},
+ {name:"Pattern to example",goal:"Match each example to the inheritance pattern it shows.",
+  bins:[["complete","Complete dominance"],["incomplete","Incomplete dominance"],["codom","Codominance"],["multiple","Multiple alleles"],["pleio","Pleiotropy"],["epist","Epistasis"],["poly","Polygenic inheritance"]],
+  cards:[["Pp pea plants look just like PP plants","complete","One P allele makes enough product, so the heterozygote looks like the dominant homozygote."],["Rr pea seeds are round like RR seeds","complete","One working starch-branching enzyme allele is enough: complete dominance."],
+   ["Pink snapdragons from red × white","incomplete","The heterozygote is in between: incomplete dominance."],["Type AB blood carries both A and B antigens","codom","Both alleles show fully in the heterozygote: codominance."],
+   ["The ABO gene has three alleles in the population: Iᴬ, Iᴮ and i","multiple","More than two alleles exist for the gene: multiple alleles."],["The sickle allele causes anemia, pain crises and spleen damage","pleio","One gene affects many traits: pleiotropy."],
+   ["Yellow Labradors (ee) are yellow whatever their B alleles are","epist","One gene masks another: epistasis."],["Human height has a continuous range","poly","Many genes add small effects: polygenic inheritance."]]},
+ {name:"Pedigree clues",goal:"Is each clue typical of an autosomal dominant or an autosomal recessive trait? (Assume full penetrance and no new mutations.)",
+  bins:[["ad","Autosomal dominant"],["ar","Autosomal recessive"]],
+  cards:[["Two unaffected parents have an affected child","ar","Both parents must be carriers, so the trait is recessive."],["The trait often skips generations","ar","Carriers pass a recessive allele along without showing it."],
+   ["Two affected parents have an unaffected child","ad","Aa × Aa can give an aa child, which rules out recessive."],["Every affected person has an affected parent","ad","Typical of dominant traits: each case inherits the allele from an affected parent."],
+   ["About half the children of one affected parent are affected","ad","Aa × aa gives a 1/2 chance per child."],["Unaffected carriers are common","ar","Heterozygotes carry a recessive allele without symptoms."],
+   ["Huntington disease","ad","An expanded repeat in HTT causes disease with one copy: autosomal dominant."],["Cystic fibrosis","ar","CF needs two non-working CFTR alleles: autosomal recessive."],["Sickle cell disease (the disease itself)","ar","Disease needs two sickle alleles (SS): autosomal recessive."]]},
+ {name:"Cross to result",goal:"Match each cross to the result you expect.",
+  bins:[["all","All show the dominant phenotype"],["x31","3 : 1"],["x11","1 : 1"],["x1111","1 : 1 : 1 : 1"],["x9331","9 : 3 : 3 : 1"]],
+  cards:[["PP × pp","all","Every offspring is Pp: all dominant phenotype."],["PP × Pp","all","Every offspring gets a P from the PP parent."],["Aa × Aa","x31","Monohybrid cross with complete dominance: 3 : 1."],
+   ["Aa × aa","x11","Testcross of a heterozygote: 1 : 1."],["AaBb × aabb","x1111","Dihybrid testcross: four gamete types from AaBb, each 1/4."],["Iᴬi × Iᴮi (blood types)","x1111","Gives AB, A, B and O, each 1/4."],["AaBb × AaBb","x9331","Dihybrid cross with independent genes: 9 : 3 : 3 : 1."],["Bb × bb","x11","Another testcross: 1 : 1."]]}
+];
+function svgW(inner){return `<svg viewBox="0 0 56 46" aria-hidden="true" focusable="false">${inner}</svg>`}
+function bars(vals,col){const n=vals.length,mx=Math.max(...vals);const w=46/n;return vals.map((v,i)=>`<rect x="${5+i*w+1}" y="${40-30*v/mx}" width="${w-2}" height="${30*v/mx}" rx="1.5" fill="${col||"var(--accent)"}"/>`).join("")+`<line x1="4" y1="40.5" x2="52" y2="40.5" stroke="var(--ink-soft)" stroke-width="1.2"/>`}
+function fl(x,y,c){return `<circle cx="${x}" cy="${y}" r="6" fill="${c}" stroke="var(--ink-soft)" stroke-width="1"/>`}
+function binSVG(k){
+  const M={r31:bars([3,1]),r121:bars([1,2,1],"var(--pink-fl)"),r11:bars([1,1]),r9331:bars([9,3,3,1]),r934:bars([9,3,4],"var(--dogChoc)"),
+   rbell:`<path d="M4 40 C14 40 18 8 28 8 C38 8 42 40 52 40" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`,
+   complete:fl(18,22,"var(--purp)")+fl(38,22,"var(--purp)")+`<text x="18" y="40" font-size="9" text-anchor="middle" fill="var(--ink)">PP</text><text x="38" y="40" font-size="9" text-anchor="middle" fill="var(--ink)">Pp</text>`,
+   incomplete:fl(10,22,"var(--red-fl)")+fl(28,22,"var(--pink-fl)")+fl(46,22,"var(--wfl)"),
+   codom:`<circle cx="28" cy="23" r="13" fill="var(--rbc)"/><path d="M28 6 l4 6 h-8z" fill="var(--agA)"/><rect x="40" y="18" width="8" height="8" fill="var(--agB)"/><path d="M12 30 l-6 4 l1 -8z" fill="var(--agA)"/><rect x="25" y="37" width="7" height="7" fill="var(--agB)"/>`,
+   multiple:`<rect x="4" y="15" width="14" height="16" rx="3" fill="var(--agA)"/><rect x="21" y="15" width="14" height="16" rx="3" fill="var(--agB)"/><rect x="38" y="15" width="14" height="16" rx="3" fill="var(--ink-soft)"/>`,
+   pleio:`<circle cx="12" cy="23" r="7" fill="var(--bad)"/><path d="M19 23 L44 8 M19 23 L44 23 M19 23 L44 38" stroke="var(--ink-soft)" stroke-width="1.6"/><circle cx="46" cy="8" r="4" fill="var(--rbc)"/><circle cx="46" cy="23" r="4" fill="var(--rbc)"/><circle cx="46" cy="38" r="4" fill="var(--rbc)"/>`,
+   epist:`<ellipse cx="17" cy="26" rx="12" ry="7" fill="var(--dogBlk)"/><ellipse cx="40" cy="26" rx="12" ry="7" fill="var(--dogYel)" stroke="var(--ink-soft)"/><path d="M30 10 l6 6 M36 10 l-6 6" stroke="var(--bad)" stroke-width="2"/>`,
+   poly:bars([1,6,15,20,15,6,1]),
+   ad:`<rect x="20" y="4" width="14" height="14" fill="var(--aff)" stroke="var(--ink)"/><line x1="27" y1="18" x2="27" y2="28" stroke="var(--ink)"/><line x1="12" y1="28" x2="42" y2="28" stroke="var(--ink)"/><circle cx="12" cy="37" r="7" fill="var(--aff)" stroke="var(--ink)"/><rect x="35" y="30" width="14" height="14" fill="var(--unaff)" stroke="var(--ink)"/>`,
+   ar:`<rect x="6" y="4" width="14" height="14" fill="var(--unaff)" stroke="var(--ink)"/><circle cx="43" cy="11" r="7" fill="var(--unaff)" stroke="var(--ink)"/><line x1="20" y1="11" x2="36" y2="11" stroke="var(--ink)"/><line x1="28" y1="11" x2="28" y2="30" stroke="var(--ink)"/><rect x="21" y="30" width="14" height="14" fill="var(--aff)" stroke="var(--ink)"/>`,
+   all:fl(10,22,"var(--purp)")+fl(28,22,"var(--purp)")+fl(46,22,"var(--purp)"),x31:bars([3,1]),x11:bars([1,1]),x1111:bars([1,1,1,1]),x9331:bars([9,3,3,1])};
+  return svgW(M[k]||"")}
+const SG={r:0,placed:{},mist:0,sel:null,t0:0,timer:null,hint:null,doneRounds:{}};
+function cardBins(c){return Array.isArray(c[1])?c[1]:[c[1]]}
+function sRoundsUI(){$("#sRounds").innerHTML=SROUNDS.map((r,i)=>`<button type="button" class="round" aria-pressed="${i===SG.r}" data-i="${i}">Round ${i+1}: ${r.name}${SG.doneRounds[i]?`<span class="ok" aria-label="${SG.doneRounds[i]} stars">${"★".repeat(SG.doneRounds[i])}</span>`:""}</button>`).join("");
+  $("#sRounds").querySelectorAll("button").forEach(b=>b.onclick=()=>sLoad(+b.dataset.i))}
+function sLoad(i){SG.r=i;SG.placed={};SG.mist=0;SG.sel=null;SG.hint=null;SG.t0=Date.now();const R=SROUNDS[i];SG.order=shuffle(R.cards.map((c,k)=>k));
+  $("#sN").textContent=`Round ${i+1} of ${SROUNDS.length}`;$("#sTitle").textContent=R.name;$("#sGoal").textContent=R.goal;
+  const bins=$("#sBins");bins.innerHTML="";R.bins.forEach(b=>{const d=document.createElement("div");d.className="bin";d.dataset.k=b[0];
+    d.innerHTML=`<button type="button" class="binhead" data-k="${b[0]}">${binSVG(b[0])}<span>${b[1]}</span></button><div class="binitems"></div>`;
+    d.querySelector(".binhead").onclick=()=>{if(SG.sel!=null)sDrop(SG.sel,b[0]);else sMsg("info","Pick a card first, then tap a box.")};bins.appendChild(d)});
+  const best=store.get("best-"+i);$("#sBest").textContent=best?`Best for this round: ${"★".repeat(+best)}`:"";
+  $("#sMsg").className="msg";sRoundsUI();sRender();sTimerUI();a11yKey=""}
+function sRender(){const R=SROUNDS[SG.r];const pool=$("#sPool");pool.innerHTML="";
+  SG.order.forEach(k=>{if(SG.placed[k])return;const c=R.cards[k];const b=document.createElement("button");b.type="button";b.className="scard"+(SG.hint===k?" hinted":"");b.innerHTML=(c[3]||"")+"<span>"+c[0]+"</span>";b.dataset.k=k;
+    b.setAttribute("aria-pressed",SG.sel===k);b.onclick=e=>{if(b.dataset.dragged){delete b.dataset.dragged;return}SG.sel=SG.sel===k?null:k;sRender();const nb=pool.querySelector(`[data-k="${k}"]`);if(nb)nb.focus()};
+    b.addEventListener("pointerdown",e=>sDragStart(e,b,k));pool.appendChild(b)});
+  if(!pool.children.length)pool.innerHTML='<span class="small">All cards sorted.</span>';
+  document.querySelectorAll("#sBins .bin").forEach(d=>{const items=d.querySelector(".binitems");items.innerHTML="";d.classList.toggle("hintbin",SG.hint!=null&&cardBins(R.cards[SG.hint]).indexOf(d.dataset.k)>=0);
+    R.cards.forEach((c,k)=>{if(SG.placed[k]===d.dataset.k){const s=document.createElement("div");s.className="scard placed";s.innerHTML=(c[3]||"")+"<span>✓ "+c[0]+"</span>";items.appendChild(s)}})});
+  const n=Object.keys(SG.placed).length,tot=R.cards.length;$("#sStars").textContent=n===tot?"★".repeat(sStars())+"☆".repeat(3-sStars()):"";$("#sStars").setAttribute("aria-label",n===tot?sStars()+" of 3 stars":"Stars appear when the round is done")}
+function sStars(){return SG.mist===0?3:SG.mist<=2?2:1}
+function sMsg(cls,t){const m=$("#sMsg");m.className="msg show "+cls;m.textContent=t}
+function sDrop(k,bin){const R=SROUNDS[SG.r];const c=R.cards[k];SG.sel=null;SG.hint=null;
+  if(cardBins(c).indexOf(bin)>=0){SG.placed[k]=bin;sMsg("good","✓ "+c[0]+": "+c[2])}else{SG.mist++;const nm=R.bins.find(b=>b[0]===bin)[1];sMsg("warn",`Not quite. "${c[0]}" does not go in ${nm}. Hint: ${c[2].split(":")[0].split(".")[0]}.`)}
+  sRender();a11yKey="";if(Object.keys(SG.placed).length===R.cards.length)sFinish();else{const f=$("#sPool .scard");if(f&&document.activeElement===document.body)f.focus()}}
+function sFinish(){const st=sStars();SG.doneRounds[SG.r]=Math.max(SG.doneRounds[SG.r]||0,st);const best=+(store.get("best-"+SG.r)||0);if(st>best)store.set("best-"+SG.r,st);
+  const tm=!$("#sRelaxed").checked?` Time: ${fmt((Date.now()-SG.t0)/1000)}.`:"";sMsg("good",`Round complete with ${SG.mist} ${SG.mist===1?"mistake":"mistakes"}: ${st} of 3 stars.${tm} `+(SG.r<SROUNDS.length-1?"Press Next round when you are ready.":"That was the last round. Well done."));sRoundsUI();sRender()}
+let drag=null;
+function sDragStart(e,b,k){if(e.button>0)return;const r=b.getBoundingClientRect();drag={k,b,sx:e.clientX,sy:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,g:null,over:null,id:e.pointerId};
+  window.addEventListener("pointermove",sDragMove);window.addEventListener("pointerup",sDragEnd);window.addEventListener("pointercancel",sDragEnd)}
+function sDragMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.g){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const g=drag.b.cloneNode(true);g.classList.add("ghost");g.removeAttribute("id");g.setAttribute("aria-hidden","true");g.tabIndex=-1;g.style.width=drag.b.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.b.style.opacity=".35"}
+  e.preventDefault();drag.g.style.left=(e.clientX-drag.dx)+"px";drag.g.style.top=(e.clientY-drag.dy)+"px";
+  const el=document.elementFromPoint(e.clientX,e.clientY);const bin=el&&el.closest?el.closest(".bin"):null;document.querySelectorAll(".bin.over").forEach(x=>x!==bin&&x.classList.remove("over"));if(bin)bin.classList.add("over");drag.over=bin}
+function sDragEnd(e){if(!drag)return;window.removeEventListener("pointermove",sDragMove);window.removeEventListener("pointerup",sDragEnd);window.removeEventListener("pointercancel",sDragEnd);
+  const d=drag;drag=null;document.querySelectorAll(".bin.over").forEach(x=>x.classList.remove("over"));if(!d.g)return;d.g.remove();d.b.style.opacity="";d.b.dataset.dragged="1";
+  if(d.over)sDrop(d.k,d.over.dataset.k);else sRender()}
+$("#sHint").onclick=()=>{const R=SROUNDS[SG.r];const k=SG.sel!=null?SG.sel:SG.order.find(k=>!SG.placed[k]);if(k==null){sMsg("info","Everything is sorted.");return}SG.hint=k;
+  const bn=cardBins(R.cards[k]).map(b=>R.bins.find(x=>x[0]===b)[1]).join(" or ");sMsg("info",`Hint: "${R.cards[k][0]}" goes in the glowing box (${bn}).`);sRender()};
+$("#sShow").onclick=()=>{const R=SROUNDS[SG.r];R.cards.forEach((c,k)=>{if(!SG.placed[k])SG.placed[k]=cardBins(c)[0]});SG.mist=Math.max(SG.mist,3);sMsg("info","All cards placed. Read each box to see why they belong there.");sRender();sFinish()};
+$("#sShuffle").onclick=()=>sLoad(SG.r);$("#sNext").onclick=()=>sLoad((SG.r+1)%SROUNDS.length);
+function sTimerUI(){const relaxed=$("#sRelaxed").checked;$("#sTimer").hidden=relaxed;clearInterval(SG.timer);if(!relaxed){SG.timer=setInterval(()=>{if(Object.keys(SG.placed).length<SROUNDS[SG.r].cards.length)$("#sTimer").textContent=fmt((Date.now()-SG.t0)/1000)},500)}}
+$("#sRelaxed").onchange=()=>{SG.t0=Date.now();sTimerUI()};
+function sortA11y(){const R=SROUNDS[SG.r];const n=Object.keys(SG.placed).length;
+  return [null,`Round ${SG.r+1}, ${R.name}. ${n} of ${R.cards.length} cards sorted. Each box has a small drawing and a name: `+R.bins.map(b=>b[1]).join(", ")+`. Cards still to sort: `+(SG.order.filter(k=>!SG.placed[k]).map(k=>R.cards[k][0]).join(", ")||"none")+"."]}
+/* ================= Part 4: genetics in the real world ================= */
+const LS={i:0,ans:{}};
+function lifeUI(){const S=LIFE[LS.i];$("#lifeN").textContent=S.who;$("#lifeTitle").textContent=S.name;$("#lifeStory").textContent=S.story;$("#lifeCap").textContent=S.cap;
+  $("#lifeChips").innerHTML=LIFE.map((s,i)=>`<button type="button" class="casechip" aria-pressed="${i===LS.i}" data-i="${i}">${i+1}. ${s.name}${LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]?'<span class="ok" aria-label="all answered">✓</span>':""}</button>`).join("");
+  $("#lifeChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{LS.i=+b.dataset.i;lifeUI()});
+  const box=$("#lifeQs");box.innerHTML="";S.qs.forEach((q,qi)=>{const d=document.createElement("div");d.className="qblock lifeq";d.innerHTML=`<p class="qlab" id="lq${qi}">${qi+1}. ${q.q}</p><div class="opts" role="group" aria-labelledby="lq${qi}"></div><div class="fb" role="status"></div>`;
+    const ob=d.querySelector(".opts"),fb=d.querySelector(".fb");shuffle(q.opts).forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[0];
+      b.onclick=()=>{ob.querySelectorAll(".opt").forEach(x=>x.classList.remove("wrong"));if(o[1]){b.classList.add("right");fb.className="fb show ok";fb.textContent="✓ "+o[2];LS.ans[LS.i+"-"+qi]=1;lifeChipsOnly()}else{b.classList.add("wrong");fb.className="fb show no";fb.textContent="Not quite. "+o[2]}};ob.appendChild(b)});box.appendChild(d)});a11yKey=""}
+function lifeChipsOnly(){const i=LS.i;const b=$("#lifeChips").querySelector(`[data-i="${i}"]`);if(b&&LS.ans[i+"-0"]&&LS.ans[i+"-1"]&&LS.ans[i+"-2"]&&!b.querySelector(".ok"))b.insertAdjacentHTML("beforeend",'<span class="ok" aria-label="all answered">✓</span>')}
+function drawLife(now){use(S4);LIFE[LS.i].draw(now/1000)}
+function lifeA11y(){const S=LIFE[LS.i];return [S.name+". "+S.cap,S.desc]}
+function lifeInit(){$("#lifePrev").onclick=()=>{LS.i=(LS.i+LIFE.length-1)%LIFE.length;lifeUI()};$("#lifeNext").onclick=()=>{LS.i=(LS.i+1)%LIFE.length;lifeUI()}}
+const LIFE=[
+{name:"Counselling two CF carriers",who:"Scenario 1 · genetics clinic",
+ story:"Nadia and Jon both had carrier screening before starting a family. Each carries one non-working CFTR allele (Ff). Neither has cystic fibrosis. They ask a genetic counsellor what this means for their children.",
+ cap:"Two carrier parents, their Punnett square, and a row of possible children; one in four has CF.",
+ desc:"Two adults stand at the top left, each labelled Ff carrier, with half-shaded carrier symbols. A 2 by 2 Punnett square fills in to the right with FF, Ff, fF and ff; the ff box is shaded red and labelled CF. Below, four child figures appear one at a time; a highlight moves among them, and a bar on the right shows the chance that three children are all unaffected: 3/4 × 3/4 × 3/4 = 27/64, about 42 percent.",
+ draw(T){const t=P(T,12)*12;pane(10,10,780,480,"",C["ink-soft"]);person(80,200,150,{shirt:C.shirt2});person(170,200,150,{shirt:C.shirt1,skin:C.skin2});pedInd(80,230,22,"f",2);pedInd(170,230,22,"m",2);gtxt(80,262,"Ff",{size:14});gtxt(170,262,"Ff",{size:14});txt(125,286,"both carriers",{size:12.5,weight:700,align:"center"});
+   const G=["F","f"];punnett(250,40,92,G,G,(i,j)=>{const c=(i===0)+(j===0);const g=c===2?"FF":c===1?"Ff":"ff";return {g:g+(c===0?" CF":""),col:c===0?C.bad:c===1?C.carr:C.good}},(i,j)=>seg(t,.4+(i*2+j)*.5,.8+(i*2+j)*.5),{hh:34,fs:14});
+   txt(500,60,"Each child, independently:",{size:13,weight:700});[["unaffected, not a carrier (FF)","1/4",C.good],["unaffected carrier (Ff)","1/2",C.carr],["cystic fibrosis (ff)","1/4",C.bad]].forEach((r,i)=>{rr(500,78+i*34,16,16,3);ctx.fillStyle=r[2];ctx.fill();txt(524,86+i*34,r[0],{size:12.5,weight:600});txt(770,86+i*34,r[1],{size:13,weight:700,mono:true,align:"right"})});
+   const k=Math.floor(P(T,8)*4);for(let i=0;i<4;i++){const x=320+i*80;const st=i===3?1:i===0?0:2;person(x,430,90,{shirt:C["shirt"+(1+i)],hl:i===k});pedInd(x,452,16,i%2?"m":"f",st)}txt(320,326,"possible children",{size:12.5,weight:700});
+   txt(560,240,"P(3 children, none with CF)",{size:12.5,weight:700});const f=seg(t,4,7);rr(560,256,200,20,4);ctx.fillStyle=hexA(C.sunk,.9);ctx.fill();rr(560,256,200*(27/64)*f,20,4);ctx.fillStyle=hexA(C.good,.75);ctx.fill();txt(560,292,"3/4 × 3/4 × 3/4 = 27/64 ≈ 42%",{size:12.5,weight:700,mono:true})},
+ qs:[{q:"What is the chance that any one of their children will have cystic fibrosis?",opts:[["1/4",true,"Ff × Ff gives ff in 1 of 4 boxes, and that chance is the same for every pregnancy."],["1/2",false,"1/2 is the chance of a carrier child (Ff). CF needs ff, which is 1/4."],["0, because neither parent has CF",false,"Carriers can each pass on their f allele. Two carriers have a 1/4 chance per child."],["It depends on how many children they already have",false,"Each fertilization is independent. Earlier children do not change the chance for the next one."]]},
+  {q:"Their first child does not have CF. What is the chance this child is a carrier?",opts:[["2/3",true,"Being unaffected rules out ff. Of the remaining three boxes (FF, Ff, fF), two are carriers."],["1/2",false,"1/2 is the carrier chance before you know the child is unaffected. That knowledge removes the ff box."],["1/4",false,"1/4 is the chance of FF (or of ff) among all children."],["1",false,"The child could be FF, so a carrier status is not certain."]]},
+  {q:"If they have three children, what is the chance that none of them has CF?",opts:[["27/64, about 42%",true,"Each child is unaffected with 3/4, independently: 3/4 × 3/4 × 3/4 = 27/64."],["3/4",false,"3/4 is for one child. All three unaffected (AND) means multiply three times."],["1/4",false,"That is the chance one child has CF, not the chance none of three do."],["9/4",false,"Adding 3/4 three times gives more than 1, which is impossible for a probability."]]}]},
+{name:"A blood-type puzzle",who:"Scenario 2 · a family question",
+ story:"A child has type O blood. The mother has type A. Three men are named in a family dispute: one has type AB, one type B and one type O. Blood typing is done before any DNA testing. (A fictional case.)",
+ cap:"Mother type A and child type O; three possible fathers. The type AB man is ruled out.",
+ desc:"On the left, the mother's red blood cell has blue triangle A antigens and the label type A, genotype I A i. The child's cell has no antigens, labelled type O, genotype ii. On the right, three men stand with their red blood cells: type AB with triangles and squares, type B with squares, and type O with none. After a moment a red cross appears over the type AB man, with the note: always passes I A or I B, never i. The other two are marked possible.",
+ draw(T){const t=P(T,10)*10;pane(10,10,780,480,"",C["ink-soft"]);
+   person(90,220,150,{shirt:C.shirt2});rbc(90,280,30,{ag:"A",rot:T*.2,n:9});label(90,330,"mother: type A",{size:12.5,weight:700,border:C.agA});gtxt(90,354,"I^Ai",{size:14});
+   person(210,220,100,{shirt:C.shirt3,skin:C.skin2});rbc(210,280,26,{});label(210,330,"child: type O",{size:12.5,weight:700,border:C["ink-soft"]});gtxt(210,354,"ii",{size:14});
+   txt(150,400,"The child got one i from each parent,",{size:12.5,weight:600,align:"center"});txt(150,420,"so the mother must be Iᴬi.",{size:12.5,weight:600,align:"center"});
+   [["AB","I^AI^B"],["B","I^BI^B or I^Bi"],["O","ii"]].forEach((m,i)=>{const x=420+i*130;person(x,220,150,{shirt:C["shirt"+(i+1)],skin:C["skin"+(1+i%3)]});rbc(x,280,28,m[0]==="O"?{}:{ag:m[0],rot:T*.2,n:10});label(x,330,"type "+m[0],{size:12.5,weight:700,border:m[0]==="AB"?C.act7:m[0]==="B"?C.agB:C["ink-soft"]});gtxt(x,354,m[1],{size:12.5});
+     const a=seg(t,3+i*.6,3.6+i*.6);if(a>0)withA(a,()=>{if(i===0){crossMark(x,40,16,C.bad);txt(x,400,"always passes Iᴬ or Iᴮ,",{size:12,weight:700,align:"center",color:C.bad});txt(x,418,"never i: ruled out",{size:12,weight:700,align:"center",color:C.bad})}else{tick(x,40,14,C.good);txt(x,400,i===1?"possible if Iᴮi":"possible",{size:12,weight:700,align:"center",color:C.good})}})});
+   txt(400,460,"Blood typing can rule a man out. It cannot prove who the father is.",{size:13,weight:700,align:"center"})},
+ qs:[{q:"What must the mother's genotype be?",opts:[["Iᴬi",true,"A type O child (ii) received i from each parent, so the type A mother must carry i: Iᴬi."],["IᴬIᴬ",false,"An IᴬIᴬ mother can only pass on Iᴬ, so her child could not be ii."],["ii",false,"ii would make her type O, but she is type A."],["IᴬIᴮ",false,"That would make her type AB."]]},
+  {q:"Which man can be ruled out as the biological father?",opts:[["The type AB man",true,"IᴬIᴮ always passes on Iᴬ or Iᴮ, so his child could never be ii (type O)."],["The type O man",false,"An ii father always passes on i, which fits a type O child."],["The type B man",false,"If he is Iᴮi, he could pass on i. He cannot be ruled out by ABO typing alone."],["None of them",false,"The type AB man is ruled out, because he has no i allele to pass on."]]},
+  {q:"What can ABO typing alone tell the family?",opts:[["It can exclude some men, but it cannot prove which man is the father.",true,"Many people share each blood type, so a match is only consistent, not proof. DNA testing is needed to confirm."],["It proves the type O man is the father.",false,"A type O man is consistent with the child, but so is a type B man who is Iᴮi, and so are millions of others."],["It proves the mother is not related to the child.",false,"An Iᴬi mother can have an ii child, so the result fits her being the mother."],["It is useless because blood types are not inherited.",false,"ABO types follow Mendelian inheritance with codominant Iᴬ and Iᴮ and recessive i."]]}]},
+{name:"Labrador litters and epistasis",who:"Scenario 3 · a dog breeder",
+ story:"A breeder mates two black Labradors several times. Over many litters she records 96 pups: 52 black, 17 chocolate and 27 yellow. She wonders whether the classic two-gene model (gene B for pigment colour, gene E for pigment deposition) explains her data.",
+ cap:"Two black parents, a litter of black, chocolate and yellow pups, and the breeder's counts against a 9 : 3 : 4 expectation.",
+ desc:"Two black Labrador silhouettes stand at the top left labelled BbEe. A row of pups trots across below: black, chocolate and yellow. On the right, a bar chart shows the breeder's counts as teal bars, 52 black, 17 chocolate and 27 yellow, with dashed gold lines at the expected 54, 18 and 24. A readout gives chi-square about 0.51 with 2 degrees of freedom and a critical value of 5.99.",
+ draw(T){pane(10,10,780,480,"",C["ink-soft"]);dog(110,150,1,C.dogBlk);dog(280,150,1,C.dogBlk);gtxt(110,172,"BbEe",{size:14});gtxt(280,172,"BbEe",{size:14});txt(195,100,"×",{size:24,weight:700,align:"center"});
+   const pups=["dogBlk","dogYel","dogBlk","dogChoc","dogBlk","dogYel","dogBlk","dogBlk"];for(let i=0;i<pups.length;i++){const x=((T*40+i*60)%480)-20;dog(x+20,300+((i%2)*40),.5,C[pups[i]])}txt(30,388,"pups",{size:12.5,weight:700});
+   txt(30,430,"B_E_ black · bbE_ chocolate · __ee yellow",{size:12.5,weight:700,mono:true});txt(30,454,"expected 9 : 3 : 4",{size:12.5,weight:600,color:C["ink-soft"]});
+   pane(520,20,260,300,"breeder's data (96 pups)",C["ink-soft"]);obsExp(540,70,220,190,[{lab:"black",obs:52,exp:54,col:C.obs},{lab:"chocolate",obs:17,exp:18,col:C.obs},{lab:"yellow",obs:27,exp:24,col:C.obs}],{max:62,num:c=>c.obs});
+   pane(520,330,260,150,"",C["ink-soft"]);txt(534,356,"E = 54, 18, 24",{size:13,weight:700,mono:true});txt(534,382,"χ² = 0.07 + 0.06 + 0.38",{size:13,weight:700,mono:true});txt(534,408,"   ≈ 0.51,  df = 2",{size:13,weight:700,mono:true});txt(534,434,"critical value 5.99",{size:13,weight:700,mono:true,color:C.tail});label(650,462,"fits 9 : 3 : 4",{size:12.5,weight:700,border:C.good})},
+ qs:[{q:"Two black parents had black, chocolate and yellow pups. What are the parents' genotypes?",opts:[["BbEe and BbEe",true,"To have chocolate pups (bb) each parent must carry b; to have yellow pups (ee) each must carry e. Both are black, so both are B_E_: BbEe."],["BBEE and bbee",false,"bbee would be yellow, but both parents are black."],["BbEE and BbEE",false,"Then no pup could be ee, so there would be no yellow pups."],["BBEe and BBEe",false,"Then every pup gets a B, so there could be no chocolate (bb) pups."]]},
+  {q:"Under the 9 : 3 : 4 model, what fraction of pups should be yellow?",opts:[["4/16 = 1/4",true,"Yellow is any __ee genotype: 4 of the 16 boxes (BBee, Bbee, Bbee, bbee)."],["1/16",false,"1/16 is bbee alone. Yellow includes every ee genotype, whatever gene B is."],["3/16",false,"3/16 is the chocolate class (bbE_)."],["9/16",false,"9/16 is black (B_E_)."]]},
+  {q:"Read the data: the breeder's χ² is about 0.51 with df = 2 (critical value 5.99). What should she conclude?",opts:[["The counts fit the 9 : 3 : 4 model; the small differences are consistent with chance.",true,"0.51 is far below 5.99, so she fails to reject H₀. The data give no reason to doubt the two-gene epistasis model."],["Reject the model, because the counts are not exactly 54 : 18 : 24.",false,"Real counts almost never match exactly. Chi-square asks whether the gap is bigger than chance usually makes; here it is not."],["The model is proven true.",false,"Failing to reject is not proof. It only means these data do not contradict the model."],["Use df = 3, since there are three classes.",false,"df is the number of classes minus 1: 3 − 1 = 2."]]}]},
+{name:"Reading a family pedigree",who:"Scenario 4 · a family history",
+ story:"A man (II-2) has a rare condition. His parents (I-1 and I-2) do not, and neither do his sisters (II-1 and II-3). His sister II-3 and her husband II-4 have two unaffected children. Assume the condition is autosomal, fully penetrant and caused by one gene.",
+ cap:"A three-generation pedigree: unaffected parents with one affected son.",
+ desc:"A pedigree with three generations. In generation I, an unaffected man and woman are joined by a mating line. Their three children in generation II are an unaffected daughter II-1, an affected son II-2 shown as a filled square, and an unaffected daughter II-3. II-3 is married to an unaffected man II-4, and they have two unaffected children in generation III. After a moment, both members of generation I become half-shaded as carriers and a question mark pulses on II-1.",
+ draw(T){const t=P(T,10)*10;pane(10,10,780,480,"",C["ink-soft"]);const s=30;["I","II","III"].forEach((r,i)=>txt(40,100+i*130,r,{size:14,weight:700,mono:true}));
+   const car=t>3?2:0;pedMate(300,400,100);pedInd(300,100,s,"m",car,{lab:"I-1"});pedInd(400,100,s,"f",car,{lab:"I-2"});pedKids(350,100,[250,350,450],230,s);
+   pedInd(250,230,s,"f",0,{lab:"II-1",q:t>5,hl:t>5});pedInd(350,230,s,"m",1,{lab:"II-2"});pedInd(450,230,s,"f",0,{lab:"II-3"});pedMate(450,550,230);pedInd(550,230,s,"m",0,{lab:"II-4"});pedKids(500,230,[470,530],360,s);pedInd(470,360,s,"m",0,{lab:"III-1"});pedInd(530,360,s,"f",0,{lab:"III-2"});
+   [["m",0,"unaffected male"],["f",0,"unaffected female"],["m",1,"affected"],["f",2,"carrier (inferred)"]].forEach((k,i)=>{pedInd(640,60+i*34,18,k[0],k[1]);txt(656,60+i*34,k[2],{size:12})});
+   if(t>3)withA(seg(t,3,3.6),()=>label(350,40,"unaffected parents, affected son → both carriers",{size:12.5,weight:700,border:C.carr}));if(t>5)withA(seg(t,5,5.6),()=>label(250,300,"II-1: carrier with probability 2/3",{size:12.5,weight:700,border:C.accent}))},
+ qs:[{q:"Which inheritance pattern best explains this pedigree?",opts:[["Autosomal recessive",true,"Two unaffected parents have an affected son, so both must carry a hidden recessive allele."],["Autosomal dominant",false,"A dominant trait would need an affected parent. Both of II-2's parents are unaffected."],["It must be a new mutation",false,"Possible but rare. The simplest explanation for a rare trait in a child of unaffected parents is that both are carriers."],["Codominant",false,"Codominance describes heterozygote phenotypes, not a pattern you can read from affected and unaffected symbols here."]]},
+  {q:"What are the genotypes of I-1 and I-2?",opts:[["Both are carriers (Aa)",true,"II-2 is aa, so he received a from each parent; both parents are unaffected, so each is Aa."],["Both are AA",false,"Then they could not pass a to II-2."],["One is aa",false,"An aa parent would be affected, but both are unaffected."],["You cannot tell anything about them",false,"An affected child of unaffected parents tells you both parents are carriers."]]},
+  {q:"What is the probability that II-1 (unaffected sister) is a carrier?",opts:[["2/3",true,"Her parents are Aa × Aa. She is unaffected, so aa is ruled out, leaving AA, Aa, aA: 2 of 3 are carriers."],["1/2",false,"1/2 ignores what we know: she is unaffected, so the aa box is removed."],["1/4",false,"1/4 is the chance of an affected child of two carriers."],["0",false,"She could easily carry the allele without showing it."]]}]},
+{name:"Read the experiment: are these genes independent?",who:"Scenario 5 · research lab data",
+ story:"A student testcrosses a dihybrid fruit fly (AaBb, from AABB × aabb parents) with an aabb fly and scores 100 offspring: 42 AB-type, 8 Ab-type, 9 aB-type and 41 ab-type. If the genes assort independently, the four classes should be equal.",
+ cap:"Bar chart of the testcross classes against the equal 1 : 1 : 1 : 1 expectation; the parental classes are far too common.",
+ desc:"A bar chart shows four teal bars for the testcross offspring classes AB, Ab, aB and ab, with heights 42, 8, 9 and 41. A dashed gold line crosses all four bars at the expected 25 each. The AB and ab bars, labelled parental, tower above the line; Ab and aB, labelled recombinant, sit far below it. A readout shows chi-square about 43.6, df 3, critical value 7.81, and the verdict: reject independent assortment.",
+ draw(T){pane(10,10,780,480,"",C["ink-soft"]);const gr=smooth(P(T,8)*2);obsExp(60,70,440,300,[{lab:"AB (parental)",obs:42*Math.min(1,gr),exp:25,col:C.obs},{lab:"Ab (recombinant)",obs:8*Math.min(1,gr),exp:25,col:C.obs},{lab:"aB (recombinant)",obs:9*Math.min(1,gr),exp:25,col:C.obs},{lab:"ab (parental)",obs:41*Math.min(1,gr),exp:25,col:C.obs}],{max:48,num:c=>Math.round(c.obs),ls:11.5});
+   txt(60,40,"Testcross AaBb × aabb, 100 offspring",{size:13,weight:700});txt(66,70+300-300*25/48-12,"E = 25",{size:12,weight:700,mono:true,color:C["exp-ink"]});
+   pane(540,60,240,330,"chi-square",C["ink-soft"]);txt(556,104,"E = 25 for each class",{size:13,weight:700,mono:true});["(42−25)²/25 = 11.56","(8−25)²/25 = 11.56","(9−25)²/25 = 10.24","(41−25)²/25 = 10.24"].forEach((r,i)=>txt(556,136+i*26,r,{size:12.5,weight:600,mono:true}));
+   txt(556,252,"χ² = 43.6,  df = 3",{size:14,weight:700,mono:true});txt(556,278,"critical value 7.81",{size:13,weight:700,mono:true,color:C.tail});label(660,320,"reject independence",{size:12.5,weight:700,border:C.bad});wrapText("Parental classes dominate: the genes are probably linked.",556,350,214,16,{size:12,weight:600});
+   txt(60,430,"Simplified, fictional data for teaching.",{size:12,color:C["ink-soft"]})},
+ qs:[{q:"If the genes assort independently, what count is expected in each class?",opts:[["25 in each class (1 : 1 : 1 : 1)",true,"AaBb makes AB, Ab, aB and ab gametes equally; the aabb parent adds only ab, so each class is 1/4 of 100."],["56, 19, 19, 6 (9 : 3 : 3 : 1)",false,"9 : 3 : 3 : 1 is for a dihybrid crossed with another dihybrid. This is a testcross."],["50 and 50",false,"There are four classes here, not two."],["The same as the observed counts",false,"Expected counts come from the hypothesis, not from the data."]]},
+  {q:"Using the bar chart, what is χ² closest to?",opts:[["43.6",true,"(17² + 17² + 16² + 16²) ÷ 25 = 1,090 ÷ 25 = 43.6."],["4.36",false,"Check the division: each squared deviation (about 256 to 289) is divided by 25, giving about 10 to 12 per class."],["0.44",false,"That would mean the bars sit almost on the dashed line, but two classes are far above it and two far below."],["7.81",false,"7.81 is the critical value for df = 3, not the calculated χ²."]]},
+  {q:"What is the best interpretation?",opts:[["Reject independent assortment; the genes are probably linked on the same chromosome.",true,"χ² = 43.6 is far above 7.81, and the parental combinations (AB, ab) are much more common than recombinants, the signature of linkage (Module 12)."],["Fail to reject; the data fit 1 : 1 : 1 : 1.",false,"43.6 is much larger than the critical value of 7.81, so the deviation is too large to be chance."],["The aabb parent must have been heterozygous.",false,"An aabb fly can only make ab gametes. The pattern comes from the dihybrid parent's gametes."],["Sample size of 100 is too small to test anything.",false,"Each expected count is 25, well above 5, so the test is valid."]]}]}
+];
+/* ---------------- stages ---------------- */
+const S1=makeStage("cvCross",800,620),S2=makeStage("cvCalc",800,600),S4=makeStage("cvLife",800,500);
+/* ---------------- accessibility: live labels and picture descriptions ---------------- */
+const A11Y={cross:{cv:"#cvCross",f:crossA11y},calc:{cv:"#cvCalc",f:calcA11y},sort:{cv:null,f:sortA11y},life:{cv:"#cvLife",f:lifeA11y}};
+let a11yKey="",a11yT=0;
+function a11yTick(){if((++a11yT)%20)return;const a=A11Y[curTab];const [lab,d]=a.f();const key=curTab+"|"+lab+"|"+d;if(key===a11yKey)return;a11yKey=key;
+  if(a.cv&&lab)$(a.cv).setAttribute("aria-label",lab);if(window.gkDescribe)window.gkDescribe(d);
+  const box=document.getElementById("gk-desc");if(box){const host=a.cv?$(a.cv).closest(".canvas-holder"):$("#sPool");if(host&&host.nextElementSibling!==box)host.after(box);if(a.cv)$(a.cv).setAttribute("aria-describedby","gk-desc")}}
+/* ---------------- tabs / theme / loop ---------------- */
+let curTab="cross";
+const TABS=["cross","calc","sort","life"];
+function showTab(k,focus){curTab=k;document.querySelectorAll(".tab").forEach(x=>{const on=x.dataset.tab===k;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;if(on&&focus)x.focus()});
+  TABS.forEach(t=>$("#tab-"+t).hidden=t!==k);fitAll();a11yKey="";a11yT=19}
+document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>showTab(t.dataset.tab);t.onkeydown=e=>{const i=TABS.indexOf(t.dataset.tab);
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length],true)}
+  if(e.key==="Home"){e.preventDefault();showTab(TABS[0],true)}if(e.key==="End"){e.preventDefault();showTab(TABS[TABS.length-1],true)}}});
+function fitAll(){[S1,S2,S4].forEach(s=>s.fit())}
+window.addEventListener("resize",fitAll);
+$("#themeBtn").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--ground").trim().toLowerCase()==="#0e1519";r.setAttribute("data-theme",dark?"light":"dark");readColors()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(readColors,30));
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;DT=dt;
+  try{if(curTab==="cross")drawCross(now);else if(curTab==="calc")drawCalc(now);else if(curTab==="life")drawLife(now)}catch(err){console.error(err)}
+  try{a11yTick()}catch(err){console.error(err)}
+  requestAnimationFrame(frame)}
+/* test hooks */
+window.__ml={tab:k=>showTab(k),preset:i=>xPreset(PRESETS[i][1],PRESETS[i][0]),breed:n=>breed(n),state:()=>({N:XS.N,counts:Object.assign({},XS.counts),chi:chiNow(),ratio:ratioStr(chiNow().model),flying:XS.flying.length}),auto:v=>{XS.auto=v;$("#xAuto").setAttribute("aria-pressed",String(v))},
+  hyp:v=>{$("#xHyp").value=v;XS.hyp=v;XS.hist=[];pushHist();xUI()},nPresets:()=>PRESETS.length,set:o=>{Object.assign(XS,o);xBuildGenes();xReset("")},exp:()=>expDist(),
+  calcTypes:()=>CTYPES.map(c=>c[0]).filter(c=>c!=="mix"),calcSet:t=>{TR.type=t;$("#calcType").value=t;calcNew()},calcProb:()=>({ans:TR.p.ans,choices:TR.p.choices?TR.p.choices.length:0,fmt:TR.p.choices?String(TR.p.ans):TR.p.fmt,kind:TR.p.kind}),
+  gen:t=>{const q=genOne(t);if(q.choices){return {choice:true,ans:q.ans,j1:judge(q,String(q.ans)),j2:judge(q,String((q.ans+1)%q.choices.length)),hints:q.hints.length,rows:q.rows.length,html:q.html}}
+    const good=q.fmt;const dec=String(q.ans);const pct=q.kind==="prob"?(q.ans*100).toFixed(3)+"%":null;const bad=q.kind==="chi"?String(+(q.ans*1.3+.6).toFixed(2)):String(q.ans*1.4+.01>1?q.ans*.6:q.ans*1.4+.01);
+    return {ans:q.ans,good,j1:judge(q,good),j1d:judge(q,dec),j1p:pct?judge(q,pct):{ok:true},j2:judge(q,bad),j3:judge(q,"abc"),hints:q.hints.length,rows:q.rows.length,html:q.html,valid:isFinite(q.ans)&&q.ans>0&&(q.kind!=="prob"||q.ans<=1)}},
+  sortGo:i=>sLoad(i),sortN:()=>SROUNDS.length,sortShow:()=>$("#sShow").click(),sortState:()=>({placed:Object.keys(SG.placed).length,n:SROUNDS[SG.r].cards.length}),lifeGo:i=>{LS.i=i;lifeUI()},lifeN:()=>LIFE.length};
+readColors();xInit();xUI();calcInit();calcNew();updCalcMeter();sLoad(0);lifeInit();lifeUI();fitAll();requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
